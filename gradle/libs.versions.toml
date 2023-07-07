@@ -1,4 +1,7 @@
 [versions]
+# Kotlin
+kotlinx-coroutines = "1.7.2"
+
 # AndroidX Libraries
 core-ktx = "1.8.0"
 appcompat = "1.6.1"
@@ -7,6 +10,8 @@ navigation = "2.6.0"
 splashscreen = "1.0.0"
 datastore = "1.0.0"
 viewpager2 = "1.0.0"
+lifecycle = "2.6.1"
+fragment = "1.5.7"
 
 # Test Libraries
 junit = "4.13.2"
@@ -34,12 +39,16 @@ google-services = "4.3.15"
 firebase = "32.1.0"
 
 [libraries]
+kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen"}
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 viewpager2 = { module = "androidx.viewpager2:viewpager2" , version.ref = "viewpager2" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 
@@ -67,7 +76,7 @@ navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref 
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 
 [bundles]
-androidx-ui-foundation = ["core-ktx", "appcompat"]
+androidx-ui-foundation = ["core-ktx", "appcompat", "constraintlayout", "lifecycle-viewmodel", "fragment"]
 okhttp = ["okhttp", "okhttp-bom", "okhttp-logging-interceptor"]
 retrofit = ["retrofit", "retrofit-moshi-converter"]
 moshi = ["moshi", "moshi-kotlin", "moshi-kapt"]
