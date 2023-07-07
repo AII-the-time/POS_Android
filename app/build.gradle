@@ -37,5 +37,19 @@ dependencies {
     implementation libs.appcompat
     implementation libs.material
     implementation libs.constraintlayout
+
+    //Test
     implementation libs.bundles.basic.test
+
+    //moshi
+    implementation libs.bundles.moshi
+
+    //retrofit
+    implementation libs.bundles.retrofit
+
+    //okhttp
+    implementation libs.bundles.okhttp
+
+    //hilt
+    implementation libs.hilt
 }
