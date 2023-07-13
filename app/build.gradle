@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -25,15 +26,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     dataBinding {
         enabled true
     }
+}
+kapt {
+    correctErrorTypes true
 }
 
 dependencies {
@@ -46,7 +50,9 @@ dependencies {
     implementation libs.bundles.basic.test
 
     //moshi
-    implementation libs.bundles.moshi
+    implementation libs.moshi
+    implementation libs.moshi.kotlin
+    kapt libs.moshi.kapt
 
     //retrofit
     implementation libs.bundles.retrofit
