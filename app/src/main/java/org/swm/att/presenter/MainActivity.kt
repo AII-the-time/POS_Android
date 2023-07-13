@@ -2,7 +2,7 @@ package org.swm.att.presenter
 
 import android.os.Bundle
 import org.swm.att.R
-import org.swm.att.`common-ui`.BaseActivity
+import org.swm.att.common_ui.BaseActivity
 import org.swm.att.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {

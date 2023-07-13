@@ -1,4 +1,4 @@
-package org.swm.att.`common-ui`
+package org.swm.att.common_ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
