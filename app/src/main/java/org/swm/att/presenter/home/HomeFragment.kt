@@ -15,7 +15,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        super.onCreateView(inflater, container, savedInstanceState)
         return binding.root
     }
 
