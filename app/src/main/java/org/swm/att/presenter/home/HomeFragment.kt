@@ -1,22 +1,31 @@
 package org.swm.att.presenter.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.R
 import org.swm.att.common_ui.BaseFragment
 import org.swm.att.databinding.FragmentHomeBinding
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+    private val homeViewModel by viewModels<HomeViewModel>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return binding.root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setObserver()
+        setPongData()
+    }
+
+    private fun setPongData() {
+        homeViewModel.getPong()
+    }
+
+    private fun setObserver() {
+        homeViewModel.pongData.observe(viewLifecycleOwner) {
+            binding.pongVO = it
+        }
     }
 
 }
