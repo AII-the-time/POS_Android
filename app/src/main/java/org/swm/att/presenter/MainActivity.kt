@@ -18,6 +18,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onResume() {
         super.onResume()
         removeStatusBar()
+        setMenuItemClickListener()
     }
 
     private fun removeStatusBar() {
@@ -26,6 +27,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    private fun setMenuItemClickListener() {
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_settings -> {
+                    //Handle setting icon press
+                    true
+                }
+
+                else -> false
+            }
         }
     }
 
