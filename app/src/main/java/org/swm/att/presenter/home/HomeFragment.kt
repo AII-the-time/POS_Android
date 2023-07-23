@@ -24,7 +24,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setObserver() {
         homeViewModel.pongData.observe(viewLifecycleOwner) {
-            binding.pongVO = it
+//            binding.pongVO = it
         }
     }
 

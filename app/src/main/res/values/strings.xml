@@ -6,4 +6,5 @@
     <string name="menu_setting">설정</string>
     <!--  description  -->
     <string name="menu_setting_description">menu for setting</string>
+    <string name="category_tab_layout_description">tab layout for category</string>
 </resources>
