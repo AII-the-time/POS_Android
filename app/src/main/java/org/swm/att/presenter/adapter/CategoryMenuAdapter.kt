@@ -16,6 +16,7 @@ class CategoryMenuAdapter: ListAdapter<MenuVO, MenuViewHolder>(
         onContentTheSame = { old, new -> old == new }
     )
 ) {
+    private var onItemClickListener: ((MenuVO) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         return MenuViewHolder(
@@ -31,6 +32,13 @@ class CategoryMenuAdapter: ListAdapter<MenuVO, MenuViewHolder>(
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = getItem(position)
         holder.bind(menu)
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.let { it(menu) }
+        }
+    }
+
+    fun setOnItemClickListener(listener: (MenuVO) -> Unit) {
+        onItemClickListener = listener
     }
 
 }
