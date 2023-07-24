@@ -1,4 +1,4 @@
-package org.swm.att.presenter.home
+package org.swm.att.presenter.menu
 
 import androidx.recyclerview.widget.RecyclerView
 import org.swm.att.databinding.ItemMenuBinding
