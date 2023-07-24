@@ -2,6 +2,7 @@ package org.swm.att.presenter.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import org.swm.att.R
@@ -16,6 +17,8 @@ class SelectedMenuAdapter: ListAdapter<Pair<MenuVO, Int>, SelectedMenuViewHolder
         onContentTheSame = { old, new -> old == new }
     )
 ){
+    private var onItemClickListener: ((MenuVO, Int) -> Unit)? = null
+    private var onDeleteBtnClickListener: ((MenuVO) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectedMenuViewHolder {
         return SelectedMenuViewHolder(
             DataBindingUtil.inflate(
@@ -31,6 +34,25 @@ class SelectedMenuAdapter: ListAdapter<Pair<MenuVO, Int>, SelectedMenuViewHolder
         val menu = getItem(position).first
         val count = getItem(position).second
         holder.bind(menu, count)
+
+        holder.itemView.findViewById<AppCompatButton>(R.id.btn_plus_menu_item).setOnClickListener {
+            onItemClickListener?.let { it(menu, 1) }
+        }
+
+        holder.itemView.findViewById<AppCompatButton>(R.id.btn_minus_menu_item).setOnClickListener {
+            onItemClickListener?.let { it(menu, -1) }
+        }
+
+        holder.itemView.findViewById<AppCompatButton>(R.id.btn_delete_selected_menu_item).setOnClickListener {
+            onDeleteBtnClickListener?.let { it(menu) }
+        }
     }
 
+    fun setOnItemClickListener(listener: (MenuVO, Int) -> Unit) {
+        onItemClickListener = listener
+    }
+
+    fun setOnDeleteBtnClickListener(listener: (MenuVO) -> Unit) {
+        onDeleteBtnClickListener = listener
+    }
 }

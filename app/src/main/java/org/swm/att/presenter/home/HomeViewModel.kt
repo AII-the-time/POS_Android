@@ -1,6 +1,5 @@
 package org.swm.att.presenter.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +18,34 @@ class HomeViewModel: ViewModel() {
             selectedMenuMap[menu] = 1
         }
 
+        _selectedMenuMap.value = selectedMenuMap
+    }
+
+    fun minusSelectedMenuItem(menu: MenuVO) {
+        val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
+        val count = selectedMenuMap[menu]!!
+
+        if (count == 1) {
+            selectedMenuMap.remove(menu)
+        } else {
+            selectedMenuMap[menu] = count - 1
+        }
+
+        _selectedMenuMap.value = selectedMenuMap
+    }
+
+    fun plusSelectedMenuItem(menu: MenuVO) {
+        val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
+        val count = selectedMenuMap[menu]!!
+
+        selectedMenuMap[menu] = count + 1
+
+        _selectedMenuMap.value = selectedMenuMap
+    }
+
+    fun deleteSelectedMenuItem(menu:MenuVO) {
+        val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
+        selectedMenuMap.remove(menu)
         _selectedMenuMap.value = selectedMenuMap
     }
 }
