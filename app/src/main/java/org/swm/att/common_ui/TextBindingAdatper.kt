@@ -17,7 +17,7 @@ fun setCustomTotalPriceText(view: TextView, price: Int, totalCount: Int) {
 
 @BindingAdapter("customTotalCountText")
 fun setCustomTotalCountText(view: TextView, menuMap: Map<MenuVO, Int>?) {
-    val size = menuMap?.size ?: 0
+    val size = menuMap?.map { it.value }?.sum() ?: 0
     view.text = view.context.getString(R.string.tv_custom_total_count_text, size)
 }
 
