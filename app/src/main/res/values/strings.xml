@@ -7,4 +7,8 @@
     <!--  description  -->
     <string name="menu_setting_description">menu for setting</string>
     <string name="category_tab_layout_description">tab layout for category</string>
+
+    <string name="btn_plus_menu_item">+</string>
+    <string name="btn_minus_menu_item">-</string>
+    <string name="btn_delete_selected_menu_item">x</string>
 </resources>

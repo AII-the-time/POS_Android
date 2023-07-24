@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="menu"
+            type="org.swm.att.domain.entity.response.MenuVO" />
+
+        <variable
+            name="count"
+            type="int"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:padding="10dp"
+        android:background="@drawable/shape_round"
+        android:backgroundTint="@color/white">
+
+        <TextView
+            android:id="@+id/tv_menu_item_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@{menu.name}"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_change_menu_item_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_menu_item_name"
+            app:layout_constraintEnd_toStartOf="@id/tv_menu_item_price">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_plus_menu_item"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_menu_item_count"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/shape_oval"
+                android:backgroundTint="@color/main_color_light"
+                android:text="@string/btn_plus_menu_item"/>
+
+            <TextView
+                android:id="@+id/tv_menu_item_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_minus_menu_item"
+                app:layout_constraintStart_toEndOf="@id/btn_plus_menu_item"
+                android:text="@{String.valueOf(count)}"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_minus_menu_item"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_menu_item_count"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/btn_minus_menu_item"
+                android:background="@drawable/shape_oval"
+                android:backgroundTint="@color/main_color_light"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_menu_item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cl_change_menu_item_count"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:price="@{menu.price}"
+            app:totalCount="@{count}"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_delete_selected_menu_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_delete_selected_menu_item"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_menu_item_price"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
