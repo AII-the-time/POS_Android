@@ -48,4 +48,8 @@ class HomeViewModel: ViewModel() {
         selectedMenuMap.remove(menu)
         _selectedMenuMap.value = selectedMenuMap
     }
+
+    fun deletedAllMenuItem() {
+        _selectedMenuMap.value = mutableMapOf()
+    }
 }

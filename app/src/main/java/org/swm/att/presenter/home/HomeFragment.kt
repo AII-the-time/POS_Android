@@ -25,6 +25,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setTabLayout()
         setSelectedMenuObserver()
         setDataBinding()
+        setCancelAllBtnClickListener()
     }
 
     private fun initRecyclerView() {
@@ -53,7 +54,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         categoryViewPagerAdapter.addFragment(MenuFragment())
         binding.vpCategory.adapter = categoryViewPagerAdapter
 
-        TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, position ->
+        TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, _ ->
             tab.text = "카페 및 쿠키"
         }.attach()
     }
@@ -66,6 +67,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setDataBinding() {
         binding.homeViewHolder = homeViewModel
+    }
+
+    private fun setCancelAllBtnClickListener() {
+        binding.btnDeleteSelectedMenuAll.setOnClickListener {
+            homeViewModel.deletedAllMenuItem()
+        }
     }
 
 }
