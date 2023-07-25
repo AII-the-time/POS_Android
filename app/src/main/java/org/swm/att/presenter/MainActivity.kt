@@ -8,6 +8,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.R
 import org.swm.att.common_ui.BaseActivity
 import org.swm.att.databinding.ActivityMainBinding
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -17,8 +19,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onResume() {
         super.onResume()
+        setDateAndTime()
         removeStatusBar()
         setMenuItemClickListener()
+    }
+
+    private fun setDateAndTime() {
+        val date = Date(System.currentTimeMillis())
+        val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
+
+        binding.tvDate.text = dateFormat.format(date)
+
     }
 
     private fun removeStatusBar() {
