@@ -5,9 +5,13 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.R
 import org.swm.att.common_ui.BaseFragment
+import org.swm.att.common_ui.ItemTouchHelperCallback
+import org.swm.att.common_ui.StartDragListener
 import org.swm.att.databinding.FragmentMenuBinding
 import org.swm.att.presenter.adapter.CategoryMenuAdapter
 import org.swm.att.presenter.home.HomeViewModel
@@ -26,9 +30,19 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
 
     private fun initRecyclerView() {
         categoryMenuAdapter = CategoryMenuAdapter()
+        val itemTouchHelperCallback = ItemTouchHelperCallback(categoryMenuAdapter)
+        val helper = ItemTouchHelper(itemTouchHelperCallback)
+        helper.attachToRecyclerView(binding.rvMenuForCategory)
+
         categoryMenuAdapter.setOnItemClickListener {
             homeViewModel.addSelectedMenu(it)
         }
+
+        categoryMenuAdapter.setOnStartDragListener(object: StartDragListener {
+            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+                helper.startDrag(viewHolder)
+            }
+        })
 
         binding.rvMenuForCategory.apply {
             setHasFixedSize(true)
