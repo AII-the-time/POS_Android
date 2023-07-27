@@ -12,7 +12,7 @@ data class MenuDTO(
     @field:Json(name = "category")
     val category: String
 ) {
-    fun toVO(): MenuVO {
-        return MenuVO(name, price, category)
+    fun toVO(): org.swm.att.domain.entity.response.MenuVO {
+        return org.swm.att.domain.entity.response.MenuVO(name, price, category)
     }
 }

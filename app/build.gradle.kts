@@ -46,6 +46,8 @@ kapt {
 }
 
 dependencies {
+    implementation(project(":domain"))
+
     implementation(libs.material)
     implementation(libs.bundles.androidx.ui.foundation)
     //Navigation

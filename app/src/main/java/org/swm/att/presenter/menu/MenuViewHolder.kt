@@ -8,7 +8,7 @@ class MenuViewHolder(
     private val binding: ItemMenuBinding
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(menu: MenuVO) {
+    fun bind(menu: org.swm.att.domain.entity.response.MenuVO) {
         binding.menu = menu
     }
 }

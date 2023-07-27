@@ -10,15 +10,15 @@ import org.swm.att.common_ui.ItemDiffCallback
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.presenter.home.SelectedMenuViewHolder
 
-class SelectedMenuAdapter: ListAdapter<Pair<MenuVO, Int>, SelectedMenuViewHolder>(
-    ItemDiffCallback<Pair<MenuVO, Int>>(
+class SelectedMenuAdapter: ListAdapter<Pair<org.swm.att.domain.entity.response.MenuVO, Int>, SelectedMenuViewHolder>(
+    ItemDiffCallback<Pair<org.swm.att.domain.entity.response.MenuVO, Int>>(
         onItemsTheSame = { old, new -> old == new },
         //서버에서 id 넘겨줄 경우, id로 변경해야 함
         onContentTheSame = { old, new -> old == new }
     )
 ){
-    private var onItemClickListener: ((MenuVO, Int) -> Unit)? = null
-    private var onDeleteBtnClickListener: ((MenuVO) -> Unit)? = null
+    private var onItemClickListener: ((org.swm.att.domain.entity.response.MenuVO, Int) -> Unit)? = null
+    private var onDeleteBtnClickListener: ((org.swm.att.domain.entity.response.MenuVO) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectedMenuViewHolder {
         return SelectedMenuViewHolder(
             DataBindingUtil.inflate(
@@ -48,11 +48,11 @@ class SelectedMenuAdapter: ListAdapter<Pair<MenuVO, Int>, SelectedMenuViewHolder
         }
     }
 
-    fun setOnItemClickListener(listener: (MenuVO, Int) -> Unit) {
+    fun setOnItemClickListener(listener: (org.swm.att.domain.entity.response.MenuVO, Int) -> Unit) {
         onItemClickListener = listener
     }
 
-    fun setOnDeleteBtnClickListener(listener: (MenuVO) -> Unit) {
+    fun setOnDeleteBtnClickListener(listener: (org.swm.att.domain.entity.response.MenuVO) -> Unit) {
         onDeleteBtnClickListener = listener
     }
 }

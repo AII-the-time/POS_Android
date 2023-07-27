@@ -11,14 +11,14 @@ import org.swm.att.common_ui.StartDragListener
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.presenter.menu.MenuViewHolder
 
-class CategoryMenuAdapter: ListAdapter<MenuVO, MenuViewHolder>(
-    ItemDiffCallback<MenuVO>(
+class CategoryMenuAdapter: ListAdapter<org.swm.att.domain.entity.response.MenuVO, MenuViewHolder>(
+    ItemDiffCallback<org.swm.att.domain.entity.response.MenuVO>(
         onItemsTheSame = { old, new -> old == new },
         //서버에서 id 넘겨줄 경우, id로 변경해야 함
         onContentTheSame = { old, new -> old == new }
     )
 ), ItemTouchHelperListener {
-    private var onItemClickListener: ((MenuVO) -> Unit)? = null
+    private var onItemClickListener: ((org.swm.att.domain.entity.response.MenuVO) -> Unit)? = null
     private lateinit var onItemDragListener: StartDragListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
@@ -46,7 +46,7 @@ class CategoryMenuAdapter: ListAdapter<MenuVO, MenuViewHolder>(
         }
     }
 
-    fun setOnItemClickListener(listener: (MenuVO) -> Unit) {
+    fun setOnItemClickListener(listener: (org.swm.att.domain.entity.response.MenuVO) -> Unit) {
         onItemClickListener = listener
     }
 

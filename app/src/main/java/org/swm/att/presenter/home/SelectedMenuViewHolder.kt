@@ -9,7 +9,7 @@ class SelectedMenuViewHolder(
     private val binding: ItemSelectedMenuBinding
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(menu: MenuVO, count: Int) {
+    fun bind(menu: org.swm.att.domain.entity.response.MenuVO, count: Int) {
         Log.d("selectedMenu", "$count ${menu.name}")
         binding.menu = menu
         binding.count = count

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.repository.AttPosRepository
 import javax.inject.Inject
 
@@ -13,7 +12,7 @@ import javax.inject.Inject
 class MenuViewModel @Inject constructor(
     private val attPosRepository: AttPosRepository
 ): ViewModel() {
-    private val _menuList = MutableLiveData<List<MenuVO>>(arrayListOf())
+    private val _menuList = MutableLiveData<List<org.swm.att.domain.entity.response.MenuVO>>(arrayListOf())
     val menuList = _menuList
 
     fun getMenuList() {
