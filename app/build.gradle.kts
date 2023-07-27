@@ -47,9 +47,11 @@ kapt {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation(libs.material)
     implementation(libs.bundles.androidx.ui.foundation)
+
     //Navigation
     implementation(libs.bundles.navigation)
 
@@ -60,12 +62,6 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     kapt(libs.moshi.kapt)
-
-    //retrofit
-    implementation(libs.bundles.retrofit)
-
-    //okhttp
-    implementation(libs.bundles.okhttp)
 
     //hilt
     implementation(libs.hilt)

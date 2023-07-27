@@ -1,4 +1,4 @@
-package org.swm.att.data.remote.model.response
+package org.swm.att.data.remote.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

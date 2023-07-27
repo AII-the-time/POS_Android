@@ -1,6 +1,6 @@
 package org.swm.att.data.remote.datasource
 
-import org.swm.att.data.remote.model.response.MenusDTO
+import org.swm.att.data.remote.response.MenusDTO
 import org.swm.att.data.remote.service.AttPosService
 import javax.inject.Inject
 

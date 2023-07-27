@@ -1,4 +1,4 @@
-package org.swm.att.data.remote.repository
+package org.swm.att.data.repository
 
 import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.domain.repository.AttPosRepository
