@@ -6,13 +6,13 @@ import android.view.View
 import android.view.WindowInsets
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.R
-import org.swm.att.common_ui.BaseActivity
+import toss.next.common_ui.base.BaseActivity
 import org.swm.att.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity : toss.next.common_ui.base.BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

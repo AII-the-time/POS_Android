@@ -16,3 +16,4 @@ rootProject.name = "POS-Android"
 include ':app'
 include ':domain'
 include ':data'
+include ':common-ui'

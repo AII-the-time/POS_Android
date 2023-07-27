@@ -1,9 +1,8 @@
-package org.swm.att.common_ui
+package toss.next.common_ui.util
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import org.swm.att.R
-import org.swm.att.domain.entity.response.MenuVO
+import toss.next.common_ui.R
 
 @BindingAdapter("customPriceText")
 fun setCustomPriceText(view: TextView, price: Int) {

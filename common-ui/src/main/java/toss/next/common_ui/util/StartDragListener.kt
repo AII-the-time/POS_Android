@@ -1,4 +1,4 @@
-package org.swm.att.common_ui
+package toss.next.common_ui.util
 
 import androidx.recyclerview.widget.RecyclerView
 

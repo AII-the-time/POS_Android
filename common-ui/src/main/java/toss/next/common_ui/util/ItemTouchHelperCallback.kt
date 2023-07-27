@@ -1,8 +1,7 @@
-package org.swm.att.common_ui
+package toss.next.common_ui.util
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import org.swm.att.common_ui.ItemTouchHelperListener
 
 class ItemTouchHelperCallback(
     private val itemTouchHelperListener: ItemTouchHelperListener

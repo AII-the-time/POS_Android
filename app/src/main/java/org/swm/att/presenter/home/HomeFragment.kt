@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.R
-import org.swm.att.common_ui.BaseFragment
+import toss.next.common_ui.base.BaseFragment
 import org.swm.att.databinding.FragmentHomeBinding
 import org.swm.att.presenter.adapter.CategoryViewPagerAdapter
 import org.swm.att.presenter.adapter.SelectedMenuAdapter
 import org.swm.att.presenter.menu.MenuFragment
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+class HomeFragment : toss.next.common_ui.base.BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private lateinit var categoryViewPagerAdapter: CategoryViewPagerAdapter
     private lateinit var selectedMenuAdapter: SelectedMenuAdapter
     private val homeViewModel: HomeViewModel by activityViewModels()

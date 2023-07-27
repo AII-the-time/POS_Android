@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.R
-import org.swm.att.common_ui.BaseFragment
-import org.swm.att.common_ui.ItemTouchHelperCallback
-import org.swm.att.common_ui.StartDragListener
+import toss.next.common_ui.base.BaseFragment
+import toss.next.common_ui.util.ItemTouchHelperCallback
+import toss.next.common_ui.util.StartDragListener
 import org.swm.att.databinding.FragmentMenuBinding
 import org.swm.att.presenter.adapter.CategoryMenuAdapter
 import org.swm.att.presenter.home.HomeViewModel
 
 @AndroidEntryPoint
-class MenuFragment : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
+class MenuFragment : toss.next.common_ui.base.BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
     private lateinit var categoryMenuAdapter: CategoryMenuAdapter
     private val menuViewModel: MenuViewModel by viewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
@@ -30,7 +30,8 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
 
     private fun initRecyclerView() {
         categoryMenuAdapter = CategoryMenuAdapter()
-        val itemTouchHelperCallback = ItemTouchHelperCallback(categoryMenuAdapter)
+        val itemTouchHelperCallback =
+            toss.next.common_ui.util.ItemTouchHelperCallback(categoryMenuAdapter)
         val helper = ItemTouchHelper(itemTouchHelperCallback)
         helper.attachToRecyclerView(binding.rvMenuForCategory)
 
@@ -38,7 +39,8 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
             homeViewModel.addSelectedMenu(it)
         }
 
-        categoryMenuAdapter.setOnStartDragListener(object: StartDragListener {
+        categoryMenuAdapter.setOnStartDragListener(object:
+            toss.next.common_ui.util.StartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
                 helper.startDrag(viewHolder)
             }

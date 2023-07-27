@@ -6,12 +6,12 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import org.swm.att.R
-import org.swm.att.common_ui.ItemDiffCallback
+import toss.next.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.presenter.home.SelectedMenuViewHolder
 
 class SelectedMenuAdapter: ListAdapter<Pair<org.swm.att.domain.entity.response.MenuVO, Int>, SelectedMenuViewHolder>(
-    ItemDiffCallback<Pair<org.swm.att.domain.entity.response.MenuVO, Int>>(
+    toss.next.common_ui.util.ItemDiffCallback<Pair<MenuVO, Int>>(
         onItemsTheSame = { old, new -> old == new },
         //서버에서 id 넘겨줄 경우, id로 변경해야 함
         onContentTheSame = { old, new -> old == new }
