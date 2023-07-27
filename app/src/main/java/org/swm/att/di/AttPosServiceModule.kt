@@ -4,18 +4,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.data.remote.service.AttPosService
-import javax.inject.Singleton
+import retrofit2.Retrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RemoteDataSourceModule {
+object AttPosServiceModule {
 
     @Provides
-    @Singleton
-    fun provideMenuDataSource(attPosService: AttPosService): MenuDataSource {
-        return MenuDataSource(attPosService)
-    }
+    fun provideAttPosService(retrofit: Retrofit): AttPosService =
+        retrofit.create(AttPosService::class.java)
 
 }
