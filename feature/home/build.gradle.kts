@@ -1,31 +1,27 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     kotlin("kapt")
 }
 
 android {
-    namespace = "org.swm.att"
+    namespace = "org.swm.att.home"
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        applicationId = "org.swm.att"
         minSdk = ProjectConfig.minSdk
-        targetSdk = ProjectConfig.targetSdk
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -41,26 +37,16 @@ android {
         buildConfig = true
     }
 }
-kapt {
-    correctErrorTypes = true
-}
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":data"))
     implementation(project(":common-ui"))
-    implementation(project(":feature:home"))
 
-    implementation(libs.material)
     implementation(libs.bundles.androidx.ui.foundation)
-
-    //Navigation
-    implementation(libs.bundles.navigation)
-
-    //Test
-    implementation(libs.bundles.basic.test)
-
-    //hilt
+    implementation(libs.material)
     implementation(libs.hilt)
     kapt(libs.hilt.kapt)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    kapt(libs.moshi.kapt)
 }
