@@ -1,11 +1,12 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
     kotlin("kapt")
 }
 
 android {
-    namespace = "org.swm.att.common_ui"
+    namespace = "org.swm.att.home"
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
@@ -34,13 +35,19 @@ android {
     }
     buildFeatures {
         dataBinding = true
+        buildConfig = true
     }
 }
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":common-ui"))
 
     implementation(libs.bundles.androidx.ui.foundation)
     implementation(libs.material)
-    implementation(libs.bundles.basic.test)
+    implementation(libs.hilt)
+    kapt(libs.hilt.kapt)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    kapt(libs.moshi.kapt)
 }

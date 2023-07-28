@@ -1,4 +1,4 @@
-package org.swm.att.presenter
+package org.swm.att
 
 import android.os.Build
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package org.swm.att.presenter.menu
+package org.swm.att.home.menu
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

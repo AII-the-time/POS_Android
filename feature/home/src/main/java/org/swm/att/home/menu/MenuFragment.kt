@@ -1,4 +1,4 @@
-package org.swm.att.presenter.menu
+package org.swm.att.home.menu
 
 import android.os.Bundle
 import android.view.View
@@ -8,19 +8,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import org.swm.att.R
+import org.swm.att.home.R
+import org.swm.att.home.adapter.CategoryMenuAdapter
+import org.swm.att.home.databinding.FragmentMenuBinding
 import toss.next.common_ui.base.BaseFragment
-import toss.next.common_ui.util.ItemTouchHelperCallback
-import toss.next.common_ui.util.StartDragListener
-import org.swm.att.databinding.FragmentMenuBinding
-import org.swm.att.presenter.adapter.CategoryMenuAdapter
-import org.swm.att.presenter.home.HomeViewModel
 
 @AndroidEntryPoint
-class MenuFragment : toss.next.common_ui.base.BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
+class MenuFragment : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
     private lateinit var categoryMenuAdapter: CategoryMenuAdapter
     private val menuViewModel: MenuViewModel by viewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val homeViewModel: org.swm.att.home.home.HomeViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

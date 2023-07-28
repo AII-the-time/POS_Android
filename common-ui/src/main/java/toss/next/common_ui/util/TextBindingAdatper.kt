@@ -2,7 +2,8 @@ package toss.next.common_ui.util
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import toss.next.common_ui.R
+import org.swm.att.common_ui.R
+
 
 @BindingAdapter("customPriceText")
 fun setCustomPriceText(view: TextView, price: Int) {

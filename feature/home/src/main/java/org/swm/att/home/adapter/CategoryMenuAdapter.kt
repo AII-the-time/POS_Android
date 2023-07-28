@@ -1,24 +1,21 @@
-package org.swm.att.presenter.adapter
+package org.swm.att.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
-import org.swm.att.R
-import toss.next.common_ui.util.ItemDiffCallback
-import toss.next.common_ui.util.ItemTouchHelperListener
-import toss.next.common_ui.util.StartDragListener
+import org.swm.att.home.R
 import org.swm.att.domain.entity.response.MenuVO
-import org.swm.att.presenter.menu.MenuViewHolder
+import org.swm.att.home.menu.MenuViewHolder
 
-class CategoryMenuAdapter: ListAdapter<org.swm.att.domain.entity.response.MenuVO, MenuViewHolder>(
+class CategoryMenuAdapter: ListAdapter<MenuVO, MenuViewHolder>(
     toss.next.common_ui.util.ItemDiffCallback<MenuVO>(
         onItemsTheSame = { old, new -> old == new },
         //서버에서 id 넘겨줄 경우, id로 변경해야 함
         onContentTheSame = { old, new -> old == new }
     )
 ), toss.next.common_ui.util.ItemTouchHelperListener {
-    private var onItemClickListener: ((org.swm.att.domain.entity.response.MenuVO) -> Unit)? = null
+    private var onItemClickListener: ((MenuVO) -> Unit)? = null
     private lateinit var onItemDragListener: toss.next.common_ui.util.StartDragListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
@@ -46,7 +43,7 @@ class CategoryMenuAdapter: ListAdapter<org.swm.att.domain.entity.response.MenuVO
         }
     }
 
-    fun setOnItemClickListener(listener: (org.swm.att.domain.entity.response.MenuVO) -> Unit) {
+    fun setOnItemClickListener(listener: (MenuVO) -> Unit) {
         onItemClickListener = listener
     }
 

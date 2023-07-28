@@ -2,9 +2,9 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs.kotlin")
-    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    kotlin("kapt")
 }
 
 android {
@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":common-ui"))
+    implementation(project(":feature:home"))
 
     implementation(libs.material)
     implementation(libs.bundles.androidx.ui.foundation)

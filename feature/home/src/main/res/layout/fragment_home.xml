@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presenter.home.HomeFragment">
+    tools:context=".home.home.HomeFragment">
 
     <data>
         <variable
             name="homeViewHolder"
-            type="org.swm.att.presenter.home.HomeViewModel" />
+            type="org.swm.att.home.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

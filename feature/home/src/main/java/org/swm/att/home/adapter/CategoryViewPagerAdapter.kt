@@ -1,4 +1,4 @@
-package org.swm.att.presenter.adapter
+package org.swm.att.home.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
