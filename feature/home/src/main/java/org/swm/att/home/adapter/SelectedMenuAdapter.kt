@@ -12,7 +12,7 @@ class SelectedMenuAdapter: ListAdapter<Pair<MenuVO, Int>, org.swm.att.home.home.
     org.swm.att.common_ui.util.ItemDiffCallback<Pair<MenuVO, Int>>(
         onItemsTheSame = { old, new -> old == new },
         //서버에서 id 넘겨줄 경우, id로 변경해야 함
-        onContentTheSame = { old, new -> old == new }
+        onContentTheSame = { old, new -> old.first.id == new.first.id}
     )
 ){
     private var onItemClickListener: ((MenuVO, Int) -> Unit)? = null

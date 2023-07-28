@@ -12,7 +12,7 @@ class CategoryMenuAdapter: ListAdapter<MenuVO, MenuViewHolder>(
     org.swm.att.common_ui.util.ItemDiffCallback<MenuVO>(
         onItemsTheSame = { old, new -> old == new },
         //서버에서 id 넘겨줄 경우, id로 변경해야 함
-        onContentTheSame = { old, new -> old == new }
+        onContentTheSame = { old, new -> old.id == new.id }
     )
 ), org.swm.att.common_ui.util.ItemTouchHelperListener {
     private var onItemClickListener: ((MenuVO) -> Unit)? = null
