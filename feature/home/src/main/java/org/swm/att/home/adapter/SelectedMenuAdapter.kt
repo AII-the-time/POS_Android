@@ -9,7 +9,7 @@ import org.swm.att.home.R
 import org.swm.att.domain.entity.response.MenuVO
 
 class SelectedMenuAdapter: ListAdapter<Pair<MenuVO, Int>, org.swm.att.home.home.SelectedMenuViewHolder>(
-    toss.next.common_ui.util.ItemDiffCallback<Pair<MenuVO, Int>>(
+    org.swm.att.common_ui.util.ItemDiffCallback<Pair<MenuVO, Int>>(
         onItemsTheSame = { old, new -> old == new },
         //서버에서 id 넘겨줄 경우, id로 변경해야 함
         onContentTheSame = { old, new -> old == new }

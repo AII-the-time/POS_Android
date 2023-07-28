@@ -1,4 +1,4 @@
-package toss.next.common_ui
+package org.swm.att.common_ui
 
 import org.junit.Test
 

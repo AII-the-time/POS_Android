@@ -1,4 +1,4 @@
-package toss.next.common_ui.base
+package org.swm.att.common_ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

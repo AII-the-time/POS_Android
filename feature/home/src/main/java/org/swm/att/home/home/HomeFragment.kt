@@ -11,10 +11,10 @@ import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
 import org.swm.att.home.menu.MenuFragment
-import toss.next.common_ui.base.BaseFragment
+import org.swm.att.common_ui.base.BaseFragment
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+class HomeFragment : org.swm.att.common_ui.base.BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private lateinit var categoryViewPagerAdapter: CategoryViewPagerAdapter
     private lateinit var selectedMenuAdapter: SelectedMenuAdapter
     private val homeViewModel: HomeViewModel by activityViewModels()

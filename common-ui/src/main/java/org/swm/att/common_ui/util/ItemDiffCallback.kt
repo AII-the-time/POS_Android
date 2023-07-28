@@ -1,4 +1,4 @@
-package toss.next.common_ui.util
+package org.swm.att.common_ui.util
 
 import androidx.recyclerview.widget.DiffUtil
 

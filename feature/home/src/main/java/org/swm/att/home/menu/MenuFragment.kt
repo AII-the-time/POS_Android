@@ -11,10 +11,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryMenuAdapter
 import org.swm.att.home.databinding.FragmentMenuBinding
-import toss.next.common_ui.base.BaseFragment
+import org.swm.att.common_ui.base.BaseFragment
 
 @AndroidEntryPoint
-class MenuFragment : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
+class MenuFragment : org.swm.att.common_ui.base.BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
     private lateinit var categoryMenuAdapter: CategoryMenuAdapter
     private val menuViewModel: MenuViewModel by viewModels()
     private val homeViewModel: org.swm.att.home.home.HomeViewModel by activityViewModels()
@@ -28,7 +28,7 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
     private fun initRecyclerView() {
         categoryMenuAdapter = CategoryMenuAdapter()
         val itemTouchHelperCallback =
-            toss.next.common_ui.util.ItemTouchHelperCallback(categoryMenuAdapter)
+            org.swm.att.common_ui.util.ItemTouchHelperCallback(categoryMenuAdapter)
         val helper = ItemTouchHelper(itemTouchHelperCallback)
         helper.attachToRecyclerView(binding.rvMenuForCategory)
 
@@ -37,7 +37,7 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
         }
 
         categoryMenuAdapter.setOnStartDragListener(object:
-            toss.next.common_ui.util.StartDragListener {
+            org.swm.att.common_ui.util.StartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
                 helper.startDrag(viewHolder)
             }
