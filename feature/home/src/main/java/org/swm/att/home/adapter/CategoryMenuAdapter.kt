@@ -1,22 +1,24 @@
 package org.swm.att.home.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
-import org.swm.att.home.R
+import org.swm.att.common_ui.util.StartDragListener
 import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.home.R
 import org.swm.att.home.menu.MenuViewHolder
 
 class CategoryMenuAdapter: ListAdapter<MenuVO, MenuViewHolder>(
     org.swm.att.common_ui.util.ItemDiffCallback<MenuVO>(
-        onItemsTheSame = { old, new -> old == new },
+        onItemsTheSame = { old, new -> old.id == new.id },
         //서버에서 id 넘겨줄 경우, id로 변경해야 함
-        onContentTheSame = { old, new -> old.id == new.id }
+        onContentTheSame = { old, new -> old == new }
     )
 ), org.swm.att.common_ui.util.ItemTouchHelperListener {
     private var onItemClickListener: ((MenuVO) -> Unit)? = null
-    private lateinit var onItemDragListener: org.swm.att.common_ui.util.StartDragListener
+    private lateinit var onItemDragListener: StartDragListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         return MenuViewHolder(
@@ -29,6 +31,7 @@ class CategoryMenuAdapter: ListAdapter<MenuVO, MenuViewHolder>(
         )
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = getItem(position)
         holder.bind(menu)
@@ -47,7 +50,7 @@ class CategoryMenuAdapter: ListAdapter<MenuVO, MenuViewHolder>(
         onItemClickListener = listener
     }
 
-    fun setOnStartDragListener(listener: org.swm.att.common_ui.util.StartDragListener) {
+    fun setOnStartDragListener(listener: StartDragListener) {
         onItemDragListener = listener
     }
 
