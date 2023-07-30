@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import org.swm.att.domain.entity.response.MenuVO
 
 class HomeViewModel: ViewModel() {
-    private val _selectedMenuMap = MutableLiveData<MutableMap<org.swm.att.domain.entity.response.MenuVO, Int>>(mutableMapOf())
-    val selectedMenuMap: LiveData<MutableMap<org.swm.att.domain.entity.response.MenuVO, Int>> = _selectedMenuMap
+    private val _selectedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>>(mutableMapOf())
+    val selectedMenuMap: LiveData<MutableMap<MenuVO, Int>> = _selectedMenuMap
 
-    fun addSelectedMenu(menu: org.swm.att.domain.entity.response.MenuVO) {
+    fun addSelectedMenu(menu: MenuVO) {
         val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
 
         if (selectedMenuMap.containsKey(menu)) {
@@ -21,7 +21,7 @@ class HomeViewModel: ViewModel() {
         _selectedMenuMap.value = selectedMenuMap
     }
 
-    fun minusSelectedMenuItem(menu: org.swm.att.domain.entity.response.MenuVO) {
+    fun minusSelectedMenuItem(menu: MenuVO) {
         val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
         val count = selectedMenuMap[menu]!!
 
@@ -34,7 +34,7 @@ class HomeViewModel: ViewModel() {
         _selectedMenuMap.value = selectedMenuMap
     }
 
-    fun plusSelectedMenuItem(menu: org.swm.att.domain.entity.response.MenuVO) {
+    fun plusSelectedMenuItem(menu: MenuVO) {
         val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
         val count = selectedMenuMap[menu]!!
 
@@ -43,7 +43,7 @@ class HomeViewModel: ViewModel() {
         _selectedMenuMap.value = selectedMenuMap
     }
 
-    fun deleteSelectedMenuItem(menu: org.swm.att.domain.entity.response.MenuVO) {
+    fun deleteSelectedMenuItem(menu: MenuVO) {
         val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
         selectedMenuMap.remove(menu)
         _selectedMenuMap.value = selectedMenuMap
