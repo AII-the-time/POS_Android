@@ -24,21 +24,23 @@
 
         <TextView
             android:id="@+id/tv_menu_item_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_weight="1"
             android:text="@{menu.name}"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_change_menu_item_count"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_menu_item_name"
-            app:layout_constraintEnd_toStartOf="@id/tv_menu_item_price">
+            app:layout_constraintEnd_toStartOf="@id/tv_menu_item_price"
+            app:layout_constraintHorizontal_weight="2">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_plus_menu_item"
@@ -50,6 +52,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:background="@drawable/shape_oval"
                 android:backgroundTint="@color/main_color_light"
+                app:layout_constraintHorizontal_weight="1"
                 android:text="@string/btn_plus_menu_item"/>
 
             <TextView
@@ -61,6 +64,7 @@
                 app:layout_constraintEnd_toStartOf="@id/btn_minus_menu_item"
                 app:layout_constraintStart_toEndOf="@id/btn_plus_menu_item"
                 android:text="@{String.valueOf(count)}"
+                app:layout_constraintHorizontal_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"/>
 
@@ -73,6 +77,7 @@
                 app:layout_constraintStart_toEndOf="@id/tv_menu_item_count"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/btn_minus_menu_item"
+                app:layout_constraintHorizontal_weight="1"
                 android:background="@drawable/shape_oval"
                 android:backgroundTint="@color/main_color_light"/>
 
@@ -80,14 +85,15 @@
 
         <TextView
             android:id="@+id/tv_menu_item_price"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/cl_change_menu_item_count"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_delete_selected_menu_item"
             app:price="@{menu.price}"
-            app:totalCount="@{count}"/>
+            app:totalCount="@{count}"
+            app:layout_constraintHorizontal_weight="1"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_delete_selected_menu_item"
@@ -97,7 +103,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_menu_item_price"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_weight="1"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
