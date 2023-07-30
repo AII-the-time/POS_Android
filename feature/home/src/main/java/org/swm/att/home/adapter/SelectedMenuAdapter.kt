@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
+import org.swm.att.common_ui.constant.SelectedState
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.home.R
 import org.swm.att.home.home.SelectedMenuViewHolder
@@ -16,7 +17,7 @@ class SelectedMenuAdapter : ListAdapter<Pair<MenuVO, Int>, SelectedMenuViewHolde
         onContentTheSame = { old, new -> old == new }
     )
 ) {
-    private var onItemClickListener: ((MenuVO, Int) -> Unit)? = null
+    private var onItemClickListener: ((MenuVO, SelectedState) -> Unit)? = null
     private var onDeleteBtnClickListener: ((MenuVO) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectedMenuViewHolder {
         return SelectedMenuViewHolder(
@@ -35,11 +36,11 @@ class SelectedMenuAdapter : ListAdapter<Pair<MenuVO, Int>, SelectedMenuViewHolde
         holder.bind(menu, count)
 
         holder.itemView.findViewById<AppCompatButton>(R.id.btn_plus_menu_item).setOnClickListener {
-            onItemClickListener?.let { it(menu, 1) }
+            onItemClickListener?.let { it(menu, SelectedState.PLUS_STATE) }
         }
 
         holder.itemView.findViewById<AppCompatButton>(R.id.btn_minus_menu_item).setOnClickListener {
-            onItemClickListener?.let { it(menu, -1) }
+            onItemClickListener?.let { it(menu, SelectedState.MINUS_STATE) }
         }
 
         holder.itemView.findViewById<AppCompatButton>(R.id.btn_delete_selected_menu_item).setOnClickListener {
@@ -47,7 +48,7 @@ class SelectedMenuAdapter : ListAdapter<Pair<MenuVO, Int>, SelectedMenuViewHolde
         }
     }
 
-    fun setOnItemClickListener(listener: (MenuVO, Int) -> Unit) {
+    fun setOnItemClickListener(listener: (MenuVO, SelectedState) -> Unit) {
         onItemClickListener = listener
     }
 

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.common_ui.constant.SelectedState
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
@@ -31,8 +32,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun initRecyclerView() {
         selectedMenuAdapter = SelectedMenuAdapter()
-        selectedMenuAdapter.setOnItemClickListener{ menuVO, dif ->
-            if (dif == 1) {
+        selectedMenuAdapter.setOnItemClickListener { menuVO, state ->
+            if (state == SelectedState.PLUS_STATE) {
                 homeViewModel.plusSelectedMenuItem(menuVO)
             } else {
                 homeViewModel.minusSelectedMenuItem(menuVO)
