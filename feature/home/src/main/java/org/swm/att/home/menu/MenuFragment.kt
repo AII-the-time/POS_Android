@@ -27,15 +27,11 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
     }
 
     private fun initRecyclerView() {
-        categoryMenuAdapter = CategoryMenuAdapter()
+        categoryMenuAdapter = CategoryMenuAdapter(homeViewModel)
         val itemTouchHelperCallback =
             org.swm.att.common_ui.util.ItemTouchHelperCallback(categoryMenuAdapter)
         val helper = ItemTouchHelper(itemTouchHelperCallback)
         helper.attachToRecyclerView(binding.rvMenuForCategory)
-
-        categoryMenuAdapter.setOnItemClickListener {
-            homeViewModel.addSelectedMenu(it)
-        }
 
         categoryMenuAdapter.setOnStartDragListener(object : StartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
