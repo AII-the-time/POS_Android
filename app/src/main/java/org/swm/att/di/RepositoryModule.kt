@@ -13,7 +13,7 @@ interface RepositoryModule {
 
     @Binds
     fun bindPingRepository(
-        pingRepositoryImpl: org.swm.att.data.repository.AttPosRepositoryImpl
+        pingRepositoryImpl: AttPosRepositoryImpl
     ): AttPosRepository
 
 }

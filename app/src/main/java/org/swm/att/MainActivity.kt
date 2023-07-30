@@ -1,25 +1,17 @@
 package org.swm.att
 
 import android.os.Build
-import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import dagger.hilt.android.AndroidEntryPoint
-import org.swm.att.R
 import org.swm.att.common_ui.base.BaseActivity
 import org.swm.att.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 
 @AndroidEntryPoint
-class MainActivity : org.swm.att.common_ui.base.BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onResume() {
         super.onResume()
@@ -37,6 +29,7 @@ class MainActivity : org.swm.att.common_ui.base.BaseActivity<ActivityMainBinding
 
     }
 
+    @Suppress("DEPRECATION")
     private fun removeStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
@@ -59,6 +52,7 @@ class MainActivity : org.swm.att.common_ui.base.BaseActivity<ActivityMainBinding
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun hideSystemUI() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val controller = window.insetsController

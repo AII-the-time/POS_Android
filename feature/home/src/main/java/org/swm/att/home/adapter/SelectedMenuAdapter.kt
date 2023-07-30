@@ -5,20 +5,21 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
-import org.swm.att.home.R
 import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.home.R
+import org.swm.att.home.home.SelectedMenuViewHolder
 
-class SelectedMenuAdapter: ListAdapter<Pair<MenuVO, Int>, org.swm.att.home.home.SelectedMenuViewHolder>(
+class SelectedMenuAdapter : ListAdapter<Pair<MenuVO, Int>, SelectedMenuViewHolder>(
     org.swm.att.common_ui.util.ItemDiffCallback<Pair<MenuVO, Int>>(
-        onItemsTheSame = { old, new -> old == new },
+        onItemsTheSame = { old, new -> old.first.id == new.first.id },
         //서버에서 id 넘겨줄 경우, id로 변경해야 함
         onContentTheSame = { old, new -> old == new }
     )
-){
+) {
     private var onItemClickListener: ((MenuVO, Int) -> Unit)? = null
     private var onDeleteBtnClickListener: ((MenuVO) -> Unit)? = null
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): org.swm.att.home.home.SelectedMenuViewHolder {
-        return org.swm.att.home.home.SelectedMenuViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectedMenuViewHolder {
+        return SelectedMenuViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
                 R.layout.item_selected_menu,
@@ -28,7 +29,7 @@ class SelectedMenuAdapter: ListAdapter<Pair<MenuVO, Int>, org.swm.att.home.home.
         )
     }
 
-    override fun onBindViewHolder(holder: org.swm.att.home.home.SelectedMenuViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SelectedMenuViewHolder, position: Int) {
         val menu = getItem(position).first
         val count = getItem(position).second
         holder.bind(menu, count)
