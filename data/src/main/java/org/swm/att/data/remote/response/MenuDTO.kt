@@ -19,10 +19,10 @@ data class MenuDTO(
 ) {
     fun toVO(): MenuVO {
         return MenuVO(
-            id ?: 0,
-            storeId ?: 0,
+            id ?: -1,
+            storeId ?: -1,
             name ?: "",
-            price ?: 0,
+            price ?: -1,
             category ?: "")
     }
 }
