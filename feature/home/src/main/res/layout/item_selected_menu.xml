@@ -10,6 +10,10 @@
         <variable
             name="count"
             type="int"/>
+
+        <variable
+            name="homeViewModel"
+            type="org.swm.att.home.home.HomeViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,6 +57,7 @@
                 android:background="@drawable/shape_oval"
                 android:backgroundTint="@color/main_color_light"
                 app:layout_constraintHorizontal_weight="1"
+                android:onClick="@{() -> homeViewModel.plusSelectedMenuItem(menu)}"
                 android:text="@string/btn_plus_menu_item"/>
 
             <TextView
@@ -78,6 +83,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/btn_minus_menu_item"
                 app:layout_constraintHorizontal_weight="1"
+                android:onClick="@{() -> homeViewModel.minusSelectedMenuItem(menu)}"
                 android:background="@drawable/shape_oval"
                 android:backgroundTint="@color/main_color_light"/>
 
@@ -99,12 +105,13 @@
             android:id="@+id/btn_delete_selected_menu_item"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/btn_delete_selected_menu_item"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_menu_item_price"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_weight="1"/>
+            app:layout_constraintHorizontal_weight="1"
+            android:text="@string/btn_delete_selected_menu_item"
+            android:onClick="@{() -> homeViewModel.deleteSelectedMenuItem(menu)}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

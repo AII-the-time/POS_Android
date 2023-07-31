@@ -30,17 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun initRecyclerView() {
-        selectedMenuAdapter = SelectedMenuAdapter()
-        selectedMenuAdapter.setOnItemClickListener{ menuVO, dif ->
-            if (dif == 1) {
-                homeViewModel.plusSelectedMenuItem(menuVO)
-            } else {
-                homeViewModel.minusSelectedMenuItem(menuVO)
-            }
-        }
-        selectedMenuAdapter.setOnDeleteBtnClickListener { menuVO ->
-            homeViewModel.deleteSelectedMenuItem(menuVO)
-        }
+        selectedMenuAdapter = SelectedMenuAdapter(homeViewModel)
 
         val animator = DefaultItemAnimator()
         animator.supportsChangeAnimations = false

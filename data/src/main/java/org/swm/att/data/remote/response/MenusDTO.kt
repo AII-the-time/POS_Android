@@ -9,7 +9,7 @@ data class MenusDTO(
     @field:Json(name = "menus")
     val menus: List<MenuDTO>
 ) {
-    fun toVO(): List<org.swm.att.domain.entity.response.MenuVO> {
+    fun toVO(): List<MenuVO> {
         return menus.map { it.toVO() }
     }
 }
