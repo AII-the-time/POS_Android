@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.home.R
+import org.swm.att.home.databinding.ItemSelectedMenuBinding
 import org.swm.att.home.home.HomeViewModel
 import org.swm.att.home.home.SelectedMenuViewHolder
 
@@ -17,17 +18,12 @@ class SelectedMenuAdapter(
         onContentTheSame = { old, new -> old == new }
     )
 ) {
+    private lateinit var binding: ItemSelectedMenuBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectedMenuViewHolder {
-        return SelectedMenuViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.item_selected_menu,
-                parent,
-                false
-            ),
-            homeViewModel
-        )
+        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_selected_menu, parent, false)
+        binding.homeViewModel = homeViewModel
+        return SelectedMenuViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SelectedMenuViewHolder, position: Int) {
