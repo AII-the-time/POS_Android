@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
+    api(project(":domain"))
 
     implementation(libs.bundles.androidx.ui.foundation)
     implementation(libs.material)
