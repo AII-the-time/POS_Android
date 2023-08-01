@@ -1,8 +1,8 @@
 package org.swm.att.domain.repository
 
-import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.domain.entity.response.CategoriesVO
 
 
 interface AttPosRepository {
-    suspend fun getMenu(storeId: Int): Result<List<MenuVO>>
+    suspend fun getMenu(storeId: Int): Result<CategoriesVO>
 }
