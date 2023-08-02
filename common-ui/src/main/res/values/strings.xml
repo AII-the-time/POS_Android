@@ -3,14 +3,27 @@
     <!--  navigation  -->
     <string name="fragment_home">HomeFragment</string>
     <!--  menu  -->
-    <string name="menu_setting">설정</string>
+    <string name="menu_home">홈</string>
+    <string name="menu_order">전체 주문</string>
+    <string name="menu_booking">예약 주문</string>
+    <string name="menu_stock">재고 확인</string>
+    <string name="menu_recipe">레시피 관리</string>
     <!--  description  -->
-    <string name="menu_setting_description">menu for setting</string>
+    <string name="menu_home_description">menu for home</string>
+    <string name="menu_order_description">menu for order</string>
+    <string name="menu_booking_description">menu for booking</string>
+    <string name="menu_stock_description">menu for stock</string>
+    <string name="menu_recipe_description">menu for recipe</string>
     <string name="category_tab_layout_description">tab layout for category</string>
 
     <string name="btn_plus_menu_item">+</string>
     <string name="btn_minus_menu_item">-</string>
     <string name="btn_delete_selected_menu_item">x</string>
     <string name="tv_custom_price_text">%d원</string>
-    <string name="tv_custom_total_count_text">총 %d개</string>
+    <string name="tv_custom_total_count_text">총 %d개 금액</string>
+    <string name="cafe_pos">CAFEPOS</string>
+    <string name="tv_payment_des">주문 내역</string>
+    <string name="tv_cancel_all"><u>주문 전체취소</u></string>
+    <string name="btn_order">주문하기</string>
+    <string name="btn_book">예약 주문</string>
 </resources>

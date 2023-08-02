@@ -13,7 +13,8 @@ fun setCustomPriceText(view: TextView, price: Int) {
 
 @BindingAdapter("price", "totalCount")
 fun setCustomTotalPriceText(view: TextView, price: Int, totalCount: Int) {
-    view.text = (price * totalCount).toString()
+    val totalPrice = price * totalCount
+    view.text = view.context.getString(R.string.tv_custom_price_text, totalPrice)
 }
 
 @BindingAdapter("customTotalCountText")

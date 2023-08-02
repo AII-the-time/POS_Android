@@ -11,10 +11,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_width="128dp"
+        android:layout_height="160dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/shape_round"
         android:backgroundTint="@color/main_color_light"
         android:padding="10dp">
@@ -34,7 +34,6 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/white"
                 android:text="@{menu.name}"/>
 
             <TextView
@@ -43,7 +42,6 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:textColor="@color/white"
                 app:customPriceText="@{menu.price}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
