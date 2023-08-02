@@ -19,8 +19,8 @@
     <string name="btn_plus_menu_item">+</string>
     <string name="btn_minus_menu_item">-</string>
     <string name="btn_delete_selected_menu_item">x</string>
-    <string name="tv_custom_price_text">%d원</string>
-    <string name="tv_custom_total_count_text">총 %d개 금액</string>
+    <string name="tv_custom_price_text">%s원</string>
+    <string name="tv_custom_total_count_text">총 %s개 금액</string>
     <string name="cafe_pos">CAFEPOS</string>
     <string name="tv_payment_des">주문 내역</string>
     <string name="tv_cancel_all"><u>주문 전체취소</u></string>
