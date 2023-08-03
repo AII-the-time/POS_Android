@@ -5,6 +5,7 @@ import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import androidx.activity.viewModels
 import androidx.datastore.dataStore
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
@@ -15,7 +16,7 @@ import org.swm.att.home.home.HomeFragment
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
-
+    private val mainViewModel by viewModels<MainViewModel>()
     private val Context.dataStore by dataStore(
         fileName = "user-setting.json",
         serializer = TokenSerializer(CryptoManager())
@@ -26,6 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         removeStatusBar()
         setNavRail()
         hideSystemUI()
+        checkRefreshToken()
     }
 
     @Suppress("DEPRECATION")
@@ -67,4 +69,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                             or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
         }
     }
+
+    private fun checkRefreshToken() {
+        mainViewModel.getRefreshToken(dataStore)
+
+        mainViewModel.token.observe(this) {
+            if(it.refreshToken == null) { //회원가입 처리
+
+            } else {
+                // 만료 처리
+            }
+        }
+    }
+
+
 }
