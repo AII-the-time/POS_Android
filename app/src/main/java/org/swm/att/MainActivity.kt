@@ -1,17 +1,25 @@
 package org.swm.att
 
-import android.graphics.Color
+import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import androidx.datastore.dataStore
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
+import org.swm.att.data.datastore.CryptoManager
+import org.swm.att.data.datastore.TokenSerializer
 import org.swm.att.databinding.ActivityMainBinding
 import org.swm.att.home.home.HomeFragment
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+
+    private val Context.dataStore by dataStore(
+        fileName = "user-setting.json",
+        serializer = TokenSerializer(CryptoManager())
+    )
 
     override fun onResume() {
         super.onResume()
