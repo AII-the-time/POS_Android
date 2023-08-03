@@ -1,6 +1,8 @@
 [versions]
 # Kotlin
 kotlinx-coroutines = "1.7.2"
+kotlin = "1.7.21"
+kotlin-serialization = "1.5.1"
 
 # AndroidX Libraries
 core-ktx = "1.8.0"
@@ -12,6 +14,7 @@ datastore = "1.0.0"
 viewpager2 = "1.0.0"
 lifecycle = "2.6.1"
 fragment = "1.5.7"
+preferences-datastore = "1.0.0"
 
 # Test Libraries
 junit = "4.13.2"
@@ -45,6 +48,7 @@ secret = "2.0.1"
 
 [libraries]
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -54,6 +58,7 @@ datastore = { module = "androidx.datastore:datastore-preferences", version.ref =
 viewpager2 = { module = "androidx.viewpager2:viewpager2" , version.ref = "viewpager2" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
+preferences-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "preferences-datastore" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 
@@ -94,3 +99,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin_an
 navigation_safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 dagger_hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secret" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

@@ -1,7 +1,8 @@
 plugins {
+    kotlin("kapt")
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    kotlin("kapt")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -42,7 +43,11 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     kapt(libs.moshi.kapt)
+    implementation(libs.preferences.datastore)
+    implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlin.serialization)
 
     api(libs.bundles.retrofit)
     api(libs.bundles.okhttp)
+    api(libs.preferences.datastore)
 }
