@@ -23,10 +23,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        setTabLayout()
+        setCategories()
+        setCategoriesObserver()
         setSelectedMenuObserver()
         setDataBinding()
-        setCancelAllBtnClickListener()
     }
 
     private fun initRecyclerView() {
@@ -41,15 +41,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    private fun setTabLayout() {
+    private fun setCategories() {
         categoryViewPagerAdapter = CategoryViewPagerAdapter(this)
-        //임의로 하나의 카테고리 추가
-        categoryViewPagerAdapter.addFragment(MenuFragment())
         binding.vpCategory.adapter = categoryViewPagerAdapter
 
-        TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, _ ->
-            tab.text = "카페 및 쿠키"
-        }.attach()
+        homeViewModel.getCategories()
+    }
+
+    private fun setCategoriesObserver() {
+        homeViewModel.categoryList.observe(viewLifecycleOwner) {
+            for(category in it.categories) {
+                categoryViewPagerAdapter.addFragment(MenuFragment(category))
+            }
+
+            TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, position ->
+                tab.text = it.categories[position].category
+            }.attach()
+
+        }
     }
 
     private fun setSelectedMenuObserver() {
@@ -60,12 +69,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setDataBinding() {
         binding.homeViewHolder = homeViewModel
-    }
-
-    private fun setCancelAllBtnClickListener() {
-        binding.btnDeleteSelectedMenuAll.setOnClickListener {
-            homeViewModel.deletedAllMenuItem()
-        }
     }
 
 }
