@@ -39,7 +39,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
     implementation(project(":common-ui"))
 
     implementation(libs.bundles.androidx.ui.foundation)

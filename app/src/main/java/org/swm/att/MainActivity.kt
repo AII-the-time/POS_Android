@@ -1,5 +1,6 @@
 package org.swm.att
 
+import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
@@ -7,26 +8,16 @@ import android.view.WindowInsetsController
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
 import org.swm.att.databinding.ActivityMainBinding
-import java.text.SimpleDateFormat
-import java.util.Date
+import org.swm.att.home.home.HomeFragment
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onResume() {
         super.onResume()
-        setDateAndTime()
         removeStatusBar()
-        setMenuItemClickListener()
+        setNavRail()
         hideSystemUI()
-    }
-
-    private fun setDateAndTime() {
-        val date = Date(System.currentTimeMillis())
-        val dateFormat = SimpleDateFormat("MM월 dd일 hh:mm")
-
-        binding.tvDate.text = dateFormat.format(date)
-
     }
 
     @Suppress("DEPRECATION")
@@ -39,15 +30,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    private fun setMenuItemClickListener() {
-        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.action_settings -> {
-                    //Handle setting icon press
+    private fun setNavRail() {
+        val homeFragment = HomeFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, homeFragment).commit()
+        binding.navRail.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home_screen -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, homeFragment).commit()
                     true
                 }
 
-                else -> false
+                else -> true
             }
         }
     }

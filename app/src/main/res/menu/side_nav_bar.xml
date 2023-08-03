@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_screen"
+        android:icon="@drawable/ic_nav_home"
+        android:title="@string/menu_home"
+        android:contentDescription="@string/menu_home_description"/>
+    <item
+        android:id="@+id/order_screen"
+        android:icon="@drawable/ic_nav_order"
+        android:title="@string/menu_order"
+        android:contentDescription="@string/menu_order_description"/>
+    <item
+        android:id="@+id/booking_screen"
+        android:icon="@drawable/ic_nav_booking"
+        android:title="@string/menu_booking"
+        android:contentDescription="@string/menu_booking_description"/>
+    <item
+        android:id="@+id/stock_screen"
+        android:icon="@drawable/ic_nav_stock"
+        android:title="@string/menu_stock"
+        android:contentDescription="@string/menu_stock_description"/>
+    <item
+        android:id="@+id/recipe_screen"
+        android:icon="@drawable/ic_nav_recipe"
+        android:title="@string/menu_recipe"
+        android:contentDescription="@string/menu_recipe_description"/>
+</menu>
