@@ -53,6 +53,7 @@ dependencies {
 
     implementation(libs.material)
     implementation(libs.bundles.androidx.ui.foundation)
+    implementation(libs.security.crypto)
 
     //Navigation
     implementation(libs.bundles.navigation)

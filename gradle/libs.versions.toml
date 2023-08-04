@@ -15,6 +15,7 @@ viewpager2 = "1.0.0"
 lifecycle = "2.6.1"
 fragment = "1.5.7"
 preferences-datastore = "1.0.0"
+security-crypto = "1.0.0"
 
 # Test Libraries
 junit = "4.13.2"
@@ -59,6 +60,7 @@ viewpager2 = { module = "androidx.viewpager2:viewpager2" , version.ref = "viewpa
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 preferences-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "preferences-datastore" }
+security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 
