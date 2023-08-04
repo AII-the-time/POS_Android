@@ -9,8 +9,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import org.swm.att.common_ui.util.token.JWTUtils
+import org.swm.att.common_ui.util.token.JWTUtils.unixTimeToDateTime
 import org.swm.att.data.remote.response.TokenDTO
-import org.swm.att.domain.entity.response.TokenVO
 import org.swm.att.domain.repository.AttPosUserRepository
 import javax.inject.Inject
 
@@ -18,27 +20,49 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val attPosUserRepository: AttPosUserRepository
 ): ViewModel() {
-    private val _token = MutableLiveData<TokenVO>()
-    val token: LiveData<TokenVO> = _token
+    private val _refreshExist = MutableLiveData<Boolean>()
+    val refreshExist: LiveData<Boolean> = _refreshExist
 
-    fun getRefreshToken(dataStore: DataStore<TokenDTO>) {
+    fun checkRefreshToken(dataStore: DataStore<TokenDTO>) {
         viewModelScope.launch {
-            _token.postValue(dataStore.data.first().toVO())
+            val curToken = dataStore.data.first().toVO()
+            if (curToken.refreshToken != null){
+                _refreshExist.postValue(false)
+            } else {
+                //refresh token 만료 확인
+                //val refreshDecodeStr = JWTUtils.decodeToken(curToken.refreshToken)
+                val refreshDecodeStr = JWTUtils.decodeToken(BuildConfig.TMP_REFRESH_TOKEN)
+                if (!checkRefreshExpire(refreshDecodeStr)) {
+                    refreshToken(dataStore, curToken.refreshToken)
+                }
+            }
+
         }
     }
 
-    fun refreshToken() {
+    private fun checkRefreshExpire(refreshDecodeStr: String): Boolean {
+        val expStr = JSONObject(refreshDecodeStr).getString("exp")
+        val expDate = unixTimeToDateTime(expStr.toLong())
+        return JWTUtils.isTokenExpired(expDate)
+    }
+
+    private fun refreshToken(dataStore: DataStore<TokenDTO>, curRefresh: String) {
         viewModelScope.launch {
             try {
-                token.value?.let {
-                    attPosUserRepository.refreshToken(it.refreshToken).onSuccess { newTokenVO ->
-                        _token.postValue(newTokenVO)
+                attPosUserRepository.refreshToken(curRefresh).onSuccess { newTokenVO ->
+                    dataStore.updateData {
+                        TokenDTO(
+                            accessToken = newTokenVO.accessToken,
+                            refreshToken = newTokenVO.refreshToken
+                        )
                     }
                 }
             } catch (e: Exception) {
-                Log.d("MainViewModel", "refreshToken: ${e.message}")
+                Log.d("MainViewModel", "${e.message}")
             }
         }
     }
+
+
 
 }

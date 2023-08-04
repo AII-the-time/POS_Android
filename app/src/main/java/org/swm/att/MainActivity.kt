@@ -28,6 +28,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         setNavRail()
         hideSystemUI()
         checkRefreshToken()
+        getAccesibility()
+        setObserver()
     }
 
     @Suppress("DEPRECATION")
@@ -71,15 +73,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun checkRefreshToken() {
-        mainViewModel.getRefreshToken(dataStore)
+        mainViewModel.checkRefreshToken(dataStore)
+    }
 
-        mainViewModel.token.observe(this) {
-            if(it.refreshToken == null) { //회원가입 처리
-
-            } else {
-                // 만료 처리
+    private fun setObserver() {
+        mainViewModel.refreshExist.observe(this) { exist ->
+            if (exist == false) {
+                getAccesibility()
             }
         }
+    }
+
+    private fun getAccesibility() {
+        // 로그인 및 회원가입 처리
     }
 
 
