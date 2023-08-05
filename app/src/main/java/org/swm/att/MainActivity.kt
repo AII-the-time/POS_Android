@@ -1,35 +1,27 @@
 package org.swm.att
 
-import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import androidx.activity.viewModels
-import androidx.datastore.dataStore
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
-import org.swm.att.data.datastore.CryptoManager
-import org.swm.att.data.datastore.TokenSerializer
 import org.swm.att.databinding.ActivityMainBinding
 import org.swm.att.home.home.HomeFragment
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val mainViewModel by viewModels<MainViewModel>()
-    private val Context.dataStore by dataStore(
-        fileName = "user-setting.json",
-        serializer = TokenSerializer(CryptoManager())
-    )
 
     override fun onResume() {
         super.onResume()
-        removeStatusBar()
-        setNavRail()
-        hideSystemUI()
         checkRefreshToken()
+        removeStatusBar()
+        hideSystemUI()
         getAccesibility()
         setObserver()
+        setNavRail()
     }
 
     @Suppress("DEPRECATION")
@@ -73,7 +65,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun checkRefreshToken() {
-        mainViewModel.checkRefreshToken(dataStore)
+        mainViewModel.checkRefreshToken()
     }
 
     private fun setObserver() {
@@ -87,6 +79,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private fun getAccesibility() {
         // 로그인 및 회원가입 처리
     }
-
 
 }
