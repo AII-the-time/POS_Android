@@ -1,23 +1,27 @@
 package org.swm.att
 
-import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
 import org.swm.att.databinding.ActivityMainBinding
 import org.swm.att.home.home.HomeFragment
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onResume() {
         super.onResume()
+        checkRefreshToken()
         removeStatusBar()
-        setNavRail()
         hideSystemUI()
+        getAccesibility()
+        setObserver()
+        setNavRail()
     }
 
     @Suppress("DEPRECATION")
@@ -59,4 +63,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                             or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
         }
     }
+
+    private fun checkRefreshToken() {
+        mainViewModel.checkRefreshToken()
+    }
+
+    private fun setObserver() {
+        mainViewModel.refreshExist.observe(this) { exist ->
+            if (exist == false) {
+                getAccesibility()
+            }
+        }
+    }
+
+    private fun getAccesibility() {
+        // 로그인 및 회원가입 처리
+    }
+
 }
