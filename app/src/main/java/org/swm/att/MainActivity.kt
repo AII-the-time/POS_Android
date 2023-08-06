@@ -1,5 +1,6 @@
 package org.swm.att
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
@@ -9,6 +10,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
 import org.swm.att.databinding.ActivityMainBinding
 import org.swm.att.home.home.HomeFragment
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -17,11 +21,21 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onResume() {
         super.onResume()
         checkRefreshToken()
+        setBindingData()
         removeStatusBar()
         hideSystemUI()
-        getAccesibility()
         setObserver()
         setNavRail()
+    }
+
+    private fun checkRefreshToken() {
+        mainViewModel.checkRefreshToken()
+    }
+
+    private fun setBindingData() {
+        val date = Date(System.currentTimeMillis())
+        val dateFormat = SimpleDateFormat("MM월 dd일 HH시 mm분", Locale.KOREA)
+        binding.barDate = dateFormat.format(date)
     }
 
     @Suppress("DEPRECATION")
@@ -34,13 +48,16 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
+    @SuppressLint("CommitTransaction")
     private fun setNavRail() {
         val homeFragment = HomeFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, homeFragment).commit()
-        binding.navRail.setOnItemSelectedListener { item ->
+        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, homeFragment)
+            .commit()
+        binding.posNavRail.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.home_screen -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, homeFragment).commit()
+                R.id.home_page -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment, homeFragment).commit()
                     true
                 }
 
@@ -64,20 +81,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    private fun checkRefreshToken() {
-        mainViewModel.checkRefreshToken()
-    }
-
     private fun setObserver() {
         mainViewModel.refreshExist.observe(this) { exist ->
             if (exist == false) {
-                getAccesibility()
+//                로그인 및 회원가입으로 화면 전환
             }
         }
-    }
-
-    private fun getAccesibility() {
-        // 로그인 및 회원가입 처리
     }
 
 }

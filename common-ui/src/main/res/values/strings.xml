@@ -5,16 +5,22 @@
     <!--  menu  -->
     <string name="menu_home">홈</string>
     <string name="menu_order">전체 주문</string>
-    <string name="menu_booking">예약 주문</string>
+    <string name="menu_preorder">예약 주문</string>
     <string name="menu_stock">재고 확인</string>
     <string name="menu_recipe">레시피 관리</string>
+    <string name="menu_worker">근무자변경</string>
+    <string name="menu_sales">영업관리</string>
+    <string name="menu_setting">환경설정</string>
     <!--  description  -->
-    <string name="menu_home_description">menu for home</string>
-    <string name="menu_order_description">menu for order</string>
-    <string name="menu_booking_description">menu for booking</string>
-    <string name="menu_stock_description">menu for stock</string>
-    <string name="menu_recipe_description">menu for recipe</string>
-    <string name="category_tab_layout_description">tab layout for category</string>
+    <string name="menu_home_des">menu for home</string>
+    <string name="menu_order_des">menu for order</string>
+    <string name="menu_preorder_des">menu for booking</string>
+    <string name="menu_stock_des">menu for stock</string>
+    <string name="menu_recipe_des">menu for recipe</string>
+    <string name="menu_worker_des">menu for managing worker</string>
+    <string name="menu_sales_des">menu for sales</string>
+    <string name="menu_setting_des">menu for setting</string>
+    <string name="category_tab_layout_des">tab layout for category</string>
 
     <string name="btn_plus_menu_item">+</string>
     <string name="btn_minus_menu_item">-</string>
@@ -23,7 +29,9 @@
     <string name="tv_custom_total_count_text">총 %s개 금액</string>
     <string name="cafe_pos">CAFEPOS</string>
     <string name="tv_payment_des">주문 내역</string>
-    <string name="tv_cancel_all"><u>주문 전체취소</u></string>
+    <string name="tv_cancel_all"><u>내역 전체취소</u></string>
     <string name="btn_order">주문하기</string>
-    <string name="btn_book">예약 주문</string>
+    <string name="btn_preorder">예약 주문</string>
+    <string name="tv_sales_target">오늘 목표매출 달성율</string>
+    <string name="btn_change_selected_options">옵션변경</string>
 </resources>
