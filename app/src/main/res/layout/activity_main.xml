@@ -4,34 +4,154 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+    <data>
+
+        <variable
+            name="barDate"
+            type="String" />
+
+        <variable
+            name="salesPercent"
+            type="Integer" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/custom_app_bar"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/pos_nav_rail"
+            app:layout_constraintRight_toRightOf="parent"
+            android:background="@color/back_color"
+            android:elevation="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_store_name"
+                    android:text="@string/cafe_pos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ll_store_name_divider"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/ll_store_name_divider"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="@id/tv_store_name"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_store_name"
+                    app:layout_constraintStart_toEndOf="@id/tv_store_name"
+                    app:layout_constraintEnd_toStartOf="@id/tv_current_date_time"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_current_date_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/ll_store_name_divider"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_store_name_divider"
+                    app:layout_constraintStart_toEndOf="@id/ll_store_name_divider"
+                    android:layout_marginStart="16dp"
+                    android:textSize="14sp"
+                    android:text="@{barDate}"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/cl_sales_target_bar"
+                    android:layout_marginEnd="13dp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:text="@string/tv_sales_target" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_sales_target_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ProgressBar
+                        android:id="@+id/current_sales_progress_bar"
+                        android:layout_width="180dp"
+                        android:layout_height="16dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:progress="50"
+                        android:progressBackgroundTint="@color/white"
+                        android:progressTint="@color/main_color"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:background="@drawable/shape_round_stroke" />
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="180dp"
+                        android:layout_height="16dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/tv_current_sales_percent"
+                        android:background="@drawable/shape_round_stroke" />
+
+                    <TextView
+                        android:id="@+id/tv_current_sales_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@id/current_sales_progress_bar"
+                        app:layout_constraintBottom_toBottomOf="@id/current_sales_progress_bar"
+                        app:layout_constraintStart_toEndOf="@id/current_sales_progress_bar"
+                        android:layout_marginStart="5dp"
+                        android:textSize="11sp"
+                        android:text="50%"
+                        android:textColor="@color/main_color" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
         <com.google.android.material.navigationrail.NavigationRailView
-            android:id="@+id/nav_rail"
-            android:layout_width="wrap_content"
+            android:id="@+id/pos_nav_rail"
+            android:layout_width="80dp"
             android:layout_height="0dp"
-            android:background="@color/white"
             app:headerLayout="@layout/nav_rail_header"
+            app:labelVisibilityMode="labeled"
             app:itemRippleColor="@null"
             app:itemTextAppearanceActive="@style/CustomNavigationRailStyle"
             app:itemTextAppearanceInactive="@style/CustomNavigationRailStyle"
-            app:labelVisibilityMode="labeled"
+            app:itemIconSize="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/nav_host_fragment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/CustomNavigationRailStyle"
-            app:menu="@menu/side_nav_bar" />
+            app:elevation="0dp"
+            app:menu="@menu/pos_nav_bar" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/custom_app_bar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/nav_rail"
+            app:layout_constraintStart_toEndOf="@id/pos_nav_rail"
             app:layout_constraintEnd_toEndOf="parent"
             android:name="androidx.navigation.fragment.NavHostFragment"
             app:navGraph="@navigation/nav_graph"

@@ -40,7 +40,7 @@ class MenuFragment(
 
         binding.rvMenuForCategory.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(requireContext(), 4)
+            layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = categoryMenuAdapter
         }
     }
