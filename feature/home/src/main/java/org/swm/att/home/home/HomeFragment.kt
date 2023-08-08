@@ -12,6 +12,7 @@ import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
+import org.swm.att.home.dialog.EarnMileageDialog
 import org.swm.att.home.menu.MenuFragment
 
 @AndroidEntryPoint
@@ -27,6 +28,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setCategoriesObserver()
         setSelectedMenuObserver()
         setDataBinding()
+        setOrderBtnListener()
     }
 
     private fun initRecyclerView() {
@@ -69,6 +71,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setDataBinding() {
         binding.homeViewHolder = homeViewModel
+    }
+
+    private fun setOrderBtnListener() {
+        binding.btnOrder.setOnClickListener {
+            val mileageDialog = EarnMileageDialog(homeViewModel)
+            mileageDialog.show(requireActivity().supportFragmentManager, "EarnMileageDialog")
+        }
     }
 
 }
