@@ -3,6 +3,7 @@
     <!--  navigation  -->
     <string name="fragment_home">HomeFragment</string>
     <string name="fragment_pay">PayFragment</string>
+    <string name="dialog_earn_mileage">EarnMileageDialog</string>
     <!--  menu  -->
     <string name="menu_home">홈</string>
     <string name="menu_order">전체 주문</string>
@@ -64,4 +65,11 @@
     <string name="tv_cur_mileage_des">사용 가능한 포인트</string>
     <string name="tv_use_mileage_des">오늘 사용 포인트</string>
     <string name="tv_mileage_text">%d점</string>
+    <string name="tv_payment_des">결제 내역</string>
+    <string name="tv_total_price_des">총 금액</string>
+    <string name="tv_total_mileage_use_des">포인트 결제</string>
+    <string name="tv_total_pay_price_des">결제 금액</string>
+    <string name="btn_pay_by_cash">현금/계좌이체</string>
+    <string name="btn_pay_by_easy">간편 결제(카카오페이)</string>
+    <string name="btn_pay_by_card">신용카드 결제</string>
 </resources>
