@@ -49,7 +49,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":common-ui"))
-    implementation(project(":feature:home"))
+    implementation(project(":feature:main"))
 
     implementation(libs.material)
     implementation(libs.bundles.androidx.ui.foundation)
