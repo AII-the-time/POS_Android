@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
+    id("androidx.navigation.safeargs.kotlin")
     kotlin("kapt")
 }
 
@@ -48,4 +49,5 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     kapt(libs.moshi.kapt)
+    implementation(libs.bundles.navigation)
 }
