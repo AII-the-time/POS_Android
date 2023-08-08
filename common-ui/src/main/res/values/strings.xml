@@ -11,6 +11,20 @@
     <string name="menu_worker">근무자변경</string>
     <string name="menu_sales">영업관리</string>
     <string name="menu_setting">환경설정</string>
+    <!--  keypad  -->
+    <string name="key_pad_1">1</string>
+    <string name="key_pad_2">2</string>
+    <string name="key_pad_3">3</string>
+    <string name="key_pad_4">4</string>
+    <string name="key_pad_5">5</string>
+    <string name="key_pad_6">6</string>
+    <string name="key_pad_7">7</string>
+    <string name="key_pad_8">8</string>
+    <string name="key_pad_9">9</string>
+    <string name="key_pad_0">0</string>
+    <string name="key_pad_clear">지우기</string>
+    <string name="key_pad_enter">완료</string>
+
     <!--  description  -->
     <string name="menu_home_des">menu for home</string>
     <string name="menu_order_des">menu for order</string>
@@ -22,6 +36,7 @@
     <string name="menu_setting_des">menu for setting</string>
     <string name="category_tab_layout_des">tab layout for category</string>
 
+    <!--  etc  -->
     <string name="btn_plus_menu_item">+</string>
     <string name="btn_minus_menu_item">-</string>
     <string name="btn_delete_selected_menu_item">x</string>
@@ -34,4 +49,8 @@
     <string name="btn_preorder">예약 주문</string>
     <string name="tv_sales_target">오늘 목표매출 달성율</string>
     <string name="btn_change_selected_options">옵션변경</string>
+    <string name="tv_earn_mileage_des">포인트 적립</string>
+    <string name="phone_number_header">010</string>
+    <string name="phone_number_divider">-</string>
+    <string name="pass_earn_mileage">적립 안함</string>
 </resources>

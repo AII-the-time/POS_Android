@@ -188,7 +188,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/main_color"
-                android:background="@drawable/shape_round" />
+                android:background="@drawable/shape_round_10" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
