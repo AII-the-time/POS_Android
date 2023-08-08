@@ -1,4 +1,4 @@
-package org.swm.att
+package org.swm.att.home
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -8,7 +8,7 @@ import android.view.WindowInsetsController
 import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
-import org.swm.att.databinding.ActivityMainBinding
+import org.swm.att.home.databinding.ActivityMainBinding
 import org.swm.att.home.home.HomeFragment
 import java.text.SimpleDateFormat
 import java.util.Date
