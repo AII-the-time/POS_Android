@@ -65,7 +65,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setSelectedMenuObserver() {
         homeViewModel.selectedMenuMap.observe(viewLifecycleOwner) {
-            selectedMenuAdapter.submitList(it.toList())
+            it?.let {
+                selectedMenuAdapter.submitList(it.toList())
+            }
         }
     }
 

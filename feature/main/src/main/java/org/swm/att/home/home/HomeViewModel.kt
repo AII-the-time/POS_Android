@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.swm.att.domain.entity.request.OrderedMenuVO
+import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.repository.AttPosRepository
@@ -17,8 +19,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val attPosRepository: AttPosRepository
 ): ViewModel() {
-    private val _selectedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>>(mutableMapOf())
-    val selectedMenuMap: LiveData<MutableMap<MenuVO, Int>> = _selectedMenuMap
+    private val _selectedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
+    val selectedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _selectedMenuMap
     private val _categoryList = MutableLiveData<CategoriesVO>()
     val categoryList = _categoryList
     private val _midPhoneNumber = MutableLiveData<Stack<String>>()
@@ -108,5 +110,20 @@ class HomeViewModel @Inject constructor(
     fun clearPhoneNumber() {
         _midPhoneNumber.postValue(Stack())
         _endPhoneNumber.postValue(Stack())
+    }
+
+    fun getOrderedMenusVO(): OrderedMenusVO {
+        val selectedMenuMap = _selectedMenuMap.value ?: mapOf()
+        val orderedMenuList = mutableListOf<OrderedMenuVO>()
+        selectedMenuMap.keys.forEach {
+            orderedMenuList.add(
+                OrderedMenuVO(
+                    it,
+                    selectedMenuMap[it]
+                )
+            )
+        }
+
+        return OrderedMenusVO(orderedMenuList)
     }
 }

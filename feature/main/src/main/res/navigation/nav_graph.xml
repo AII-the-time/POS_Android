@@ -11,12 +11,12 @@
         android:label="@string/fragment_home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_fragment_home_to_fragment_pay2"
+            android:id="@+id/action_fragment_home_to_fragment_pay"
             app:destination="@id/fragment_pay"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <dialog
         android:id="@+id/dialog_earn_mileage"
@@ -33,5 +33,10 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="OrderedMenus"
+            app:argType="org.swm.att.domain.entity.request.OrderedMenusVO"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>
