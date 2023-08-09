@@ -1,15 +1,16 @@
 package org.swm.att.home
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import androidx.activity.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
 import org.swm.att.home.databinding.ActivityMainBinding
-import org.swm.att.home.home.HomeFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -17,6 +18,7 @@ import java.util.Locale
 @AndroidEntryPoint
 class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val mainViewModel by viewModels<MainViewModel>()
+    private lateinit var navController: NavController
 
     override fun onResume() {
         super.onResume()
@@ -48,22 +50,11 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    @SuppressLint("CommitTransaction")
     private fun setNavRail() {
-        val homeFragment = HomeFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, homeFragment)
-            .commit()
-        binding.posNavRail.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.home_page -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment, homeFragment).commit()
-                    true
-                }
+        val host = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = host.navController
 
-                else -> true
-            }
-        }
+        binding.posNavRail.setupWithNavController(navController)
     }
 
     @Suppress("DEPRECATION")
