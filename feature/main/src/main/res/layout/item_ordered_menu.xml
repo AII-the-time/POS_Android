@@ -4,11 +4,8 @@
 
     <data>
         <variable
-            name="menu"
-            type="org.swm.att.domain.entity.response.MenuVO" />
-        <variable
-            name="count"
-            type="Integer" />
+            name="orderedMenu"
+            type="org.swm.att.domain.entity.request.OrderedMenuVO" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +25,7 @@
             app:layout_constraintBottom_toTopOf="@id/tv_menu_item_options"
             app:layout_constraintEnd_toStartOf="@id/cl_menu_item_total_price"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            android:text="@{menu.name}"
+            android:text="@{orderedMenu.menu.name}"
             android:textColor="@color/black"
             android:textSize="14sp"/>
 
@@ -47,7 +44,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tv_menu_item_count"
-                app:customPriceText="@{menu.price}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:customPriceText="@{orderedMenu.menu.price}"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
 
@@ -58,7 +56,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_menu_item_price"
                 app:layout_constraintEnd_toStartOf="@id/tv_menu_item_total_price"
-                android:text="@{String.valueOf(count)}"
+                android:text="@{String.valueOf(orderedMenu.count)}"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginStart="20dp"/>
@@ -70,8 +68,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_menu_item_count"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:price="@{menu.price}"
-                app:totalCount="@{count}"
+                app:price="@{orderedMenu.menu.price}"
+                app:totalCount="@{orderedMenu.count}"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginStart="20dp"/>
