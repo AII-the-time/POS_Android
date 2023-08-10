@@ -12,8 +12,11 @@ import org.swm.att.home.pay.OrderedMenuViewHolder
 import org.swm.att.home.pay.PayViewModel
 
 class OrderedMenuAdapter(
+    private val payViewModel: PayViewModel,
+    private val selected: Boolean
 ): ListAdapter<OrderedMenuVO, OrderedMenuViewHolder>(
     ItemDiffCallback<OrderedMenuVO>(
+        //옵션이 추가되면 옵션도 고려해서 비교해야 함
         onItemsTheSame = { old, new -> old.menu.id == new.menu.id },
         onContentTheSame = { old, new -> old == new }
     )
@@ -28,5 +31,14 @@ class OrderedMenuAdapter(
     override fun onBindViewHolder(holder: OrderedMenuViewHolder, position: Int) {
         val orderedMenu = getItem(position)
         holder.bind(orderedMenu)
+
+        holder.itemView.setOnClickListener {
+            if (selected) {
+                payViewModel.moveSelectedMenuToOrderedList(orderedMenu)
+            } else {
+                payViewModel.moveOrderedMenuToSelectedList(orderedMenu)
+            }
+        }
+
     }
 }

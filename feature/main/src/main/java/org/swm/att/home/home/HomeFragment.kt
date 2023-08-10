@@ -24,18 +24,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("HomeFragment", "onViewCreated")
         initRecyclerView()
         setCategories()
         setCategoriesObserver()
         setSelectedMenuObserver()
         setDataBinding()
         setOrderBtnListener()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("HomeFragment", "onResume")
     }
 
     private fun initRecyclerView() {
