@@ -1,6 +1,7 @@
 package org.swm.att.home.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -47,7 +48,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         categoryViewPagerAdapter = CategoryViewPagerAdapter(this)
         binding.vpCategory.adapter = categoryViewPagerAdapter
 
-        homeViewModel.getCategories()
+        if (homeViewModel.categoryList.value == null) {
+            homeViewModel.getCategories()
+        }
     }
 
     private fun setCategoriesObserver() {
@@ -65,7 +68,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setSelectedMenuObserver() {
         homeViewModel.selectedMenuMap.observe(viewLifecycleOwner) {
-            selectedMenuAdapter.submitList(it.toList())
+            it?.let {
+                selectedMenuAdapter.submitList(it.toList())
+            }
         }
     }
 

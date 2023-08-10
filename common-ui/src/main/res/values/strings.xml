@@ -2,6 +2,8 @@
     <string name="app_name">POS-Android</string>
     <!--  navigation  -->
     <string name="fragment_home">HomeFragment</string>
+    <string name="fragment_pay">PayFragment</string>
+    <string name="dialog_earn_mileage">EarnMileageDialog</string>
     <!--  menu  -->
     <string name="menu_home">홈</string>
     <string name="menu_order">전체 주문</string>
@@ -43,7 +45,7 @@
     <string name="tv_custom_price_text">%s원</string>
     <string name="tv_custom_total_count_text">총 %s개 금액</string>
     <string name="cafe_pos">CAFEPOS</string>
-    <string name="tv_payment_des">주문 내역</string>
+    <string name="tv_order_des">주문 내역</string>
     <string name="tv_cancel_all"><u>내역 전체취소</u></string>
     <string name="btn_order">주문하기</string>
     <string name="btn_preorder">예약 주문</string>
@@ -53,4 +55,21 @@
     <string name="phone_number_header">010</string>
     <string name="phone_number_divider">-</string>
     <string name="pass_earn_mileage">적립 안함</string>
+    <string name="tv_modify_order"><u>주문 수정</u></string>
+    <string name="tv_customer_info_des">회원 정보</string>
+    <string name="tv_customer_name">%s 님</string>
+    <string name="tv_visit_time">%d번째 방문</string>
+    <string name="tv_last_visit_date_des">마지막 방문</string>
+    <string name="tv_earned_mileage_des">적립 예상 포인트</string>
+    <string name="tv_mileage_des">포인트 현황</string>
+    <string name="tv_cur_mileage_des">사용 가능한 포인트</string>
+    <string name="tv_use_mileage_des">오늘 사용 포인트</string>
+    <string name="tv_mileage_text">%d점</string>
+    <string name="tv_payment_des">결제 내역</string>
+    <string name="tv_total_price_des">총 금액</string>
+    <string name="tv_total_mileage_use_des">포인트 결제</string>
+    <string name="tv_total_pay_price_des">결제 금액</string>
+    <string name="btn_pay_by_cash">현금/계좌이체</string>
+    <string name="btn_pay_by_easy">간편 결제(카카오페이)</string>
+    <string name="btn_pay_by_card">신용카드 결제</string>
 </resources>

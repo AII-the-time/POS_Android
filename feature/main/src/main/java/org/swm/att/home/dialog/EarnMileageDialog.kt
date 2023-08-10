@@ -2,9 +2,11 @@ package org.swm.att.home.dialog
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.NavHostFragment
 import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogEarnMileageBinding
+import org.swm.att.home.home.HomeFragmentDirections
 import org.swm.att.home.home.HomeViewModel
 
 class EarnMileageDialog(
@@ -27,6 +29,9 @@ class EarnMileageDialog(
         binding.btnPassEarnMileage.setOnClickListener {
             homeViewModel.clearPhoneNumber()
             dismiss()
+            val orderedMenus = homeViewModel.getOrderedMenusVO()
+            val action = HomeFragmentDirections.actionFragmentHomeToFragmentPay(orderedMenus)
+            NavHostFragment.findNavController(this).navigate(action)
         }
     }
 
