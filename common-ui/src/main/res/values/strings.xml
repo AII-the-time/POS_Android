@@ -60,14 +60,14 @@
     <string name="pass_earn_mileage">적립 안함</string>
     <string name="tv_modify_order"><u>주문 수정</u></string>
     <string name="tv_customer_info_des">회원 정보</string>
-    <string name="tv_customer_name">%s 님</string>
+    <string name="tv_customer_number">%s 님</string>
     <string name="tv_visit_time">%d번째 방문</string>
     <string name="tv_last_visit_date_des">마지막 방문</string>
     <string name="tv_earned_mileage_des">적립 예상 포인트</string>
     <string name="tv_mileage_des">포인트 현황</string>
     <string name="tv_cur_mileage_des">사용 가능한 포인트</string>
     <string name="tv_use_mileage_des">오늘 사용 포인트</string>
-    <string name="tv_mileage_text">%d점</string>
+    <string name="tv_mileage_text">%s점</string>
     <string name="tv_payment_des">결제 내역</string>
     <string name="tv_total_price_des">총 금액</string>
     <string name="tv_total_mileage_use_des">포인트 결제</string>

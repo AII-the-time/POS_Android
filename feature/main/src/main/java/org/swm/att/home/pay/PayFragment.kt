@@ -25,6 +25,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         setBtnModifyOrderClickListener()
         setSelectedMenuList()
         setMenusMapObserver()
+        getCustomerMileageInfo()
         setDataBinding()
     }
 
@@ -69,5 +70,12 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setDataBinding() {
         binding.payViewModel = payViewModel
+        binding.phoneNumber = args.PhoneNumber
+    }
+
+    private fun getCustomerMileageInfo() {
+        args.PhoneNumber?.let {
+            payViewModel.getMileage(it)
+        }
     }
 }
