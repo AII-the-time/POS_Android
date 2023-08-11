@@ -24,6 +24,7 @@ androidx-test-espresso = "3.5.1"
 
 # Google Libraries
 material = "1.5.0"
+flexbox = "3.0.0"
 
 # Dependency Injection
 dagger-hilt = "2.46.1"
@@ -63,6 +64,7 @@ preferences-datastore = { module = "androidx.datastore:datastore-preferences", v
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }

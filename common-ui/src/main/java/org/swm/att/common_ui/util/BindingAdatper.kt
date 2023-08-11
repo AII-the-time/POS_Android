@@ -5,6 +5,7 @@ import androidx.databinding.BindingAdapter
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.util.CurrencyFormat.getUnit
 import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.domain.entity.response.OptionVO
 
 @BindingAdapter("customPriceText")
 fun setCustomPriceText(view: TextView, price: Int) {
@@ -28,4 +29,25 @@ fun setCustomTotalCountText(view: TextView, menuMap: Map<MenuVO, Int>?) {
 fun setCustomTotalPriceText(view: TextView, menuMap: Map<MenuVO, Int>?) {
     val totalPrice = (menuMap?.map { it.key.price * it.value }?.sum() ?: 0).toString().getUnit()
     view.text = view.context.getString(R.string.tv_custom_price_text, totalPrice)
+}
+
+@BindingAdapter("optionListText")
+fun setOptionListText(view: TextView, optionList: List<OptionVO>?) {
+    val optionStr = optionList?.let { list ->
+        list.joinToString { optionVO ->
+            optionVO.types.joinToString { optionTypeVO ->
+                optionTypeVO.name
+            }
+        }
+    }
+    view.text = optionStr
+}
+
+@BindingAdapter("setCustomVisibility")
+fun setCustomVisibility(view: TextView, detail: String?) {
+    view.visibility = if (detail.isNullOrEmpty()) {
+        TextView.GONE
+    } else {
+        TextView.VISIBLE
+    }
 }

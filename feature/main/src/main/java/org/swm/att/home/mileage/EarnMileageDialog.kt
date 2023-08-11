@@ -1,4 +1,4 @@
-package org.swm.att.home.dialog
+package org.swm.att.home.mileage
 
 import android.os.Bundle
 import android.view.View

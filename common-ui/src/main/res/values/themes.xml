@@ -5,13 +5,18 @@
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryVariant">@color/divider_gray</item>
         <item name="colorOnPrimary">@color/divider_gray</item>
+        <item name="chipStyle">@style/Widget.App.Chip</item>
     </style>
 
     <style name="Theme.POSAndroid" parent="Base.Theme.POSAndroid" />
-    <style name="Widget.App.NavigationRailView" parent="Widget.MaterialComponents.NavigationRailView">
-        <item name="materialThemeOverlay">@style/CustomNavigationRailStyle</item>
-    </style>
     <style name="CustomNavigationRailStyle">
         <item name="android:textSize">10sp</item>
+    </style>
+    <!-- chip   -->
+    <style name="Widget.App.Chip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.SmallComponent</item>
+        <item name="chipBackgroundColor">@drawable/selector_option_type_chip_item</item>
+        <item name="android:textColor">@drawable/selector_option_type_chip_text</item>
     </style>
 </resources>

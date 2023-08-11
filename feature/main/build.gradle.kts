@@ -50,4 +50,5 @@ dependencies {
     implementation(libs.moshi.kotlin)
     kapt(libs.moshi.kapt)
     implementation(libs.bundles.navigation)
+    implementation(libs.flexbox)
 }

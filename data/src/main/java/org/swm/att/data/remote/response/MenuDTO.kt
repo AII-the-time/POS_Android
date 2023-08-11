@@ -8,21 +8,19 @@ import org.swm.att.domain.entity.response.MenuVO
 data class MenuDTO(
     @field:Json(name = "id")
     val id: Int?,
-    @field:Json(name = "storeId")
-    val storeId: Int?,
     @field:Json(name = "name")
     val name: String?,
     @field:Json(name = "price")
     val price: Int?,
-    @field:Json(name = "category")
-    val category: String?
+    @field:Json(name = "options")
+    val options: List<OptionDTO>?
 ) {
     fun toVO(): MenuVO {
         return MenuVO(
-            id ?: -1,
-            storeId ?: -1,
-            name ?: "",
-            price ?: -1,
-            category ?: "")
+            id = id ?: -1,
+            name = name ?: "",
+            price = price ?: -1,
+            options = options?.map { it.toVO() } ?: listOf()
+        )
     }
 }

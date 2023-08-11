@@ -1,7 +1,6 @@
 package org.swm.att.home.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -13,7 +12,7 @@ import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
-import org.swm.att.home.dialog.EarnMileageDialog
+import org.swm.att.home.mileage.EarnMileageDialog
 import org.swm.att.home.menu.MenuFragment
 
 @AndroidEntryPoint

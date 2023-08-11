@@ -1,13 +1,18 @@
 package org.swm.att.common_ui.base
 
+import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -33,9 +38,20 @@ abstract class BaseDialog<T : ViewBinding>(
         return binding.root
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return object: Dialog(requireContext()) {
+            override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+                return super.dispatchTouchEvent(ev)
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         hideSystemUI()
+        setDialogSize()
     }
 
     override fun onDestroy() {
@@ -55,6 +71,15 @@ abstract class BaseDialog<T : ViewBinding>(
             decorView.systemUiVisibility =
                 (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
         }
+    }
+
+    private fun setDialogSize() {
+        val display = resources.displayMetrics
+        val window:Window = dialog?.window ?: return
+        val params:WindowManager.LayoutParams = window.attributes
+        params.width = (display.widthPixels * 0.6).toInt()
+
+        dialog?.window?.attributes = params
     }
 
 }

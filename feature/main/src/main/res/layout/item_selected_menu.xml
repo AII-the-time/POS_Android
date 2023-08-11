@@ -49,16 +49,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tv_selected_menu_item_name"
+                app:layout_constraintBottom_toTopOf="@id/tv_option_detail"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="12sp"
+                app:optionListText="@{menu.options}"/>
+
+            <TextView
+                android:id="@+id/tv_option_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_selected_menu_options"
                 app:layout_constraintBottom_toTopOf="@id/cl_change_menu_item_count"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="12sp"
-                android:text="아이스,스몰,밸런스,시럽 적게" />
+                app:setCustomVisibility="@{menu.detail}"
+                android:text="@{menu.detail}"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_change_menu_item_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tv_selected_menu_options"
+                app:layout_constraintTop_toBottomOf="@id/tv_option_detail"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="16dp">
@@ -112,6 +123,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/cl_change_menu_item_count"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/btn_change_selected_options"
+                android:visibility="gone"
                 android:textSize="11sp"
                 android:textColor="@color/black"
                 android:background="@drawable/shape_round_stroke" />
