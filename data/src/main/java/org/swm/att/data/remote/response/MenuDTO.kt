@@ -17,10 +17,10 @@ data class MenuDTO(
 ) {
     fun toVO(): MenuVO {
         return MenuVO(
-            id ?: -1,
-            name ?: "",
-            price ?: -1,
-            options?.map { it.toVO() } ?: listOf()
+            id = id ?: -1,
+            name = name ?: "",
+            price = price ?: -1,
+            options = options?.map { it.toVO() } ?: listOf()
         )
     }
 }

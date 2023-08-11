@@ -1,6 +1,5 @@
 package org.swm.att.common_ui.util
 
-import android.util.Log
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import org.swm.att.common_ui.R
@@ -34,14 +33,21 @@ fun setCustomTotalPriceText(view: TextView, menuMap: Map<MenuVO, Int>?) {
 
 @BindingAdapter("optionListText")
 fun setOptionListText(view: TextView, optionList: List<OptionVO>?) {
-    val optionStr = optionList?.let { optionList ->
-        optionList.joinToString { optionVO ->
-                optionVO?.let { optionTypeVO ->
-                    optionTypeVO.types?.joinToString { optionTypeVO ->
-                        optionTypeVO.name
-                    }
-                } ?: ""
+    val optionStr = optionList?.let { list ->
+        list.joinToString { optionVO ->
+            optionVO.types.joinToString { optionTypeVO ->
+                optionTypeVO.name
             }
         }
+    }
     view.text = optionStr
+}
+
+@BindingAdapter("setCustomVisibility")
+fun setCustomVisibility(view: TextView, detail: String?) {
+    view.visibility = if (detail.isNullOrEmpty()) {
+        TextView.GONE
+    } else {
+        TextView.VISIBLE
+    }
 }

@@ -46,11 +46,16 @@ class MenuOptionDialog(
             val optionsPrice = menuOptionViewModel.selectedOptionList.value?.sumOf {
                 it.types.sumOf { type -> type.price }
             } ?: 0
+            var detail: String? = null
+            if (binding.edtMenuCustomOption.text.toString() != "") {
+                detail = binding.edtMenuCustomOption.text.toString()
+            }
             val selectedMenuWithOptions = MenuVO(
                 menuVO.id,
                 menuVO.name,
                 menuVO.price + optionsPrice,
-                menuOptionViewModel.selectedOptionList.value ?: listOf()
+                menuOptionViewModel.selectedOptionList.value ?: listOf(),
+                detail
             )
             homeViewModel.addSelectedMenu(selectedMenuWithOptions)
             dismiss()
