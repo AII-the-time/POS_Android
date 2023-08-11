@@ -1,5 +1,6 @@
 package org.swm.att.domain.repository
 
+import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.TokenVO
 
 interface AttPosUserRepository {
@@ -8,4 +9,5 @@ interface AttPosUserRepository {
     suspend fun saveRefreshToken(refreshToken: String)
     suspend fun getAccessToken(): String
     suspend fun getRefreshToken(): String
+    suspend fun getMileage(storeId: Int, phoneNumber: String): Result<MileageVO>
 }

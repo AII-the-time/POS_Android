@@ -11,4 +11,7 @@ class UserDataSource @Inject constructor(
     suspend fun refreshToken(refreshToken: String): TokenDTO =
         checkResponse(attPosUserService.refreshToken(refreshToken))
 
+    suspend fun getMileage(storeId: Int, phoneNumber: String) =
+        checkResponse(attPosUserService.getMileage(storeId, phoneNumber))
+
 }

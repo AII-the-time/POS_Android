@@ -5,6 +5,7 @@ import org.swm.att.data.remote.datasource.UserDataSource
 import org.swm.att.domain.entity.response.TokenVO
 import org.swm.att.domain.repository.AttPosUserRepository
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey
+import org.swm.att.domain.entity.response.MileageVO
 import javax.inject.Inject
 
 class AttPosUserRepositoryImpl @Inject constructor(
@@ -36,5 +37,10 @@ class AttPosUserRepositoryImpl @Inject constructor(
 
     override suspend fun getRefreshToken(): String {
         return attEncryptedPrefDataSource.getStrValue(PreferenceKey.REFRESH_TOKEN)
+    }
+
+    override suspend fun getMileage(storeId: Int, phoneNumber: String): Result<MileageVO> {
+        val response = userDataSource.getMileage(storeId, phoneNumber)
+        return Result.success(response.toVO())
     }
 }
