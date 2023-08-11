@@ -8,9 +8,12 @@ import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.home.R
 import org.swm.att.home.option.MenuOptionViewHolder
+import org.swm.att.home.option.MenuOptionViewModel
 
 
-class MenuOptionAdapter: ListAdapter<OptionVO, MenuOptionViewHolder>(
+class MenuOptionAdapter(
+    private val menuOptionViewModel: MenuOptionViewModel
+): ListAdapter<OptionVO, MenuOptionViewHolder>(
     ItemDiffCallback<OptionVO>(
         onItemsTheSame = { old, new -> old.id == new.id },
         onContentTheSame = { old, new -> old == new }
@@ -24,7 +27,8 @@ class MenuOptionAdapter: ListAdapter<OptionVO, MenuOptionViewHolder>(
                 R.layout.item_menu_option,
                 parent,
                 false
-            )
+            ),
+            menuOptionViewModel
         )
     }
 

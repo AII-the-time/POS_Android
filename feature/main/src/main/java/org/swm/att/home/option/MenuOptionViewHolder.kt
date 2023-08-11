@@ -7,7 +7,8 @@ import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.home.databinding.ItemMenuOptionBinding
 
 class MenuOptionViewHolder(
-    private val binding: ItemMenuOptionBinding
+    private val binding: ItemMenuOptionBinding,
+    private val menuOptionViewModel: MenuOptionViewModel
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(menuOption: OptionVO) {
@@ -24,6 +25,18 @@ class MenuOptionViewHolder(
                         context.getString(R.string.tv_menu_option_type_with_price, type.name, type.price)
                     } else {
                         context.getString(R.string.tv_menu_option_type_with_no_price, type.name)
+                    }
+                    setOnCheckedChangeListener { _, b ->
+                        val optionVO = OptionVO(
+                            id = menuOption.id,
+                            category = menuOption.category,
+                            types = listOf(type)
+                        )
+                        if (b) {
+                            menuOptionViewModel.addSelectedOption(optionVO)
+                        } else {
+                            menuOptionViewModel.removeSelectedOption(optionVO)
+                        }
                     }
 
                 }
