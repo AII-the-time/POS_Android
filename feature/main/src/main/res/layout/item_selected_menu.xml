@@ -123,6 +123,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/cl_change_menu_item_count"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/btn_change_selected_options"
+                android:visibility="gone"
                 android:textSize="11sp"
                 android:textColor="@color/black"
                 android:background="@drawable/shape_round_stroke" />
