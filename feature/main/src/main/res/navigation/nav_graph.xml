@@ -20,7 +20,7 @@
     </fragment>
     <dialog
         android:id="@+id/dialog_earn_mileage"
-        android:name="org.swm.att.home.dialog.EarnMileageDialog"
+        android:name="org.swm.att.home.mileage.EarnMileageDialog"
         android:label="@string/dialog_earn_mileage" />
     <fragment
         android:id="@+id/fragment_pay"
