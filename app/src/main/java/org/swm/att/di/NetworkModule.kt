@@ -54,7 +54,7 @@ object NetworkModule {
     @Singleton
     fun providePingRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create().asLenient())
+            .addConverterFactory(MoshiConverterFactory.create())
             .client(okHttpClient)
             .baseUrl(BuildConfig.ATT_BASE_URL)
             .build()

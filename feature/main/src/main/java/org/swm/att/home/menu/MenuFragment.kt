@@ -26,7 +26,7 @@ class MenuFragment(
     }
 
     private fun initRecyclerView() {
-        categoryMenuAdapter = CategoryMenuAdapter(homeViewModel)
+        categoryMenuAdapter = CategoryMenuAdapter(homeViewModel, requireActivity())
         val itemTouchHelperCallback =
             org.swm.att.common_ui.util.ItemTouchHelperCallback(categoryMenuAdapter)
         val helper = ItemTouchHelper(itemTouchHelperCallback)
