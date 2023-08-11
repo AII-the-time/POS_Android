@@ -6,11 +6,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuAdapter
 import org.swm.att.home.databinding.FragmentPayBinding
 
+@AndroidEntryPoint
 class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     private val payViewModel by viewModels<PayViewModel>()
     private val args by navArgs<PayFragmentArgs>()

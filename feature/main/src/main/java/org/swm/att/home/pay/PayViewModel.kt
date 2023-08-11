@@ -3,11 +3,18 @@ package org.swm.att.home.pay
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.MenuVO
+import javax.inject.Inject
 
-class PayViewModel: ViewModel() {
+@HiltViewModel
+class PayViewModel @Inject constructor(
+
+): ViewModel() {
     private val _orderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
     val orderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _orderedMenuMap
     private val _selectedOrderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
