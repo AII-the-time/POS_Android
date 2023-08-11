@@ -1,6 +1,7 @@
 package org.swm.att.home.mileage
 
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import org.swm.att.common_ui.base.BaseDialog
@@ -18,6 +19,7 @@ class EarnMileageDialog(
         setDialogCloseBtnListener()
         setupCustomKeypad()
         setPhoneNumberObserver()
+        setCustomKeypadEnterBtnClickListener()
     }
 
     private fun setDialogCloseBtnListener() {
@@ -30,7 +32,7 @@ class EarnMileageDialog(
             homeViewModel.clearPhoneNumber()
             dismiss()
             val orderedMenus = homeViewModel.getOrderedMenusVO()
-            val action = HomeFragmentDirections.actionFragmentHomeToFragmentPay(orderedMenus)
+            val action = HomeFragmentDirections.actionFragmentHomeToFragmentPay(OrderedMenus = orderedMenus)
             NavHostFragment.findNavController(this).navigate(action)
         }
     }
@@ -57,6 +59,17 @@ class EarnMileageDialog(
         }
         homeViewModel.endPhoneNumber.observe(viewLifecycleOwner) {
             binding.tvPhoneNumberEndPart.text = it.joinToString("")
+        }
+    }
+
+    private fun setCustomKeypadEnterBtnClickListener() {
+        binding.ckpEarnMileage.setOnEnterBtnClickListener {
+            dismiss()
+            val orderedMenus = homeViewModel.getOrderedMenusVO()
+            val phoneNumber = homeViewModel.getPhoneNumber()
+            val action = HomeFragmentDirections
+                .actionFragmentHomeToFragmentPay(OrderedMenus = orderedMenus, PhoneNumber = phoneNumber)
+            NavHostFragment.findNavController(this).navigate(action)
         }
     }
 

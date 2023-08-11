@@ -126,4 +126,10 @@ class HomeViewModel @Inject constructor(
 
         return OrderedMenusVO(orderedMenuList)
     }
+
+    fun getPhoneNumber(): String {
+        val mid = _midPhoneNumber.value ?: Stack()
+        val end = _endPhoneNumber.value ?: Stack()
+        return "${mid.joinToString("")}${end.joinToString("")}"
+    }
 }
