@@ -38,6 +38,9 @@
     <string name="menu_setting_des">menu for setting</string>
     <string name="category_tab_layout_des">tab layout for category</string>
 
+    <!--  hint  -->
+    <string name="edt_menu_custom_option">상세옵션 입력 시 작성</string>
+
     <!--  etc  -->
     <string name="btn_plus_menu_item">+</string>
     <string name="btn_minus_menu_item">-</string>
@@ -72,4 +75,7 @@
     <string name="btn_pay_by_cash">현금/계좌이체</string>
     <string name="btn_pay_by_easy">간편 결제(카카오페이)</string>
     <string name="btn_pay_by_card">신용카드 결제</string>
+    <string name="tv_menu_option_picker_des">옵션 추가</string>
+    <string name="tv_menu_custom_option_des">상세옵션</string>
+    <string name="btn_menu_option_add">옵션 추가</string>
 </resources>
