@@ -78,4 +78,6 @@
     <string name="tv_menu_option_picker_des">옵션 추가</string>
     <string name="tv_menu_custom_option_des">상세옵션</string>
     <string name="btn_menu_option_add">옵션 추가</string>
+    <string name="tv_menu_option_type_with_price">%s(+%d원)</string>
+    <string name="tv_menu_option_type_with_no_price">%s</string>
 </resources>
