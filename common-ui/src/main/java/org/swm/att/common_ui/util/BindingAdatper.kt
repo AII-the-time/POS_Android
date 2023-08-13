@@ -5,6 +5,7 @@ import androidx.databinding.BindingAdapter
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.util.CurrencyFormat.getUnit
 import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OptionVO
 
 @BindingAdapter("customPriceText")
@@ -62,4 +63,11 @@ fun setCustomerNumber(view: TextView, phoneNumber: String) {
 fun setCustomerMileage(view: TextView, mileage: Int) {
     val mileage = mileage.toString().getUnit()
     view.text = view.context.getString(R.string.tv_mileage_text, mileage)
+}
+
+@BindingAdapter("customClickable")
+fun setCustomClickable(view: TextView, mileageVO: MileageVO?) {
+    mileageVO?.let {
+        view.isClickable = it.mileage > 0
+    }
 }

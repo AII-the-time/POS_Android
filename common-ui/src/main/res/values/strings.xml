@@ -37,6 +37,7 @@
     <string name="menu_sales_des">menu for sales</string>
     <string name="menu_setting_des">menu for setting</string>
     <string name="category_tab_layout_des">tab layout for category</string>
+    <string name="close_dialog">close dialog</string>
 
     <!--  hint  -->
     <string name="edt_menu_custom_option">상세옵션 입력 시 작성</string>
@@ -80,4 +81,8 @@
     <string name="btn_menu_option_add">옵션 추가</string>
     <string name="tv_menu_option_type_with_price">%s(+%d원)</string>
     <string name="tv_menu_option_type_with_no_price">%s</string>
+    <string name="btn_use_mileage">선결제/포인트 사용</string>
+    <string name="btn_not_use">사용 안 함</string>
+    <string name="tv_use_mileage_dl_des">포인트 사용</string>
+    <string name="tv_use_mileage_all">사용가능 포인트 전체 사용(%s점)</string>
 </resources>
