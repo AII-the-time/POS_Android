@@ -84,5 +84,5 @@
     <string name="btn_use_mileage">선결제/포인트 사용</string>
     <string name="btn_not_use">사용 안 함</string>
     <string name="tv_use_mileage_dl_des">포인트 사용</string>
-    <string name="tv_use_mileage_all">사용가능 포인트 전체 사용(%s점)</string>
+    <string name="tv_use_all_mileage">사용가능 포인트 전체 사용(%s점)</string>
 </resources>
