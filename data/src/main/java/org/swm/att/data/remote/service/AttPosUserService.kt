@@ -1,9 +1,12 @@
 package org.swm.att.data.remote.service
 
+import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.data.remote.response.TokenDTO
 import retrofit2.Response
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface AttPosUserService {
 
@@ -11,4 +14,10 @@ interface AttPosUserService {
     suspend fun refreshToken(
         @Header("Authorization") refreshToken: String
     ): Response<TokenDTO>
+
+    @GET("mileage")
+    suspend fun getMileage(
+        @Header("StoreId") storeId: Int,
+        @Query("phoneNumber") phoneNumber: String
+    ): Response<MileageDTO>
 }

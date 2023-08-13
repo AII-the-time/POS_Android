@@ -7,6 +7,9 @@
         <variable
             name="payViewModel"
             type="org.swm.att.home.pay.PayViewModel" />
+        <variable
+            name="phoneNumber"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -191,7 +194,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/tv_visit_time"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
-                    android:text="@string/tv_customer_name"
+                    app:setCustomerNumber="@{phoneNumber}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"/>
@@ -346,7 +349,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_cur_mileage_des"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@string/tv_mileage_text"
+                    app:setCustomerMileage="@{payViewModel.mileage.mileage}"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
 

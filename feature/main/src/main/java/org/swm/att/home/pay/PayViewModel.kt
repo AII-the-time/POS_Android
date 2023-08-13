@@ -1,17 +1,29 @@
 package org.swm.att.home.pay
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.domain.entity.response.MileageVO
+import org.swm.att.domain.repository.AttPosUserRepository
+import javax.inject.Inject
 
-class PayViewModel: ViewModel() {
+@HiltViewModel
+class PayViewModel @Inject constructor(
+    private val attPosUserRepository: AttPosUserRepository
+): ViewModel() {
     private val _orderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
     val orderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _orderedMenuMap
     private val _selectedOrderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
     val selectedOrderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _selectedOrderedMenuMap
+    private val _mileage = MutableLiveData<MileageVO>()
+    val mileage: LiveData<MileageVO> = _mileage
 
     fun setOrderedMenuMap(orderedMenusVO: OrderedMenusVO) {
         orderedMenusVO.menus?.let {
@@ -73,6 +85,19 @@ class PayViewModel: ViewModel() {
 
         _orderedMenuMap.postValue(orderedMenuMap)
         _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
+    }
+
+    fun getMileage(phoneNumber: String) {
+        viewModelScope.launch {
+            try {
+                attPosUserRepository.getMileage(1, phoneNumber).onSuccess {
+                    Log.d("PayViewModel", "getMileage: $it")
+                    _mileage.postValue(it)
+                }
+            } catch (e: Exception) {
+                Log.d("PayViewModel", "getMileage: ${e.message}")
+            }
+        }
     }
 
 }

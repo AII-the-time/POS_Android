@@ -51,3 +51,15 @@ fun setCustomVisibility(view: TextView, detail: String?) {
         TextView.VISIBLE
     }
 }
+
+@BindingAdapter("setCustomerNumber")
+fun setCustomerNumber(view: TextView, phoneNumber: String) {
+    val number = phoneNumber.takeLast(4)
+    view.text = view.context.getString(R.string.tv_customer_number, number)
+}
+
+@BindingAdapter("setCustomerMileage")
+fun setCustomerMileage(view: TextView, mileage: Int) {
+    val mileage = mileage.toString().getUnit()
+    view.text = view.context.getString(R.string.tv_mileage_text, mileage)
+}
