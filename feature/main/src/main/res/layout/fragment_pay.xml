@@ -474,7 +474,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/cl_total_pay_price"
-                android:visibility="gone"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:paddingStart="20dp"
@@ -502,7 +501,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_total_mileage_use_des"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@string/tv_custom_price_text"
+                    app:setCustomStrMileage="@{payViewModel.useMileage}"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
 
@@ -543,7 +542,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_total_pay_price_des"
                     app:layout_constraintEnd_toEndOf="parent"
-                    customTotalPriceText="@{payViewModel.selectedOrderedMenuMap}"
+                    app:totalPriceMap="@{payViewModel.selectedOrderedMenuMap}"
+                    app:useMileage="@{payViewModel.useMileage}"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
 
