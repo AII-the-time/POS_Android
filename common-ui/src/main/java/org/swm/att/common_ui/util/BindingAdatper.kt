@@ -57,9 +57,18 @@ fun setOptionListText(view: TextView, optionList: List<OptionVO>?) {
     view.text = optionStr
 }
 
-@BindingAdapter("setCustomVisibility")
-fun setCustomVisibility(view: TextView, detail: String?) {
+@BindingAdapter("setDetailVisibility")
+fun setDetailVisibility(view: TextView, detail: String?) {
     view.visibility = if (detail.isNullOrEmpty()) {
+        TextView.GONE
+    } else {
+        TextView.VISIBLE
+    }
+}
+
+@BindingAdapter("setOptionsVisibility")
+fun setOptionsVisibility(view: TextView, optionList: List<OptionVO>?) {
+    view.visibility = if (optionList.isNullOrEmpty()) {
         TextView.GONE
     } else {
         TextView.VISIBLE
