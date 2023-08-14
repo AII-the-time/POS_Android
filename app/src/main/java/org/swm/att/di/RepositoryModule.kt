@@ -4,9 +4,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.swm.att.data.repository.AttPosRepositoryImpl
+import org.swm.att.data.repository.AttMenuRepositoryImpl
 import org.swm.att.data.repository.AttPosUserRepositoryImpl
-import org.swm.att.domain.repository.AttPosRepository
+import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttPosUserRepository
 
 @Module
@@ -14,9 +14,9 @@ import org.swm.att.domain.repository.AttPosUserRepository
 interface RepositoryModule {
 
     @Binds
-    fun bindPingRepository(
-        pingRepositoryImpl: AttPosRepositoryImpl
-    ): AttPosRepository
+    fun bindAttMenuRepository(
+        pingRepositoryImpl: AttMenuRepositoryImpl
+    ): AttMenuRepository
 
     @Binds
     fun bindAttPosUserRepository(
