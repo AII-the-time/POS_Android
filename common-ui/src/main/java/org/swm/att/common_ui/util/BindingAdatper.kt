@@ -1,6 +1,7 @@
 package org.swm.att.common_ui.util
 
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.BindingAdapter
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.util.CurrencyFormat.getUnit
@@ -127,4 +128,11 @@ fun setCustomMileageStrColor(view: TextView, totalMileage: Int, useMileage: Stac
         }
     }
     view.setTextColor(view.context.getColor(color))
+}
+
+@BindingAdapter("setOrderBtnClickable")
+fun setOrderBtnClickable(view: AppCompatButton, selectedMenuCount: Int?) {
+    selectedMenuCount?.let {
+        view.isClickable = selectedMenuCount > 0
+    }
 }
