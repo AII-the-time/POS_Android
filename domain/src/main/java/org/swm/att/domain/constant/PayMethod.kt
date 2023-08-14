@@ -1,4 +1,4 @@
-package org.swm.att.common_ui.util.constant
+package org.swm.att.domain.constant
 
 enum class PayMethod {
     CARD,
