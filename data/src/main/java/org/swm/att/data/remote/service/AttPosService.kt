@@ -1,8 +1,10 @@
 package org.swm.att.data.remote.service
 
 import org.swm.att.data.remote.request.OrderedMenusDTO
+import org.swm.att.data.remote.request.PaymentDTO
 import org.swm.att.data.remote.response.CategoriesDTO
 import org.swm.att.data.remote.response.OrderDTO
+import org.swm.att.data.remote.response.PaymentResultDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -20,4 +22,10 @@ interface AttPosService {
         @Header("StoreId") storeId: Int,
         @Body orderedMenus: OrderedMenusDTO
     ): Response<OrderDTO>
+
+    @POST("order/pay")
+    suspend fun postPayment(
+        @Header("StoreId") storeId: Int,
+        @Body payOrder: PaymentDTO
+    ): Response<PaymentResultDTO>
 }
