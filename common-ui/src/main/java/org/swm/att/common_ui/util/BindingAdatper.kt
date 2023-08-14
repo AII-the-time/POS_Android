@@ -5,7 +5,9 @@ import androidx.databinding.BindingAdapter
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.util.CurrencyFormat.getUnit
 import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OptionVO
+import java.util.Stack
 
 @BindingAdapter("customPriceText")
 fun setCustomPriceText(view: TextView, price: Int) {
@@ -60,6 +62,46 @@ fun setCustomerNumber(view: TextView, phoneNumber: String) {
 
 @BindingAdapter("setCustomerMileage")
 fun setCustomerMileage(view: TextView, mileage: Int) {
-    val mileage = mileage.toString().getUnit()
+    val mileageStr = mileage.toString().getUnit()
+    view.text = view.context.getString(R.string.tv_mileage_text, mileageStr)
+}
+
+@BindingAdapter("customClickable")
+fun setCustomClickable(view: TextView, mileageVO: MileageVO?) {
+    mileageVO?.let {
+        view.isClickable = it.mileage > 0
+    }
+}
+
+@BindingAdapter("setCustomStrMileage")
+fun setCustomStrMileage(view: TextView, stack: Stack<String>?){
+    var mileage = "0"
+    stack?.let {
+        if (it.isNotEmpty()) {
+            mileage = stack.joinToString("").getUnit()
+        }
+    }
     view.text = view.context.getString(R.string.tv_mileage_text, mileage)
+}
+
+@BindingAdapter("setCustomUseAllMileage")
+fun setCustomUseAllMileage(view: TextView, mileage: Int) {
+    val mileageStr = mileage.toString().getUnit()
+    view.text = view.context.getString(R.string.tv_use_all_mileage, mileageStr)
+    view.paint.isUnderlineText = true
+}
+
+@BindingAdapter("totalMileage", "useMileage")
+fun setCustomMileageStrColor(view: TextView, totalMileage: Int, useMileage: Stack<String>?) {
+    var color = R.color.black
+    useMileage?.let {
+        if (it.isNotEmpty()) {
+            color = if (totalMileage < (useMileage.joinToString("").toInt())) {
+                R.color.key_pad_gray
+            } else {
+                R.color.black
+            }
+        }
+    }
+    view.setTextColor(view.context.getColor(color))
 }

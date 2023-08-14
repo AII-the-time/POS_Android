@@ -156,7 +156,7 @@
                     android:background="@drawable/shape_round_4"
                     android:backgroundTint="@color/key_pad_gray"
                     android:gravity="center"
-                    android:text="@string/key_pad_8"
+                    android:text="@string/key_pad_0"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 

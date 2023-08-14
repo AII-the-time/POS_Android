@@ -1,7 +1,6 @@
 package org.swm.att.home.mileage
 
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import org.swm.att.common_ui.base.BaseDialog

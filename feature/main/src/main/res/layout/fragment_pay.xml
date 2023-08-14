@@ -389,11 +389,32 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_use_mileage_des"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@string/tv_mileage_text"
+                    app:setCustomStrMileage="@{payViewModel.useMileage}"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_use_mileage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="44dp"
+                android:minWidth="188dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:clickable="false"
+                app:customClickable="@{payViewModel.mileage}"
+                android:background="@drawable/shape_round_stroke"
+                android:text="@string/btn_use_mileage"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
