@@ -191,6 +191,7 @@ class PayViewModel @Inject constructor(
                     )
                 ).onSuccess {paymentResultVO ->
                     if (paymentResultVO.leftPrice == 0) {
+                        patchMileage()
                         // 결제 프로세스 끝!
                     }
                     _selectedOrderedMenuMap.postValue(mutableMapOf())
@@ -220,6 +221,26 @@ class PayViewModel @Inject constructor(
                     } catch (e: Exception) {
                         Log.d("PayViewModel", "postUseMileage: ${e.message}")
                     }
+                }
+            }
+        }
+    }
+
+    private fun patchMileage() {
+        if (totalPrice.value != null && mileage.value != null) {
+            viewModelScope.launch {
+                try {
+                    attPosUserRepository.patchMileage(
+                        1,
+                        MileageVO(
+                            mileageId = 1,
+                            mileage = (totalPrice.value!! * 0.1).toInt()
+                        )
+                    ).onSuccess {
+                        Log.d("PayViewModel", "patMileage result: $it")
+                    }
+                } catch (e: Exception) {
+                    Log.d("PayViewModel", "patchMileage: ${e.message}")
                 }
             }
         }
