@@ -9,7 +9,7 @@ data class OrderDTO(
     @field:Json(name = "orderId")
     val orderId: Int?,
 ) {
-    fun toOrderVO() = OrderVO(
+    fun toVO() = OrderVO(
         orderId = orderId ?: -1,
     )
 }
