@@ -8,6 +8,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.domain.constant.PayMethod
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuAdapter
 import org.swm.att.home.databinding.FragmentPayBinding
@@ -29,6 +30,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         getCustomerMileageInfo()
         setDataBinding()
         setUseMileageBtnClickListener()
+        setPayBtnClickListener()
     }
 
     private fun initOrderedMenuRecyclerView() {
@@ -86,6 +88,18 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         binding.btnUseMileage.setOnClickListener {
             val dialog = UseMileageDialog(payViewModel)
             dialog.show(requireActivity().supportFragmentManager, "UseMileageDialog")
+        }
+    }
+
+    private fun setPayBtnClickListener() {
+        binding.btnPayByCard.setOnClickListener {
+            payViewModel.postOrder(PayMethod.CARD)
+        }
+        binding.btnPayByCash.setOnClickListener {
+            payViewModel.postOrder(PayMethod.CASH)
+        }
+        binding.btnPayByEasy.setOnClickListener {
+            payViewModel.postOrder(PayMethod.EASY)
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.swm.att.data.remote.datasource
 
+import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.data.remote.response.TokenDTO
 import org.swm.att.data.remote.service.AttPosUserService
 import javax.inject.Inject
@@ -13,5 +14,8 @@ class UserDataSource @Inject constructor(
 
     suspend fun getMileage(storeId: Int, phoneNumber: String) =
         checkResponse(attPosUserService.getMileage(storeId, phoneNumber))
+
+    suspend fun patchMileage(storeId: Int, mileage: MileageDTO) =
+        checkResponse(attPosUserService.patchMileage(storeId, mileage))
 
 }

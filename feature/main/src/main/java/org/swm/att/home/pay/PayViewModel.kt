@@ -7,29 +7,47 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
+import org.swm.att.domain.entity.request.PaymentVO
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.entity.response.MileageVO
+import org.swm.att.domain.entity.response.OrderVO
+import org.swm.att.domain.repository.AttOrderRepository
 import org.swm.att.domain.repository.AttPosUserRepository
 import java.util.Stack
 import javax.inject.Inject
 
 @HiltViewModel
 class PayViewModel @Inject constructor(
-    private val attPosUserRepository: AttPosUserRepository
+    private val attPosUserRepository: AttPosUserRepository,
+    private val attOrderRepository: AttOrderRepository
 ): ViewModel() {
+    //결제 진행 여부에 따른 분리
     private val _orderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
     val orderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _orderedMenuMap
     private val _selectedOrderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
     val selectedOrderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _selectedOrderedMenuMap
+    private val _totalOrderMenuList= MutableLiveData<List<OrderedMenuVO>>()
+    private val totalOrderMenuList: LiveData<List<OrderedMenuVO>> = _totalOrderMenuList
+
+    //주문 전체 가격
+    private val _totalPrice = MutableLiveData<Int>()
+    private val totalPrice: LiveData<Int> = _totalPrice
+    private val _orderVO = MutableLiveData<OrderVO>()
+    private val orderVO: LiveData<OrderVO> = _orderVO
+
     private val _mileage = MutableLiveData<MileageVO>()
     val mileage: LiveData<MileageVO> = _mileage
     private val _useMileage = MutableLiveData<Stack<String>>()
     val useMileage: LiveData<Stack<String>> = _useMileage
 
+
     fun setOrderedMenuMap(orderedMenusVO: OrderedMenusVO) {
         orderedMenusVO.menus?.let {
+            _totalOrderMenuList.postValue(it)
+            _totalPrice.postValue(it.sumOf { orderedMenu -> orderedMenu.menu.price * (orderedMenu.count ?: 1) })
             val selectedOrderedMenuMap = (_selectedOrderedMenuMap.value ?: mapOf()).toMutableMap()
             it.forEach {  orderedMenu ->
                 selectedOrderedMenuMap[orderedMenu.menu] = orderedMenu.count ?: 0
@@ -49,7 +67,6 @@ class PayViewModel @Inject constructor(
                 )
             )
         }
-
         return orderedMenuList
     }
 
@@ -64,7 +81,6 @@ class PayViewModel @Inject constructor(
                 )
             )
         }
-
         return orderedMenuList
     }
 
@@ -127,6 +143,120 @@ class PayViewModel @Inject constructor(
 
     fun clearUseMileage() {
         _useMileage.postValue(Stack())
+    }
+
+    fun postOrder(payMethod: PayMethod) {
+        if (checkLeftPrice()) {
+            if (orderVO.value == null){
+                getOrderIdAndPostPayment(payMethod)
+            } else {
+                postUseMileage(orderVO.value!!.orderId)
+                postPayment(payMethod, orderVO.value!!.orderId)
+            }
+        }
+
+    }
+
+    private fun getOrderIdAndPostPayment(payMethod: PayMethod) {
+        viewModelScope.launch {
+            try {
+                attOrderRepository.postOrder(
+                    1,
+                    1,
+                    totalPrice.value ?: 0,
+                    OrderedMenusVO(
+                        menus = totalOrderMenuList.value
+                    )
+                ).onSuccess { orderVO ->
+                    _orderVO.postValue(orderVO)
+                    postUseMileage(orderVO.orderId)
+                    postPayment(payMethod, orderVO.orderId)
+                }
+            } catch (e: Exception) {
+                Log.d("PayViewModel", "postOrder: ${e.message}")
+            }
+        }
+    }
+
+    private fun postPayment(payMethod: PayMethod, id: Int) {
+        val cost = (getPriceFromMap(selectedOrderedMenuMap.value)) - (useMileage.value?.joinToString("")?.toInt() ?: 0)
+        viewModelScope.launch {
+            try {
+                attOrderRepository.postPayment(
+                    1,
+                    PaymentVO(
+                        paymentMethod = payMethod,
+                        price = cost,
+                        orderId = id
+                    )
+                ).onSuccess {paymentResultVO ->
+                    if (paymentResultVO.leftPrice == 0) {
+                        patchMileage()
+                        // 결제 프로세스 끝!
+                    }
+                    _selectedOrderedMenuMap.postValue(mutableMapOf())
+                    _totalPrice.postValue(paymentResultVO.leftPrice)
+                }
+            } catch (e: Exception) {
+                Log.d("PayViewModel", "postPayment: ${e.message}")
+            }
+        }
+    }
+
+    private fun postUseMileage(id: Int) {
+        useMileage.value?.let { mileageStack ->
+            if (mileageStack.isNotEmpty()) {
+                viewModelScope.launch {
+                    try {
+                        attOrderRepository.postPayment(
+                            1,
+                            PaymentVO(
+                                paymentMethod = PayMethod.MILEAGE,
+                                price = mileageStack.joinToString("").toInt(),
+                                orderId = id
+                            )
+                        ).onSuccess {
+                            _totalPrice.postValue(it.leftPrice)
+                        }
+                    } catch (e: Exception) {
+                        Log.d("PayViewModel", "postUseMileage: ${e.message}")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun patchMileage() {
+        if (totalPrice.value != null && mileage.value != null) {
+            viewModelScope.launch {
+                try {
+                    attPosUserRepository.patchMileage(
+                        1,
+                        MileageVO(
+                            mileageId = 1,
+                            mileage = (totalPrice.value!! * 0.1).toInt()
+                        )
+                    ).onSuccess {
+                        Log.d("PayViewModel", "patMileage result: $it")
+                    }
+                } catch (e: Exception) {
+                    Log.d("PayViewModel", "patchMileage: ${e.message}")
+                }
+            }
+        }
+    }
+
+    private fun checkLeftPrice(): Boolean {
+        totalPrice.value?.let {
+            return it > 0
+        }
+        return false
+    }
+
+    companion object {
+        private fun getPriceFromMap(menuWithCountMap: Map<MenuVO, Int>?): Int {
+            return menuWithCountMap?.map { it.key.price * it.value }?.sum() ?: 0
+        }
     }
 
 }

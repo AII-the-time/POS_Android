@@ -5,6 +5,7 @@ import org.swm.att.data.remote.datasource.UserDataSource
 import org.swm.att.domain.entity.response.TokenVO
 import org.swm.att.domain.repository.AttPosUserRepository
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey
+import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.domain.entity.response.MileageVO
 import javax.inject.Inject
 
@@ -41,6 +42,17 @@ class AttPosUserRepositoryImpl @Inject constructor(
 
     override suspend fun getMileage(storeId: Int, phoneNumber: String): Result<MileageVO> {
         val response = userDataSource.getMileage(storeId, phoneNumber)
+        return Result.success(response.toVO())
+    }
+
+    override suspend fun patchMileage(storeId: Int, mileage: MileageVO): Result<MileageVO> {
+        val response = userDataSource.patchMileage(
+            storeId,
+            MileageDTO(
+                mileageId = mileage.mileageId,
+                mileage = mileage.mileage
+            )
+        )
         return Result.success(response.toVO())
     }
 }
