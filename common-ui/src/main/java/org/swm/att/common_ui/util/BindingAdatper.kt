@@ -49,7 +49,7 @@ fun setCustomTotalPriceText(view: TextView, menuMap: Map<MenuVO, Int>?) {
 fun setOptionListText(view: TextView, optionList: List<OptionVO>?) {
     val optionStr = optionList?.let { list ->
         list.joinToString { optionVO ->
-            optionVO.types.joinToString { optionTypeVO ->
+            optionVO.options.joinToString { optionTypeVO ->
                 optionTypeVO.name
             }
         }

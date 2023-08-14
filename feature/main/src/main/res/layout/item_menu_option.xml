@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:gravity="top"
                 android:layout_marginTop="13dp"
-                android:text="@{option.category}"
+                android:text="@{option.optionType}"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="12sp"/>

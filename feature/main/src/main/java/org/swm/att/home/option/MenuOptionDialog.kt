@@ -44,7 +44,7 @@ class MenuOptionDialog(
     private fun setOptionAddBtnClickListener() {
         binding.btnMenuOptionAdd.setOnClickListener {
             val optionsPrice = menuOptionViewModel.selectedOptionList.value?.sumOf {
-                it.types.sumOf { type -> type.price }
+                it.options.sumOf { type -> type.price }
             } ?: 0
             var detail: String? = null
             if (binding.edtMenuCustomOption.text.toString() != "") {

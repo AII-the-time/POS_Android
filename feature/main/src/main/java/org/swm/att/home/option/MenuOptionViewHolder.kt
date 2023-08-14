@@ -17,7 +17,7 @@ class MenuOptionViewHolder(
     }
 
     private fun setChipGroup(menuOption: OptionVO) {
-        menuOption.types?.let {
+        menuOption.options?.let {
             for (type in it) {
                 val chip = Chip(binding.root.context).apply {
                     id = type.id
@@ -29,8 +29,8 @@ class MenuOptionViewHolder(
                     setOnCheckedChangeListener { _, b ->
                         val optionVO = OptionVO(
                             id = menuOption.id,
-                            category = menuOption.category,
-                            types = listOf(type)
+                            optionType = menuOption.optionType,
+                            options = listOf(type)
                         )
                         if (b) {
                             menuOptionViewModel.addSelectedOption(optionVO)

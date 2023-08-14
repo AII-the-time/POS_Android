@@ -24,7 +24,11 @@ class AttOrderRepositoryImpl @Inject constructor(
                 menus = orderedMenus.menus?.map { OrderedMenuDTO(
                     Id = it.menu.id,
                     count = it.count ?: 1,
-                    options = it.menu.option.map { option -> option.id },
+                    options = it.menu.option.map { option ->
+                        option.options.map { optionType ->
+                            optionType.id
+                        }
+                    }.flatten(),
                     detail = it.menu.detail
                 )} ?: listOf()
             )
