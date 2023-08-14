@@ -33,7 +33,7 @@ fun setCustomPayPriceText(view: TextView, totalPriceMap: Map<MenuVO, Int>?, useM
     var useMileagePrice = 0
     useMileage?.let {
         if (it.isNotEmpty()) {
-            useMileagePrice = useMileage?.joinToString("")?.toInt() ?: 0
+            useMileagePrice = useMileage.joinToString("").toInt()
         }
     }
     view.text = view.context.getString(R.string.tv_custom_price_text, (totalPrice - useMileagePrice).toString().getUnit())
@@ -76,9 +76,11 @@ fun setOptionsVisibility(view: TextView, optionList: List<OptionVO>?) {
 }
 
 @BindingAdapter("setCustomerNumber")
-fun setCustomerNumber(view: TextView, phoneNumber: String) {
-    val number = phoneNumber.takeLast(4)
-    view.text = view.context.getString(R.string.tv_customer_number, number)
+fun setCustomerNumber(view: TextView, phoneNumber: String?) {
+    phoneNumber?.let {
+        val number = phoneNumber.takeLast(4)
+        view.text = view.context.getString(R.string.tv_customer_number, number)
+    }
 }
 
 @BindingAdapter("setCustomerMileage")
