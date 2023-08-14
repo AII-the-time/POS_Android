@@ -14,7 +14,7 @@ class SelectedMenuAdapter(
     private val homeViewModel: HomeViewModel
 ) : ListAdapter<Pair<MenuVO, Int>, SelectedMenuViewHolder>(
     org.swm.att.common_ui.util.ItemDiffCallback<Pair<MenuVO, Int>>(
-        onItemsTheSame = { old, new -> old.first.id == new.first.id },
+        onItemsTheSame = { old, new -> old.first.id == new.first.id  && old.first.option == new.first.option},
         onContentTheSame = { old, new -> old == new }
     )
 ) {
