@@ -10,4 +10,5 @@ interface AttPosUserRepository {
     suspend fun getAccessToken(): String
     suspend fun getRefreshToken(): String
     suspend fun getMileage(storeId: Int, phoneNumber: String): Result<MileageVO>
+    suspend fun patchMileage(storeId: Int, mileage: MileageVO): Result<MileageVO>
 }
