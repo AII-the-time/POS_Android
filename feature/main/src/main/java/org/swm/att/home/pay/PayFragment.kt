@@ -11,6 +11,7 @@ import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuAdapter
 import org.swm.att.home.databinding.FragmentPayBinding
+import org.swm.att.home.mileage.UseMileageDialog
 
 @AndroidEntryPoint
 class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
@@ -27,6 +28,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         setMenusMapObserver()
         getCustomerMileageInfo()
         setDataBinding()
+        setUseMileageBtnClickListener()
     }
 
     private fun initOrderedMenuRecyclerView() {
@@ -71,11 +73,19 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     private fun setDataBinding() {
         binding.payViewModel = payViewModel
         binding.phoneNumber = args.PhoneNumber
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun getCustomerMileageInfo() {
         args.PhoneNumber?.let {
             payViewModel.getMileage(it)
+        }
+    }
+
+    private fun setUseMileageBtnClickListener() {
+        binding.btnUseMileage.setOnClickListener {
+            val dialog = UseMileageDialog(payViewModel)
+            dialog.show(requireActivity().supportFragmentManager, "UseMileageDialog")
         }
     }
 }

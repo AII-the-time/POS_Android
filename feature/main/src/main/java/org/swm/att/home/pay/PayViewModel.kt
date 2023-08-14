@@ -12,6 +12,7 @@ import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.repository.AttPosUserRepository
+import java.util.Stack
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +25,8 @@ class PayViewModel @Inject constructor(
     val selectedOrderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _selectedOrderedMenuMap
     private val _mileage = MutableLiveData<MileageVO>()
     val mileage: LiveData<MileageVO> = _mileage
+    private val _useMileage = MutableLiveData<Stack<String>>()
+    val useMileage: LiveData<Stack<String>> = _useMileage
 
     fun setOrderedMenuMap(orderedMenusVO: OrderedMenusVO) {
         orderedMenusVO.menus?.let {
@@ -91,13 +94,39 @@ class PayViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 attPosUserRepository.getMileage(1, phoneNumber).onSuccess {
-                    Log.d("PayViewModel", "getMileage: $it")
                     _mileage.postValue(it)
                 }
             } catch (e: Exception) {
                 Log.d("PayViewModel", "getMileage: ${e.message}")
             }
         }
+    }
+
+    fun addUseMileageStr(str: String) {
+        val mileage = _useMileage.value ?: Stack()
+        mileage.push(str)
+        _useMileage.postValue(mileage)
+    }
+
+    fun removeUseMileageStr() {
+        val mileage = _useMileage.value ?: Stack()
+        if (mileage.isNotEmpty()) {
+            mileage.pop()
+        }
+        _useMileage.postValue(mileage)
+    }
+
+    fun useAllMileage() {
+        val mileageStr = _mileage.value?.mileage.toString()
+        val mileageStack = Stack<String>()
+        mileageStr.forEach {
+            mileageStack.push(it.toString())
+        }
+        _useMileage.postValue(mileageStack)
+    }
+
+    fun clearUseMileage() {
+        _useMileage.postValue(Stack())
     }
 
 }

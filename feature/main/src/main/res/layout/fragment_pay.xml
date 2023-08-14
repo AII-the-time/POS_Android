@@ -389,7 +389,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_use_mileage_des"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@string/tv_mileage_text"
+                    app:setCustomStrMileage="@{payViewModel.useMileage}"
                     android:textColor="@color/black"
                     android:textSize="12sp"/>
 
