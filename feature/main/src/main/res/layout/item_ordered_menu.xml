@@ -83,7 +83,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_menu_item_name"
             app:layout_constraintStart_toStartOf="@id/tv_menu_item_name"
             app:layout_constraintBottom_toTopOf="@id/tv_menu_detail"
-            app:optionListText="@{orderedMenu.menu.options}"
+            app:optionListText="@{orderedMenu.menu.option}"
             android:textSize="12sp"
             android:layout_marginTop="4dp"/>
 

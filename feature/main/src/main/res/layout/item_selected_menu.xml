@@ -52,7 +52,7 @@
                 app:layout_constraintBottom_toTopOf="@id/tv_option_detail"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="12sp"
-                app:optionListText="@{menu.options}"/>
+                app:optionListText="@{menu.option}"/>
 
             <TextView
                 android:id="@+id/tv_option_detail"

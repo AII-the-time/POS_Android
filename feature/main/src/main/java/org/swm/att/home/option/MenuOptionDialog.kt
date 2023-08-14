@@ -38,7 +38,7 @@ class MenuOptionDialog(
             layoutManager = LinearLayoutManager(requireContext())
             adapter = menuOptionAdapter
         }
-        menuOptionAdapter.submitList(menuVO.options)
+        menuOptionAdapter.submitList(menuVO.option)
     }
 
     private fun setOptionAddBtnClickListener() {

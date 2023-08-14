@@ -7,6 +7,6 @@ data class MenuVO(
     val id: Int,
     val name: String,
     val price: Int,
-    val options: List<OptionVO>,
+    val option: List<OptionVO>,
     val detail: String? = null
 ): java.io.Serializable
