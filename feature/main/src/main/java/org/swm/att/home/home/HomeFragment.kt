@@ -79,6 +79,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setOrderBtnListener() {
         binding.btnOrder.setOnClickListener {
+            homeViewModel.clearPhoneNumber()
             val mileageDialog = EarnMileageDialog(homeViewModel)
             mileageDialog.show(requireActivity().supportFragmentManager, "EarnMileageDialog")
         }

@@ -22,12 +22,10 @@ class EarnMileageDialog(
 
     private fun setDialogCloseBtnListener() {
         binding.btnCloseEarnMileageDialog.setOnClickListener {
-            homeViewModel.clearPhoneNumber()
             dismiss()
         }
 
         binding.btnPassEarnMileage.setOnClickListener {
-            homeViewModel.clearPhoneNumber()
             dismiss()
             val orderedMenus = homeViewModel.getOrderedMenusVO()
             val action = HomeFragmentDirections.actionFragmentHomeToFragmentPay(OrderedMenus = orderedMenus)
