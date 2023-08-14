@@ -20,7 +20,7 @@ interface AttPosUserService {
     @GET("mileage")
     suspend fun getMileage(
         @Header("StoreId") storeId: Int,
-        @Query("phoneNumber") phoneNumber: String
+        @Query("phone") phoneNumber: String
     ): Response<MileageDTO>
 
     @PATCH("mileage")

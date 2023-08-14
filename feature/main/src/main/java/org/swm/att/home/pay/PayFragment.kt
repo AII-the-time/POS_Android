@@ -80,7 +80,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun getCustomerMileageInfo() {
         args.PhoneNumber?.let {
-            payViewModel.getMileage(it)
+            payViewModel.getMileage("010$it")
         }
     }
 
