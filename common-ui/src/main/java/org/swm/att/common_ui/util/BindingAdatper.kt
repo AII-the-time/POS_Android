@@ -30,7 +30,12 @@ fun setCustomTotalCountText(view: TextView, menuMap: Map<MenuVO, Int>?) {
 @BindingAdapter("totalPriceMap", "useMileage")
 fun setCustomPayPriceText(view: TextView, totalPriceMap: Map<MenuVO, Int>?, useMileage: Stack<String>?) {
     val totalPrice = totalPriceMap?.map { it.key.price * it.value }?.sum() ?: 0
-    val useMileagePrice = useMileage?.joinToString("")?.toInt() ?: 0
+    var useMileagePrice = 0
+    useMileage?.let {
+        if (it.isNotEmpty()) {
+            useMileagePrice = useMileage?.joinToString("")?.toInt() ?: 0
+        }
+    }
     view.text = view.context.getString(R.string.tv_custom_price_text, (totalPrice - useMileagePrice).toString().getUnit())
 }
 
