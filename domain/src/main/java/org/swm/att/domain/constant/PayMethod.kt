@@ -4,5 +4,16 @@ enum class PayMethod {
     CARD,
     CASH,
     MILEAGE,
-    BANK
+    EASY;
+
+    companion object {
+        fun toString(payMethod: PayMethod): String {
+            return when (payMethod) {
+                CARD -> "CARD"
+                CASH -> "CASH"
+                MILEAGE -> "MILEAGE"
+                EASY -> "EASY"
+            }
+        }
+    }
 }
