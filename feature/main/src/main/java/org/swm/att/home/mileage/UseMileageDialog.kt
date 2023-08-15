@@ -2,7 +2,10 @@ package org.swm.att.home.mileage
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.lifecycle.map
 import org.swm.att.common_ui.base.BaseDialog
+import org.swm.att.common_ui.util.CurrencyFormat.getUnit
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogUseMileageBinding
 import org.swm.att.home.pay.PayViewModel
@@ -43,9 +46,19 @@ class UseMileageDialog(
                 payViewModel.removeUseMileageStr()
             }
             setOnEnterBtnClickListener {
-                dismiss()
+                if (isAvailableUseMileage()) {
+                    dismiss()
+                } else {
+                    Toast.makeText(requireContext(), "사용 가능한 금액이 아닙니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+    }
+
+    private fun isAvailableUseMileage(): Boolean {
+        val useMileage = payViewModel.useMileage.value?.joinToString("")?.toInt() ?: 0
+        val selectedTotalCost = payViewModel.selectedOrderedMenuMap?.value?.map { it.key.price * it.value }?.sum() ?: 0
+        return useMileage <= selectedTotalCost
     }
 
     private fun setDataBindingData() {
