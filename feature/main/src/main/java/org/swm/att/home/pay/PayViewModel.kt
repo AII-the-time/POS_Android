@@ -213,6 +213,7 @@ class PayViewModel @Inject constructor(
                     )
                 ).onSuccess {
                     _postUseMileageState.postValue(NetworkState.Success(it))
+                    _useMileage.postValue(Stack())
                     _totalPrice.postValue(it.leftPrice)
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "마일리지 사용 실패"
