@@ -9,7 +9,11 @@ class AttMenuRepositoryImpl @Inject constructor(
     private val menuDataSource: MenuDataSource
 ) : AttMenuRepository {
     override suspend fun getMenu(storeId: Int): Result<CategoriesVO> {
-        val response = menuDataSource.getMenu(storeId)
-        return Result.success(response.toVO())
+        return try {
+            val response = menuDataSource.getMenu(storeId)
+            Result.success(response.toVO())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }
