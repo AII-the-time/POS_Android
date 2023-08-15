@@ -34,6 +34,9 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         setUseMileageBtnClickListener()
         setPayBtnClickListener()
         setPatchMileageStateObserver()
+        setPostOrderStateObserver()
+        setPostPaymentStateObserver()
+        setPostUseMileageStateObserver()
     }
 
     private fun initOrderedMenuRecyclerView() {
@@ -114,6 +117,44 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
                 is NetworkState.Failure -> {
                     Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+    }
+
+    private fun setPostOrderStateObserver() {
+        payViewModel.postOrderState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> {}
+                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setPostPaymentStateObserver() {
+        payViewModel.postPaymentState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> {
+                    Toast.makeText(requireContext(), "결제가 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                    if (it.data.leftPrice == 0) {
+                        payViewModel.patchMileage()
+                        findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
+                    }
+                }
+                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setPostUseMileageStateObserver() {
+        payViewModel.postUseMileageState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> {
+                    Toast.makeText(requireContext(), "마일리지 사용이 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                }
+                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
             }
         }
     }
