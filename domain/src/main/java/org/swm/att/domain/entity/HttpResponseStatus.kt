@@ -1,4 +1,4 @@
-package org.swm.att.data.remote
+package org.swm.att.domain.entity
 
 enum class HttpResponseStatus {
     OK,

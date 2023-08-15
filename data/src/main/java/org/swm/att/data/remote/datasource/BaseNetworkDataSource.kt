@@ -1,7 +1,7 @@
 package org.swm.att.data.remote.datasource
 
-import org.swm.att.data.remote.HttpResponseException
-import org.swm.att.data.remote.HttpResponseStatus
+import org.swm.att.domain.entity.HttpResponseException
+import org.swm.att.domain.entity.HttpResponseStatus
 import retrofit2.Response
 
 abstract class BaseNetworkDataSource {
