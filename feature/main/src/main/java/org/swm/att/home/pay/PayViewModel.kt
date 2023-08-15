@@ -45,11 +45,12 @@ class PayViewModel @Inject constructor(
     private val _useMileage = MutableLiveData<Stack<String>>()
     val useMileage: LiveData<Stack<String>> = _useMileage
 
-    private val _getMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(NetworkState.Init)
-    val getMileageState: LiveData<NetworkState<MileageVO>> = _getMileageState
     private val _patchMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(NetworkState.Init)
     val patchMileageState: LiveData<NetworkState<MileageVO>> = _patchMileageState
 
+    fun setMileage(mileageVO: MileageVO) {
+        _mileage.postValue(mileageVO)
+    }
 
     fun setOrderedMenuMap(orderedMenusVO: OrderedMenusVO) {
         orderedMenusVO.menus?.let {
@@ -111,20 +112,6 @@ class PayViewModel @Inject constructor(
 
         _orderedMenuMap.postValue(orderedMenuMap)
         _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
-    }
-
-    fun getMileage(phone: String) {
-        viewModelScope.launch(attExceptionHandler) {
-            attPosUserRepository.getMileage(1, phone)
-                .onSuccess {
-                    _getMileageState.postValue(NetworkState.Success(it))
-                    _mileage.postValue(it)
-                }.onFailure {
-                    //추후 에러처리 필요
-                    val errorMsg = if (it is HttpResponseException) it.message else "마일리지 가져오기 실패"
-                    _getMileageState.postValue(NetworkState.Failure(errorMsg))
-                }
-        }
     }
 
     fun addUseMileageStr(str: String) {

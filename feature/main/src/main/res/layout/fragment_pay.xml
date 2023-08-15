@@ -8,7 +8,7 @@
             name="payViewModel"
             type="org.swm.att.home.pay.PayViewModel" />
         <variable
-            name="phoneNumber"
+            name="customerId"
             type="String" />
     </data>
 
@@ -194,7 +194,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/tv_visit_time"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
-                    app:setCustomerNumber="@{phoneNumber}"
+                    app:setCustomerNumber="@{customerId}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"/>

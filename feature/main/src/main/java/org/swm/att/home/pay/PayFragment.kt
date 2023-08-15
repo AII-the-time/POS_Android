@@ -26,14 +26,13 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initOrderedMenuRecyclerView()
+        setMileage()
         setBtnModifyOrderClickListener()
         setSelectedMenuList()
         setMenusMapObserver()
-        getCustomerMileageInfo()
         setDataBinding()
         setUseMileageBtnClickListener()
         setPayBtnClickListener()
-        setGetMileageStateObserver()
         setPatchMileageStateObserver()
     }
 
@@ -52,6 +51,12 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
             adapter = selectedOrderedMenuAdapter
         }
 
+    }
+
+    private fun setMileage() {
+        args.Mileage?.let {
+            payViewModel.setMileage(it)
+        }
     }
 
     private fun setBtnModifyOrderClickListener() {
@@ -78,14 +83,8 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setDataBinding() {
         binding.payViewModel = payViewModel
-        binding.phoneNumber = args.PhoneNumber
+        binding.customerId = args.CustomerId
         binding.lifecycleOwner = viewLifecycleOwner
-    }
-
-    private fun getCustomerMileageInfo() {
-        args.PhoneNumber?.let {
-            payViewModel.getMileage("010$it")
-        }
     }
 
     private fun setUseMileageBtnClickListener() {
@@ -107,22 +106,14 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         }
     }
 
-    private fun setGetMileageStateObserver() {
-        payViewModel.getMileageState.observe(viewLifecycleOwner) {
-            when(it) {
-                is NetworkState.Init -> {}
-                is NetworkState.Success -> {}
-                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     private fun setPatchMileageStateObserver() {
         payViewModel.patchMileageState.observe(viewLifecycleOwner) {
             when(it) {
                 is NetworkState.Init -> {}
                 is NetworkState.Success -> Toast.makeText(requireContext(), "보유 마일리지: ${it.data.mileage}", Toast.LENGTH_SHORT).show()
-                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+                is NetworkState.Failure -> {
+                    Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
