@@ -54,7 +54,7 @@ class MenuOptionDialog(
                 menuVO.id,
                 menuVO.name,
                 menuVO.price + optionsPrice,
-                menuOptionViewModel.selectedOptionList.value ?: listOf(),
+                menuOptionViewModel.selectedOptionList.value?.sortedBy { it.id } ?: listOf(),
                 detail
             )
             homeViewModel.addSelectedMenu(selectedMenuWithOptions)
