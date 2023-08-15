@@ -39,7 +39,12 @@
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
-            android:name="PhoneNumber"
+            android:name="Mileage"
+            app:argType="org.swm.att.domain.entity.response.MileageVO"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="CustomerId"
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
