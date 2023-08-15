@@ -15,7 +15,7 @@ import javax.inject.Inject
 class AttOrderRepositoryImpl @Inject constructor(
     private val orderDataSource: OrderDataSource
 ): AttOrderRepository {
-    override suspend fun postOrder(storeId: Int, mileageId: Int, totalPrice: Int, orderedMenus: OrderedMenusVO): Result<OrderVO> {
+    override suspend fun postOrder(storeId: Int, mileageId: Int?, totalPrice: Int, orderedMenus: OrderedMenusVO): Result<OrderVO> {
         val response = orderDataSource.postOrder(
             storeId,
             OrderedMenusDTO(

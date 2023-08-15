@@ -158,7 +158,7 @@ class PayViewModel @Inject constructor(
             try {
                 attOrderRepository.postOrder(
                     1,
-                    mileage.value?.mileageId ?: -1,
+                    mileage.value?.mileageId,
                     totalPrice.value ?: 0,
                     OrderedMenusVO(
                         menus = totalOrderMenuList.value
