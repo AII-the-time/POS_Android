@@ -41,18 +41,26 @@ class AttPosUserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMileage(storeId: Int, phoneNumber: String): Result<MileageVO> {
-        val response = userDataSource.getMileage(storeId, phoneNumber)
-        return Result.success(response.toVO())
+        return try {
+            val response = userDataSource.getMileage(storeId, phoneNumber)
+            Result.success(response.toVO())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun patchMileage(storeId: Int, mileage: MileageVO): Result<MileageVO> {
-        val response = userDataSource.patchMileage(
-            storeId,
-            MileageDTO(
-                mileageId = mileage.mileageId,
-                mileage = mileage.mileage
+        return try {
+            val response = userDataSource.patchMileage(
+                storeId,
+                MileageDTO(
+                    mileageId = mileage.mileageId,
+                    mileage = mileage.mileage
+                )
             )
-        )
-        return Result.success(response.toVO())
+            return Result.success(response.toVO())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

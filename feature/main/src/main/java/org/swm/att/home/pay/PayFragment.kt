@@ -2,12 +2,14 @@ package org.swm.att.home.pay
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.common_ui.util.NetworkState
 import org.swm.att.domain.constant.PayMethod
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuAdapter
@@ -31,6 +33,8 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         setDataBinding()
         setUseMileageBtnClickListener()
         setPayBtnClickListener()
+        setGetMileageStateObserver()
+        setPatchMileageStateObserver()
     }
 
     private fun initOrderedMenuRecyclerView() {
@@ -100,6 +104,26 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         }
         binding.btnPayByEasy.setOnClickListener {
             payViewModel.postOrder(PayMethod.EASY)
+        }
+    }
+
+    private fun setGetMileageStateObserver() {
+        payViewModel.getMileageState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> {}
+                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setPatchMileageStateObserver() {
+        payViewModel.patchMileageState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> Toast.makeText(requireContext(), "보유 마일리지: ${it.data.mileage}", Toast.LENGTH_SHORT).show()
+                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

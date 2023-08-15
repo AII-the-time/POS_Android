@@ -3,11 +3,13 @@ package org.swm.att.home.pay
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.swm.att.common_ui.base.BaseViewModel
+import org.swm.att.common_ui.util.NetworkState
 import org.swm.att.domain.constant.PayMethod
+import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PaymentVO
@@ -23,7 +25,7 @@ import javax.inject.Inject
 class PayViewModel @Inject constructor(
     private val attPosUserRepository: AttPosUserRepository,
     private val attOrderRepository: AttOrderRepository
-): ViewModel() {
+): BaseViewModel() {
     //결제 진행 여부에 따른 분리
     private val _orderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
     val orderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _orderedMenuMap
@@ -42,6 +44,11 @@ class PayViewModel @Inject constructor(
     val mileage: LiveData<MileageVO> = _mileage
     private val _useMileage = MutableLiveData<Stack<String>>()
     val useMileage: LiveData<Stack<String>> = _useMileage
+
+    private val _getMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(NetworkState.Init)
+    val getMileageState: LiveData<NetworkState<MileageVO>> = _getMileageState
+    private val _patchMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(NetworkState.Init)
+    val patchMileageState: LiveData<NetworkState<MileageVO>> = _patchMileageState
 
 
     fun setOrderedMenuMap(orderedMenusVO: OrderedMenusVO) {
@@ -107,15 +114,16 @@ class PayViewModel @Inject constructor(
     }
 
     fun getMileage(phone: String) {
-        viewModelScope.launch {
-            try {
-                attPosUserRepository.getMileage(1, phone).onSuccess {
-                    Log.d("PayViewModel", "getMileage: $it")
+        viewModelScope.launch(attExceptionHandler) {
+            attPosUserRepository.getMileage(1, phone)
+                .onSuccess {
+                    _getMileageState.postValue(NetworkState.Success(it))
                     _mileage.postValue(it)
+                }.onFailure {
+                    //추후 에러처리 필요
+                    val errorMsg = if (it is HttpResponseException) it.message else "마일리지 가져오기 실패"
+                    _getMileageState.postValue(NetworkState.Failure(errorMsg))
                 }
-            } catch (e: Exception) {
-                Log.d("PayViewModel", "getMileage: ${e.message}")
-            }
         }
     }
 
@@ -230,18 +238,18 @@ class PayViewModel @Inject constructor(
     private fun patchMileage() {
         if (totalPrice.value != null && mileage.value != null) {
             viewModelScope.launch {
-                try {
-                    attPosUserRepository.patchMileage(
-                        1,
-                        MileageVO(
-                            mileageId = mileage.value!!.mileageId,
-                            mileage = (totalPrice.value!! * 0.1).toInt()
-                        )
-                    ).onSuccess {
-                        Log.d("PayViewModel", "patMileage result: $it")
-                    }
-                } catch (e: Exception) {
-                    Log.d("PayViewModel", "patchMileage: ${e.message}")
+                attPosUserRepository.patchMileage(
+                    1,
+                    MileageVO(
+                        mileageId = mileage.value?.mileageId ?: -1,
+                        //default로 10% 적립
+                        mileage = (totalPrice.value!! * 0.1).toInt()
+                    )
+                ).onSuccess {
+                    _patchMileageState.postValue(NetworkState.Success(it))
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "마일리지 적립 실패"
+                    _patchMileageState.postValue(NetworkState.Failure(errorMsg))
                 }
             }
         }
