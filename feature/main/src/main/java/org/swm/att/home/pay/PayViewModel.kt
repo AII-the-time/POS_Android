@@ -106,10 +106,11 @@ class PayViewModel @Inject constructor(
         _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
     }
 
-    fun getMileage(phoneNumber: String) {
+    fun getMileage(phone: String) {
         viewModelScope.launch {
             try {
-                attPosUserRepository.getMileage(1, phoneNumber).onSuccess {
+                attPosUserRepository.getMileage(1, phone).onSuccess {
+                    Log.d("PayViewModel", "getMileage: $it")
                     _mileage.postValue(it)
                 }
             } catch (e: Exception) {
@@ -162,7 +163,7 @@ class PayViewModel @Inject constructor(
             try {
                 attOrderRepository.postOrder(
                     1,
-                    1,
+                    mileage.value?.mileageId ?: -1,
                     totalPrice.value ?: 0,
                     OrderedMenusVO(
                         menus = totalOrderMenuList.value
@@ -233,7 +234,7 @@ class PayViewModel @Inject constructor(
                     attPosUserRepository.patchMileage(
                         1,
                         MileageVO(
-                            mileageId = 1,
+                            mileageId = mileage.value!!.mileageId,
                             mileage = (totalPrice.value!! * 0.1).toInt()
                         )
                     ).onSuccess {
