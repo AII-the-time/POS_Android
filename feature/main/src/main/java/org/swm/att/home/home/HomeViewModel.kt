@@ -28,8 +28,19 @@ class HomeViewModel @Inject constructor(
     private val _endPhoneNumber = MutableLiveData<Stack<String>>()
     val endPhoneNumber: LiveData<Stack<String>> = _endPhoneNumber
 
-    private val _getMenuState: MutableLiveData<NetworkState<CategoriesVO>> = MutableLiveData(NetworkState.Init)
+    private val _getMenuState: MutableLiveData<NetworkState<CategoriesVO>> =
+        MutableLiveData(NetworkState.Init)
     val getMenuState: LiveData<NetworkState<CategoriesVO>> = _getMenuState
+
+    fun setSelectedMenusVO(selectedMenusVO: OrderedMenusVO) {
+        selectedMenusVO.menus?.let {
+            val selectedOrderedMenuMap = mutableMapOf<MenuVO, Int>()
+            it.forEach { orderedMenu ->
+                selectedOrderedMenuMap[orderedMenu.menu] = orderedMenu.count ?: 1
+            }
+            _selectedMenuMap.postValue(selectedOrderedMenuMap)
+        }
+    }
 
     fun getCategories() {
         viewModelScope.launch(attExceptionHandler) {
@@ -114,6 +125,10 @@ class HomeViewModel @Inject constructor(
     fun clearPhoneNumber() {
         _midPhoneNumber.postValue(Stack())
         _endPhoneNumber.postValue(Stack())
+    }
+
+    fun clearSelectedMenuList() {
+        _selectedMenuMap.postValue(mutableMapOf())
     }
 
     fun getOrderedMenusVO(): OrderedMenusVO {

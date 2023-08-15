@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.common_ui.util.NetworkState
 import org.swm.att.domain.constant.PayMethod
+import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuAdapter
 import org.swm.att.home.databinding.FragmentPayBinding
@@ -64,7 +65,10 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setBtnModifyOrderClickListener() {
         binding.btnModifyOrder.setOnClickListener {
-            findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
+            val orderedMenus = OrderedMenusVO(payViewModel.totalOrderMenuList.value)
+            val action =
+                PayFragmentDirections.actionFragmentPayToFragmentHome(selectedMenus = orderedMenus)
+            findNavController().navigate(action)
         }
     }
 

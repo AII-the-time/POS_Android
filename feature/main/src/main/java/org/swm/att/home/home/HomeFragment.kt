@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
@@ -14,23 +15,31 @@ import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
-import org.swm.att.home.mileage.EarnMileageDialog
 import org.swm.att.home.menu.MenuFragment
+import org.swm.att.home.mileage.EarnMileageDialog
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private lateinit var categoryViewPagerAdapter: CategoryViewPagerAdapter
     private lateinit var selectedMenuAdapter: SelectedMenuAdapter
     private val homeViewModel: HomeViewModel by activityViewModels()
+    private val args by navArgs<HomeFragmentArgs>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        setSelectedMenuList()
         setCategories()
         setCategoriesObserver()
         setSelectedMenuObserver()
         setDataBinding()
         setOrderBtnListener()
+    }
+
+    private fun setSelectedMenuList() {
+        args.selectedMenus?.let {
+            homeViewModel.setSelectedMenusVO(it)
+        }
     }
 
     private fun initRecyclerView() {

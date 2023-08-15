@@ -31,20 +31,17 @@ class PayViewModel @Inject constructor(
     val orderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _orderedMenuMap
     private val _selectedOrderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
     val selectedOrderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _selectedOrderedMenuMap
-    private val _totalOrderMenuList= MutableLiveData<List<OrderedMenuVO>>()
-    private val totalOrderMenuList: LiveData<List<OrderedMenuVO>> = _totalOrderMenuList
+    private val _totalOrderMenuList = MutableLiveData<List<OrderedMenuVO>>()
+    val totalOrderMenuList: LiveData<List<OrderedMenuVO>> = _totalOrderMenuList
 
-    //주문 전체 가격
     private val _totalPrice = MutableLiveData<Int>()
     private val totalPrice: LiveData<Int> = _totalPrice
     private val _orderVO = MutableLiveData<OrderVO>()
     private val orderVO: LiveData<OrderVO> = _orderVO
-
     private val _mileage = MutableLiveData<MileageVO>()
     val mileage: LiveData<MileageVO> = _mileage
     private val _useMileage = MutableLiveData<Stack<String>>()
     val useMileage: LiveData<Stack<String>> = _useMileage
-
     private val _patchMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(NetworkState.Init)
     val patchMileageState: LiveData<NetworkState<MileageVO>> = _patchMileageState
     private val _postUseMileageState: MutableLiveData<NetworkState<PaymentResultVO>> = MutableLiveData(NetworkState.Init)
@@ -64,7 +61,7 @@ class PayViewModel @Inject constructor(
             _totalPrice.postValue(it.sumOf { orderedMenu -> orderedMenu.menu.price * (orderedMenu.count ?: 1) })
             val selectedOrderedMenuMap = (_selectedOrderedMenuMap.value ?: mapOf()).toMutableMap()
             it.forEach {  orderedMenu ->
-                selectedOrderedMenuMap[orderedMenu.menu] = orderedMenu.count ?: 0
+                selectedOrderedMenuMap[orderedMenu.menu] = orderedMenu.count ?: 1
             }
             _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
         }

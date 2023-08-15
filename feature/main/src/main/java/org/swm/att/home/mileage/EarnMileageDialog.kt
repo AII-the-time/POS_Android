@@ -100,6 +100,7 @@ class EarnMileageDialog(
     private fun navigateToPayFragment(mileage: MileageVO) {
         dismiss()
         earnMileageViewModel.initMileage()
+        homeViewModel.clearSelectedMenuList()
         val orderedMenus = homeViewModel.getOrderedMenusVO()
         val customerId = homeViewModel.endPhoneNumber.value?.joinToString("")
         val action = HomeFragmentDirections
