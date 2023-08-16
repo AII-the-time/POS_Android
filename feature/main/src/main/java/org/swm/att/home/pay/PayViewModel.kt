@@ -149,8 +149,7 @@ class PayViewModel @Inject constructor(
             if (orderVO.value == null){
                 getOrderIdAndPostPayment(payMethod)
             } else {
-                postUseMileage(orderVO.value!!.orderId)
-                postPayment(payMethod, orderVO.value!!.orderId)
+                postUseMileage(payMethod, orderVO.value!!.orderId)
             }
         }
 
@@ -168,8 +167,7 @@ class PayViewModel @Inject constructor(
                 )
             ).onSuccess {
                 _postOrderState.postValue(NetworkState.Success(it))
-                postPayment(payMethod, it.orderId)
-                postUseMileage(it.orderId)
+                postUseMileage(payMethod, it.orderId)
             }.onFailure {
                 val errorMsg = if (it is HttpResponseException) it.message else "주문 실패"
                 _postOrderState.postValue(NetworkState.Failure(errorMsg))
@@ -198,7 +196,7 @@ class PayViewModel @Inject constructor(
         }
     }
 
-    private fun postUseMileage(id: Int) {
+    private fun postUseMileage(payMethod: PayMethod, id: Int) {
         if (useMileage.value.isNullOrEmpty().not()) {
             viewModelScope.launch(attExceptionHandler) {
                 attOrderRepository.postPayment(
@@ -211,12 +209,14 @@ class PayViewModel @Inject constructor(
                 ).onSuccess {
                     _postUseMileageState.postValue(NetworkState.Success(it))
                     _useMileage.postValue(Stack())
-                    _totalPrice.postValue(it.leftPrice)
+                    postPayment(payMethod, id)
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "마일리지 사용 실패"
                     _postUseMileageState.postValue(NetworkState.Failure(errorMsg))
                 }
             }
+        } else {
+            postPayment(payMethod, id)
         }
     }
 
