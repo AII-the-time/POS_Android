@@ -35,7 +35,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:background="@null"
                 app:tabRippleColor="@null"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="30dp"
                 android:contentDescription="@string/category_tab_layout_des" />
 
             <androidx.viewpager2.widget.ViewPager2
