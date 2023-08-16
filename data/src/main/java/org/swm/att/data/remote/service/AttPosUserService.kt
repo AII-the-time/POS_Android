@@ -1,6 +1,8 @@
 package org.swm.att.data.remote.service
 
+import org.swm.att.data.remote.request.PhoneNumDTO
 import org.swm.att.data.remote.response.MileageDTO
+import org.swm.att.data.remote.response.MileageIdDTO
 import org.swm.att.data.remote.response.TokenDTO
 import retrofit2.Response
 import retrofit2.http.Body
@@ -20,7 +22,7 @@ interface AttPosUserService {
     @GET("mileage")
     suspend fun getMileage(
         @Header("StoreId") storeId: Int,
-        @Query("phoneNumber") phoneNumber: String
+        @Query("phone") phoneNumber: String
     ): Response<MileageDTO>
 
     @PATCH("mileage")
@@ -28,5 +30,11 @@ interface AttPosUserService {
         @Header("StoreId") storeId: Int,
         @Body mileage: MileageDTO
     ): Response<MileageDTO>
+
+    @POST("mileage")
+    suspend fun registerCustomer(
+        @Header("StoreId") storeId: Int,
+        @Body phone: PhoneNumDTO
+    ): Response<MileageIdDTO>
 
 }

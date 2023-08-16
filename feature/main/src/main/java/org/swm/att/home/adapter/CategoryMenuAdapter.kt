@@ -39,7 +39,7 @@ class CategoryMenuAdapter(
         val menu = getItem(position)
         holder.bind(menu)
         holder.itemView.setOnClickListener {
-            if (menu.options.isNotEmpty()) {
+            if (menu.option.isNotEmpty()) {
                 val menuOptionDialog = MenuOptionDialog(homeViewModel, menu)
                 menuOptionDialog.show(
                     (parentContext as FragmentActivity).supportFragmentManager,

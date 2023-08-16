@@ -15,34 +15,44 @@ import javax.inject.Inject
 class AttOrderRepositoryImpl @Inject constructor(
     private val orderDataSource: OrderDataSource
 ): AttOrderRepository {
-    override suspend fun postOrder(storeId: Int, mileageId: Int, totalPrice: Int, orderedMenus: OrderedMenusVO): Result<OrderVO> {
-        val response = orderDataSource.postOrder(
-            storeId,
-            OrderedMenusDTO(
-                totalPrice = totalPrice,
-                mileageId = mileageId,
-                menus = orderedMenus.menus?.map { OrderedMenuDTO(
-                    Id = it.menu.id,
-                    count = it.count ?: 1,
-                    options = it.menu.options.map { option -> option.id },
-                    detail = it.menu.detail
-                )} ?: listOf()
+    override suspend fun postOrder(storeId: Int, mileageId: Int?, totalPrice: Int, orderedMenus: OrderedMenusVO): Result<OrderVO> {
+        return try {
+            val response = orderDataSource.postOrder(
+                storeId,
+                OrderedMenusDTO(
+                    totalPrice = totalPrice,
+                    mileageId = mileageId,
+                    menus = orderedMenus.menus?.map { OrderedMenuDTO(
+                        Id = it.menu.id,
+                        count = it.count ?: 1,
+                        options = it.menu.option.map { option ->
+                            option.options.map { optionType ->
+                                optionType.id
+                            }
+                        }.flatten(),
+                        detail = it.menu.detail
+                    )} ?: listOf()
+                )
             )
-        )
-
-        return Result.success(response.toVO())
+            Result.success(response.toVO())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun postPayment(storeId: Int, paymentVO: PaymentVO): Result<PaymentResultVO> {
-        val response = orderDataSource.postPayment(
-            storeId,
-            PaymentDTO(
-                paymentMethod = PayMethod.toString(paymentVO.paymentMethod),
-                price = paymentVO.price,
-                orderId = paymentVO.orderId
+        return try {
+            val response = orderDataSource.postPayment(
+                storeId,
+                PaymentDTO(
+                    paymentMethod = PayMethod.toString(paymentVO.paymentMethod),
+                    price = paymentVO.price,
+                    orderId = paymentVO.orderId
+                )
             )
-        )
-
-        return Result.success(response.toVO())
+            Result.success(response.toVO())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

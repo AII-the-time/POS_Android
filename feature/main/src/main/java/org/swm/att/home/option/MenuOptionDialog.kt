@@ -38,13 +38,13 @@ class MenuOptionDialog(
             layoutManager = LinearLayoutManager(requireContext())
             adapter = menuOptionAdapter
         }
-        menuOptionAdapter.submitList(menuVO.options)
+        menuOptionAdapter.submitList(menuVO.option)
     }
 
     private fun setOptionAddBtnClickListener() {
         binding.btnMenuOptionAdd.setOnClickListener {
             val optionsPrice = menuOptionViewModel.selectedOptionList.value?.sumOf {
-                it.types.sumOf { type -> type.price }
+                it.options.sumOf { type -> type.price }
             } ?: 0
             var detail: String? = null
             if (binding.edtMenuCustomOption.text.toString() != "") {
@@ -54,7 +54,7 @@ class MenuOptionDialog(
                 menuVO.id,
                 menuVO.name,
                 menuVO.price + optionsPrice,
-                menuOptionViewModel.selectedOptionList.value ?: listOf(),
+                menuOptionViewModel.selectedOptionList.value?.sortedBy { it.id } ?: listOf(),
                 detail
             )
             homeViewModel.addSelectedMenu(selectedMenuWithOptions)

@@ -9,7 +9,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="9dp"
         android:paddingBottom="9dp"
@@ -83,7 +83,8 @@
             app:layout_constraintTop_toBottomOf="@id/tv_menu_item_name"
             app:layout_constraintStart_toStartOf="@id/tv_menu_item_name"
             app:layout_constraintBottom_toTopOf="@id/tv_menu_detail"
-            app:optionListText="@{orderedMenu.menu.options}"
+            app:setOptionsVisibility="@{orderedMenu.menu.option}"
+            app:optionListText="@{orderedMenu.menu.option}"
             android:textSize="12sp"
             android:layout_marginTop="4dp"/>
 
@@ -95,7 +96,7 @@
             app:layout_constraintStart_toStartOf="@id/tv_menu_item_name"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="@{orderedMenu.menu.detail}"
-            app:setCustomVisibility="@{orderedMenu.menu.detail}"
+            app:setDetailVisibility="@{orderedMenu.menu.detail}"
             android:textSize="12sp"
             android:layout_marginTop="4dp"/>
 

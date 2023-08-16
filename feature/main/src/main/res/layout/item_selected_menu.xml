@@ -52,7 +52,8 @@
                 app:layout_constraintBottom_toTopOf="@id/tv_option_detail"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="12sp"
-                app:optionListText="@{menu.options}"/>
+                app:setOptionsVisibility="@{menu.option}"
+                app:optionListText="@{menu.option}"/>
 
             <TextView
                 android:id="@+id/tv_option_detail"
@@ -62,7 +63,7 @@
                 app:layout_constraintBottom_toTopOf="@id/cl_change_menu_item_count"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="12sp"
-                app:setCustomVisibility="@{menu.detail}"
+                app:setDetailVisibility="@{menu.detail}"
                 android:text="@{menu.detail}"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout

@@ -2,13 +2,16 @@ package org.swm.att.home.pay
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.common_ui.util.NetworkState
 import org.swm.att.domain.constant.PayMethod
+import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuAdapter
 import org.swm.att.home.databinding.FragmentPayBinding
@@ -24,13 +27,17 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initOrderedMenuRecyclerView()
+        setMileage()
         setBtnModifyOrderClickListener()
         setSelectedMenuList()
         setMenusMapObserver()
-        getCustomerMileageInfo()
         setDataBinding()
         setUseMileageBtnClickListener()
         setPayBtnClickListener()
+        setPatchMileageStateObserver()
+        setPostOrderStateObserver()
+        setPostPaymentStateObserver()
+        setPostUseMileageStateObserver()
     }
 
     private fun initOrderedMenuRecyclerView() {
@@ -50,9 +57,18 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     }
 
+    private fun setMileage() {
+        args.Mileage?.let {
+            payViewModel.setMileage(it)
+        }
+    }
+
     private fun setBtnModifyOrderClickListener() {
         binding.btnModifyOrder.setOnClickListener {
-            findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
+            val orderedMenus = OrderedMenusVO(payViewModel.totalOrderMenuList.value)
+            val action =
+                PayFragmentDirections.actionFragmentPayToFragmentHome(selectedMenus = orderedMenus)
+            findNavController().navigate(action)
         }
     }
 
@@ -74,14 +90,8 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setDataBinding() {
         binding.payViewModel = payViewModel
-        binding.phoneNumber = args.PhoneNumber
+        binding.customerId = args.CustomerId
         binding.lifecycleOwner = viewLifecycleOwner
-    }
-
-    private fun getCustomerMileageInfo() {
-        args.PhoneNumber?.let {
-            payViewModel.getMileage(it)
-        }
     }
 
     private fun setUseMileageBtnClickListener() {
@@ -100,6 +110,56 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         }
         binding.btnPayByEasy.setOnClickListener {
             payViewModel.postOrder(PayMethod.EASY)
+        }
+    }
+
+    private fun setPatchMileageStateObserver() {
+        payViewModel.patchMileageState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> Toast.makeText(requireContext(), "보유 마일리지: ${it.data.mileage}", Toast.LENGTH_SHORT).show()
+                is NetworkState.Failure -> {
+                    Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun setPostOrderStateObserver() {
+        payViewModel.postOrderState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> {}
+                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setPostPaymentStateObserver() {
+        payViewModel.postPaymentState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> {
+                    Toast.makeText(requireContext(), "결제가 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                    if (it.data.leftPrice == 0) {
+                        payViewModel.patchMileage()
+                        findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
+                    }
+                }
+                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setPostUseMileageStateObserver() {
+        payViewModel.postUseMileageState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> {
+                    Toast.makeText(requireContext(), "마일리지 사용이 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                }
+                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

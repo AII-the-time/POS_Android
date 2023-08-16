@@ -1,12 +1,15 @@
 package org.swm.att.data.repository
 
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource
+import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey
 import org.swm.att.data.remote.datasource.UserDataSource
+import org.swm.att.data.remote.request.PhoneNumDTO
+import org.swm.att.data.remote.response.MileageDTO
+import org.swm.att.domain.entity.request.PhoneNumVO
+import org.swm.att.domain.entity.response.MileageIdVO
+import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.TokenVO
 import org.swm.att.domain.repository.AttPosUserRepository
-import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey
-import org.swm.att.data.remote.response.MileageDTO
-import org.swm.att.domain.entity.response.MileageVO
 import javax.inject.Inject
 
 class AttPosUserRepositoryImpl @Inject constructor(
@@ -41,18 +44,41 @@ class AttPosUserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMileage(storeId: Int, phoneNumber: String): Result<MileageVO> {
-        val response = userDataSource.getMileage(storeId, phoneNumber)
-        return Result.success(response.toVO())
+        return try {
+            val response = userDataSource.getMileage(storeId, phoneNumber)
+            Result.success(response.toVO())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun patchMileage(storeId: Int, mileage: MileageVO): Result<MileageVO> {
-        val response = userDataSource.patchMileage(
-            storeId,
-            MileageDTO(
-                mileageId = mileage.mileageId,
-                mileage = mileage.mileage
+        return try {
+            val response = userDataSource.patchMileage(
+                storeId,
+                MileageDTO(
+                    mileageId = mileage.mileageId,
+                    mileage = mileage.mileage
+                )
             )
-        )
-        return Result.success(response.toVO())
+            Result.success(response.toVO())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
+
+    override suspend fun registerCustomer(storeId: Int, phone: PhoneNumVO): Result<MileageIdVO> {
+        return try {
+            val response = userDataSource.registerCustomer(
+                storeId,
+                PhoneNumDTO(
+                    phone = phone.phone
+                )
+            )
+            Result.success(response.toVO())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }

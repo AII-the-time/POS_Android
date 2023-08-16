@@ -3,10 +3,12 @@ package org.swm.att.home.home
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.swm.att.common_ui.base.BaseViewModel
+import org.swm.att.common_ui.util.NetworkState
+import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
@@ -18,26 +20,39 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val attMenuRepository: AttMenuRepository
-): ViewModel() {
+): BaseViewModel() {
     private val _selectedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
     val selectedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _selectedMenuMap
-    private val _categoryList = MutableLiveData<CategoriesVO>()
-    val categoryList = _categoryList
     private val _midPhoneNumber = MutableLiveData<Stack<String>>()
     val midPhoneNumber: LiveData<Stack<String>> = _midPhoneNumber
     private val _endPhoneNumber = MutableLiveData<Stack<String>>()
     val endPhoneNumber: LiveData<Stack<String>> = _endPhoneNumber
 
-    fun getCategories() {
-        viewModelScope.launch {
-            try {
-                // mock data를 위해 임시로 sotreId를 1로 지정
-                attMenuRepository.getMenu(1).onSuccess {
-                    _categoryList.postValue(it)
-                }
-            } catch (e: Exception) {
-                Log.d("MenuViewModel", "getMenuList: ${e.message}")
+    private val _getMenuState: MutableLiveData<NetworkState<CategoriesVO>> =
+        MutableLiveData(NetworkState.Init)
+    val getMenuState: LiveData<NetworkState<CategoriesVO>> = _getMenuState
+
+    fun setSelectedMenusVO(selectedMenusVO: OrderedMenusVO) {
+        selectedMenusVO.menus?.let {
+            val selectedOrderedMenuMap = mutableMapOf<MenuVO, Int>()
+            it.forEach { orderedMenu ->
+                selectedOrderedMenuMap[orderedMenu.menu] = orderedMenu.count ?: 1
             }
+            _selectedMenuMap.postValue(selectedOrderedMenuMap)
+        }
+    }
+
+    fun getCategories() {
+        viewModelScope.launch(attExceptionHandler) {
+            // mock data를 위해 임시로 sotreId를 1로 지정
+            attMenuRepository.getMenu(1)
+                .onSuccess {
+                    Log.d("HomeViewModel", "getMenu: $it")
+                    _getMenuState.postValue(NetworkState.Success(it))
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "메뉴 불러오기 실패"
+                    _getMenuState.postValue(NetworkState.Failure(errorMsg))
+                }
         }
     }
 
@@ -112,6 +127,10 @@ class HomeViewModel @Inject constructor(
         _endPhoneNumber.postValue(Stack())
     }
 
+    fun clearSelectedMenuList() {
+        _selectedMenuMap.postValue(mutableMapOf())
+    }
+
     fun getOrderedMenusVO(): OrderedMenusVO {
         val selectedMenuMap = _selectedMenuMap.value ?: mapOf()
         val orderedMenuList = mutableListOf<OrderedMenuVO>()
@@ -130,6 +149,6 @@ class HomeViewModel @Inject constructor(
     fun getPhoneNumber(): String {
         val mid = _midPhoneNumber.value ?: Stack()
         val end = _endPhoneNumber.value ?: Stack()
-        return "${mid.joinToString("")}${end.joinToString("")}"
+        return "010${mid.joinToString("")}${end.joinToString("")}"
     }
 }

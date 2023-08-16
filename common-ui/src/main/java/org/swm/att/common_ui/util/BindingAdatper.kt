@@ -1,6 +1,7 @@
 package org.swm.att.common_ui.util
 
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.BindingAdapter
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.util.CurrencyFormat.getUnit
@@ -33,7 +34,7 @@ fun setCustomPayPriceText(view: TextView, totalPriceMap: Map<MenuVO, Int>?, useM
     var useMileagePrice = 0
     useMileage?.let {
         if (it.isNotEmpty()) {
-            useMileagePrice = useMileage?.joinToString("")?.toInt() ?: 0
+            useMileagePrice = useMileage.joinToString("").toInt()
         }
     }
     view.text = view.context.getString(R.string.tv_custom_price_text, (totalPrice - useMileagePrice).toString().getUnit())
@@ -49,7 +50,7 @@ fun setCustomTotalPriceText(view: TextView, menuMap: Map<MenuVO, Int>?) {
 fun setOptionListText(view: TextView, optionList: List<OptionVO>?) {
     val optionStr = optionList?.let { list ->
         list.joinToString { optionVO ->
-            optionVO.types.joinToString { optionTypeVO ->
+            optionVO.options.joinToString { optionTypeVO ->
                 optionTypeVO.name
             }
         }
@@ -57,8 +58,8 @@ fun setOptionListText(view: TextView, optionList: List<OptionVO>?) {
     view.text = optionStr
 }
 
-@BindingAdapter("setCustomVisibility")
-fun setCustomVisibility(view: TextView, detail: String?) {
+@BindingAdapter("setDetailVisibility")
+fun setDetailVisibility(view: TextView, detail: String?) {
     view.visibility = if (detail.isNullOrEmpty()) {
         TextView.GONE
     } else {
@@ -66,10 +67,21 @@ fun setCustomVisibility(view: TextView, detail: String?) {
     }
 }
 
+@BindingAdapter("setOptionsVisibility")
+fun setOptionsVisibility(view: TextView, optionList: List<OptionVO>?) {
+    view.visibility = if (optionList.isNullOrEmpty()) {
+        TextView.GONE
+    } else {
+        TextView.VISIBLE
+    }
+}
+
 @BindingAdapter("setCustomerNumber")
-fun setCustomerNumber(view: TextView, phoneNumber: String) {
-    val number = phoneNumber.takeLast(4)
-    view.text = view.context.getString(R.string.tv_customer_number, number)
+fun setCustomerNumber(view: TextView, phoneNumber: String?) {
+    phoneNumber?.let {
+        val number = phoneNumber.takeLast(4)
+        view.text = view.context.getString(R.string.tv_customer_number, number)
+    }
 }
 
 @BindingAdapter("setCustomerMileage")
@@ -116,4 +128,11 @@ fun setCustomMileageStrColor(view: TextView, totalMileage: Int, useMileage: Stac
         }
     }
     view.setTextColor(view.context.getColor(color))
+}
+
+@BindingAdapter("setOrderBtnClickable")
+fun setOrderBtnClickable(view: AppCompatButton, selectedMenuCount: Int?) {
+    selectedMenuCount?.let {
+        view.isClickable = selectedMenuCount > 0
+    }
 }
