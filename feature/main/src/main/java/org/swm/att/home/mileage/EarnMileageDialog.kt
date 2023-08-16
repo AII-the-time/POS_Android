@@ -26,8 +26,9 @@ class EarnMileageDialog(
         setDialogCloseBtnListener()
         setupCustomKeypad()
         setPhoneNumberObserver()
-        setGetMileageStateObserver()
         setRegisterBtnClickListener()
+        setGetMileageStateObserver()
+        setRegisterCustomerStateObserver()
     }
 
     private fun setBindingData() {
@@ -109,6 +110,28 @@ class EarnMileageDialog(
     }
 
     private fun setRegisterBtnClickListener() {
-        /* 구현 해야 함 */
+        binding.btnRegisterNewCustomer.setOnClickListener {
+            val phoneNumber = homeViewModel.getPhoneNumber()
+            if (isPhoneNumberValid(phoneNumber)) {
+                earnMileageViewModel.registerCustomer(phoneNumber)
+            } else {
+                Toast.makeText(requireContext(), "휴대폰 번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setRegisterCustomerStateObserver() {
+        earnMileageViewModel.registerCustomerState.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Init -> {}
+                is NetworkState.Success -> {
+                    Toast.makeText(requireContext(), "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                    navigateToPayFragment(it.data)
+                }
+                is NetworkState.Failure -> {
+                    Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }
