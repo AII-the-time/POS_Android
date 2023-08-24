@@ -50,6 +50,10 @@ jobs:
       uses: asadmansr/android-test-report-action@v1.2.0
 
   merge-branch:
+    permissions:
+      checks: write
+      contents: write
+      pull-requests: write
     needs: build-and-test
     runs-on: ubuntu-latest
     steps:
