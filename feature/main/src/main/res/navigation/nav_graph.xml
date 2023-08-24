@@ -54,4 +54,40 @@
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
+    <fragment
+        android:id="@+id/fragment_bill"
+        android:name="org.swm.att.home.bills.BillFragment"
+        android:label="@string/fragment_bill"
+        tools:layout="@layout/fragment_bill" />
+    <fragment
+        android:id="@+id/fragment_preorder"
+        android:name="org.swm.att.home.preorder.PreorderFragment"
+        android:label="@string/fragment_preorder"
+        tools:layout="@layout/fragment_preorder" />
+    <fragment
+        android:id="@+id/fragment_stock"
+        android:name="org.swm.att.home.stock.StockFragment"
+        android:label="@string/fragment_stock"
+        tools:layout="@layout/fragment_stock" />
+    <fragment
+        android:id="@+id/fragment_recipe"
+        android:name="org.swm.att.home.recipe.RecipeFragment"
+        android:label="@string/fragment_recipe"
+        tools:layout="@layout/fragment_recipe" />
+    <fragment
+        android:id="@+id/fragment_sale"
+        android:name="org.swm.att.home.sale.SaleFragment"
+        android:label="@string/fragment_sale"
+        tools:layout="@layout/fragment_sale" />
+    <fragment
+        android:id="@+id/fragment_setting"
+        android:name="org.swm.att.home.setting.SettingFragment"
+        android:label="@string/menu_setting"
+        tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/fragment_worker"
+        android:name="org.swm.att.home.worker.WorkerFragment"
+        android:label="@string/fragment_worker"
+        tools:layout="@layout/fragment_worker" />
+
 </navigation>
