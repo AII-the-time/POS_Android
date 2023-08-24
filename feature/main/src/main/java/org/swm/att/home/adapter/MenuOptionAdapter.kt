@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.home.R
-import org.swm.att.home.option.MenuOptionViewHolder
-import org.swm.att.home.option.MenuOptionViewModel
+import org.swm.att.home.home.option.MenuOptionViewHolder
+import org.swm.att.home.home.option.MenuOptionViewModel
 
 
 class MenuOptionAdapter(

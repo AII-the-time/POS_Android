@@ -1,4 +1,4 @@
-package org.swm.att.home.pay
+package org.swm.att.home.home.pay
 
 import android.os.Bundle
 import android.view.View
@@ -15,7 +15,7 @@ import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuAdapter
 import org.swm.att.home.databinding.FragmentPayBinding
-import org.swm.att.home.mileage.UseMileageDialog
+import org.swm.att.home.home.mileage.UseMileageDialog
 
 @AndroidEntryPoint
 class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {

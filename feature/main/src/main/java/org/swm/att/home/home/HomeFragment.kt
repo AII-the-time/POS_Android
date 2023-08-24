@@ -15,8 +15,8 @@ import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
-import org.swm.att.home.menu.MenuFragment
-import org.swm.att.home.mileage.EarnMileageDialog
+import org.swm.att.home.home.menu.MenuFragment
+import org.swm.att.home.home.mileage.EarnMileageDialog
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
