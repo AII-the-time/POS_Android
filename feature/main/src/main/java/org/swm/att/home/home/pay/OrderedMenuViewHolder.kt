@@ -1,4 +1,4 @@
-package org.swm.att.home.pay
+package org.swm.att.home.home.pay
 
 import androidx.recyclerview.widget.RecyclerView
 import org.swm.att.domain.entity.request.OrderedMenuVO

@@ -5,6 +5,9 @@
     tools:context=".MainActivity">
 
     <data>
+        <variable
+            name="mainViewModel"
+            type="org.swm.att.home.MainViewModel" />
 
         <variable
             name="barDate"
@@ -24,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/pos_nav_rail"
+            app:layout_constraintLeft_toRightOf="@id/custom_nav_rail"
             app:layout_constraintRight_toRightOf="parent"
             android:background="@color/back_color"
             android:elevation="0dp">
@@ -127,26 +130,367 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <com.google.android.material.navigationrail.NavigationRailView
-            android:id="@+id/pos_nav_rail"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/custom_nav_rail"
             android:layout_width="80dp"
-            android:layout_height="0dp"
-            app:headerLayout="@layout/nav_rail_header"
-            app:labelVisibilityMode="labeled"
+            android:layout_height="match_parent"
             android:background="@color/main_color"
-            app:itemIconTint="@color/white"
-            app:itemRippleColor="@null"
-            app:itemTextAppearanceActive="@style/CustomNavigationRailStyle"
-            app:itemTextAppearanceInactive="@style/CustomNavigationRailStyle"
-            app:itemTextColor="@color/white"
-            app:itemIconSize="40dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/nav_host_fragment"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            style="@style/CustomNavigationRailStyle"
-            app:elevation="0dp"
-            app:menu="@menu/pos_nav_bar" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/nav_host_fragment">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_nav_pos_menu_with_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/cl_nav_etc_menu">
+
+                <TextView
+                    android:id="@+id/tv_app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cafe_pos"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:paddingTop="21dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/cl_nav_menu"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_nav_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_app_name"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/menu_home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/menu_bills">
+
+                        <CheckBox
+                            android:id="@+id/btn_home"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:checked="true"
+                            android:button="@null"
+                            android:text="@null"
+                            android:background="@drawable/selector_menu_home"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/tv_icon_home_des"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:importantForAccessibility="no"/>
+
+                        <TextView
+                            android:id="@+id/tv_icon_home_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="@color/white"
+                            android:text="@string/menu_home"
+                            app:layout_constraintTop_toBottomOf="@id/btn_home"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/menu_bills"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintTop_toBottomOf="@id/menu_home"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/menu_preorder">
+
+                        <CheckBox
+                            android:id="@+id/btn_bills"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:button="@null"
+                            android:background="@drawable/selector_menu_bills"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/tv_icon_bills_des"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:importantForAccessibility="no"/>
+
+                        <TextView
+                            android:id="@+id/tv_icon_bills_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="@color/white"
+                            android:text="@string/menu_order"
+                            app:layout_constraintTop_toBottomOf="@id/btn_bills"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/menu_preorder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintTop_toBottomOf="@id/menu_bills"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/menu_stock">
+
+                        <CheckBox
+                            android:id="@+id/btn_preorder"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:button="@null"
+                            android:background="@drawable/selector_menu_preorder"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/tv_icon_preorder_des"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:importantForAccessibility="no"/>
+
+                        <TextView
+                            android:id="@+id/tv_icon_preorder_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="@color/white"
+                            android:text="@string/menu_preorder"
+                            app:layout_constraintTop_toBottomOf="@id/btn_preorder"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/menu_stock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintTop_toBottomOf="@id/menu_preorder"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/menu_recipe">
+
+                        <CheckBox
+                            android:id="@+id/btn_stock"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/selector_menu_stock"
+                            android:button="@null"
+                            android:importantForAccessibility="no"
+                            app:layout_constraintBottom_toTopOf="@id/tv_icon_stock_des"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_icon_stock_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="@color/white"
+                            android:text="@string/menu_stock"
+                            app:layout_constraintTop_toBottomOf="@id/btn_stock"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/menu_recipe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintTop_toBottomOf="@id/menu_stock"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <CheckBox
+                            android:id="@+id/btn_recipe"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:button="@null"
+                            android:background="@drawable/selector_menu_recipe"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/tv_icon_recipe_des"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:importantForAccessibility="no"/>
+
+                        <TextView
+                            android:id="@+id/tv_icon_recipe_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="@color/white"
+                            android:text="@string/menu_recipe"
+                            app:layout_constraintTop_toBottomOf="@id/btn_recipe"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_nav_etc_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/cl_nav_pos_menu_with_header"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_nav_rail"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/menu_worker"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/menu_worker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/divider_nav_rail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/menu_sales">
+
+                    <CheckBox
+                        android:id="@+id/btn_worker"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:button="@null"
+                        android:background="@drawable/ic_menu_auth_w_mdpi"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/tv_icon_worker_des"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:importantForAccessibility="no"/>
+
+                    <TextView
+                        android:id="@+id/tv_icon_worker_des"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:text="@string/menu_worker"
+                        app:layout_constraintTop_toBottomOf="@id/btn_worker"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/menu_sales"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/menu_worker"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/menu_setting">
+
+                    <CheckBox
+                        android:id="@+id/btn_sales"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:button="@null"
+                        android:background="@drawable/ic_menu_topmenu_w_mdpi"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/tv_icon_sales_des"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:importantForAccessibility="no"/>
+
+                    <TextView
+                        android:id="@+id/tv_icon_sales_des"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:text="@string/menu_sales"
+                        app:layout_constraintTop_toBottomOf="@id/btn_sales"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/menu_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/menu_sales"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <CheckBox
+                        android:id="@+id/btn_setting"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:button="@null"
+                        android:background="@drawable/ic_menu_settings_w_mdpi"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/tv_icon_setting_des"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:importantForAccessibility="no"/>
+
+                    <TextView
+                        android:id="@+id/tv_icon_setting_des"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:text="@string/menu_setting"
+                        app:layout_constraintTop_toBottomOf="@id/btn_setting"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
@@ -154,7 +498,7 @@
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/custom_app_bar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pos_nav_rail"
+            app:layout_constraintStart_toEndOf="@id/custom_nav_rail"
             app:layout_constraintEnd_toEndOf="parent"
             android:name="androidx.navigation.fragment.NavHostFragment"
             app:navGraph="@navigation/nav_graph"

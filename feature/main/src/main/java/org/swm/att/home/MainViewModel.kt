@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import org.swm.att.common_ui.util.nav.NavDestination
 import org.swm.att.common_ui.util.token.JWTUtils
 import org.swm.att.common_ui.util.token.JWTUtils.unixTimeToDateTime
 import org.swm.att.domain.repository.AttPosUserRepository
@@ -19,6 +20,10 @@ class MainViewModel @Inject constructor(
 ): ViewModel() {
     private val _refreshExist = MutableLiveData<Boolean>()
     val refreshExist: LiveData<Boolean> = _refreshExist
+    private val _selectedScreen = MutableLiveData<NavDestination>()
+    val selectedScreen: LiveData<NavDestination> = _selectedScreen
+    private val _curSelectedScreen = MutableLiveData(NavDestination.Home)
+    val curSelectedScreen: LiveData<NavDestination> = _curSelectedScreen
 
     fun checkRefreshToken() {
         viewModelScope.launch {
@@ -54,6 +59,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun setSelectedScreen(destination: NavDestination) {
+        _selectedScreen.postValue(destination)
+    }
 
+    fun changedCurSelectedScreen() {
+        _curSelectedScreen.postValue(selectedScreen.value)
+    }
 
 }

@@ -1,4 +1,4 @@
-package org.swm.att.home.menu
+package org.swm.att.home.home.menu
 
 import androidx.recyclerview.widget.RecyclerView
 import org.swm.att.domain.entity.response.MenuVO

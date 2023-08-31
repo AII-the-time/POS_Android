@@ -1,4 +1,4 @@
-package org.swm.att.home.option
+package org.swm.att.home.home.option
 
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip

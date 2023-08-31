@@ -1,4 +1,4 @@
-package org.swm.att.home.menu
+package org.swm.att.home.home.menu
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

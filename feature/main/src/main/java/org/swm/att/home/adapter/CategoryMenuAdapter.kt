@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.ListAdapter
 import org.swm.att.common_ui.util.StartDragListener
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.home.R
-import org.swm.att.home.option.MenuOptionDialog
+import org.swm.att.home.home.option.MenuOptionDialog
 import org.swm.att.home.home.HomeViewModel
-import org.swm.att.home.menu.MenuViewHolder
+import org.swm.att.home.home.menu.MenuViewHolder
 
 class CategoryMenuAdapter(
     private val homeViewModel: HomeViewModel,

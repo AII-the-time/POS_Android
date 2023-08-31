@@ -1,4 +1,4 @@
-package org.swm.att.home.menu
+package org.swm.att.home.home.menu
 
 import android.os.Bundle
 import android.view.View

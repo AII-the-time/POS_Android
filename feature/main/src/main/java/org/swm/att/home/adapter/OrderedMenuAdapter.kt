@@ -8,8 +8,8 @@ import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.home.R
 import org.swm.att.home.databinding.ItemOrderedMenuBinding
-import org.swm.att.home.pay.OrderedMenuViewHolder
-import org.swm.att.home.pay.PayViewModel
+import org.swm.att.home.home.pay.OrderedMenuViewHolder
+import org.swm.att.home.home.pay.PayViewModel
 
 class OrderedMenuAdapter(
     private val payViewModel: PayViewModel,
