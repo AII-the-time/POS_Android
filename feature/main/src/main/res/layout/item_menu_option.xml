@@ -23,9 +23,9 @@
 
             <TextView
                 android:id="@+id/tv_menu_option_category"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="top"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginTop="13dp"
                 android:text="@{option.optionType}"
                 android:textColor="@color/black"
