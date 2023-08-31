@@ -3,6 +3,13 @@
     <!--  navigation  -->
     <string name="fragment_home">HomeFragment</string>
     <string name="fragment_pay">PayFragment</string>
+    <string name="fragment_bill">BillFragment</string>
+    <string name="fragment_preorder">PreorderFragment</string>
+    <string name="fragment_stock">StockFragment</string>
+    <string name="fragment_recipe">RecipeFragment</string>
+    <string name="fragment_sale">SaleFragment</string>
+    <string name="fragment_setting">SettingFragment</string>
+    <string name="fragment_worker">WorkerFragment</string>
     <string name="dialog_earn_mileage">EarnMileageDialog</string>
     <!--  menu  -->
     <string name="menu_home">홈</string>

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="earnMileageViewModel"
-            type="org.swm.att.home.mileage.EarnMileageViewModel" />
+            type="org.swm.att.home.home.mileage.EarnMileageViewModel" />
         <import type="android.view.View"/>
     </data>
 

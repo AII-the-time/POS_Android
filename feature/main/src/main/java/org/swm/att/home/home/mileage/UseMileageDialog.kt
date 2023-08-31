@@ -1,4 +1,4 @@
-package org.swm.att.home.mileage
+package org.swm.att.home.home.mileage
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,7 @@ import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.common_ui.util.CurrencyFormat.getUnit
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogUseMileageBinding
-import org.swm.att.home.pay.PayViewModel
+import org.swm.att.home.home.pay.PayViewModel
 
 class UseMileageDialog(
     private val payViewModel: PayViewModel

@@ -1,30 +1,33 @@
 package org.swm.att.home.home
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.common_ui.util.NetworkState
+import org.swm.att.common_ui.util.extension.customGetSerializable
+import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
-import org.swm.att.home.menu.MenuFragment
-import org.swm.att.home.mileage.EarnMileageDialog
+import org.swm.att.home.home.menu.MenuFragment
+import org.swm.att.home.home.mileage.EarnMileageDialog
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private lateinit var categoryViewPagerAdapter: CategoryViewPagerAdapter
     private lateinit var selectedMenuAdapter: SelectedMenuAdapter
     private val homeViewModel: HomeViewModel by activityViewModels()
-    private val args by navArgs<HomeFragmentArgs>()
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
@@ -36,8 +39,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setOrderBtnListener()
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun setSelectedMenuList() {
-        args.selectedMenus?.let {
+        val args = this.arguments
+        val selectedMenus = args?.customGetSerializable<OrderedMenusVO>("selectedMenus")
+        selectedMenus?.let {
             homeViewModel.setSelectedMenusVO(it)
         }
     }
