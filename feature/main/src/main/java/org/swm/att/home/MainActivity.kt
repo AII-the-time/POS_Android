@@ -5,18 +5,12 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import androidx.activity.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
 import org.swm.att.common_ui.util.nav.NavDestination
-import org.swm.att.home.bills.BillFragment
 import org.swm.att.home.databinding.ActivityMainBinding
-import org.swm.att.home.home.HomeFragment
-import org.swm.att.home.preorder.PreorderFragment
-import org.swm.att.home.recipe.RecipeFragment
-import org.swm.att.home.sale.SaleFragment
-import org.swm.att.home.setting.SettingFragment
-import org.swm.att.home.stock.StockFragment
-import org.swm.att.home.worker.WorkerFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -24,10 +18,12 @@ import java.util.Locale
 @AndroidEntryPoint
 class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val mainViewModel by viewModels<MainViewModel>()
+    private lateinit var navController: NavController
 
     override fun onResume() {
         super.onResume()
         checkRefreshToken()
+        setNavController()
         setBindingData()
         removeStatusBar()
         hideSystemUI()
@@ -37,6 +33,11 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private fun checkRefreshToken() {
         mainViewModel.checkRefreshToken()
+    }
+
+    private fun setNavController() {
+        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHost.navController
     }
 
     private fun setBindingData() {
@@ -143,35 +144,35 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         mainViewModel.selectedScreen.observe(this) { destination ->
             when(destination) {
                 NavDestination.Home -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, HomeFragment()).commit()
+                    navController.navigate(R.id.action_global_fragment_home)
                     changeNavDestination()
                 }
                 NavDestination.Bills -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, BillFragment()).commit()
+                    navController.navigate(R.id.action_global_fragment_bill)
                     changeNavDestination()
                 }
                 NavDestination.Preorder -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, PreorderFragment()).commit()
+                    navController.navigate(R.id.action_global_fragment_preorder)
                     changeNavDestination()
                 }
                 NavDestination.Stock -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, StockFragment()).commit()
+                    navController.navigate(R.id.action_global_fragment_stock)
                     changeNavDestination()
                 }
                 NavDestination.Recipe -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, RecipeFragment()).commit()
+                    navController.navigate(R.id.action_global_fragment_recipe)
                     changeNavDestination()
                 }
                 NavDestination.Worker -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, WorkerFragment()).commit()
+                    navController.navigate(R.id.action_global_fragment_worker)
                     changeNavDestination()
                 }
                 NavDestination.Sales -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, SaleFragment()).commit()
+                    navController.navigate(R.id.action_global_fragment_sales)
                     changeNavDestination()
                 }
                 NavDestination.Setting -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, SettingFragment()).commit()
+                    navController.navigate(R.id.action_global_fragment_setting)
                     changeNavDestination()
                 }
             }
