@@ -44,5 +44,6 @@ class OrderedMenuOfBillViewHolder (
             detail =  orderedMenuOfBill.detail
         )
         binding.tvMenuItemPrice.visibility = View.INVISIBLE
+        binding.dividerForReceiptMenuItem.visibility = View.VISIBLE
     }
 }
