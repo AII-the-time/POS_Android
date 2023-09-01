@@ -1,10 +1,14 @@
 package org.swm.att.domain.entity.request
 
 import kotlinx.serialization.Serializable
-import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.domain.entity.response.OptionTypeVO
 
 @Serializable
 data class OrderedMenuVO(
-    val menu: MenuVO,
-    val count: Int? = 0
+    val id: Int,
+    val name: String,
+    val price: Int,
+    val count: Int? = 1,
+    val options: List<OptionTypeVO>,
+    val detail: String? = null
 ): java.io.Serializable

@@ -5,9 +5,9 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.BindingAdapter
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.util.CurrencyFormat.getUnit
-import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.MileageVO
-import org.swm.att.domain.entity.response.OptionVO
+import org.swm.att.domain.entity.response.OptionTypeVO
 import java.util.Stack
 
 @BindingAdapter("customPriceText")
@@ -23,13 +23,17 @@ fun setCustomTotalPriceText(view: TextView, price: Int, totalCount: Int) {
 }
 
 @BindingAdapter("customTotalCountText")
-fun setCustomTotalCountText(view: TextView, menuMap: Map<MenuVO, Int>?) {
+fun setCustomTotalCountText(view: TextView, menuMap: Map<OrderedMenuVO, Int>?) {
     val size = (menuMap?.map { it.value }?.sum() ?: 0).toString().getUnit()
     view.text = view.context.getString(R.string.tv_custom_total_count_text, size)
 }
 
 @BindingAdapter("totalPriceMap", "useMileage")
-fun setCustomPayPriceText(view: TextView, totalPriceMap: Map<MenuVO, Int>?, useMileage: Stack<String>?) {
+fun setCustomPayPriceText(
+    view: TextView,
+    totalPriceMap: Map<OrderedMenuVO, Int>?,
+    useMileage: Stack<String>?
+) {
     val totalPrice = totalPriceMap?.map { it.key.price * it.value }?.sum() ?: 0
     var useMileagePrice = 0
     useMileage?.let {
@@ -37,22 +41,23 @@ fun setCustomPayPriceText(view: TextView, totalPriceMap: Map<MenuVO, Int>?, useM
             useMileagePrice = useMileage.joinToString("").toInt()
         }
     }
-    view.text = view.context.getString(R.string.tv_custom_price_text, (totalPrice - useMileagePrice).toString().getUnit())
+    view.text = view.context.getString(
+        R.string.tv_custom_price_text,
+        (totalPrice - useMileagePrice).toString().getUnit()
+    )
 }
 
 @BindingAdapter("customTotalPriceText")
-fun setCustomTotalPriceText(view: TextView, menuMap: Map<MenuVO, Int>?) {
+fun setCustomTotalPriceText(view: TextView, menuMap: Map<OrderedMenuVO, Int>?) {
     val totalPrice = (menuMap?.map { it.key.price * it.value }?.sum() ?: 0).toString().getUnit()
     view.text = view.context.getString(R.string.tv_custom_price_text, totalPrice)
 }
 
 @BindingAdapter("optionListText")
-fun setOptionListText(view: TextView, optionList: List<OptionVO>?) {
+fun setOptionListText(view: TextView, optionList: List<OptionTypeVO>?) {
     val optionStr = optionList?.let { list ->
-        list.joinToString { optionVO ->
-            optionVO.options.joinToString { optionTypeVO ->
-                optionTypeVO.name
-            }
+        list.joinToString { type ->
+            type.name
         }
     }
     view.text = optionStr
@@ -68,7 +73,7 @@ fun setDetailVisibility(view: TextView, detail: String?) {
 }
 
 @BindingAdapter("setOptionsVisibility")
-fun setOptionsVisibility(view: TextView, optionList: List<OptionVO>?) {
+fun setOptionsVisibility(view: TextView, optionList: List<OptionTypeVO>?) {
     view.visibility = if (optionList.isNullOrEmpty()) {
         TextView.GONE
     } else {

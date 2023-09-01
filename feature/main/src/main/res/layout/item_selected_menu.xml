@@ -5,7 +5,7 @@
     <data>
         <variable
             name="menu"
-            type="org.swm.att.domain.entity.response.MenuVO" />
+            type="org.swm.att.domain.entity.request.OrderedMenuVO" />
 
         <variable
             name="count"
@@ -52,8 +52,8 @@
                 app:layout_constraintBottom_toTopOf="@id/tv_option_detail"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="12sp"
-                app:setOptionsVisibility="@{menu.option}"
-                app:optionListText="@{menu.option}"/>
+                app:optionListText="@{menu.options}"
+                app:setOptionsVisibility="@{menu.options}" />
 
             <TextView
                 android:id="@+id/tv_option_detail"

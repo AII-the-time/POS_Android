@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toTopOf="@id/tv_menu_item_options"
             app:layout_constraintEnd_toStartOf="@id/cl_menu_item_total_price"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            android:text="@{orderedMenu.menu.name}"
+            android:text="@{orderedMenu.name}"
             android:textColor="@color/black"
             android:textSize="14sp"/>
 
@@ -45,7 +45,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tv_menu_item_count"
                 app:layout_constraintStart_toStartOf="parent"
-                app:customPriceText="@{orderedMenu.menu.price}"
+                app:customPriceText="@{orderedMenu.price}"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
 
@@ -68,7 +68,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_menu_item_count"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:price="@{orderedMenu.menu.price}"
+                app:price="@{orderedMenu.price}"
                 app:totalCount="@{orderedMenu.count}"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -83,10 +83,10 @@
             app:layout_constraintTop_toBottomOf="@id/tv_menu_item_name"
             app:layout_constraintStart_toStartOf="@id/tv_menu_item_name"
             app:layout_constraintBottom_toTopOf="@id/tv_menu_detail"
-            app:setOptionsVisibility="@{orderedMenu.menu.option}"
-            app:optionListText="@{orderedMenu.menu.option}"
+            android:layout_marginTop="4dp"
+            app:optionListText="@{orderedMenu.options}"
             android:textSize="12sp"
-            android:layout_marginTop="4dp"/>
+            app:setOptionsVisibility="@{orderedMenu.options}" />
 
         <TextView
             android:id="@+id/tv_menu_detail"
@@ -95,10 +95,10 @@
             app:layout_constraintTop_toBottomOf="@id/tv_menu_item_options"
             app:layout_constraintStart_toStartOf="@id/tv_menu_item_name"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@{orderedMenu.menu.detail}"
-            app:setDetailVisibility="@{orderedMenu.menu.detail}"
+            android:layout_marginTop="4dp"
+            android:text="@{orderedMenu.detail}"
             android:textSize="12sp"
-            android:layout_marginTop="4dp"/>
+            app:setDetailVisibility="@{orderedMenu.detail}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

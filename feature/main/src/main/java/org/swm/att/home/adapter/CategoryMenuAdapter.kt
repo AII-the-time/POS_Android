@@ -7,11 +7,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ListAdapter
 import org.swm.att.common_ui.util.StartDragListener
+import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.home.R
-import org.swm.att.home.home.option.MenuOptionDialog
 import org.swm.att.home.home.HomeViewModel
 import org.swm.att.home.home.menu.MenuViewHolder
+import org.swm.att.home.home.option.MenuOptionDialog
 
 class CategoryMenuAdapter(
     private val homeViewModel: HomeViewModel,
@@ -46,7 +47,14 @@ class CategoryMenuAdapter(
                     MenuOptionDialog::class.java.simpleName
                 )
             } else {
-                homeViewModel.addSelectedMenu(menu)
+                homeViewModel.addSelectedMenu(
+                    OrderedMenuVO(
+                        id = menu.id,
+                        name = menu.name,
+                        price = menu.price,
+                        options = emptyList()
+                    )
+                )
             }
         }
         holder.itemView.setOnTouchListener { _, motionEvent ->
