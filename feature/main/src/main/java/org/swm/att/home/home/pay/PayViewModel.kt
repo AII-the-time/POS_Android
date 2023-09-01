@@ -12,7 +12,6 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PaymentVO
-import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OrderVO
 import org.swm.att.domain.entity.response.PaymentResultVO
@@ -27,10 +26,10 @@ class PayViewModel @Inject constructor(
     private val attOrderRepository: AttOrderRepository
 ): BaseViewModel() {
     //결제 진행 여부에 따른 분리
-    private val _orderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
-    val orderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _orderedMenuMap
-    private val _selectedOrderedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
-    val selectedOrderedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _selectedOrderedMenuMap
+    private val _orderedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
+    val orderedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _orderedMenuMap
+    private val _selectedOrderedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
+    val selectedOrderedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _selectedOrderedMenuMap
     private val _totalOrderMenuList = MutableLiveData<List<OrderedMenuVO>>()
     val totalOrderMenuList: LiveData<List<OrderedMenuVO>> = _totalOrderMenuList
 
@@ -58,10 +57,12 @@ class PayViewModel @Inject constructor(
     fun setOrderedMenuMap(orderedMenusVO: OrderedMenusVO) {
         orderedMenusVO.menus?.let {
             _totalOrderMenuList.postValue(it)
-            _totalPrice.postValue(it.sumOf { orderedMenu -> orderedMenu.menu.price * (orderedMenu.count ?: 1) })
+            _totalPrice.postValue(it.sumOf { orderedMenu ->
+                orderedMenu.price * (orderedMenu.count ?: 1)
+            })
             val selectedOrderedMenuMap = (_selectedOrderedMenuMap.value ?: mapOf()).toMutableMap()
-            it.forEach {  orderedMenu ->
-                selectedOrderedMenuMap[orderedMenu.menu] = orderedMenu.count ?: 1
+            it.forEach { orderedMenu ->
+                selectedOrderedMenuMap[orderedMenu] = orderedMenu.count ?: 1
             }
             _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
         }
@@ -71,12 +72,7 @@ class PayViewModel @Inject constructor(
         val selectedMenuMap = _orderedMenuMap.value ?: mapOf()
         val orderedMenuList = mutableListOf<OrderedMenuVO>()
         selectedMenuMap.keys.forEach {
-            orderedMenuList.add(
-                OrderedMenuVO(
-                    menu = it,
-                    count = selectedMenuMap[it]
-                )
-            )
+            orderedMenuList.add(it)
         }
         return orderedMenuList
     }
@@ -85,12 +81,7 @@ class PayViewModel @Inject constructor(
         val selectedMenuMap = _selectedOrderedMenuMap.value ?: mapOf()
         val orderedMenuList = mutableListOf<OrderedMenuVO>()
         selectedMenuMap.keys.forEach {
-            orderedMenuList.add(
-                OrderedMenuVO(
-                    menu = it,
-                    count = selectedMenuMap[it]
-                )
-            )
+            orderedMenuList.add(it)
         }
         return orderedMenuList
     }
@@ -99,8 +90,8 @@ class PayViewModel @Inject constructor(
         val orderedMenuMap = (_orderedMenuMap.value ?: mapOf()).toMutableMap()
         val selectedOrderedMenuMap = (_selectedOrderedMenuMap.value ?: mapOf()).toMutableMap()
 
-        orderedMenuMap.remove(orderedMenuVO.menu)
-        selectedOrderedMenuMap[orderedMenuVO.menu] = orderedMenuVO.count ?: 0
+        orderedMenuMap.remove(orderedMenuVO)
+        selectedOrderedMenuMap[orderedMenuVO] = orderedMenuVO.count ?: 0
 
         _orderedMenuMap.postValue(orderedMenuMap)
         _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
@@ -110,8 +101,8 @@ class PayViewModel @Inject constructor(
         val orderedMenuMap = (_orderedMenuMap.value ?: mapOf()).toMutableMap()
         val selectedOrderedMenuMap = (_selectedOrderedMenuMap.value ?: mapOf()).toMutableMap()
 
-        selectedOrderedMenuMap.remove(orderedMenuVO.menu)
-        orderedMenuMap[orderedMenuVO.menu] = orderedMenuVO.count ?: 0
+        selectedOrderedMenuMap.remove(orderedMenuVO)
+        orderedMenuMap[orderedMenuVO] = orderedMenuVO.count ?: 0
 
         _orderedMenuMap.postValue(orderedMenuMap)
         _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
@@ -248,7 +239,7 @@ class PayViewModel @Inject constructor(
     }
 
     companion object {
-        private fun getPriceFromMap(menuWithCountMap: Map<MenuVO, Int>?): Int {
+        private fun getPriceFromMap(menuWithCountMap: Map<OrderedMenuVO, Int>?): Int {
             return menuWithCountMap?.map { it.key.price * it.value }?.sum() ?: 0
         }
     }

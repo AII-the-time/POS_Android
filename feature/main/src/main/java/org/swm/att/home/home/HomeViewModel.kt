@@ -12,7 +12,6 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
-import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.repository.AttMenuRepository
 import java.util.Stack
 import javax.inject.Inject
@@ -21,8 +20,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val attMenuRepository: AttMenuRepository
 ): BaseViewModel() {
-    private val _selectedMenuMap = MutableLiveData<MutableMap<MenuVO, Int>?>()
-    val selectedMenuMap: LiveData<MutableMap<MenuVO, Int>?> = _selectedMenuMap
+    private val _selectedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
+    val selectedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _selectedMenuMap
     private val _midPhoneNumber = MutableLiveData<Stack<String>>()
     val midPhoneNumber: LiveData<Stack<String>> = _midPhoneNumber
     private val _endPhoneNumber = MutableLiveData<Stack<String>>()
@@ -34,9 +33,9 @@ class HomeViewModel @Inject constructor(
 
     fun setSelectedMenusVO(selectedMenusVO: OrderedMenusVO) {
         selectedMenusVO.menus?.let {
-            val selectedOrderedMenuMap = mutableMapOf<MenuVO, Int>()
+            val selectedOrderedMenuMap = mutableMapOf<OrderedMenuVO, Int>()
             it.forEach { orderedMenu ->
-                selectedOrderedMenuMap[orderedMenu.menu] = orderedMenu.count ?: 1
+                selectedOrderedMenuMap[orderedMenu] = orderedMenu.count ?: 1
             }
             _selectedMenuMap.postValue(selectedOrderedMenuMap)
         }
@@ -56,9 +55,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun addSelectedMenu(menu: MenuVO) {
+    fun addSelectedMenu(menu: OrderedMenuVO) {
         val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
-
         if (selectedMenuMap.containsKey(menu)) {
             selectedMenuMap[menu] = selectedMenuMap[menu]!! + 1
         } else {
@@ -66,9 +64,10 @@ class HomeViewModel @Inject constructor(
         }
 
         _selectedMenuMap.postValue(selectedMenuMap)
+        Log.d("HomeViewModel", "addSelectedMenu: ${_selectedMenuMap.value}")
     }
 
-    fun minusSelectedMenuItem(menu: MenuVO) {
+    fun minusSelectedMenuItem(menu: OrderedMenuVO) {
         val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
         val count = selectedMenuMap[menu]!!
 
@@ -81,7 +80,7 @@ class HomeViewModel @Inject constructor(
         _selectedMenuMap.postValue(selectedMenuMap)
     }
 
-    fun plusSelectedMenuItem(menu: MenuVO) {
+    fun plusSelectedMenuItem(menu: OrderedMenuVO) {
         val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
         val count = selectedMenuMap[menu]!!
 
@@ -135,12 +134,7 @@ class HomeViewModel @Inject constructor(
         val selectedMenuMap = _selectedMenuMap.value ?: mapOf()
         val orderedMenuList = mutableListOf<OrderedMenuVO>()
         selectedMenuMap.keys.forEach {
-            orderedMenuList.add(
-                OrderedMenuVO(
-                    it,
-                    selectedMenuMap[it]
-                )
-            )
+            orderedMenuList.add(it)
         }
 
         return OrderedMenusVO(orderedMenuList)

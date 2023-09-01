@@ -23,14 +23,10 @@ class AttOrderRepositoryImpl @Inject constructor(
                     totalPrice = totalPrice,
                     mileageId = mileageId,
                     menus = orderedMenus.menus?.map { OrderedMenuDTO(
-                        Id = it.menu.id,
+                        Id = it.id,
                         count = it.count ?: 1,
-                        options = it.menu.option.map { option ->
-                            option.options.map { optionType ->
-                                optionType.id
-                            }
-                        }.flatten(),
-                        detail = it.menu.detail
+                        options = it.options.map { option -> option.id },
+                        detail = it.detail
                     )} ?: listOf()
                 )
             )

@@ -16,8 +16,7 @@ class OrderedMenuAdapter(
     private val selected: Boolean
 ): ListAdapter<OrderedMenuVO, OrderedMenuViewHolder>(
     ItemDiffCallback<OrderedMenuVO>(
-        //옵션이 추가되면 옵션도 고려해서 비교해야 함
-        onItemsTheSame = { old, new -> old.menu.id == new.menu.id },
+        onItemsTheSame = { old, new -> old.id == new.id && old.options == new.options },
         onContentTheSame = { old, new -> old == new }
     )
 ){
