@@ -5,6 +5,71 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/fragment_home">
 
+    <action
+        android:id="@+id/action_global_fragment_home"
+        app:destination="@id/fragment_home"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/nav_graph"/>
+    <action
+        android:id="@+id/action_global_fragment_bill"
+        app:destination="@id/fragment_bill"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/nav_graph"/>
+    <action
+        android:id="@+id/action_global_fragment_preorder"
+        app:destination="@id/fragment_preorder"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/nav_graph"/>
+    <action
+        android:id="@+id/action_global_fragment_stock"
+        app:destination="@id/fragment_stock"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/nav_graph"/>
+    <action
+        android:id="@+id/action_global_fragment_recipe"
+        app:destination="@id/fragment_recipe"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/nav_graph"/>
+    <action
+        android:id="@+id/action_global_fragment_worker"
+        app:destination="@id/fragment_worker"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/nav_graph"/>
+    <action
+        android:id="@+id/action_global_fragment_sales"
+        app:destination="@id/fragment_sale"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/nav_graph"/>
+    <action
+        android:id="@+id/action_global_fragment_setting"
+        app:destination="@id/fragment_setting"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/nav_graph"/>
+
     <fragment
         android:id="@+id/fragment_home"
         android:name="org.swm.att.home.home.HomeFragment"
