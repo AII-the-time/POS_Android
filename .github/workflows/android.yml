@@ -62,5 +62,6 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
+          message: auto merged in develop
           target_branch: 'develop'
           github_token: ${{ secrets.GITHUB_TOKEN }}
