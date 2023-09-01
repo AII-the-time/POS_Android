@@ -2,39 +2,33 @@ package org.swm.att.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.ListAdapter
+import androidx.databinding.ViewDataBinding
+import org.swm.att.common_ui.base.BaseListAdapter
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.response.OptionVO
-import org.swm.att.home.R
+import org.swm.att.home.databinding.ItemMenuOptionBinding
 import org.swm.att.home.home.option.MenuOptionViewHolder
 import org.swm.att.home.home.option.MenuOptionViewModel
 
 
 class MenuOptionAdapter(
     private val menuOptionViewModel: MenuOptionViewModel
-): ListAdapter<OptionVO, MenuOptionViewHolder>(
-    ItemDiffCallback<OptionVO>(
+): BaseListAdapter<OptionVO, MenuOptionViewHolder>(
+    ItemDiffCallback(
         onItemsTheSame = { old, new -> old.id == new.id },
         onContentTheSame = { old, new -> old == new }
     )
 ) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuOptionViewHolder {
+    override fun inflateBinding(inflater: LayoutInflater, parent: ViewGroup): ViewDataBinding {
+        return ItemMenuOptionBinding.inflate(inflater, parent, false)
+    }
+    override fun createViewHolder(binding: ViewDataBinding): MenuOptionViewHolder {
         return MenuOptionViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.item_menu_option,
-                parent,
-                false
-            ),
+            binding as ItemMenuOptionBinding,
             menuOptionViewModel
         )
     }
-
-    override fun onBindViewHolder(holder: MenuOptionViewHolder, position: Int) {
-        val menuOption = getItem(position)
-        holder.bind(menuOption)
+    override fun bindViewHolder(holder: MenuOptionViewHolder, item: OptionVO) {
+        holder.bind(item)
     }
-
 }
