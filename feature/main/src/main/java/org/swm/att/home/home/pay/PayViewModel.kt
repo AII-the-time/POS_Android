@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseViewModel
-import org.swm.att.common_ui.util.NetworkState
+import org.swm.att.common_ui.util.state.NetworkState
 import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
@@ -41,13 +41,17 @@ class PayViewModel @Inject constructor(
     val mileage: LiveData<MileageVO> = _mileage
     private val _useMileage = MutableLiveData<Stack<String>>()
     val useMileage: LiveData<Stack<String>> = _useMileage
-    private val _patchMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(NetworkState.Init)
+    private val _patchMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(
+        NetworkState.Init)
     val patchMileageState: LiveData<NetworkState<MileageVO>> = _patchMileageState
-    private val _postUseMileageState: MutableLiveData<NetworkState<PaymentResultVO>> = MutableLiveData(NetworkState.Init)
+    private val _postUseMileageState: MutableLiveData<NetworkState<PaymentResultVO>> = MutableLiveData(
+        NetworkState.Init)
     val postUseMileageState: LiveData<NetworkState<PaymentResultVO>> = _postUseMileageState
-    private val _postOrderState: MutableLiveData<NetworkState<OrderVO>> = MutableLiveData(NetworkState.Init)
+    private val _postOrderState: MutableLiveData<NetworkState<OrderVO>> = MutableLiveData(
+        NetworkState.Init)
     val postOrderState: LiveData<NetworkState<OrderVO>> = _postOrderState
-    private val _postPaymentState: MutableLiveData<NetworkState<PaymentResultVO>> = MutableLiveData(NetworkState.Init)
+    private val _postPaymentState: MutableLiveData<NetworkState<PaymentResultVO>> = MutableLiveData(
+        NetworkState.Init)
     val postPaymentState: LiveData<NetworkState<PaymentResultVO>> = _postPaymentState
 
     fun setMileage(mileageVO: MileageVO) {

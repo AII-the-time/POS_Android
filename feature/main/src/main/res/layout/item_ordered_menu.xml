@@ -11,17 +11,26 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="9dp"
         android:paddingBottom="9dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp">
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_for_receipt_menu_item"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            android:layout_marginBottom="9dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/tv_menu_item_name"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tv_menu_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/divider_for_receipt_menu_item"
             app:layout_constraintBottom_toTopOf="@id/tv_menu_item_options"
             app:layout_constraintEnd_toStartOf="@id/cl_menu_item_total_price"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
