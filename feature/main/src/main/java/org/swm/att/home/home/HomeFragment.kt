@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseFragment
-import org.swm.att.common_ui.util.NetworkState
+import org.swm.att.common_ui.util.state.NetworkState
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter

@@ -8,7 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseDialog
-import org.swm.att.common_ui.util.NetworkState
+import org.swm.att.common_ui.util.state.NetworkState
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogEarnMileageBinding

@@ -93,4 +93,11 @@
     <string name="tv_use_mileage_dl_des">포인트 사용</string>
     <string name="tv_use_all_mileage">사용가능 포인트 전체 사용(%s점)</string>
     <string name="btn_register_new_customer">마일리지 등록</string>
+    <string name="tv_search_result_des">검색결과</string>
+    <string name="tv_receipt_des">영수증</string>
+    <string name="tv_mileage_use_des">포인트 사용</string>
+    <string name="tv_mileage_earn_des">포인트 적립</string>
+    <string name="tv_pay_method_des">결제수단</string>
+    <string name="tv_pay_total_price_des">총 결제금액</string>
+    <string name="btn_pay_cancel">결제 취소</string>
 </resources>
