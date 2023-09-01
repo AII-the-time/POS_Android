@@ -63,5 +63,4 @@ jobs:
         with:
           type: now
           target_branch: 'develop'
-          message: Merge
           github_token: ${{ secrets.GITHUB_TOKEN }}
