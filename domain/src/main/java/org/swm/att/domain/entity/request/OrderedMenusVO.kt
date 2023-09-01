@@ -6,3 +6,4 @@ import kotlinx.serialization.Serializable
 data class OrderedMenusVO(
     val menus: List<OrderedMenuVO>? = listOf()
 ): java.io.Serializable
+
