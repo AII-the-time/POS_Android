@@ -4,7 +4,8 @@ enum class PayMethod {
     CARD,
     CASH,
     MILEAGE,
-    EASY;
+    EASY,
+    UNKNOWN;
 
     companion object {
         fun toString(payMethod: PayMethod): String {
@@ -13,6 +14,17 @@ enum class PayMethod {
                 CASH -> "CASH"
                 MILEAGE -> "MILEAGE"
                 EASY -> "EASY"
+                else -> "UNKNOWN"
+            }
+        }
+
+        fun toPayMethod(payMethod:String): PayMethod {
+            return when (payMethod) {
+                "CARD" -> CARD
+                "CASH" -> CASH
+                "MILEAGE" -> MILEAGE
+                "EASY" -> EASY
+                else -> UNKNOWN
             }
         }
     }
