@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.swm.att.common_ui.base.BaseDialog
+import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.MenuOptionAdapter
@@ -43,19 +44,19 @@ class MenuOptionDialog(
 
     private fun setOptionAddBtnClickListener() {
         binding.btnMenuOptionAdd.setOnClickListener {
-            val optionsPrice = menuOptionViewModel.selectedOptionList.value?.sumOf {
-                it.options.sumOf { type -> type.price }
-            } ?: 0
+            val optionsPrice =
+                menuOptionViewModel.selectedOptionMap.value?.values?.sumOf { it.price } ?: 0
             var detail: String? = null
             if (binding.edtMenuCustomOption.text.toString() != "") {
                 detail = binding.edtMenuCustomOption.text.toString()
             }
-            val selectedMenuWithOptions = MenuVO(
-                menuVO.id,
-                menuVO.name,
-                menuVO.price + optionsPrice,
-                menuOptionViewModel.selectedOptionList.value?.sortedBy { it.id } ?: listOf(),
-                detail
+            val selectedMenuWithOptions = OrderedMenuVO(
+                id = menuVO.id,
+                name = menuVO.name,
+                price = menuVO.price + optionsPrice,
+                options = menuOptionViewModel.selectedOptionMap.value?.values?.toList()
+                    ?.sortedBy { it.id } ?: emptyList(),
+                detail = detail
             )
             homeViewModel.addSelectedMenu(selectedMenuWithOptions)
             dismiss()

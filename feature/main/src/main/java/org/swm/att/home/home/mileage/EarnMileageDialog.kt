@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.common_ui.util.NetworkState
@@ -106,7 +107,7 @@ class EarnMileageDialog(
         val customerId = homeViewModel.endPhoneNumber.value?.joinToString("")
         val action = HomeFragmentDirections
             .actionFragmentHomeToFragmentPay(OrderedMenus = orderedMenus, Mileage = mileage, CustomerId = customerId)
-        NavHostFragment.findNavController(this@EarnMileageDialog).navigate(action)
+        findNavController().navigate(action)
     }
 
     private fun setRegisterBtnClickListener() {
