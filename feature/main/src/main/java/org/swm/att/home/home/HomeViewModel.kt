@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseViewModel
-import org.swm.att.common_ui.util.NetworkState
+import org.swm.att.common_ui.util.state.NetworkState
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO

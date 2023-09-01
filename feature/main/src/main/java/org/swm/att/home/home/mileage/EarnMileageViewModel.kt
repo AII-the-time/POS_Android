@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseViewModel
-import org.swm.att.common_ui.util.NetworkState
+import org.swm.att.common_ui.util.state.NetworkState
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.PhoneNumVO
 import org.swm.att.domain.entity.response.MileageVO
@@ -21,9 +21,11 @@ class EarnMileageViewModel @Inject constructor(
     private val _mileage = MutableLiveData<MileageVO?>()
     val mileage: LiveData<MileageVO?> = _mileage
 
-    private val _getMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(NetworkState.Init)
+    private val _getMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(
+        NetworkState.Init)
     val getMileageState: LiveData<NetworkState<MileageVO>> = _getMileageState
-    private val _registerCustomerState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(NetworkState.Init)
+    private val _registerCustomerState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(
+        NetworkState.Init)
     val registerCustomerState: LiveData<NetworkState<MileageVO>> = _registerCustomerState
 
     fun getMileage(phone: String) {
@@ -49,7 +51,8 @@ class EarnMileageViewModel @Inject constructor(
                     phone = phone
                 )
             ).onSuccess {
-                _registerCustomerState.postValue(NetworkState.Success(MileageVO(
+                _registerCustomerState.postValue(
+                    NetworkState.Success(MileageVO(
                     mileageId = it.mileageId,
                     mileage = 0
                 )))
