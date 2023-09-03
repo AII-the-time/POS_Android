@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ListAdapter
+import org.swm.att.common_ui.util.ItemDiffCallback
+import org.swm.att.common_ui.util.ItemTouchHelperListener
 import org.swm.att.common_ui.util.StartDragListener
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.MenuVO
@@ -18,11 +20,11 @@ class CategoryMenuAdapter(
     private val homeViewModel: HomeViewModel,
     private val parentContext: Context
 ) : ListAdapter<MenuVO, MenuViewHolder>(
-    org.swm.att.common_ui.util.ItemDiffCallback<MenuVO>(
+    ItemDiffCallback<MenuVO>(
         onItemsTheSame = { old, new -> old.id == new.id },
         onContentTheSame = { old, new -> old == new }
     )
-), org.swm.att.common_ui.util.ItemTouchHelperListener {
+), ItemTouchHelperListener {
     private lateinit var onItemDragListener: StartDragListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
