@@ -43,10 +43,9 @@ fun setCustomPayPriceText(
             useMileagePrice = useMileage.joinToString("").toInt()
         }
     }
-    view.text = getStringBaseCurrencyUnit( view.context.getString(
+    view.text = view.context.getString(
         R.string.tv_custom_price_text,
-        (totalPrice - useMileagePrice).toString())
-    )
+        getStringBaseCurrencyUnit((totalPrice - useMileagePrice).toString()))
 }
 
 @BindingAdapter("customTotalPriceText")
