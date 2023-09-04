@@ -20,6 +20,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/cl_menu_option"
             app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginTop="10dp"
             android:text="@string/tv_menu_option_picker_des"
             android:textColor="@color/black"
             android:textSize="16sp"

@@ -11,6 +11,9 @@
         <variable
             name="selectedBillReceipt"
             type="org.swm.att.domain.entity.response.OrderReceiptVO" />
+        <variable
+            name="billViewModel"
+            type="org.swm.att.home.bills.BillViewModel"/>
         <import type="android.view.View" />
         <import type="org.swm.att.domain.constant.PayState" />
     </data>
@@ -60,19 +63,34 @@
                     app:layout_constraintTop_toTopOf="@id/tv_search_result_des"
                     app:layout_constraintBottom_toBottomOf="@id/tv_search_result_des"
                     app:layout_constraintStart_toEndOf="@id/tv_search_result_des"
-                    app:layout_constraintEnd_toStartOf="@id/tv_search_result_date"/>
+                    app:layout_constraintEnd_toStartOf="@id/tv_search_result_date_start"/>
 
                 <TextView
-                    android:id="@+id/tv_search_result_date"
+                    android:id="@+id/tv_search_result_date_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="2023년 7월 20일 - 2023년 7월 23일"
+                    tools:text="2023년 7월 20일"
+                    app:startDateText="@{billViewModel.filteringStartDate}"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginStart="12dp"
+                    app:layout_constraintEnd_toStartOf="@id/tv_search_result_date_end"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/divider_search_result"/>
+
+                <TextView
+                    android:id="@+id/tv_search_result_date_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="- 2023년 7월 23일"
+                    app:endDateText="@{billViewModel.filteringEndDate}"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:layout_marginStart="3dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_search_result_date_start"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_search_bill"
