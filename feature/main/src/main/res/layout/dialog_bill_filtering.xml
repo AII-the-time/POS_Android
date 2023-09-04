@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="earnMileageViewModel"
+            type="org.swm.att.home.home.mileage.EarnMileageViewModel" />
+        <import type="android.view.View"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_round_10"
+        android:backgroundTint="@color/white"
+        android:paddingStart="50dp"
+        android:paddingBottom="50dp"
+        android:paddingTop="20dp">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_close_bill_filtering_dialog"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_system_close_mdpi"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="20dp"
+            tools:ignore="SpeakableTextPresentCheck"/>
+
+        <org.swm.att.common_ui.util.calendar.CustomCalendar
+            android:id="@+id/custom_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_bill_filtering_search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_close_bill_filtering_dialog"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_bill_filtering_search"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_bill_filtering_search"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_round_stroke"
+            app:layout_constraintTop_toBottomOf="@id/custom_calendar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_close_bill_filtering_dialog"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
