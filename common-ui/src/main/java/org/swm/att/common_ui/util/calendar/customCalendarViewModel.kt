@@ -3,7 +3,6 @@ package org.swm.att.common_ui.util.calendar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.swm.att.common_ui.base.BaseViewModel
-import java.util.Calendar
 import java.util.Date
 
 class CustomCalendarViewModel: BaseViewModel() {

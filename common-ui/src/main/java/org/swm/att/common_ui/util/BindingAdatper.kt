@@ -8,6 +8,9 @@ import org.swm.att.common_ui.util.CurrencyFormat.getUnit
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OptionTypeVO
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.Stack
 
 @BindingAdapter("customPriceText")
@@ -139,5 +142,24 @@ fun setCustomMileageStrColor(view: TextView, totalMileage: Int, useMileage: Stac
 fun setOrderBtnClickable(view: AppCompatButton, selectedMenuCount: Int?) {
     selectedMenuCount?.let {
         view.isClickable = selectedMenuCount > 0
+    }
+}
+
+@BindingAdapter("startDateText")
+fun setStartDateText(view: TextView, startDateText: Date?) {
+val baseDateFormatter = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+    view.text = if (startDateText == null) {
+        view.context.getString(R.string.tv_no_filtering)
+    } else {
+        view.context.getString(R.string.tv_filtering_start, baseDateFormatter.format(startDateText))
+    }
+}
+@BindingAdapter("endDateText")
+fun setEndDateText(view: TextView, endDateText: Date?) {
+    val baseDateFormatter = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+    view.text = if (endDateText != null) {
+        view.context.getString(R.string.tv_filtering_end, baseDateFormatter.format(endDateText))
+    } else {
+        null
     }
 }

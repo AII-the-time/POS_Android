@@ -46,13 +46,14 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
 
     private fun setBillFilteringBtnClickListener() {
         binding.btnSearchBill.setOnClickListener {
-            val dialog = DialogBillFiltering()
+            val dialog = DialogBillFiltering(billViewModel)
             dialog.show(childFragmentManager, "billFiltering")
         }
     }
 
     private fun setDataBinding() {
         binding.selectedBillReceipt = billViewModel.selectedBillInfo.value
+        binding.billViewModel = billViewModel
     }
 
     private fun setObserver() {
