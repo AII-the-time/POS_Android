@@ -57,17 +57,13 @@ class EarnMileageDialog(
             }
             setOnEnterBtnClickListener {
                 val phoneNumber = homeViewModel.getPhoneNumber()
-                if (isPhoneNumberValid(phoneNumber)) {
+                if (homeViewModel.isPhoneNumberValid(phoneNumber)) {
                     earnMileageViewModel.getMileage(phoneNumber)
                 } else {
                     Toast.makeText(requireContext(), "휴대폰 번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-    }
-
-    private fun isPhoneNumberValid(phoneNumber: String): Boolean {
-        return phoneNumber.length == 11
     }
 
     private fun setPhoneNumberObserver() {
@@ -108,7 +104,7 @@ class EarnMileageDialog(
     private fun setRegisterBtnClickListener() {
         binding.btnRegisterNewCustomer.setOnClickListener {
             val phoneNumber = homeViewModel.getPhoneNumber()
-            if (isPhoneNumberValid(phoneNumber)) {
+            if (homeViewModel.isPhoneNumberValid(phoneNumber)) {
                 earnMileageViewModel.registerCustomer(phoneNumber)
             } else {
                 Toast.makeText(requireContext(), "휴대폰 번호를 확인해주세요.", Toast.LENGTH_SHORT).show()

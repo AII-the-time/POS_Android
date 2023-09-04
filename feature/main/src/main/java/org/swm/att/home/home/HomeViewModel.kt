@@ -145,4 +145,8 @@ class HomeViewModel @Inject constructor(
         val end = _endPhoneNumber.value ?: Stack()
         return "010${mid.joinToString("")}${end.joinToString("")}"
     }
+
+    fun isPhoneNumberValid(phoneNumber: String): Boolean {
+        return phoneNumber.length == 11
+    }
 }
