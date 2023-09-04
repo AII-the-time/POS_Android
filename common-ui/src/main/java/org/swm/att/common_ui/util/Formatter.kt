@@ -9,15 +9,15 @@ object Formatter {
     private val decimalFormat = DecimalFormat("#,###")
     private val baseDateFormatter = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
 
-    fun String.getUnit(): String {
-        return if (this.isEmpty()) {
+    fun getStringBaseCurrencyUnit(currency: String): String {
+        return if (currency.isEmpty()) {
             ""
         } else {
-            decimalFormat.format(this.replace(",", "").toDouble())
+            decimalFormat.format(currency.replace(",", "").toDouble())
         }
     }
 
-    fun Date.getBaseFormat(): String {
-        return baseDateFormatter.format(this)
+    fun getDateBaseFormattingResult(date: Date): String {
+        return baseDateFormatter.format(date)
     }
 }

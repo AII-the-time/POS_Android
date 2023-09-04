@@ -4,8 +4,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.BindingAdapter
 import org.swm.att.common_ui.R
-import org.swm.att.common_ui.util.Formatter.getBaseFormat
-import org.swm.att.common_ui.util.Formatter.getUnit
+import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
+import org.swm.att.common_ui.util.Formatter.getStringBaseCurrencyUnit
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OptionTypeVO
@@ -14,19 +14,19 @@ import java.util.Stack
 
 @BindingAdapter("customPriceText")
 fun setCustomPriceText(view: TextView, price: Int) {
-    val currency = price.toString().getUnit()
+    val currency = getStringBaseCurrencyUnit(price.toString())
     view.text = view.context.getString(R.string.tv_custom_price_text, currency)
 }
 
 @BindingAdapter("price", "totalCount")
 fun setCustomTotalPriceText(view: TextView, price: Int, totalCount: Int) {
-    val totalPrice = (price * totalCount).toString().getUnit()
+    val totalPrice = getStringBaseCurrencyUnit((price * totalCount).toString())
     view.text = view.context.getString(R.string.tv_custom_price_text, totalPrice)
 }
 
 @BindingAdapter("customTotalCountText")
 fun setCustomTotalCountText(view: TextView, menuMap: Map<OrderedMenuVO, Int>?) {
-    val size = (menuMap?.map { it.value }?.sum() ?: 0).toString().getUnit()
+    val size = getStringBaseCurrencyUnit((menuMap?.map { it.value }?.sum() ?: 0).toString())
     view.text = view.context.getString(R.string.tv_custom_total_count_text, size)
 }
 
@@ -43,15 +43,15 @@ fun setCustomPayPriceText(
             useMileagePrice = useMileage.joinToString("").toInt()
         }
     }
-    view.text = view.context.getString(
+    view.text = getStringBaseCurrencyUnit( view.context.getString(
         R.string.tv_custom_price_text,
-        (totalPrice - useMileagePrice).toString().getUnit()
+        (totalPrice - useMileagePrice).toString())
     )
 }
 
 @BindingAdapter("customTotalPriceText")
 fun setCustomTotalPriceText(view: TextView, menuMap: Map<OrderedMenuVO, Int>?) {
-    val totalPrice = (menuMap?.map { it.key.price * it.value }?.sum() ?: 0).toString().getUnit()
+    val totalPrice = getStringBaseCurrencyUnit((menuMap?.map { it.key.price * it.value }?.sum() ?: 0).toString())
     view.text = view.context.getString(R.string.tv_custom_price_text, totalPrice)
 }
 
@@ -93,7 +93,7 @@ fun setCustomerNumber(view: TextView, phoneNumber: String?) {
 
 @BindingAdapter("setCustomerMileage")
 fun setCustomerMileage(view: TextView, mileage: Int) {
-    val mileageStr = mileage.toString().getUnit()
+    val mileageStr = getStringBaseCurrencyUnit(mileage.toString())
     view.text = view.context.getString(R.string.tv_mileage_text, mileageStr)
 }
 
@@ -109,7 +109,7 @@ fun setCustomStrMileage(view: TextView, stack: Stack<String>?){
     var mileage = "0"
     stack?.let {
         if (it.isNotEmpty()) {
-            mileage = stack.joinToString("").getUnit()
+            mileage = getStringBaseCurrencyUnit(stack.joinToString(""))
         }
     }
     view.text = view.context.getString(R.string.tv_mileage_text, mileage)
@@ -117,7 +117,7 @@ fun setCustomStrMileage(view: TextView, stack: Stack<String>?){
 
 @BindingAdapter("setCustomUseAllMileage")
 fun setCustomUseAllMileage(view: TextView, mileage: Int) {
-    val mileageStr = mileage.toString().getUnit()
+    val mileageStr = getStringBaseCurrencyUnit(mileage.toString())
     view.text = view.context.getString(R.string.tv_use_all_mileage, mileageStr)
     view.paint.isUnderlineText = true
 }
@@ -149,13 +149,13 @@ fun setStartDateText(view: TextView, startDateText: Date?) {
     view.text = if (startDateText == null) {
         view.context.getString(R.string.tv_no_filtering)
     } else {
-        view.context.getString(R.string.tv_filtering_start, startDateText.getBaseFormat())
+        view.context.getString(R.string.tv_filtering_start, getDateBaseFormattingResult(startDateText))
     }
 }
 @BindingAdapter("endDateText")
 fun setEndDateText(view: TextView, endDateText: Date?) {
     view.text = if (endDateText != null) {
-        view.context.getString(R.string.tv_filtering_end, endDateText.getBaseFormat())
+        view.context.getString(R.string.tv_filtering_end, getDateBaseFormattingResult(endDateText))
     } else {
         null
     }
