@@ -23,17 +23,12 @@ class EarnMileageDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBindingData()
         setBtnClickListener()
         setupCustomKeypad()
         setPhoneNumberObserver()
         setRegisterBtnClickListener()
         setGetMileageStateObserver()
         setRegisterCustomerStateObserver()
-    }
-
-    private fun setBindingData() {
-        binding.earnMileageViewModel = earnMileageViewModel
     }
 
     private fun setBtnClickListener() {
