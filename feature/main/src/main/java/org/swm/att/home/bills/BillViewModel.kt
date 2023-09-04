@@ -10,6 +10,7 @@ import org.swm.att.domain.entity.response.OptionTypeVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.entity.response.OrderedMenuOfBillVO
 import org.swm.att.domain.entity.response.PaymentOfBillVO
+import java.util.Date
 
 class BillViewModel: ViewModel() {
     private val _selectedBillInfo = MutableLiveData<OrderReceiptVO>()
@@ -18,6 +19,10 @@ class BillViewModel: ViewModel() {
     val selectedBillId: LiveData<Int> = _selectedBillId
     private val _currentSelectedBillId = MutableLiveData<Int>()
     val currentSelectedBillId: LiveData<Int> = _currentSelectedBillId
+    private val _filteringStartDate = MutableLiveData<Date>()
+    val filteringStartDate: LiveData<Date> = _filteringStartDate
+    private val _filteringEndDate = MutableLiveData<Date?>()
+    val filteringEndDate: LiveData<Date?> = _filteringEndDate
 
     fun getSelectedBillInfo(selectedBillId: Int) {
         val mock = OrderReceiptVO(
@@ -74,6 +79,12 @@ class BillViewModel: ViewModel() {
 
     fun changeSelectedState() {
         _selectedBillId.postValue(currentSelectedBillId.value)
+    }
+
+    fun getBillsForFilteringDates(startDate: Date, endDate: Date?) {
+        _filteringStartDate.value = startDate
+        _filteringEndDate.value = endDate
+        // filtering api 연결 필요
     }
 
 }

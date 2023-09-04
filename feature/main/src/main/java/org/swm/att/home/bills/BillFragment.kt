@@ -22,6 +22,7 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initOrderBillItemRecyclerView()
+        setBillFilteringBtnClickListener()
         setDataBinding()
         setObserver()
         initMockData()
@@ -43,8 +44,16 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
         }
     }
 
+    private fun setBillFilteringBtnClickListener() {
+        binding.btnSearchBill.setOnClickListener {
+            val dialog = DialogBillFiltering(billViewModel)
+            dialog.show(childFragmentManager, "billFiltering")
+        }
+    }
+
     private fun setDataBinding() {
         binding.selectedBillReceipt = billViewModel.selectedBillInfo.value
+        binding.billViewModel = billViewModel
     }
 
     private fun setObserver() {

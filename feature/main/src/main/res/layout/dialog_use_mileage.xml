@@ -24,6 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_close_use_mileage_dialog"
+            android:layout_marginTop="10dp"
             android:text="@string/tv_use_mileage_dl_des"
             android:textColor="@color/black"
             android:textSize="16sp"
