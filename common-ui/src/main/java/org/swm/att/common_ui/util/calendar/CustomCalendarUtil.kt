@@ -1,5 +1,6 @@
 package org.swm.att.common_ui.util.calendar
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.base.BaseListAdapter
 import org.swm.att.common_ui.databinding.CustomCalendarDateBinding
+import org.swm.att.common_ui.util.Formatter.isToday
 import org.swm.att.common_ui.util.ItemDiffCallback
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -59,8 +61,12 @@ class CustomCalendarDateViewHolder(
     private val viewModel: CustomCalendarViewModel,
     private val lifecycleOwner: LifecycleOwner
 ): ViewHolder(binding.root) {
+    @SuppressLint("ResourceAsColor")
     fun bind(date: Date, strDate: String) {
         binding.date = strDate
+        if (isToday(date)) {
+            binding.tvCalendarDate.setTextColor(R.color.white)
+        }
         setSelectingDateObserver(date)
     }
 
@@ -73,6 +79,7 @@ class CustomCalendarDateViewHolder(
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun changeBackground(date: Date) {
         val background = if(viewModel.endDate.value == null) {
             if (viewModel.startDate.value == date) {
