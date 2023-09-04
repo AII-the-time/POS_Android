@@ -32,7 +32,7 @@ class EarnMileageDialog(
     }
 
     private fun setBtnClickListener() {
-        binding.btnCloseEarnMileageDialog.setOnClickListener {
+        binding.btnCloseDialog.setOnClickListener {
             dismiss()
             earnMileageViewModel.initMileage()
         }
@@ -47,7 +47,7 @@ class EarnMileageDialog(
 
 
     private fun setupCustomKeypad() {
-        binding.ckpEarnMileage.apply {
+        binding.customKeypad.apply {
             setLifeCycleOwner(viewLifecycleOwner)
             setOnNumberItemClickListener {
                 homeViewModel.addPhoneNumber(it)
