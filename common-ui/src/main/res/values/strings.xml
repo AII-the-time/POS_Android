@@ -112,4 +112,7 @@
     <string name="tv_no_filtering">전체</string>
     <string name="tv_filtering_start">%s</string>
     <string name="tv_filtering_end">- %s</string>
+    <string name="tv_preorder_input_user_info">고객 정보</string>
+    <string name="tv_preorder_request_des">요청사항</string>
+    <string name="tv_preorder_request_hint">ex) 얼음 많이 주세요.</string>
 </resources>
