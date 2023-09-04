@@ -90,7 +90,7 @@
     </fragment>
     <dialog
         android:id="@+id/dialog_earn_mileage"
-        android:name="org.swm.att.home.home.mileage.EarnMileageDialog"
+        android:name="org.swm.att.home.home.keypad_dialog.EarnMileageDialog"
         android:label="@string/dialog_earn_mileage" />
     <fragment
         android:id="@+id/fragment_pay"

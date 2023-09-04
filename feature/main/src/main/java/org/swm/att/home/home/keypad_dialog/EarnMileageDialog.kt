@@ -1,4 +1,4 @@
-package org.swm.att.home.home.mileage
+package org.swm.att.home.home.keypad_dialog
 
 import android.os.Bundle
 import android.view.View
@@ -11,14 +11,14 @@ import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.common_ui.util.state.NetworkState
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.home.R
-import org.swm.att.home.databinding.DialogEarnMileageBinding
+import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding
 import org.swm.att.home.home.HomeFragmentDirections
 import org.swm.att.home.home.HomeViewModel
 
 @AndroidEntryPoint
 class EarnMileageDialog(
     private val homeViewModel: HomeViewModel
-): BaseDialog<DialogEarnMileageBinding>(R.layout.dialog_earn_mileage) {
+): BaseDialog<DialogUserPhoneNumInputBinding>(R.layout.dialog_user_phone_num_input) {
     private val earnMileageViewModel by viewModels<EarnMileageViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -18,7 +18,7 @@ import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
 import org.swm.att.home.home.menu.MenuFragment
-import org.swm.att.home.home.mileage.EarnMileageDialog
+import org.swm.att.home.home.keypad_dialog.EarnMileageDialog
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -37,6 +37,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setSelectedMenuObserver()
         setDataBinding()
         setOrderBtnListener()
+        setPreorderBtnClickListener()
     }
 
     private fun setSelectedMenuList() {
@@ -102,6 +103,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             homeViewModel.clearPhoneNumber()
             val mileageDialog = EarnMileageDialog(homeViewModel)
             mileageDialog.show(requireActivity().supportFragmentManager, "EarnMileageDialog")
+        }
+    }
+
+    private fun setPreorderBtnClickListener() {
+        binding.btnPreorder.setOnClickListener {
+
         }
     }
 
