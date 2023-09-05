@@ -17,8 +17,9 @@ import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
-import org.swm.att.home.home.menu.MenuFragment
 import org.swm.att.home.home.keypad_dialog.EarnMileageDialog
+import org.swm.att.home.home.menu.MenuFragment
+import org.swm.att.home.home.preorder.DateTimePickerDialog
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -108,7 +109,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setPreorderBtnClickListener() {
         binding.btnPreorder.setOnClickListener {
-
+            homeViewModel.clearPhoneNumber()
+            val dateTimePicker = DateTimePickerDialog()
+            dateTimePicker.show(requireActivity().supportFragmentManager, "DateTimePickerDialog")
         }
     }
 

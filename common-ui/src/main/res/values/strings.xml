@@ -115,4 +115,6 @@
     <string name="tv_preorder_input_user_info">고객 정보</string>
     <string name="tv_preorder_request_des">요청사항</string>
     <string name="tv_preorder_request_hint">ex) 얼음 많이 주세요.</string>
+    <string name="btn_preorder_process">예약 진행</string>
+    <string name="tv_date_time_picker_des">예약 날짜</string>
 </resources>
