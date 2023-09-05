@@ -110,7 +110,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setPreorderBtnClickListener() {
         binding.btnPreorder.setOnClickListener {
             homeViewModel.clearPhoneNumber()
-            val dateTimePicker = DateTimePickerDialog()
+            val dateTimePicker = DateTimePickerDialog(homeViewModel)
             dateTimePicker.show(requireActivity().supportFragmentManager, "DateTimePickerDialog")
         }
     }

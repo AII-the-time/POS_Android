@@ -2,6 +2,7 @@ package org.swm.att.home.home.preorder
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding
@@ -44,8 +45,12 @@ class PreorderInputUserPhoneNumDialog(
             setOnEnterBtnClickListener {
                 val phoneNumber = homeViewModel.getPhoneNumber()
                 val request = binding.edtPreorderRequest.text.toString()
-
-                // 넘겨주기
+                if (homeViewModel.isPhoneNumberValid(phoneNumber)) {
+                    homeViewModel.postPreOrder(phoneNumber, request)
+                    dismiss()
+                } else {
+                    Toast.makeText(requireContext(), "휴대폰 번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
