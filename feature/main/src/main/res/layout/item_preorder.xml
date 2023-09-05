@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_preorder_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_preorder_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="23/07/23 15:43"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginBottom="14dp"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/divider_bill"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_preorder_customer_phone_number"/>
+
+        <TextView
+            android:id="@+id/tv_preorder_customer_phone_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="01012341234"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:gravity="center"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintTop_toTopOf="@id/tv_preorder_date"
+            app:layout_constraintBottom_toBottomOf="@id/tv_preorder_date"
+            app:layout_constraintStart_toEndOf="@id/tv_preorder_date"
+            app:layout_constraintEnd_toStartOf="@id/tv_bill_total_count"/>
+
+        <TextView
+            android:id="@+id/tv_bill_total_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="6건"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:gravity="center"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@id/tv_preorder_date"
+            app:layout_constraintBottom_toBottomOf="@id/tv_preorder_date"
+            app:layout_constraintStart_toEndOf="@id/tv_preorder_customer_phone_number"
+            app:layout_constraintEnd_toStartOf="@id/tv_bill_total_price"/>
+
+        <TextView
+            android:id="@+id/tv_bill_total_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="12,000원"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:gravity="center"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintTop_toTopOf="@id/tv_bill_total_count"
+            app:layout_constraintBottom_toBottomOf="@id/tv_bill_total_count"
+            app:layout_constraintStart_toEndOf="@id/tv_bill_total_count"
+            app:layout_constraintEnd_toStartOf="@id/tv_bill_pay_method"/>
+
+        <TextView
+            android:id="@+id/tv_bill_pay_method"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="신용카드"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:gravity="end"
+            android:layout_marginEnd="14dp"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@id/tv_bill_total_price"
+            app:layout_constraintBottom_toBottomOf="@id/tv_bill_total_price"
+            app:layout_constraintStart_toEndOf="@id/tv_bill_total_price"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_bill"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/cl_preorder_item"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
