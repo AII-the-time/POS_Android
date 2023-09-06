@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="preorder"
+            type="org.swm.att.domain.entity.response.PreorderVO"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_preorder_item"
         android:layout_width="match_parent"
@@ -18,7 +24,8 @@
             android:layout_marginTop="14dp"
             android:layout_marginStart="14dp"
             android:layout_marginBottom="14dp"
-            app:layout_constraintHorizontal_weight="2"
+            android:text="@{preorder.orderedAt}"
+            app:layout_constraintHorizontal_weight="3"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/divider_bill"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +39,8 @@
             android:textColor="@color/black"
             android:textSize="12sp"
             android:gravity="center"
-            app:layout_constraintHorizontal_weight="2"
+            android:text="@{preorder.phone}"
+            app:layout_constraintHorizontal_weight="3"
             app:layout_constraintTop_toTopOf="@id/tv_preorder_date"
             app:layout_constraintBottom_toBottomOf="@id/tv_preorder_date"
             app:layout_constraintStart_toEndOf="@id/tv_preorder_date"
@@ -46,6 +54,7 @@
             android:textColor="@color/black"
             android:textSize="11sp"
             android:gravity="center"
+            android:text="@{String.format(`%d건`, preorder.totalCount)}"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/tv_preorder_date"
             app:layout_constraintBottom_toBottomOf="@id/tv_preorder_date"
@@ -60,24 +69,26 @@
             android:textColor="@color/black"
             android:textSize="11sp"
             android:gravity="center"
-            app:layout_constraintHorizontal_weight="2"
+            android:text="@{preorder.totalPrice}"
+            app:layout_constraintHorizontal_weight="3"
             app:layout_constraintTop_toTopOf="@id/tv_bill_total_count"
             app:layout_constraintBottom_toBottomOf="@id/tv_bill_total_count"
             app:layout_constraintStart_toEndOf="@id/tv_bill_total_count"
-            app:layout_constraintEnd_toStartOf="@id/tv_bill_pay_method"/>
+            app:layout_constraintEnd_toStartOf="@id/tv_exist_customer_request"/>
 
         <TextView
-            android:id="@+id/tv_bill_pay_method"
+            android:id="@+id/tv_exist_customer_request"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="신용카드"
+            android:text="@{preorder.memo == null ? `요청사항 없음` : `요청사항 있음`}"
+            tools:text="요청사항 없음"
             android:textColor="@color/black"
             android:textSize="11sp"
             android:gravity="end"
             android:layout_marginEnd="14dp"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintTop_toTopOf="@id/tv_bill_total_price"
-            app:layout_constraintBottom_toBottomOf="@id/tv_bill_total_price"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintTop_toTopOf="@id/tv_preorder_date"
+            app:layout_constraintBottom_toBottomOf="@id/tv_preorder_date"
             app:layout_constraintStart_toEndOf="@id/tv_bill_total_price"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -86,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/cl_preorder_item"
+            app:layout_constraintTop_toBottomOf="@id/tv_preorder_date"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

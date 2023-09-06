@@ -125,4 +125,6 @@
     <string name="tv_preorder_customer_info_des">고객 정보</string>
     <string name="btn_preorder_modify_menu">주문 수정하기</string>
     <string name="btn_preorder_cancel_all"><u>주문 전체취소</u></string>
+    <string name="tv_customer_request_exist">요청사항 있음</string>
+    <string name="tv_customer_request_not_exist">요청사항 없음</string>
 </resources>
