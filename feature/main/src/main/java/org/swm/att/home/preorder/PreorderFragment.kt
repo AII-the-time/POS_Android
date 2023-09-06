@@ -7,6 +7,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.domain.entity.request.OrderedMenuVO
+import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuOfBillAdapter
@@ -25,7 +27,8 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         setPreorderFilteringBtnClickListener()
         setObserver()
         setDataBinding() // api 달면 수정할 부분
-        setModifyPreorderBtnClickListener()
+        setPreorderBtnClickListener()
+        setCancelPreorderBtnClickListener()
         initMockData()
     }
 
@@ -103,10 +106,35 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         binding.validPreorderListSize = 6
     }
 
-    private fun setModifyPreorderBtnClickListener() {
+    private fun setPreorderBtnClickListener() {
         binding.btnModifyPreorderList.setOnClickListener {
-            val action = PreorderFragmentDirections.actionGlobalFragmentHome(preorderedMenus = preorderViewModel.selectedPreorderInfo.value)
+            val action = PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = getSelectedMenus(), isModify = true)
             findNavController().navigate(action)
+        }
+        binding.btnPayBill.setOnClickListener {
+            val action = PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = getSelectedMenus())
+            findNavController().navigate(action)
+        }
+    }
+
+    private fun getSelectedMenus(): OrderedMenusVO {
+        return OrderedMenusVO(
+            preorderViewModel.selectedPreorderInfo.value?.orderItems?.map { orderItem ->
+                OrderedMenuVO(
+                    id = orderItem.id,
+                    name = orderItem.menuName,
+                    price = orderItem.price.toInt(),
+                    count = orderItem.count,
+                    options = orderItem.options,
+                    detail = orderItem.detail
+                )
+            }
+        )
+    }
+
+    private fun setCancelPreorderBtnClickListener() {
+        binding.btnCancelPreorder.setOnClickListener {
+            /* todo */
         }
     }
 
@@ -115,7 +143,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             PreorderVO(
                 orderId = 1,
                 totalCount = 3,
-                totalPrice = "12,000원",
+                totalPrice = "12,000",
                 orderedAt = "2021-08-01 12:00:00",
                 phone = "01012341234",
                 memo = "얼음 많이 주세요!",
@@ -123,7 +151,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             PreorderVO(
                 orderId = 1,
                 totalCount = 3,
-                totalPrice = "12,000원",
+                totalPrice = "12,000",
                 orderedAt = "2021-08-01 12:00:00",
                 phone = "01012341234",
                 memo = "얼음 많이 주세요!",
@@ -131,7 +159,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             PreorderVO(
                 orderId = 1,
                 totalCount = 3,
-                totalPrice = "12,000원",
+                totalPrice = "12,000",
                 orderedAt = "2021-08-01 12:00:00",
                 phone = "01012341234",
                 memo = "얼음 많이 주세요!",
@@ -139,7 +167,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             PreorderVO(
                 orderId = 1,
                 totalCount = 3,
-                totalPrice = "12,000원",
+                totalPrice = "12,000",
                 orderedAt = "2021-08-01 12:00:00",
                 phone = "01012341234",
                 memo = "얼음 많이 주세요!",
@@ -147,7 +175,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             PreorderVO(
                 orderId = 1,
                 totalCount = 3,
-                totalPrice = "12,000원",
+                totalPrice = "12,000",
                 orderedAt = "2021-08-01 12:00:00",
                 phone = "01012341234",
                 memo = "얼음 많이 주세요!",
@@ -155,7 +183,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             PreorderVO(
                 orderId = 1,
                 totalCount = 3,
-                totalPrice = "12,000원",
+                totalPrice = "12,000",
                 orderedAt = "2021-08-01 12:00:00",
                 phone = "01012341234",
                 memo = "얼음 많이 주세요!",

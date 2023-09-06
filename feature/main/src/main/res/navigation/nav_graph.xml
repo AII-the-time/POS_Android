@@ -88,10 +88,9 @@
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
-            android:name="preorderedMenus"
-            app:argType="org.swm.att.domain.entity.response.PreorderDetailVO"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            android:name="isModify"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <dialog
         android:id="@+id/dialog_earn_mileage"
