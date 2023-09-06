@@ -127,4 +127,5 @@
     <string name="btn_preorder_cancel_all"><u>주문 전체취소</u></string>
     <string name="tv_customer_request_exist">요청사항 있음</string>
     <string name="tv_customer_request_not_exist">요청사항 없음</string>
+    <string name="tv_save_modification">주문 저장</string>
 </resources>

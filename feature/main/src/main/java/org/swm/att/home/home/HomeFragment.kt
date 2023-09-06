@@ -41,6 +41,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setDataBinding()
         setOrderBtnListener()
         setPreorderBtnClickListener()
+        setModifyPreorderBtnClickListener()
     }
 
     private fun setSelectedMenuList() {
@@ -62,6 +63,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     }
                 )
             )
+            binding.isModifyPreorder = true
         }
     }
 
@@ -130,6 +132,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             homeViewModel.clearPhoneNumber()
             val dateTimePicker = DateTimePickerDialog(homeViewModel)
             dateTimePicker.show(requireActivity().supportFragmentManager, "DateTimePickerDialog")
+        }
+    }
+
+    private fun setModifyPreorderBtnClickListener() {
+        binding.btnModificationComplete.setOnClickListener {
+            //주문 내역 업데이트 api 연결 필요
+            homeViewModel.clearSelectedMenuList()
         }
     }
 
