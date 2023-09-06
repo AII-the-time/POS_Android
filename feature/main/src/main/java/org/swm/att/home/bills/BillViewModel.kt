@@ -15,7 +15,7 @@ import java.util.Date
 class BillViewModel: ViewModel() {
     private val _selectedBillInfo = MutableLiveData<OrderReceiptVO>()
     val selectedBillInfo: LiveData<OrderReceiptVO> = _selectedBillInfo
-    private val _selectedBillId = MutableLiveData<Int>()
+    private val _selectedBillId = MutableLiveData(0)
     val selectedBillId: LiveData<Int> = _selectedBillId
     private val _currentSelectedBillId = MutableLiveData<Int>()
     val currentSelectedBillId: LiveData<Int> = _currentSelectedBillId
