@@ -66,6 +66,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         }
         preorderViewModel.currentSelectedValidPreorderId.observe(viewLifecycleOwner) {
             val pastId = preorderViewModel.selectedValidPreorderId.value
+            binding.isValid = true
             binding.rvPreorder[it].setBackgroundResource(R.color.main_trans)
             preorderViewModel.changeSelectedState(true)
             pastId?.let { pastId ->
@@ -82,6 +83,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         preorderViewModel.currentSelectedPastPreorderId.observe(viewLifecycleOwner) {
             val pastId = preorderViewModel.selectedPastPreorderId.value
             binding.rvPastPreorder[it].setBackgroundResource(R.color.main_trans)
+            binding.isValid = false
             preorderViewModel.changeSelectedState(false)
             pastId?.let { pastId ->
                 if (pastId != it) {
