@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.get
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.domain.entity.response.PreorderVO
@@ -24,6 +25,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         setPreorderFilteringBtnClickListener()
         setObserver()
         setDataBinding() // api 달면 수정할 부분
+        setModifyPreorderBtnClickListener()
         initMockData()
     }
 
@@ -97,6 +99,13 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     private fun setDataBinding() {
         binding.pastPreorderListSize = 6
         binding.validPreorderListSize = 6
+    }
+
+    private fun setModifyPreorderBtnClickListener() {
+        binding.btnModifyPreorderList.setOnClickListener {
+            val action = PreorderFragmentDirections.actionGlobalFragmentHome(preorderedMenus = preorderViewModel.selectedPreorderInfo.value)
+            findNavController().navigate(action)
+        }
     }
 
     private fun initMockData() {

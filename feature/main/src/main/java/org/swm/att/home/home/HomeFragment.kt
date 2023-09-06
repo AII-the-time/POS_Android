@@ -13,6 +13,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.common_ui.util.state.NetworkState
+import org.swm.att.domain.entity.request.OrderedMenuVO
+import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
@@ -44,6 +46,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setSelectedMenuList() {
         args?.selectedMenus?.let {
             homeViewModel.setSelectedMenusVO(it)
+        }
+        args.preorderedMenus?.let {
+            homeViewModel.setSelectedMenusVO(
+                OrderedMenusVO(
+                    it.orderItems.map { orderItem ->
+                        OrderedMenuVO(
+                            id = orderItem.id,
+                            name = orderItem.menuName,
+                            price = orderItem.price.toInt(),
+                            count = orderItem.count,
+                            options = orderItem.options,
+                            detail = orderItem.detail
+                        )
+                    }
+                )
+            )
         }
     }
 
