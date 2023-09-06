@@ -1,5 +1,8 @@
 package org.swm.att.domain.entity.response
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class PreorderDetailVO(
     val orderId: Int,
     val totalCount: Int,
@@ -8,4 +11,4 @@ data class PreorderDetailVO(
     val phone: String,
     val memo: String,
     val orderItems: List<OrderedMenuOfBillVO>
-)
+): java.io.Serializable
