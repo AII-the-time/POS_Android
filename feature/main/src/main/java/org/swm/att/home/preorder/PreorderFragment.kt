@@ -1,9 +1,9 @@
 package org.swm.att.home.preorder
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.get
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,9 +11,11 @@ import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.PreorderVO
+import org.swm.att.home.MainViewModel
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuOfBillAdapter
 import org.swm.att.home.adapter.PreorderListItemAdapter
+import org.swm.att.home.constant.NavDestinationType
 import org.swm.att.home.databinding.FragmentPreorderBinding
 
 class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment_preorder) {
@@ -21,6 +23,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     private lateinit var validPreorderListAdapter: PreorderListItemAdapter
     private lateinit var pastPreorderListAdapter: PreorderListItemAdapter
     private val preorderViewModel: PreorderViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,7 +68,6 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
 
     private fun setObserver() {
         preorderViewModel.selectedPreorderInfo.observe(viewLifecycleOwner) {
-            Log.d("preorder", it.toString())
             preorderMenuOfBillAdapter.submitList(it.orderItems)
         }
         preorderViewModel.currentSelectedValidPreorderId.observe(viewLifecycleOwner) {
@@ -113,10 +115,12 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         binding.btnModifyPreorderList.setOnClickListener {
             val action = PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = getSelectedMenus(), isModify = true)
             findNavController().navigate(action)
+            mainViewModel.directWithGlobalAction(NavDestinationType.Home)
         }
         binding.btnPayBill.setOnClickListener {
             val action = PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = getSelectedMenus())
             findNavController().navigate(action)
+            mainViewModel.directWithGlobalAction(NavDestinationType.Home)
         }
     }
 

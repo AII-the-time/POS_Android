@@ -4,12 +4,13 @@ import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.widget.CheckBox
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
-import org.swm.att.common_ui.util.nav.NavDestination
+import org.swm.att.home.constant.NavDestinationType
 import org.swm.att.home.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -73,64 +74,64 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private fun setCustomNavRailClickListener() {
         binding.btnHome.setOnClickListener {
-            if (isNotDestinationSame(NavDestination.Home)) {
-                mainViewModel.setSelectedScreen(NavDestination.Home)
+            if (isNotDestinationSame(NavDestinationType.Home)) {
+                mainViewModel.setSelectedScreen(NavDestinationType.Home)
             } else {
                 binding.btnHome.isChecked = true
             }
         }
         binding.btnBills.setOnClickListener {
-            if (isNotDestinationSame(NavDestination.Bills)) {
-                mainViewModel.setSelectedScreen(NavDestination.Bills)
+            if (isNotDestinationSame(NavDestinationType.Bills)) {
+                mainViewModel.setSelectedScreen(NavDestinationType.Bills)
             } else {
                 binding.btnBills.isChecked = true
             }
         }
         binding.btnPreorder.setOnClickListener {
-            if (isNotDestinationSame(NavDestination.Preorder)) {
-                mainViewModel.setSelectedScreen(NavDestination.Preorder)
+            if (isNotDestinationSame(NavDestinationType.Preorder)) {
+                mainViewModel.setSelectedScreen(NavDestinationType.Preorder)
             } else {
                 binding.btnPreorder.isChecked = true
             }
         }
         binding.btnStock.setOnClickListener {
-            if (isNotDestinationSame(NavDestination.Stock)) {
-                mainViewModel.setSelectedScreen(NavDestination.Stock)
+            if (isNotDestinationSame(NavDestinationType.Stock)) {
+                mainViewModel.setSelectedScreen(NavDestinationType.Stock)
             } else {
                 binding.btnStock.isChecked = true
             }
         }
         binding.btnRecipe.setOnClickListener {
-            if (isNotDestinationSame(NavDestination.Recipe)) {
-                mainViewModel.setSelectedScreen(NavDestination.Recipe)
+            if (isNotDestinationSame(NavDestinationType.Recipe)) {
+                mainViewModel.setSelectedScreen(NavDestinationType.Recipe)
             } else {
                 binding.btnRecipe.isChecked = true
             }
         }
         binding.btnWorker.setOnClickListener {
-            if (isNotDestinationSame(NavDestination.Worker)) {
-                mainViewModel.setSelectedScreen(NavDestination.Worker)
+            if (isNotDestinationSame(NavDestinationType.Worker)) {
+                mainViewModel.setSelectedScreen(NavDestinationType.Worker)
             } else {
                 binding.btnWorker.isChecked = true
             }
         }
         binding.btnSales.setOnClickListener {
-            if (isNotDestinationSame(NavDestination.Sales)) {
-                mainViewModel.setSelectedScreen(NavDestination.Sales)
+            if (isNotDestinationSame(NavDestinationType.Sales)) {
+                mainViewModel.setSelectedScreen(NavDestinationType.Sales)
             } else {
                 binding.btnSales.isChecked = true
             }
         }
         binding.btnSetting.setOnClickListener {
-            if (isNotDestinationSame(NavDestination.Setting)) {
-                mainViewModel.setSelectedScreen(NavDestination.Setting)
+            if (isNotDestinationSame(NavDestinationType.Setting)) {
+                mainViewModel.setSelectedScreen(NavDestinationType.Setting)
             } else {
                 binding.btnSetting.isChecked = true
             }
         }
     }
 
-    private fun isNotDestinationSame(selected: NavDestination): Boolean {
+    private fun isNotDestinationSame(selected: NavDestinationType): Boolean {
         return mainViewModel.curSelectedScreen.value != selected
     }
 
@@ -142,84 +143,24 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
 
         mainViewModel.selectedScreen.observe(this) { destination ->
-            when(destination) {
-                NavDestination.Home -> {
-                    navController.navigate(R.id.action_global_fragment_home)
-                    changeNavDestination()
+            mainViewModel.isGlobalAction.value?.let {
+                if (!it) {
+                    navController.navigate(destination.action)
+                } else {
+                    findViewById<CheckBox>(destination.viewId).isChecked = true
                 }
-                NavDestination.Bills -> {
-                    navController.navigate(R.id.action_global_fragment_bill)
-                    changeNavDestination()
-                }
-                NavDestination.Preorder -> {
-                    navController.navigate(R.id.action_global_fragment_preorder)
-                    changeNavDestination()
-                }
-                NavDestination.Stock -> {
-                    navController.navigate(R.id.action_global_fragment_stock)
-                    changeNavDestination()
-                }
-                NavDestination.Recipe -> {
-                    navController.navigate(R.id.action_global_fragment_recipe)
-                    changeNavDestination()
-                }
-                NavDestination.Worker -> {
-                    navController.navigate(R.id.action_global_fragment_worker)
-                    changeNavDestination()
-                }
-                NavDestination.Sales -> {
-                    navController.navigate(R.id.action_global_fragment_sales)
-                    changeNavDestination()
-                }
-                NavDestination.Setting -> {
-                    navController.navigate(R.id.action_global_fragment_setting)
-                    changeNavDestination()
-                }
+                changeNavDestination()
+                mainViewModel.resetIsGlobalAction()
             }
-
         }
     }
 
     private fun changeNavDestination() {
         mainViewModel.curSelectedScreen.apply {
-            when(this.value) {
-                NavDestination.Home -> {
-                    mainViewModel.changedCurSelectedScreen()
-                    binding.btnHome.isChecked = false
-                }
-                NavDestination.Bills -> {
-                    mainViewModel.changedCurSelectedScreen()
-                    binding.btnBills.isChecked = false
-                }
-                NavDestination.Preorder -> {
-                    mainViewModel.changedCurSelectedScreen()
-                    binding.btnPreorder.isChecked = false
-                }
-                NavDestination.Stock -> {
-                    mainViewModel.changedCurSelectedScreen()
-                    binding.btnStock.isChecked = false
-                }
-                NavDestination.Recipe -> {
-                    mainViewModel.changedCurSelectedScreen()
-                    binding.btnRecipe.isChecked = false
-                }
-                NavDestination.Worker -> {
-                    mainViewModel.changedCurSelectedScreen()
-                    binding.btnWorker.isChecked = false
-                }
-                NavDestination.Sales -> {
-                    mainViewModel.changedCurSelectedScreen()
-                    binding.btnSales.isChecked = false
-                }
-                NavDestination.Setting -> {
-                    mainViewModel.changedCurSelectedScreen()
-                    binding.btnSetting.isChecked = false
-                }
-                else -> {
-                    /* do nothing */
-                }
+            this.value?.let {
+                findViewById<CheckBox>(it.viewId).isChecked = false
+                mainViewModel.changedCurSelectedScreen()
             }
         }
     }
-
 }
