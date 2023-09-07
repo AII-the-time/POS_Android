@@ -6,10 +6,14 @@
     android:background="@color/back_color">
 
     <data>
-
         <variable
             name="homeViewHolder"
             type="org.swm.att.home.home.HomeViewModel" />
+        <variable
+            name="isModifyPreorder"
+            type="Boolean"
+            android:value="false"/>
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,12 +24,12 @@
             android:id="@+id/cl_menu_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginTop="9dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/cl_payment"
-            app:layout_constraintHorizontal_weight="1"
-            android:layout_marginTop="9dp">
+            app:layout_constraintHorizontal_weight="1">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_view"
@@ -59,6 +63,7 @@
             app:layout_constraintLeft_toRightOf="@id/cl_menu_view"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginBottom="40dp"
+            android:paddingBottom="20dp"
             android:layout_marginEnd="17dp"
             android:background="@color/white">
 
@@ -67,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/btn_preorder">
+                app:layout_constraintBottom_toTopOf="@id/cl_order_btns">
 
                 <TextView
                     android:id="@+id/tv_payment_des"
@@ -123,7 +128,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
                     android:padding="10dp">
 
                     <TextView
@@ -150,47 +154,79 @@
                         android:textColor="@color/black"
                         app:customTotalPriceText="@{homeViewHolder.selectedMenuMap}" />
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_preorder"
-                android:layout_width="106dp"
-                android:layout_height="44dp"
-                android:background="@drawable/shape_round_stroke"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_order_btns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{isModifyPreorder ? View.GONE : View.VISIBLE}"
                 app:layout_constraintTop_toBottomOf="@id/cl_payment_menu_list"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_order"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="20dp"
-                android:gravity="center"
-                app:setOrderBtnClickable="@{homeViewHolder.selectedMenuMap.size()}"
-                android:text="@string/btn_preorder"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:textColor="@color/black" />
+                app:layout_constraintBottom_toTopOf="@id/btn_modification_complete">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_preorder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_round_stroke"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/btn_order"
+                    app:layout_constraintHorizontal_weight="1"
+                    android:layout_marginStart="20dp"
+                    android:padding="13dp"
+                    android:gravity="center"
+                    app:setOrderBtnClickable="@{homeViewHolder.selectedMenuMap.size()}"
+                    android:text="@string/btn_preorder"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_order"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/btn_preorder"
+                    app:layout_constraintStart_toEndOf="@id/btn_preorder"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/btn_preorder"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    app:layout_constraintHorizontal_weight="2"
+                    android:padding="13dp"
+                    app:setOrderBtnClickable="@{homeViewHolder.selectedMenuMap.size()}"
+                    android:text="@string/btn_order"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/main_color"
+                    android:background="@drawable/shape_round_10" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_order"
-                android:layout_width="164dp"
-                android:layout_height="44dp"
-                app:layout_constraintTop_toTopOf="@id/btn_preorder"
-                app:layout_constraintStart_toEndOf="@id/btn_preorder"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/btn_preorder"
+                android:id="@+id/btn_modification_complete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                app:setOrderBtnClickable="@{homeViewHolder.selectedMenuMap.size()}"
-                android:text="@string/btn_order"
+                android:background="@drawable/shape_round_8"
+                android:backgroundTint="@color/main_color"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:gravity="center"
+                android:padding="13sp"
+                android:visibility="@{isModifyPreorder ? View.VISIBLE : View.GONE}"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/main_color"
-                android:background="@drawable/shape_round_10" />
+                android:text="@string/tv_save_modification"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_order_btns"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

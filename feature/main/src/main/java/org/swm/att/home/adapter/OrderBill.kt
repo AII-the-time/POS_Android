@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.swm.att.common_ui.base.BaseListAdapter
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.response.OrderBillVO
+import org.swm.att.home.R
+
 import org.swm.att.home.bills.BillViewModel
 import org.swm.att.home.databinding.ItemBillBinding
 
@@ -34,6 +36,10 @@ class OrderBillItemAdapter(
             billViewModel.setCurrentSelectedBillId(position)
         }
 
+        if (position == 0) {
+            billViewModel.getSelectedBillInfo(item.orderId)
+            holder.itemView.setBackgroundResource(R.color.main_trans)
+        }
     }
 
     override fun bindViewHolder(holder: BillViewHolder, item: OrderBillVO) {

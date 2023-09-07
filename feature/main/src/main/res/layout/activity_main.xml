@@ -8,14 +8,13 @@
         <variable
             name="mainViewModel"
             type="org.swm.att.home.MainViewModel" />
-
         <variable
             name="barDate"
             type="String" />
-
         <variable
             name="salesPercent"
             type="Integer" />
+        <import type="org.swm.att.home.constant.NavDestinationType" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -189,7 +188,7 @@
                             android:layout_height="40dp"
                             android:checked="true"
                             android:button="@null"
-                            android:text="@null"
+                            android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Home)}"
                             android:background="@drawable/selector_menu_home"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toTopOf="@id/tv_icon_home_des"
@@ -226,6 +225,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:button="@null"
+                            android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Bills)}"
                             android:background="@drawable/selector_menu_bills"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toTopOf="@id/tv_icon_bills_des"
@@ -262,6 +262,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:button="@null"
+                            android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Preorder)}"
                             android:background="@drawable/selector_menu_preorder"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toTopOf="@id/tv_icon_preorder_des"
@@ -299,6 +300,7 @@
                             android:layout_height="40dp"
                             android:background="@drawable/selector_menu_stock"
                             android:button="@null"
+                            android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Stock)}"
                             android:importantForAccessibility="no"
                             app:layout_constraintBottom_toTopOf="@id/tv_icon_stock_des"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -333,6 +335,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:button="@null"
+                            android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Recipe)}"
                             android:background="@drawable/selector_menu_recipe"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toTopOf="@id/tv_icon_recipe_des"
@@ -394,6 +397,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:button="@null"
+                        android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Worker)}"
                         android:background="@drawable/ic_menu_auth_w_mdpi"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/tv_icon_worker_des"
@@ -430,6 +434,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:button="@null"
+                        android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Sales)}"
                         android:background="@drawable/ic_menu_topmenu_w_mdpi"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/tv_icon_sales_des"
@@ -467,6 +472,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:button="@null"
+                        android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Setting)}"
                         android:background="@drawable/ic_menu_settings_w_mdpi"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/tv_icon_setting_des"

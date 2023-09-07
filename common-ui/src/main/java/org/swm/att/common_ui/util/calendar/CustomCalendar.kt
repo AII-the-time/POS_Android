@@ -39,8 +39,18 @@ class CustomCalendar @JvmOverloads constructor(
         initDatesRecyclerView()
     }
 
-    private fun initDatesRecyclerView() {
-        customCalendarAdapter = CustomCalendarAdapter(customCalendarViewModel, lifecycleOwner)
+    fun initDatePickerCustomCalendarViewModel(viewModel: CustomCalendarViewModel) {
+        customCalendarViewModel = viewModel
+        initDatesRecyclerView(true)
+    }
+
+    private fun initDatesRecyclerView(isDatePicker: Boolean = false) {
+        customCalendarAdapter = if (isDatePicker) {
+            CustomCalendarAdapter(customCalendarViewModel, lifecycleOwner, true)
+        } else {
+            CustomCalendarAdapter(customCalendarViewModel, lifecycleOwner)
+        }
+
         binding.rvCalendarDates.apply {
             setHasFixedSize(true)
             adapter = customCalendarAdapter

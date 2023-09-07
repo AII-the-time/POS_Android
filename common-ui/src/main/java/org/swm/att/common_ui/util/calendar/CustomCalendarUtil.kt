@@ -17,7 +17,8 @@ import java.util.Locale
 
 class CustomCalendarAdapter(
     private val customCalendarViewModel: CustomCalendarViewModel,
-    private val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner,
+    private val isDatePicker: Boolean = false
 ): BaseListAdapter<Date, CustomCalendarDateViewHolder> (
     ItemDiffCallback(
         onItemsTheSame = { old, new -> old == new },
@@ -41,7 +42,7 @@ class CustomCalendarAdapter(
                 if (customCalendarViewModel.startDate.value == null) {
                     customCalendarViewModel.setStartDate(item)
                 } else {
-                    if (customCalendarViewModel.endDate.value == null) {
+                    if (!isDatePicker && customCalendarViewModel.endDate.value == null) {
                         if (customCalendarViewModel.startDate.value!! >= item) {
                             customCalendarViewModel.setStartDate(item)
                         } else {

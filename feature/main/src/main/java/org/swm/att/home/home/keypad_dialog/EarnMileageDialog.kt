@@ -1,4 +1,4 @@
-package org.swm.att.home.home.mileage
+package org.swm.att.home.home.keypad_dialog
 
 import android.os.Bundle
 import android.view.View
@@ -11,20 +11,19 @@ import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.common_ui.util.state.NetworkState
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.home.R
-import org.swm.att.home.databinding.DialogEarnMileageBinding
+import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding
 import org.swm.att.home.home.HomeFragmentDirections
 import org.swm.att.home.home.HomeViewModel
 
 @AndroidEntryPoint
 class EarnMileageDialog(
     private val homeViewModel: HomeViewModel
-): BaseDialog<DialogEarnMileageBinding>(R.layout.dialog_earn_mileage) {
+): BaseDialog<DialogUserPhoneNumInputBinding>(R.layout.dialog_user_phone_num_input) {
     private val earnMileageViewModel by viewModels<EarnMileageViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBindingData()
-        setDialogCloseBtnListener()
+        setBtnClickListener()
         setupCustomKeypad()
         setPhoneNumberObserver()
         setRegisterBtnClickListener()
@@ -32,12 +31,8 @@ class EarnMileageDialog(
         setRegisterCustomerStateObserver()
     }
 
-    private fun setBindingData() {
-        binding.earnMileageViewModel = earnMileageViewModel
-    }
-
-    private fun setDialogCloseBtnListener() {
-        binding.btnCloseEarnMileageDialog.setOnClickListener {
+    private fun setBtnClickListener() {
+        binding.btnCloseDialog.setOnClickListener {
             dismiss()
             earnMileageViewModel.initMileage()
         }
@@ -52,7 +47,7 @@ class EarnMileageDialog(
 
 
     private fun setupCustomKeypad() {
-        binding.ckpEarnMileage.apply {
+        binding.customKeypad.apply {
             setLifeCycleOwner(viewLifecycleOwner)
             setOnNumberItemClickListener {
                 homeViewModel.addPhoneNumber(it)
@@ -62,17 +57,13 @@ class EarnMileageDialog(
             }
             setOnEnterBtnClickListener {
                 val phoneNumber = homeViewModel.getPhoneNumber()
-                if (isPhoneNumberValid(phoneNumber)) {
+                if (homeViewModel.isPhoneNumberValid(phoneNumber)) {
                     earnMileageViewModel.getMileage(phoneNumber)
                 } else {
                     Toast.makeText(requireContext(), "휴대폰 번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-    }
-
-    private fun isPhoneNumberValid(phoneNumber: String): Boolean {
-        return phoneNumber.length == 11
     }
 
     private fun setPhoneNumberObserver() {
@@ -113,7 +104,7 @@ class EarnMileageDialog(
     private fun setRegisterBtnClickListener() {
         binding.btnRegisterNewCustomer.setOnClickListener {
             val phoneNumber = homeViewModel.getPhoneNumber()
-            if (isPhoneNumberValid(phoneNumber)) {
+            if (homeViewModel.isPhoneNumberValid(phoneNumber)) {
                 earnMileageViewModel.registerCustomer(phoneNumber)
             } else {
                 Toast.makeText(requireContext(), "휴대폰 번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
