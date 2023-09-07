@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.swm.att.common_ui.base.BaseListAdapter
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.response.PreorderVO
+import org.swm.att.home.R
 import org.swm.att.home.databinding.ItemPreorderBinding
 import org.swm.att.home.preorder.PreorderViewModel
 
@@ -34,6 +35,11 @@ class PreorderListItemAdapter(
             // 추후 api 연동 및 실제 데이터 사용
             preorderViewModel.getSelectedPreorderDetail(item.orderId)
             preorderViewModel.setCurrentSelectedPreorderId(position, isValid)
+        }
+
+        if (isValid && position == 0) {
+            holder.itemView.setBackgroundResource(R.color.main_trans)
+            preorderViewModel.getSelectedPreorderDetail(item.orderId)
         }
     }
 

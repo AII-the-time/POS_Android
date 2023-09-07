@@ -15,7 +15,7 @@ class PreorderViewModel: ViewModel() {
     val currentSelectedValidPreorderId: LiveData<Int> = _currentSelectedValidPreorderId
     private val _currentSelectedPastPreorderId = MutableLiveData<Int>()
     val currentSelectedPastPreorderId: LiveData<Int> = _currentSelectedPastPreorderId
-    private val _selectedValidPreorderId = MutableLiveData<Int>()
+    private val _selectedValidPreorderId = MutableLiveData(0)
     val selectedValidPreorderId: LiveData<Int> = _selectedValidPreorderId
     private val _selectedPastPreorderId = MutableLiveData<Int>()
     val selectedPastPreorderId: LiveData<Int> = _selectedPastPreorderId

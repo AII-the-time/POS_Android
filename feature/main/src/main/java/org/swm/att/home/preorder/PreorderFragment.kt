@@ -104,6 +104,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     private fun setDataBinding() {
         binding.pastPreorderListSize = 6
         binding.validPreorderListSize = 6
+        binding.isValid = true
     }
 
     private fun setPreorderBtnClickListener() {

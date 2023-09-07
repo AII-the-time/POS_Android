@@ -7,13 +7,13 @@
     <data>
         <variable
             name = "selectedPreorderBill"
-            type = "org.swm.att.domain.entity.response.PreorderDetailVO"/>
+            type = "org.swm.att.domain.entity.response.PreorderDetailVO" />
         <variable
             name="isValid"
             type="Boolean" />
         <variable
             name = "validPreorderListSize"
-            type = "int"/>
+            type = "int" />
         <variable
             name="pastPreorderListSize"
             type="int" />
