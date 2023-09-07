@@ -52,14 +52,12 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
     }
 
     private fun setDataBinding() {
-        binding.selectedBillReceipt = billViewModel.selectedBillInfo.value
         binding.billViewModel = billViewModel
     }
 
     private fun setObserver() {
         billViewModel.selectedBillInfo.observe(viewLifecycleOwner) {
             orderedMenuOfBillAdapter.submitList(it.orderItems)
-            binding.selectedBillReceipt = it
         }
         billViewModel.currentSelectedBillId.observe(viewLifecycleOwner) {
             val pastId = billViewModel.selectedBillId.value

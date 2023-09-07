@@ -1,6 +1,7 @@
 package org.swm.att.home.preorder
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.get
 import androidx.fragment.app.viewModels
@@ -64,8 +65,8 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
 
     private fun setObserver() {
         preorderViewModel.selectedPreorderInfo.observe(viewLifecycleOwner) {
+            Log.d("preorder", it.toString())
             preorderMenuOfBillAdapter.submitList(it.orderItems)
-            binding.selectedPreorderBill = it
         }
         preorderViewModel.currentSelectedValidPreorderId.observe(viewLifecycleOwner) {
             val pastId = preorderViewModel.selectedValidPreorderId.value
@@ -105,6 +106,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         binding.pastPreorderListSize = 6
         binding.validPreorderListSize = 6
         binding.isValid = true
+        binding.preorderViewModel = preorderViewModel
     }
 
     private fun setPreorderBtnClickListener() {
