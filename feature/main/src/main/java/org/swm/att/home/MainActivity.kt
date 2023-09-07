@@ -10,7 +10,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.base.BaseActivity
-import org.swm.att.home.constant.NavDestinationType
 import org.swm.att.home.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -29,7 +28,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         removeStatusBar()
         hideSystemUI()
         setObserver()
-        setCustomNavRailClickListener()
     }
 
     private fun checkRefreshToken() {
@@ -45,6 +43,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         val date = Date(System.currentTimeMillis())
         val dateFormat = SimpleDateFormat("MM월 dd일 HH시 mm분", Locale.KOREA)
         binding.barDate = dateFormat.format(date)
+        binding.mainViewModel = mainViewModel
     }
 
     @Suppress("DEPRECATION")
@@ -72,69 +71,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    private fun setCustomNavRailClickListener() {
-        binding.btnHome.setOnClickListener {
-            if (isNotDestinationSame(NavDestinationType.Home)) {
-                mainViewModel.setSelectedScreen(NavDestinationType.Home)
-            } else {
-                binding.btnHome.isChecked = true
-            }
-        }
-        binding.btnBills.setOnClickListener {
-            if (isNotDestinationSame(NavDestinationType.Bills)) {
-                mainViewModel.setSelectedScreen(NavDestinationType.Bills)
-            } else {
-                binding.btnBills.isChecked = true
-            }
-        }
-        binding.btnPreorder.setOnClickListener {
-            if (isNotDestinationSame(NavDestinationType.Preorder)) {
-                mainViewModel.setSelectedScreen(NavDestinationType.Preorder)
-            } else {
-                binding.btnPreorder.isChecked = true
-            }
-        }
-        binding.btnStock.setOnClickListener {
-            if (isNotDestinationSame(NavDestinationType.Stock)) {
-                mainViewModel.setSelectedScreen(NavDestinationType.Stock)
-            } else {
-                binding.btnStock.isChecked = true
-            }
-        }
-        binding.btnRecipe.setOnClickListener {
-            if (isNotDestinationSame(NavDestinationType.Recipe)) {
-                mainViewModel.setSelectedScreen(NavDestinationType.Recipe)
-            } else {
-                binding.btnRecipe.isChecked = true
-            }
-        }
-        binding.btnWorker.setOnClickListener {
-            if (isNotDestinationSame(NavDestinationType.Worker)) {
-                mainViewModel.setSelectedScreen(NavDestinationType.Worker)
-            } else {
-                binding.btnWorker.isChecked = true
-            }
-        }
-        binding.btnSales.setOnClickListener {
-            if (isNotDestinationSame(NavDestinationType.Sales)) {
-                mainViewModel.setSelectedScreen(NavDestinationType.Sales)
-            } else {
-                binding.btnSales.isChecked = true
-            }
-        }
-        binding.btnSetting.setOnClickListener {
-            if (isNotDestinationSame(NavDestinationType.Setting)) {
-                mainViewModel.setSelectedScreen(NavDestinationType.Setting)
-            } else {
-                binding.btnSetting.isChecked = true
-            }
-        }
-    }
-
-    private fun isNotDestinationSame(selected: NavDestinationType): Boolean {
-        return mainViewModel.curSelectedScreen.value != selected
-    }
-
     private fun setObserver() {
         mainViewModel.refreshExist.observe(this) { exist ->
             if (exist == false) {
@@ -144,13 +80,16 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         mainViewModel.selectedScreen.observe(this) { destination ->
             mainViewModel.isGlobalAction.value?.let {
-                if (!it) {
+                findViewById<CheckBox>(destination.viewId).isChecked = true
+                if (!it and mainViewModel.isDestinationDiff(destination)) {
                     navController.navigate(destination.action)
                 } else {
-                    findViewById<CheckBox>(destination.viewId).isChecked = true
+                    mainViewModel.resetIsGlobalAction()
                 }
-                changeNavDestination()
-                mainViewModel.resetIsGlobalAction()
+
+                if (mainViewModel.isDestinationDiff(destination)) {
+                    changeNavDestination()
+                }
             }
         }
     }

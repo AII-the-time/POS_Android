@@ -20,7 +20,7 @@ class MainViewModel @Inject constructor(
 ): ViewModel() {
     private val _refreshExist = MutableLiveData<Boolean>()
     val refreshExist: LiveData<Boolean> = _refreshExist
-    private val _selectedScreen = MutableLiveData<NavDestinationType>()
+    private val _selectedScreen = MutableLiveData(NavDestinationType.Home)
     val selectedScreen: LiveData<NavDestinationType> = _selectedScreen
     private val _curSelectedScreen = MutableLiveData(NavDestinationType.Home)
     val curSelectedScreen: LiveData<NavDestinationType> = _curSelectedScreen
@@ -61,7 +61,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setSelectedScreen(destination: NavDestinationType) {
+    private fun setSelectedScreen(destination: NavDestinationType) {
         _selectedScreen.postValue(destination)
     }
 
@@ -76,6 +76,14 @@ class MainViewModel @Inject constructor(
 
     fun resetIsGlobalAction() {
         _isGlobalAction.postValue(false)
+    }
+
+    fun customNavRailIconClickListener(destination: NavDestinationType) {
+        setSelectedScreen(destination)
+    }
+
+    fun isDestinationDiff(destination: NavDestinationType): Boolean {
+        return curSelectedScreen.value != destination
     }
 
 }
