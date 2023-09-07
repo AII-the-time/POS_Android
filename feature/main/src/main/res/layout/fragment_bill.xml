@@ -9,9 +9,6 @@
             name="totalCountOfBill"
             type="Integer" />
         <variable
-            name="selectedBillReceipt"
-            type="org.swm.att.domain.entity.response.OrderReceiptVO" />
-        <variable
             name="billViewModel"
             type="org.swm.att.home.bills.BillViewModel"/>
         <import type="android.view.View" />
@@ -157,7 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="2023년 7월 23일 14:50"
-                android:text="@{selectedBillReceipt.createdAt}"
+                android:text="@{billViewModel.selectedBillInfo.createdAt}"
                 android:textSize="12sp"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="20dp"
@@ -170,7 +167,7 @@
                 android:id="@+id/cl_receipt_content_info"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:visibility="@{selectedBillReceipt != null ? View.VISIBLE : View.INVISIBLE}"
+                android:visibility="@{billViewModel.selectedBillInfo != null ? View.VISIBLE : View.INVISIBLE}"
                 app:layout_constraintTop_toBottomOf="@id/tv_receipt_created_at"
                 app:layout_constraintBottom_toBottomOf="parent">
 
@@ -213,7 +210,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="1,400원"
-                        android:text="@{String.format(`%s원`,selectedBillReceipt.mileage.use.toString())}"
+                        android:text="@{String.format(`%s원`,billViewModel.selectedBillInfo.mileage.use.toString())}"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginStart="9dp"
@@ -239,7 +236,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="1,400원"
-                        android:text="@{String.format(`%s원`, selectedBillReceipt.mileage.save.toString())}"
+                        android:text="@{String.format(`%s원`, billViewModel.selectedBillInfo.mileage.save.toString())}"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginStart="9dp"
@@ -265,7 +262,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="신용카드"
-                        android:text="@{selectedBillReceipt.pay.paymentMethod.toString()}"
+                        android:text="@{billViewModel.selectedBillInfo.pay.paymentMethod.toString()}"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginStart="9dp"
@@ -291,7 +288,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="1,400원"
-                        android:text="@{String.format(`%s원`, selectedBillReceipt.pay.price.toString())}"
+                        android:text="@{String.format(`%s원`, billViewModel.selectedBillInfo.pay.price.toString())}"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginStart="9dp"
@@ -315,7 +312,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="20dp"
-                    android:enabled="@{selectedBillReceipt.paymentState != PayState.CANCELED ? false: true}"
+                    android:enabled="@{billViewModel.selectedBillInfo.paymentState != PayState.CANCELED ? false: true}"
                     android:background="@drawable/selector_enabled_round_stroke"
                     app:layout_constraintTop_toBottomOf="@id/cl_receipt_payment_info"
                     app:layout_constraintBottom_toBottomOf="parent"/>

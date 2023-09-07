@@ -17,8 +17,9 @@ import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
+import org.swm.att.home.home.keypad_dialog.EarnMileageDialog
 import org.swm.att.home.home.menu.MenuFragment
-import org.swm.att.home.home.mileage.EarnMileageDialog
+import org.swm.att.home.home.preorder.DateTimePickerDialog
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -30,6 +31,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        homeViewModel.clearSelectedMenuList()
         initRecyclerView()
         setSelectedMenuList()
         setCategories()
@@ -37,11 +39,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setSelectedMenuObserver()
         setDataBinding()
         setOrderBtnListener()
+        setPreorderBtnClickListener()
+        setModifyPreorderBtnClickListener()
     }
 
     private fun setSelectedMenuList() {
-        args?.selectedMenus?.let {
+        args.selectedMenus?.let {
             homeViewModel.setSelectedMenusVO(it)
+        }
+        if (args.isModify) {
+            binding.isModifyPreorder = true
         }
     }
 
@@ -102,6 +109,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             homeViewModel.clearPhoneNumber()
             val mileageDialog = EarnMileageDialog(homeViewModel)
             mileageDialog.show(requireActivity().supportFragmentManager, "EarnMileageDialog")
+        }
+    }
+
+    private fun setPreorderBtnClickListener() {
+        binding.btnPreorder.setOnClickListener {
+            homeViewModel.clearPhoneNumber()
+            val dateTimePicker = DateTimePickerDialog(homeViewModel)
+            dateTimePicker.show(requireActivity().supportFragmentManager, "DateTimePickerDialog")
+        }
+    }
+
+    private fun setModifyPreorderBtnClickListener() {
+        binding.btnModificationComplete.setOnClickListener {
+            //주문 내역 업데이트 api 연결 필요
+            homeViewModel.clearSelectedMenuList()
         }
     }
 

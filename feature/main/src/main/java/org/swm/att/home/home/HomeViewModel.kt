@@ -1,6 +1,5 @@
 package org.swm.att.home.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,6 +12,7 @@ import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.repository.AttMenuRepository
+import java.util.Date
 import java.util.Stack
 import javax.inject.Inject
 
@@ -26,6 +26,8 @@ class HomeViewModel @Inject constructor(
     val midPhoneNumber: LiveData<Stack<String>> = _midPhoneNumber
     private val _endPhoneNumber = MutableLiveData<Stack<String>>()
     val endPhoneNumber: LiveData<Stack<String>> = _endPhoneNumber
+    private val _preorderDateTime = MutableLiveData<Date>()
+    val preorderDateTime: LiveData<Date> = _preorderDateTime
 
     private val _getMenuState: MutableLiveData<NetworkState<CategoriesVO>> =
         MutableLiveData(NetworkState.Init)
@@ -46,7 +48,6 @@ class HomeViewModel @Inject constructor(
             // mock data를 위해 임시로 sotreId를 1로 지정
             attMenuRepository.getMenu(1)
                 .onSuccess {
-                    Log.d("HomeViewModel", "getMenu: $it")
                     _getMenuState.postValue(NetworkState.Success(it))
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "메뉴 불러오기 실패"
@@ -64,7 +65,6 @@ class HomeViewModel @Inject constructor(
         }
 
         _selectedMenuMap.postValue(selectedMenuMap)
-        Log.d("HomeViewModel", "addSelectedMenu: ${_selectedMenuMap.value}")
     }
 
     fun minusSelectedMenuItem(menu: OrderedMenuVO) {
@@ -144,5 +144,18 @@ class HomeViewModel @Inject constructor(
         val mid = _midPhoneNumber.value ?: Stack()
         val end = _endPhoneNumber.value ?: Stack()
         return "010${mid.joinToString("")}${end.joinToString("")}"
+    }
+
+    fun isPhoneNumberValid(phoneNumber: String): Boolean {
+        return phoneNumber.length == 11
+    }
+
+    fun setPreorderDateTime(date: Date) {
+        _preorderDateTime.postValue(date)
+    }
+
+    fun postPreOrder(phoneNumber: String, request: String?) {
+        // 예약 주문 진행
+        deletedAllMenuItem()
     }
 }

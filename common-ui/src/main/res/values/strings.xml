@@ -112,4 +112,21 @@
     <string name="tv_no_filtering">전체</string>
     <string name="tv_filtering_start">%s</string>
     <string name="tv_filtering_end">- %s</string>
+    <string name="tv_preorder_input_user_info">고객 정보</string>
+    <string name="tv_preorder_request_des">요청사항</string>
+    <string name="tv_preorder_request_hint">ex) 얼음 많이 주세요.</string>
+    <string name="btn_preorder_process">예약 진행</string>
+    <string name="tv_date_time_picker_des">예약 날짜</string>
+    <string name="tv_preorder_list_des">예약 주문 리스트</string>
+    <string name="tv_today_valid_preorder_list_des">예약된 주문</string>
+    <string name="tv_today_past_preorder_list_des">완료된 주문</string>
+    <string name="tv_preorder_bill_des">예약 내역</string>
+    <string name="tv_user_phone_number_des">연락처</string>
+    <string name="tv_preorder_customer_info_des">고객 정보</string>
+    <string name="btn_preorder_modify_menu">주문 수정하기</string>
+    <string name="btn_pay_preorder">주문 결제하기</string>
+    <string name="btn_preorder_cancel_all"><u>주문 취소</u></string>
+    <string name="tv_customer_request_exist">요청사항 있음</string>
+    <string name="tv_customer_request_not_exist">요청사항 없음</string>
+    <string name="tv_save_modification">주문 저장</string>
 </resources>

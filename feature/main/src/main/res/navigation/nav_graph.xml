@@ -87,10 +87,14 @@
             app:argType="org.swm.att.domain.entity.request.OrderedMenusVO"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="isModify"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <dialog
         android:id="@+id/dialog_earn_mileage"
-        android:name="org.swm.att.home.home.mileage.EarnMileageDialog"
+        android:name="org.swm.att.home.home.keypad_dialog.EarnMileageDialog"
         android:label="@string/dialog_earn_mileage" />
     <fragment
         android:id="@+id/fragment_pay"

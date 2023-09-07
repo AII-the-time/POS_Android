@@ -8,10 +8,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import org.swm.att.common_ui.util.nav.NavDestination
 import org.swm.att.common_ui.util.token.JWTUtils
 import org.swm.att.common_ui.util.token.JWTUtils.unixTimeToDateTime
 import org.swm.att.domain.repository.AttPosUserRepository
+import org.swm.att.home.constant.NavDestinationType
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,10 +20,12 @@ class MainViewModel @Inject constructor(
 ): ViewModel() {
     private val _refreshExist = MutableLiveData<Boolean>()
     val refreshExist: LiveData<Boolean> = _refreshExist
-    private val _selectedScreen = MutableLiveData<NavDestination>()
-    val selectedScreen: LiveData<NavDestination> = _selectedScreen
-    private val _curSelectedScreen = MutableLiveData(NavDestination.Home)
-    val curSelectedScreen: LiveData<NavDestination> = _curSelectedScreen
+    private val _selectedScreen = MutableLiveData(NavDestinationType.Home)
+    val selectedScreen: LiveData<NavDestinationType> = _selectedScreen
+    private val _curSelectedScreen = MutableLiveData(NavDestinationType.Home)
+    val curSelectedScreen: LiveData<NavDestinationType> = _curSelectedScreen
+    private val _isGlobalAction = MutableLiveData(false)
+    val isGlobalAction: LiveData<Boolean> = _isGlobalAction
 
     fun checkRefreshToken() {
         viewModelScope.launch {
@@ -59,12 +61,29 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setSelectedScreen(destination: NavDestination) {
+    private fun setSelectedScreen(destination: NavDestinationType) {
         _selectedScreen.postValue(destination)
     }
 
     fun changedCurSelectedScreen() {
         _curSelectedScreen.postValue(selectedScreen.value)
+    }
+
+    fun directWithGlobalAction(destination: NavDestinationType) {
+        _isGlobalAction.postValue(true)
+        _selectedScreen.postValue(destination)
+    }
+
+    fun resetIsGlobalAction() {
+        _isGlobalAction.postValue(false)
+    }
+
+    fun customNavRailIconClickListener(destination: NavDestinationType) {
+        setSelectedScreen(destination)
+    }
+
+    fun isDestinationDiff(destination: NavDestinationType): Boolean {
+        return curSelectedScreen.value != destination
     }
 
 }
