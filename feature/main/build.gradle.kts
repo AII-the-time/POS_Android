@@ -52,4 +52,6 @@ dependencies {
     implementation(libs.bundles.navigation)
     implementation(libs.flexbox)
     implementation(libs.bundles.basic.test)
+    //sentry
+    implementation(libs.sentry)
 }
