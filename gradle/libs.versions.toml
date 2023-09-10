@@ -48,6 +48,9 @@ android_plugin = "8.0.2"
 kotlin_android = "1.8.20"
 secret = "2.0.1"
 
+#sentry
+setnry = "6.29.0"
+
 [libraries]
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
@@ -88,6 +91,8 @@ navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", 
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+
+sentry = { module = "io.sentry:sentry-android", version.ref = "setnry" }
 
 [bundles]
 androidx-ui-foundation = ["core-ktx", "appcompat", "constraintlayout", "lifecycle-viewmodel", "fragment"]
