@@ -6,13 +6,17 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
-import org.swm.att.common_ui.util.state.NetworkState
+import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
@@ -68,25 +72,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         categoryViewPagerAdapter = CategoryViewPagerAdapter(this)
         binding.vpCategory.adapter = categoryViewPagerAdapter
 
-        if (homeViewModel.getMenuState.value == NetworkState.Init) {
+        if (homeViewModel.getMenuState.value == UiState.Loading) {
             homeViewModel.getCategories()
         }
     }
 
     private fun setCategoriesObserver() {
-        homeViewModel.getMenuState.observe(viewLifecycleOwner) {
-            when(it) {
-                is NetworkState.Init -> {}
-                is NetworkState.Success -> {
-                    for(category in it.data.categories) {
-                        categoryViewPagerAdapter.addFragment(MenuFragment(category))
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.getMenuState.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success ->  {
+                            for(category in uiState.data.categories) {
+                                categoryViewPagerAdapter.addFragment(MenuFragment(category))
+                            }
+                            TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, position ->
+                                tab.text = uiState.data.categories[position].category
+                            }.attach()
+                        }
+                        is UiState.Error -> {
+                            Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        }
+                        is UiState.Loading -> {/* nothing */}
                     }
-                    TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, position ->
-                        tab.text = it.data.categories[position].category
-                    }.attach()
-                }
-                is NetworkState.Failure -> {
-                    Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
                 }
             }
         }

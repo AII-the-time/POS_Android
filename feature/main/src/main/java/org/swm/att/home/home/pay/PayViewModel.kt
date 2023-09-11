@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseViewModel
-import org.swm.att.common_ui.util.state.NetworkState
+import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
@@ -25,7 +27,6 @@ class PayViewModel @Inject constructor(
     private val attPosUserRepository: AttPosUserRepository,
     private val attOrderRepository: AttOrderRepository
 ): BaseViewModel() {
-    //결제 진행 여부에 따른 분리
     private val _orderedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
     val orderedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _orderedMenuMap
     private val _selectedOrderedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
@@ -40,19 +41,16 @@ class PayViewModel @Inject constructor(
     private val _mileage = MutableLiveData<MileageVO>()
     val mileage: LiveData<MileageVO> = _mileage
     private val _useMileage = MutableLiveData<Stack<String>>()
+
     val useMileage: LiveData<Stack<String>> = _useMileage
-    private val _patchMileageState: MutableLiveData<NetworkState<MileageVO>> = MutableLiveData(
-        NetworkState.Init)
-    val patchMileageState: LiveData<NetworkState<MileageVO>> = _patchMileageState
-    private val _postUseMileageState: MutableLiveData<NetworkState<PaymentResultVO>> = MutableLiveData(
-        NetworkState.Init)
-    val postUseMileageState: LiveData<NetworkState<PaymentResultVO>> = _postUseMileageState
-    private val _postOrderState: MutableLiveData<NetworkState<OrderVO>> = MutableLiveData(
-        NetworkState.Init)
-    val postOrderState: LiveData<NetworkState<OrderVO>> = _postOrderState
-    private val _postPaymentState: MutableLiveData<NetworkState<PaymentResultVO>> = MutableLiveData(
-        NetworkState.Init)
-    val postPaymentState: LiveData<NetworkState<PaymentResultVO>> = _postPaymentState
+    private val _patchMileageState = MutableStateFlow<UiState<MileageVO>>(UiState.Loading)
+    val patchMileageState: StateFlow<UiState<MileageVO>> = _patchMileageState
+    private val _postUseMileageState = MutableStateFlow<UiState<PaymentResultVO>>(UiState.Loading)
+    val postUseMileageState: StateFlow<UiState<PaymentResultVO>> = _postUseMileageState
+    private val _postOrderState = MutableStateFlow<UiState<OrderVO>>(UiState.Loading)
+    val postOrderState: StateFlow<UiState<OrderVO>> = _postOrderState
+    private val _postPaymentState = MutableStateFlow<UiState<PaymentResultVO>>(UiState.Loading)
+    val postPaymentState: StateFlow<UiState<PaymentResultVO>> = _postPaymentState
 
     fun setMileage(mileageVO: MileageVO) {
         _mileage.postValue(mileageVO)
@@ -160,12 +158,14 @@ class PayViewModel @Inject constructor(
                 OrderedMenusVO(
                     menus = totalOrderMenuList.value
                 )
-            ).onSuccess {
-                _postOrderState.postValue(NetworkState.Success(it))
-                postUseMileage(payMethod, it.orderId)
-            }.onFailure {
-                val errorMsg = if (it is HttpResponseException) it.message else "주문 실패"
-                _postOrderState.postValue(NetworkState.Failure(errorMsg))
+            ).collect { result ->
+                result.onSuccess {
+                    _postOrderState.value = UiState.Success(it)
+                    postUseMileage(payMethod, it.orderId)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "주문 실패"
+                    _postOrderState.value = UiState.Error(errorMsg)
+                }
             }
         }
     }
@@ -180,13 +180,15 @@ class PayViewModel @Inject constructor(
                     price = cost,
                     orderId = id
                 )
-            ).onSuccess {paymentResultVO ->
-                _postPaymentState.postValue(NetworkState.Success(paymentResultVO))
-                _selectedOrderedMenuMap.postValue(mutableMapOf())
-                _totalPrice.postValue(paymentResultVO.leftPrice)
-            }.onFailure {
-                val errorMsg = if (it is HttpResponseException) it.message else "결제 실패"
-                _postPaymentState.postValue(NetworkState.Failure(errorMsg))
+            ).collect { result ->
+                result.onSuccess {
+                    _postPaymentState.value = UiState.Success(it)
+                    _selectedOrderedMenuMap.postValue(mutableMapOf())
+                    _totalPrice.postValue(it.leftPrice)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "결제 실패"
+                    _postPaymentState.value = UiState.Error(errorMsg)
+                }
             }
         }
     }
@@ -201,13 +203,15 @@ class PayViewModel @Inject constructor(
                         price = useMileage.value?.joinToString("")?.toInt() ?: 0,
                         orderId = id
                     )
-                ).onSuccess {
-                    _postUseMileageState.postValue(NetworkState.Success(it))
-                    _useMileage.postValue(Stack())
-                    postPayment(payMethod, id)
-                }.onFailure {
-                    val errorMsg = if (it is HttpResponseException) it.message else "마일리지 사용 실패"
-                    _postUseMileageState.postValue(NetworkState.Failure(errorMsg))
+                ).collect { result ->
+                    result.onSuccess {
+                        _postUseMileageState.value = UiState.Success(it)
+                        _useMileage.postValue(Stack())
+                        postPayment(payMethod, id)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "마일리지 사용 실패"
+                        _postUseMileageState.value = UiState.Error(errorMsg)
+                    }
                 }
             }
         } else {
@@ -225,11 +229,13 @@ class PayViewModel @Inject constructor(
                         //default로 10% 적립
                         mileage = (totalPrice.value!! * 0.1).toInt()
                     )
-                ).onSuccess {
-                    _patchMileageState.postValue(NetworkState.Success(it))
-                }.onFailure {
-                    val errorMsg = if (it is HttpResponseException) it.message else "마일리지 적립 실패"
-                    _patchMileageState.postValue(NetworkState.Failure(errorMsg))
+                ).collect { result ->
+                    result.onSuccess {
+                        _patchMileageState.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "마일리지 적립 실패"
+                        _patchMileageState.value = UiState.Error(errorMsg)
+                    }
                 }
             }
         }

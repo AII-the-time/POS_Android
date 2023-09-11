@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseDialog
-import org.swm.att.common_ui.util.state.NetworkState
+import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding
@@ -76,15 +80,17 @@ class EarnMileageDialog(
     }
 
     private fun setGetMileageStateObserver() {
-        earnMileageViewModel.getMileageState.observe(viewLifecycleOwner) {
-            when(it) {
-                is NetworkState.Init -> {}
-                is NetworkState.Success -> {
-                    navigateToPayFragment(it.data)
-                }
-                is NetworkState.Failure -> {
-                    Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
-                    binding.btnRegisterNewCustomer.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                earnMileageViewModel.getMileageState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> navigateToPayFragment(uiState.data)
+                        is UiState.Error -> {
+                            Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                            binding.btnRegisterNewCustomer.visibility = View.VISIBLE
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                    }
                 }
             }
         }
@@ -113,15 +119,15 @@ class EarnMileageDialog(
     }
 
     private fun setRegisterCustomerStateObserver() {
-        earnMileageViewModel.registerCustomerState.observe(viewLifecycleOwner) {
-            when(it) {
-                is NetworkState.Init -> {}
-                is NetworkState.Success -> {
-                    Toast.makeText(requireContext(), "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                    navigateToPayFragment(it.data)
-                }
-                is NetworkState.Failure -> {
-                    Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            earnMileageViewModel.registerCustomerState.collect { uiState ->
+                when(uiState) {
+                    is UiState.Success -> {
+                        Toast.makeText(requireContext(), "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                        navigateToPayFragment(uiState.data)
+                    }
+                    is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    is UiState.Loading -> {/* nothing */}
                 }
             }
         }
