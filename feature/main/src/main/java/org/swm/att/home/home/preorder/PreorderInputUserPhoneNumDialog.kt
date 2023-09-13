@@ -9,7 +9,8 @@ import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding
 import org.swm.att.home.home.HomeViewModel
 
 class PreorderInputUserPhoneNumDialog(
-    private val homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel,
+    private val preorderRegisterViewModel: PreorderRegisterViewModel
 ): BaseDialog<DialogUserPhoneNumInputBinding>(R.layout.dialog_user_phone_num_input) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -23,8 +24,6 @@ class PreorderInputUserPhoneNumDialog(
     private fun initView() {
         binding.clEarnMileageBtns.visibility = View.GONE
         binding.tvEarnMileageDes.visibility = View.INVISIBLE
-        binding.tvPreorderRequestDes.visibility = View.VISIBLE
-        binding.clPreorderRequest.visibility = View.VISIBLE
     }
 
     private fun setBtnClickListener() {
@@ -44,10 +43,9 @@ class PreorderInputUserPhoneNumDialog(
             }
             setOnEnterBtnClickListener {
                 val phoneNumber = homeViewModel.getPhoneNumber()
-                val request = binding.edtPreorderRequest.text.toString()
                 if (homeViewModel.isPhoneNumberValid(phoneNumber)) {
-                    homeViewModel.postPreOrder(phoneNumber, request)
                     dismiss()
+                    preorderRegisterViewModel.setPhoneNumber(phoneNumber)
                 } else {
                     Toast.makeText(requireContext(), "휴대폰 번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
                 }
