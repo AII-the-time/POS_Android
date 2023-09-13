@@ -141,4 +141,6 @@
     <string name="tv_preorder_detail_info_des">추가 정보</string>
     <string name="tv_preorder_detail_des">요청 사항</string>
     <string name="tv_preorder_detail_hint">ex) 얼음 많이 주세요.</string>
+    <string name="tv_hour_for_picker">시</string>
+    <string name="tv_minute_for_picker">분</string>
 </resources>

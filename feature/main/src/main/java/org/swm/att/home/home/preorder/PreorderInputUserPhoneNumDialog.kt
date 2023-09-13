@@ -15,6 +15,7 @@ class PreorderInputUserPhoneNumDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        homeViewModel.clearPhoneNumber()
         initView()
         setBtnClickListener()
         setUpCustomKeypad()
