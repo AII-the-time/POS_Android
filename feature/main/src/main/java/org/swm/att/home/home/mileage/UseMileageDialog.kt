@@ -55,7 +55,7 @@ class UseMileageDialog(
 
     private fun isAvailableUseMileage(): Boolean {
         val useMileage = payViewModel.useMileage.value?.joinToString("")?.toInt() ?: 0
-        val selectedTotalCost = payViewModel.selectedOrderedMenuMap?.value?.map { it.key.price * it.value }?.sum() ?: 0
+        val selectedTotalCost = payViewModel.orderedMenuMap?.value?.map { it.key.price * it.value }?.sum() ?: 0
         return useMileage <= selectedTotalCost
     }
 

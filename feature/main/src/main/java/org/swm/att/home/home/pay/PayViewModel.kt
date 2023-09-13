@@ -25,11 +25,8 @@ class PayViewModel @Inject constructor(
     private val attPosUserRepository: AttPosUserRepository,
     private val attOrderRepository: AttOrderRepository
 ): BaseViewModel() {
-    //결제 진행 여부에 따른 분리
     private val _orderedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
     val orderedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _orderedMenuMap
-    private val _selectedOrderedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
-    val selectedOrderedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _selectedOrderedMenuMap
     private val _totalOrderMenuList = MutableLiveData<List<OrderedMenuVO>>()
     val totalOrderMenuList: LiveData<List<OrderedMenuVO>> = _totalOrderMenuList
 
@@ -64,11 +61,11 @@ class PayViewModel @Inject constructor(
             _totalPrice.postValue(it.sumOf { orderedMenu ->
                 orderedMenu.price * (orderedMenu.count ?: 1)
             })
-            val selectedOrderedMenuMap = (_selectedOrderedMenuMap.value ?: mapOf()).toMutableMap()
+            val selectedOrderedMenuMap = (_orderedMenuMap.value ?: mapOf()).toMutableMap()
             it.forEach { orderedMenu ->
                 selectedOrderedMenuMap[orderedMenu] = orderedMenu.count ?: 1
             }
-            _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
+            _orderedMenuMap.postValue(selectedOrderedMenuMap)
         }
     }
 
@@ -82,34 +79,12 @@ class PayViewModel @Inject constructor(
     }
 
     fun getSelectedOrderedMenuList(): List<OrderedMenuVO> {
-        val selectedMenuMap = _selectedOrderedMenuMap.value ?: mapOf()
+        val selectedMenuMap = _orderedMenuMap.value ?: mapOf()
         val orderedMenuList = mutableListOf<OrderedMenuVO>()
         selectedMenuMap.keys.forEach {
             orderedMenuList.add(it)
         }
         return orderedMenuList
-    }
-
-    fun moveOrderedMenuToSelectedList(orderedMenuVO: OrderedMenuVO) {
-        val orderedMenuMap = (_orderedMenuMap.value ?: mapOf()).toMutableMap()
-        val selectedOrderedMenuMap = (_selectedOrderedMenuMap.value ?: mapOf()).toMutableMap()
-
-        orderedMenuMap.remove(orderedMenuVO)
-        selectedOrderedMenuMap[orderedMenuVO] = orderedMenuVO.count ?: 0
-
-        _orderedMenuMap.postValue(orderedMenuMap)
-        _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
-    }
-
-    fun moveSelectedMenuToOrderedList(orderedMenuVO: OrderedMenuVO) {
-        val orderedMenuMap = (_orderedMenuMap.value ?: mapOf()).toMutableMap()
-        val selectedOrderedMenuMap = (_selectedOrderedMenuMap.value ?: mapOf()).toMutableMap()
-
-        selectedOrderedMenuMap.remove(orderedMenuVO)
-        orderedMenuMap[orderedMenuVO] = orderedMenuVO.count ?: 0
-
-        _orderedMenuMap.postValue(orderedMenuMap)
-        _selectedOrderedMenuMap.postValue(selectedOrderedMenuMap)
     }
 
     fun addUseMileageStr(str: String) {
@@ -171,7 +146,7 @@ class PayViewModel @Inject constructor(
     }
 
     private fun postPayment(payMethod: PayMethod, id: Int) {
-        val cost = (getPriceFromMap(selectedOrderedMenuMap.value)) - (useMileage.value?.joinToString("")?.toInt() ?: 0)
+        val cost = (getPriceFromMap(orderedMenuMap.value)) - (useMileage.value?.joinToString("")?.toInt() ?: 0)
         viewModelScope.launch(attExceptionHandler) {
             attOrderRepository.postPayment(
                 1,
@@ -182,7 +157,7 @@ class PayViewModel @Inject constructor(
                 )
             ).onSuccess {paymentResultVO ->
                 _postPaymentState.postValue(NetworkState.Success(paymentResultVO))
-                _selectedOrderedMenuMap.postValue(mutableMapOf())
+                _orderedMenuMap.postValue(mutableMapOf())
                 _totalPrice.postValue(paymentResultVO.leftPrice)
             }.onFailure {
                 val errorMsg = if (it is HttpResponseException) it.message else "결제 실패"
