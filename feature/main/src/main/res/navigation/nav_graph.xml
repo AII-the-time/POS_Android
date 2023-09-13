@@ -81,7 +81,8 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/fragment_home" />
         <argument
             android:name="selectedMenus"
             app:argType="org.swm.att.domain.entity.request.OrderedMenusVO"
@@ -91,6 +92,14 @@
             android:name="isModify"
             app:argType="boolean"
             android:defaultValue="false" />
+        <action
+            android:id="@+id/action_fragment_home_to_fragment_preorder_register"
+            app:destination="@id/fragment_preorder_register"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/fragment_home"/>
     </fragment>
     <dialog
         android:id="@+id/dialog_earn_mileage"
@@ -106,7 +115,8 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/fragment_home" />
         <argument
             android:name="OrderedMenus"
             app:argType="org.swm.att.domain.entity.request.OrderedMenusVO"
@@ -158,5 +168,24 @@
         android:name="org.swm.att.home.worker.WorkerFragment"
         android:label="@string/fragment_worker"
         tools:layout="@layout/fragment_worker" />
+    <fragment
+        android:id="@+id/fragment_preorder_register"
+        android:name="org.swm.att.home.home.preorder.PreorderRegisterFragment"
+        android:label="fragment_preorder_register"
+        tools:layout="@layout/fragment_preorder_register" >
+        <argument
+            android:name="orderedMenus"
+            app:argType="org.swm.att.domain.entity.request.OrderedMenusVO"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_fragment_preorder_register_to_fragment_home"
+            app:destination="@id/fragment_home"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/fragment_home"/>
+    </fragment>
 
 </navigation>
