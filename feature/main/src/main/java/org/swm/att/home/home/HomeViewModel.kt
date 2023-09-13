@@ -12,7 +12,6 @@ import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.repository.AttMenuRepository
-import java.util.Date
 import java.util.Stack
 import javax.inject.Inject
 
@@ -26,11 +25,7 @@ class HomeViewModel @Inject constructor(
     val midPhoneNumber: LiveData<Stack<String>> = _midPhoneNumber
     private val _endPhoneNumber = MutableLiveData<Stack<String>>()
     val endPhoneNumber: LiveData<Stack<String>> = _endPhoneNumber
-    private val _preorderDateTime = MutableLiveData<Date>()
-    val preorderDateTime: LiveData<Date> = _preorderDateTime
-
-    private val _getMenuState: MutableLiveData<NetworkState<CategoriesVO>> =
-        MutableLiveData(NetworkState.Init)
+    private val _getMenuState: MutableLiveData<NetworkState<CategoriesVO>> = MutableLiveData(NetworkState.Init)
     val getMenuState: LiveData<NetworkState<CategoriesVO>> = _getMenuState
 
     fun setSelectedMenusVO(selectedMenusVO: OrderedMenusVO) {
@@ -148,14 +143,5 @@ class HomeViewModel @Inject constructor(
 
     fun isPhoneNumberValid(phoneNumber: String): Boolean {
         return phoneNumber.length == 11
-    }
-
-    fun setPreorderDateTime(date: Date) {
-        _preorderDateTime.postValue(date)
-    }
-
-    fun postPreOrder(phoneNumber: String, request: String?) {
-        // 예약 주문 진행
-        deletedAllMenuItem()
     }
 }

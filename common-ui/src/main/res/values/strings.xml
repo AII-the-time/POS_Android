@@ -129,4 +129,18 @@
     <string name="tv_customer_request_exist">요청사항 있음</string>
     <string name="tv_customer_request_not_exist">요청사항 없음</string>
     <string name="tv_save_modification">주문 저장</string>
+    <string name="tv_preorder_register_des">예약 주문 등록</string>
+    <string name="tv_preorder_info_des">수령 정보</string>
+    <string name="tv_preorder_date_des">예약 날짜</string>
+    <string name="tv_preorder_time_des">수령 시간</string>
+    <string name="tv_preorder_method_des">수령 방법</string>
+    <string name="tv_preorder_pick_up">직접 방문</string>
+    <string name="tv_preorder_pay_info_des">결제 정보</string>
+    <string name="tv_preorder_pay_method_des">결제 방식</string>
+    <string name="tv_preorder_pay_pick_up">픽업 시 결제</string>
+    <string name="tv_preorder_detail_info_des">추가 정보</string>
+    <string name="tv_preorder_detail_des">요청 사항</string>
+    <string name="tv_preorder_detail_hint">ex) 얼음 많이 주세요.</string>
+    <string name="tv_hour_for_picker">시</string>
+    <string name="tv_minute_for_picker">분</string>
 </resources>

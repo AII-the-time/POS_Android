@@ -1,9 +1,12 @@
 package org.swm.att.home
 
+import android.content.Context
 import android.os.Build
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
 import androidx.activity.viewModels
 import androidx.navigation.NavController
@@ -69,6 +72,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val imm  = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun setObserver() {

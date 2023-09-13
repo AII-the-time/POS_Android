@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".home.preorder.PreorderRegisterFragment">
+
+    <data>
+        <variable
+            name="preorderRegisterViewModel"
+            type="org.swm.att.home.home.preorder.PreorderRegisterViewModel" />
+        <import type="org.swm.att.common_ui.util.Formatter" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/back_color"
+        android:paddingStart="39dp"
+        android:paddingEnd="39dp"
+        android:paddingBottom="40dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_preorder_item_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            app:layout_constraintEnd_toStartOf="@id/cl_preorder_info_setting"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_preorder_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="17dp"
+                android:text="@string/tv_order_des"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/divider_preorder_des"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_preorder_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:background="@color/divider_gray_trans"
+                app:layout_constraintBottom_toTopOf="@id/rv_preorder_menu_items"
+                app:layout_constraintTop_toBottomOf="@id/tv_preorder_des" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_preorder_menu_items"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/cl_preorder_total_price_info"
+                app:layout_constraintTop_toBottomOf="@id/divider_preorder_des" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_preorder_total_price_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                app:layout_constraintBottom_toTopOf="@id/btn_modify_preorder_list"
+                app:layout_constraintTop_toBottomOf="@id/rv_preorder_menu_items">
+
+                <TextView
+                    android:id="@+id/tv_preorder_total_price_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:text="@{String.format(@string/tv_custom_total_count_text, preorderRegisterViewModel.orderedMenus.menus.size)}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="총 3개 주문 금액" />
+
+                <TextView
+                    android:id="@+id/tv_preorder_total_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:text="@{preorderRegisterViewModel.totalPrice}"
+                    tools:text="18,000원"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_modify_preorder_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/shape_round_stroke"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="@string/btn_preorder_modify_menu"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_preorder_total_price_info" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_preorder_info_setting"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="29dp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintStart_toEndOf="@id/cl_preorder_item_list">
+
+            <TextView
+                android:id="@+id/tv_preorder_register_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="17dp"
+                android:text="@string/tv_preorder_register_des"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/divider_preorder_register"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_preorder_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:background="@color/divider_gray_trans"
+                app:layout_constraintBottom_toTopOf="@id/cl_preorder_info"
+                app:layout_constraintTop_toBottomOf="@id/tv_preorder_register_des" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_preorder_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="39dp"
+                app:layout_constraintBottom_toTopOf="@id/divider_preorder_pay"
+                app:layout_constraintTop_toBottomOf="@id/divider_preorder_register">
+
+                <TextView
+                    android:id="@+id/tv_preorder_info_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_preorder_info_des"
+                    android:textColor="@color/text_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/cl_preorder_date_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_preorder_date_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/cl_preorder_client_phone_num"
+                    app:layout_constraintTop_toBottomOf="@id/tv_preorder_info_des">
+
+                    <TextView
+                        android:id="@+id/tv_preorder_date_des"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_preorder_date_des"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintEnd_toStartOf="@id/tv_preorder_date"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/tv_preorder_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:gravity="start"
+                        app:layout_constraintHorizontal_weight="4"
+                        android:backgroundTint="@color/black"
+                        android:textCursorDrawable="@color/black"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:duplicateParentState="true"
+                        android:focusableInTouchMode="false"
+                        android:focusable="false"
+                        tools:text="2023년 9월 30일 금요일 12:00"
+                        android:text="@{Formatter.INSTANCE.getDataTimeBaseFormattingResult(preorderRegisterViewModel.preorderDate)}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_preorder_date_des"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_preorder_client_phone_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/cl_preorder_method"
+                    app:layout_constraintTop_toBottomOf="@id/cl_preorder_date_info">
+
+                    <TextView
+                        android:id="@+id/tv_preorder_client_phone_num_des"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_user_phone_number_des"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintEnd_toStartOf="@id/tv_preorder_client_phone_num"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/tv_preorder_client_phone_num"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:focusableInTouchMode="false"
+                        android:duplicateParentState="true"
+                        android:backgroundTint="@color/black"
+                        android:textCursorDrawable="@color/black"
+                        app:layout_constraintHorizontal_weight="4"
+                        android:gravity="start"
+                        tools:text="010-1111-1111"
+                        android:text="@{preorderRegisterViewModel.phoneNumber == null ? `연락처를 등록해주세요!`: preorderRegisterViewModel.phoneNumber}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_preorder_client_phone_num_des"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_preorder_method"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_preorder_client_phone_num">
+
+                    <TextView
+                        android:id="@+id/tv_preorder_method_des"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_preorder_method_des"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintEnd_toStartOf="@id/cg_preorder_method"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_preorder_method"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintHorizontal_weight="4"
+                        app:checkedChip="@id/chip_preorder_pick_up"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_preorder_method_des"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_preorder_pick_up"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_preorder_pick_up"
+                            android:textSize="14sp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_preorder_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toTopOf="@id/cl_preorder_pay_info"
+                app:layout_constraintTop_toBottomOf="@id/cl_preorder_info" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_preorder_pay_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="39dp"
+                app:layout_constraintBottom_toTopOf="@id/divider_preorder_pay"
+                app:layout_constraintTop_toBottomOf="@id/divider_preorder_pay">
+
+                <TextView
+                    android:id="@+id/tv_preorder_pay_info_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_preorder_pay_info_des"
+                    android:textColor="@color/text_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/cl_preorder_pay_method"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_preorder_pay_method"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/cl_preorder_total_price"
+                    app:layout_constraintTop_toBottomOf="@id/tv_preorder_pay_info_des">
+
+                    <TextView
+                        android:id="@+id/tv_preorder_pay_method_des"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_preorder_pay_method_des"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintEnd_toStartOf="@id/cg_preorder_pay_method"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_preorder_pay_method"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintHorizontal_weight="4"
+                        app:checkedChip="@id/chip_preorder_pay_pick_up"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_preorder_pay_method_des"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_preorder_pay_pick_up"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_preorder_pay_pick_up"
+                            android:textSize="14sp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_preorder_total_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_preorder_pay_method">
+
+                    <TextView
+                        android:id="@+id/tv_preorder_pay_total_price_des"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_total_price_des"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintEnd_toStartOf="@id/tv_preorder_pay_total_price"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_preorder_pay_total_price"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="18,000원"
+                        app:layout_constraintHorizontal_weight="4"
+                        android:text="@{preorderRegisterViewModel.totalPrice}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_preorder_pay_total_price_des"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_preorder_detail"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toTopOf="@id/cl_preorder_pay_detail_info"
+                app:layout_constraintTop_toBottomOf="@id/cl_preorder_pay_info" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_preorder_pay_detail_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="39dp"
+                app:layout_constraintBottom_toTopOf="@id/btn_preorder_register"
+                app:layout_constraintTop_toBottomOf="@id/divider_preorder_detail">
+
+                <TextView
+                    android:id="@+id/tv_preorder_detail_info_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_preorder_detail_info_des"
+                    android:textColor="@color/text_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/cl_preorder_pay_detail"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_preorder_pay_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_preorder_detail_info_des">
+
+                    <TextView
+                        android:id="@+id/tv_preorder_detail_des"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_preorder_detail_des"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintEnd_toStartOf="@id/edt_preorder_detail"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edt_preorder_detail"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:backgroundTint="@color/black"
+                        android:hint="@string/tv_preorder_detail_hint"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintHorizontal_weight="4"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_preorder_detail_des"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_preorder_detail_des"
+                        app:layout_constraintTop_toTopOf="@id/tv_preorder_detail_des" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_preorder_register"
+                android:layout_width="280dp"
+                android:layout_height="44dp"
+                android:background="@drawable/shape_round_8"
+                android:backgroundTint="@color/main_color"
+                android:gravity="center"
+                android:text="@string/tv_preorder_register_des"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_preorder_pay_detail_info" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -9,6 +9,7 @@ import java.util.Locale
 object Formatter {
     private val decimalFormat = DecimalFormat("#,###")
     private val baseDateFormatter = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+    private val baseDateTimeFormatter = SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분", Locale.KOREA)
     private val today = Calendar.getInstance().apply {
         set(Calendar.HOUR, 0)
         set(Calendar.MINUTE, 0)
@@ -26,6 +27,10 @@ object Formatter {
 
     fun getDateBaseFormattingResult(date: Date): String {
         return baseDateFormatter.format(date)
+    }
+
+    fun getDataTimeBaseFormattingResult(date: Date): String {
+        return baseDateTimeFormatter.format(date)
     }
 
     fun isToday(date: Date): Boolean {

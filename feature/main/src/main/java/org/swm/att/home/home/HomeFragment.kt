@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,6 @@ import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
 import org.swm.att.home.home.keypad_dialog.EarnMileageDialog
 import org.swm.att.home.home.menu.MenuFragment
-import org.swm.att.home.home.preorder.DateTimePickerDialog
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -114,9 +114,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setPreorderBtnClickListener() {
         binding.btnPreorder.setOnClickListener {
-            homeViewModel.clearPhoneNumber()
-            val dateTimePicker = DateTimePickerDialog(homeViewModel)
-            dateTimePicker.show(requireActivity().supportFragmentManager, "DateTimePickerDialog")
+            val orderedMenus = homeViewModel.getOrderedMenusVO()
+            val action = HomeFragmentDirections.actionFragmentHomeToFragmentPreorderRegister(orderedMenus)
+            findNavController().navigate(action)
         }
     }
 

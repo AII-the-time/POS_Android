@@ -8,11 +8,10 @@ import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.common_ui.util.calendar.CustomCalendarViewModel
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogDateTimePickerBinding
-import org.swm.att.home.home.HomeViewModel
 import java.util.Calendar
 
 class DateTimePickerDialog(
-    private val homeViewModel: HomeViewModel
+    private val preorderRegisterViewModel: PreorderRegisterViewModel
 ) : BaseDialog<DialogDateTimePickerBinding>(R.layout.dialog_date_time_picker) {
     private val customCalendarViewModel by viewModels<CustomCalendarViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,9 +53,7 @@ class DateTimePickerDialog(
                     Toast.makeText(context, "현재 시간 이후로 선택해주세요.", Toast.LENGTH_SHORT).show()
                 } else {
                     dismiss()
-                    homeViewModel.setPreorderDateTime(calendar.time)
-                    val inputUserPhoneNumDialog = PreorderInputUserPhoneNumDialog(homeViewModel)
-                    inputUserPhoneNumDialog.show(parentFragmentManager, "inputUserPhoneNumDialog")
+                    preorderRegisterViewModel.setPreorderDate(calendar.time)
                 }
             }
         }

@@ -22,7 +22,6 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     private val payViewModel by viewModels<PayViewModel>()
     private val args by navArgs<PayFragmentArgs>()
     private lateinit var orderedMenuAdapter: OrderedMenuAdapter
-    private lateinit var selectedOrderedMenuAdapter: OrderedMenuAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,20 +40,12 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     }
 
     private fun initOrderedMenuRecyclerView() {
-        orderedMenuAdapter = OrderedMenuAdapter(payViewModel, false)
+        orderedMenuAdapter = OrderedMenuAdapter()
         binding.rvOrderedMenuList.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = orderedMenuAdapter
         }
-
-        selectedOrderedMenuAdapter = OrderedMenuAdapter(payViewModel, true)
-        binding.rvSelectedOrderItemList.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = selectedOrderedMenuAdapter
-        }
-
     }
 
     private fun setMileage() {
@@ -80,11 +71,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setMenusMapObserver() {
         payViewModel.orderedMenuMap.observe(viewLifecycleOwner) {
-            orderedMenuAdapter.submitList(payViewModel.getOrderedMenuList())
-        }
-
-        payViewModel.selectedOrderedMenuMap.observe(viewLifecycleOwner) {
-            selectedOrderedMenuAdapter.submitList(payViewModel.getSelectedOrderedMenuList())
+            orderedMenuAdapter.submitList(payViewModel.getSelectedOrderedMenuList())
         }
     }
 
