@@ -96,7 +96,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
             payViewModel.postOrder(PayMethod.CASH)
         }
         binding.btnPayByEasy.setOnClickListener {
-            payViewModel.postOrder(PayMethod.EASY)
+            payViewModel.postOrder(PayMethod.BANK)
         }
     }
 

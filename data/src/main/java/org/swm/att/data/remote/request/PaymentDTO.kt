@@ -9,6 +9,10 @@ data class PaymentDTO(
     val orderId: Int,
     @field:Json(name = "paymentMethod")
     val paymentMethod: String,
-    @field:Json(name = "price")
-    val price: Int
+    @field:Json(name = "mileageId")
+    val mileageId: Int?,
+    @field:Json(name = "useMileage")
+    val useMileage: Int?,
+    @field:Json(name = "saveMileage")
+    val saveMileage: Int?
 )
