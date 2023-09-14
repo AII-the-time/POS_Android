@@ -15,13 +15,12 @@ import javax.inject.Inject
 class AttOrderRepositoryImpl @Inject constructor(
     private val orderDataSource: OrderDataSource
 ): AttOrderRepository {
-    override suspend fun postOrder(storeId: Int, mileageId: Int?, totalPrice: Int, orderedMenus: OrderedMenusVO): Result<OrderVO> {
+    override suspend fun postOrder(storeId: Int, totalPrice: Int, orderedMenus: OrderedMenusVO): Result<OrderVO> {
         return try {
             val response = orderDataSource.postOrder(
                 storeId,
                 OrderedMenusDTO(
                     totalPrice = totalPrice,
-                    mileageId = mileageId,
                     menus = orderedMenus.menus?.map { OrderedMenuDTO(
                         id = it.id,
                         count = it.count ?: 1,

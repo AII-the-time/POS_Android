@@ -5,10 +5,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PaymentDTO(
+    @field:Json(name = "orderId")
+    val orderId: Int,
     @field:Json(name = "paymentMethod")
     val paymentMethod: String,
     @field:Json(name = "price")
-    val price: Int,
-    @field:Json(name = "orderId")
-    val orderId: Int
+    val price: Int
 )

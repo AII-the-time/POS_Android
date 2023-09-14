@@ -130,7 +130,6 @@ class PayViewModel @Inject constructor(
         viewModelScope.launch(attExceptionHandler) {
             attOrderRepository.postOrder(
                 1,
-                mileage.value?.mileageId,
                 totalPrice.value ?: 0,
                 OrderedMenusVO(
                     menus = totalOrderMenuList.value
