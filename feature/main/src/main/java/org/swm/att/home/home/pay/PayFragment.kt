@@ -35,7 +35,6 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         setPayBtnClickListener()
         setPatchMileageStateObserver()
         setPostOrderStateObserver()
-        setPostPaymentStateObserver()
         setPostUseMileageStateObserver()
     }
 
@@ -90,13 +89,13 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setPayBtnClickListener() {
         binding.btnPayByCard.setOnClickListener {
-            payViewModel.postOrder(PayMethod.CARD)
+            payViewModel.getOrderIdAndPostPayment(PayMethod.CARD)
         }
         binding.btnPayByCash.setOnClickListener {
-            payViewModel.postOrder(PayMethod.CASH)
+            payViewModel.getOrderIdAndPostPayment(PayMethod.CASH)
         }
         binding.btnPayByEasy.setOnClickListener {
-            payViewModel.postOrder(PayMethod.BANK)
+            payViewModel.getOrderIdAndPostPayment(PayMethod.BANK)
         }
     }
 
@@ -104,7 +103,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         payViewModel.patchMileageState.observe(viewLifecycleOwner) {
             when(it) {
                 is NetworkState.Init -> {}
-                is NetworkState.Success -> Toast.makeText(requireContext(), "보유 마일리지: ${it.data.mileage}", Toast.LENGTH_SHORT).show()
+                is NetworkState.Success -> Toast.makeText(requireContext(), "보유 마일리지: ${it.data?.mileage}", Toast.LENGTH_SHORT).show()
                 is NetworkState.Failure -> {
                     Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
                 }
@@ -116,22 +115,10 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         payViewModel.postOrderState.observe(viewLifecycleOwner) {
             when(it) {
                 is NetworkState.Init -> {}
-                is NetworkState.Success -> {}
-                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun setPostPaymentStateObserver() {
-        payViewModel.postPaymentState.observe(viewLifecycleOwner) {
-            when(it) {
-                is NetworkState.Init -> {}
                 is NetworkState.Success -> {
                     Toast.makeText(requireContext(), "결제가 완료되었습니다!", Toast.LENGTH_SHORT).show()
-                    if (it.data.leftPrice == 0) {
-                        payViewModel.patchMileage()
-                        findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
-                    }
+                    payViewModel.patchMileage()
+                    findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
                 }
                 is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
             }
