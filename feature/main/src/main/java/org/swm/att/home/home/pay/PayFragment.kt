@@ -117,7 +117,6 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
                 is NetworkState.Init -> {}
                 is NetworkState.Success -> {
                     Toast.makeText(requireContext(), "결제가 완료되었습니다!", Toast.LENGTH_SHORT).show()
-                    payViewModel.patchMileage()
                     findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
                 }
                 is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()

@@ -16,13 +16,11 @@ import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OrderVO
 import org.swm.att.domain.entity.response.PaymentResultVO
 import org.swm.att.domain.repository.AttOrderRepository
-import org.swm.att.domain.repository.AttPosUserRepository
 import java.util.Stack
 import javax.inject.Inject
 
 @HiltViewModel
 class PayViewModel @Inject constructor(
-    private val attPosUserRepository: AttPosUserRepository,
     private val attOrderRepository: AttOrderRepository
 ): BaseViewModel() {
     private val _orderedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
@@ -146,26 +144,6 @@ class PayViewModel @Inject constructor(
             }.onFailure {
                 val errorMsg = if (it is HttpResponseException) it.message else "결제 실패"
                 _postOrderState.postValue(NetworkState.Failure(errorMsg))
-            }
-        }
-    }
-
-     fun patchMileage() {
-        if (totalPrice.value != null && mileage.value != null) {
-            viewModelScope.launch(attExceptionHandler) {
-                attPosUserRepository.patchMileage(
-                    1,
-                    MileageVO(
-                        mileageId = mileage.value?.mileageId ?: -1,
-                        //default로 10% 적립
-                        mileage = (totalPrice.value!! * 0.1).toInt()
-                    )
-                ).onSuccess {
-                    _patchMileageState.postValue(NetworkState.Success(it))
-                }.onFailure {
-                    val errorMsg = if (it is HttpResponseException) it.message else "마일리지 적립 실패"
-                    _patchMileageState.postValue(NetworkState.Failure(errorMsg))
-                }
             }
         }
     }
