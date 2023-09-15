@@ -16,10 +16,17 @@ class DateTimePickerDialog(
     private val customCalendarViewModel by viewModels<CustomCalendarViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setDialogCloseBtnClickListener()
         initCustomCalendar()
         initNumberPicker()
+        setDialogCloseBtnClickListener()
         setProcessPreorderBtnClickListener()
+        setDefaultDateTime()
+    }
+
+    private fun setDefaultDateTime() {
+        val today = Calendar.getInstance()
+        binding.npHourPicker.value = today.get(Calendar.HOUR_OF_DAY)
+        binding.npMinutePicker.value = today.get(Calendar.MINUTE)
     }
 
     private fun setDialogCloseBtnClickListener() {
