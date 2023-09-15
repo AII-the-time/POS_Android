@@ -7,8 +7,6 @@ import com.squareup.moshi.JsonClass
 data class OrderedMenusDTO(
     @field:Json(name = "totalPrice")
     val totalPrice: Int,
-    @field:Json(name = "mileageId")
-    val mileageId: Int?,
     @field:Json(name = "menus")
     val menus: List<OrderedMenuDTO>?
 )

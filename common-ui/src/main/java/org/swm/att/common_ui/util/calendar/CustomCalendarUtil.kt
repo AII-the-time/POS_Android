@@ -39,18 +39,14 @@ class CustomCalendarAdapter(
         holder.bind(item, baseDateFormat.format(item))
         holder.itemView.apply {
             setOnClickListener {
-                if (customCalendarViewModel.startDate.value == null) {
-                    customCalendarViewModel.setStartDate(item)
-                } else {
-                    if (!isDatePicker && customCalendarViewModel.endDate.value == null) {
-                        if (customCalendarViewModel.startDate.value!! >= item) {
-                            customCalendarViewModel.setStartDate(item)
-                        } else {
-                            customCalendarViewModel.setEndDate(item)
-                        }
-                    } else {
+                if (!isDatePicker && customCalendarViewModel.endDate.value == null) {
+                    if (customCalendarViewModel.startDate.value!! >= item) {
                         customCalendarViewModel.setStartDate(item)
+                    } else {
+                        customCalendarViewModel.setEndDate(item)
                     }
+                } else {
+                    customCalendarViewModel.setStartDate(item)
                 }
             }
         }

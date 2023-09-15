@@ -3,8 +3,7 @@ package org.swm.att.domain.constant
 enum class PayMethod {
     CARD,
     CASH,
-    MILEAGE,
-    EASY,
+    BANK,
     UNKNOWN;
 
     companion object {
@@ -12,8 +11,7 @@ enum class PayMethod {
             return when (payMethod) {
                 CARD -> "CARD"
                 CASH -> "CASH"
-                MILEAGE -> "MILEAGE"
-                EASY -> "EASY"
+                BANK -> "BANK"
                 else -> "UNKNOWN"
             }
         }
@@ -22,8 +20,7 @@ enum class PayMethod {
             return when (payMethod) {
                 "CARD" -> CARD
                 "CASH" -> CASH
-                "MILEAGE" -> MILEAGE
-                "EASY" -> EASY
+                "BANK" -> BANK
                 else -> UNKNOWN
             }
         }

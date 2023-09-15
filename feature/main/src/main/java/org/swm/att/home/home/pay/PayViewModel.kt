@@ -16,13 +16,11 @@ import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OrderVO
 import org.swm.att.domain.entity.response.PaymentResultVO
 import org.swm.att.domain.repository.AttOrderRepository
-import org.swm.att.domain.repository.AttPosUserRepository
 import java.util.Stack
 import javax.inject.Inject
 
 @HiltViewModel
 class PayViewModel @Inject constructor(
-    private val attPosUserRepository: AttPosUserRepository,
     private val attOrderRepository: AttOrderRepository
 ): BaseViewModel() {
     private val _orderedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
@@ -44,12 +42,9 @@ class PayViewModel @Inject constructor(
     private val _postUseMileageState: MutableLiveData<NetworkState<PaymentResultVO>> = MutableLiveData(
         NetworkState.Init)
     val postUseMileageState: LiveData<NetworkState<PaymentResultVO>> = _postUseMileageState
-    private val _postOrderState: MutableLiveData<NetworkState<OrderVO>> = MutableLiveData(
+    private val _postOrderState: MutableLiveData<NetworkState<Nothing>> = MutableLiveData(
         NetworkState.Init)
-    val postOrderState: LiveData<NetworkState<OrderVO>> = _postOrderState
-    private val _postPaymentState: MutableLiveData<NetworkState<PaymentResultVO>> = MutableLiveData(
-        NetworkState.Init)
-    val postPaymentState: LiveData<NetworkState<PaymentResultVO>> = _postPaymentState
+    val postOrderState: LiveData<NetworkState<Nothing>> = _postOrderState
 
     fun setMileage(mileageVO: MileageVO) {
         _mileage.postValue(mileageVO)
@@ -114,30 +109,16 @@ class PayViewModel @Inject constructor(
         _useMileage.postValue(Stack())
     }
 
-    fun postOrder(payMethod: PayMethod) {
-        if (checkLeftPrice()) {
-            if (orderVO.value == null){
-                getOrderIdAndPostPayment(payMethod)
-            } else {
-                postUseMileage(payMethod, orderVO.value!!.orderId)
-            }
-        }
-
-    }
-
-    private fun getOrderIdAndPostPayment(payMethod: PayMethod) {
-
+    fun getOrderIdAndPostPayment(payMethod: PayMethod) {
         viewModelScope.launch(attExceptionHandler) {
             attOrderRepository.postOrder(
                 1,
-                mileage.value?.mileageId,
                 totalPrice.value ?: 0,
                 OrderedMenusVO(
                     menus = totalOrderMenuList.value
                 )
             ).onSuccess {
-                _postOrderState.postValue(NetworkState.Success(it))
-                postUseMileage(payMethod, it.orderId)
+                postPayment(payMethod, it.orderId)
             }.onFailure {
                 val errorMsg = if (it is HttpResponseException) it.message else "주문 실패"
                 _postOrderState.postValue(NetworkState.Failure(errorMsg))
@@ -151,70 +132,20 @@ class PayViewModel @Inject constructor(
             attOrderRepository.postPayment(
                 1,
                 PaymentVO(
+                    orderId = id,
                     paymentMethod = payMethod,
-                    price = cost,
-                    orderId = id
+                    mileageId = mileage.value?.mileageId,
+                    useMileage = if (mileage.value != null) { useMileage.value?.joinToString("")?.toInt() ?: 0 } else { null } ,
+                    saveMileage = if (mileage.value != null) { (cost * 0.1).toInt() } else { null }// 임시로 10퍼센트 설정
                 )
-            ).onSuccess {paymentResultVO ->
-                _postPaymentState.postValue(NetworkState.Success(paymentResultVO))
+            ).onSuccess {
+                _postOrderState.postValue(NetworkState.Success())
                 _orderedMenuMap.postValue(mutableMapOf())
-                _totalPrice.postValue(paymentResultVO.leftPrice)
             }.onFailure {
                 val errorMsg = if (it is HttpResponseException) it.message else "결제 실패"
-                _postPaymentState.postValue(NetworkState.Failure(errorMsg))
+                _postOrderState.postValue(NetworkState.Failure(errorMsg))
             }
         }
-    }
-
-    private fun postUseMileage(payMethod: PayMethod, id: Int) {
-        if (useMileage.value.isNullOrEmpty().not()) {
-            viewModelScope.launch(attExceptionHandler) {
-                attOrderRepository.postPayment(
-                    1,
-                    PaymentVO(
-                        paymentMethod = PayMethod.MILEAGE,
-                        price = useMileage.value?.joinToString("")?.toInt() ?: 0,
-                        orderId = id
-                    )
-                ).onSuccess {
-                    _postUseMileageState.postValue(NetworkState.Success(it))
-                    _useMileage.postValue(Stack())
-                    postPayment(payMethod, id)
-                }.onFailure {
-                    val errorMsg = if (it is HttpResponseException) it.message else "마일리지 사용 실패"
-                    _postUseMileageState.postValue(NetworkState.Failure(errorMsg))
-                }
-            }
-        } else {
-            postPayment(payMethod, id)
-        }
-    }
-
-     fun patchMileage() {
-        if (totalPrice.value != null && mileage.value != null) {
-            viewModelScope.launch(attExceptionHandler) {
-                attPosUserRepository.patchMileage(
-                    1,
-                    MileageVO(
-                        mileageId = mileage.value?.mileageId ?: -1,
-                        //default로 10% 적립
-                        mileage = (totalPrice.value!! * 0.1).toInt()
-                    )
-                ).onSuccess {
-                    _patchMileageState.postValue(NetworkState.Success(it))
-                }.onFailure {
-                    val errorMsg = if (it is HttpResponseException) it.message else "마일리지 적립 실패"
-                    _patchMileageState.postValue(NetworkState.Failure(errorMsg))
-                }
-            }
-        }
-    }
-
-    private fun checkLeftPrice(): Boolean {
-        totalPrice.value?.let {
-            return it > 0
-        }
-        return false
     }
 
     companion object {
