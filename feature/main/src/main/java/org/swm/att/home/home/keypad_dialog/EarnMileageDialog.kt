@@ -80,7 +80,9 @@ class EarnMileageDialog(
             when(it) {
                 is NetworkState.Init -> {}
                 is NetworkState.Success -> {
-                    navigateToPayFragment(it.data)
+                    it.data?.let { resData ->
+                        navigateToPayFragment(resData)
+                    }
                 }
                 is NetworkState.Failure -> {
                     Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
@@ -118,7 +120,9 @@ class EarnMileageDialog(
                 is NetworkState.Init -> {}
                 is NetworkState.Success -> {
                     Toast.makeText(requireContext(), "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                    navigateToPayFragment(it.data)
+                    it.data?.let { resData ->
+                        navigateToPayFragment(resData)
+                    }
                 }
                 is NetworkState.Failure -> {
                     Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()

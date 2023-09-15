@@ -8,22 +8,20 @@ import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PaymentVO
 import org.swm.att.domain.entity.response.OrderVO
-import org.swm.att.domain.entity.response.PaymentResultVO
 import org.swm.att.domain.repository.AttOrderRepository
 import javax.inject.Inject
 
 class AttOrderRepositoryImpl @Inject constructor(
     private val orderDataSource: OrderDataSource
 ): AttOrderRepository {
-    override suspend fun postOrder(storeId: Int, mileageId: Int?, totalPrice: Int, orderedMenus: OrderedMenusVO): Result<OrderVO> {
+    override suspend fun postOrder(storeId: Int, totalPrice: Int, orderedMenus: OrderedMenusVO): Result<OrderVO> {
         return try {
             val response = orderDataSource.postOrder(
                 storeId,
                 OrderedMenusDTO(
                     totalPrice = totalPrice,
-                    mileageId = mileageId,
                     menus = orderedMenus.menus?.map { OrderedMenuDTO(
-                        Id = it.id,
+                        id = it.id,
                         count = it.count ?: 1,
                         options = it.options.map { option -> option.id },
                         detail = it.detail
@@ -36,17 +34,19 @@ class AttOrderRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postPayment(storeId: Int, paymentVO: PaymentVO): Result<PaymentResultVO> {
+    override suspend fun postPayment(storeId: Int, paymentVO: PaymentVO): Result<Nothing?> {
         return try {
-            val response = orderDataSource.postPayment(
+            orderDataSource.postPayment(
                 storeId,
                 PaymentDTO(
+                    orderId = paymentVO.orderId,
                     paymentMethod = PayMethod.toString(paymentVO.paymentMethod),
-                    price = paymentVO.price,
-                    orderId = paymentVO.orderId
+                    mileageId = paymentVO.mileageId,
+                    useMileage = paymentVO.useMileage,
+                    saveMileage = paymentVO.saveMileage
                 )
             )
-            Result.success(response.toVO())
+            Result.success(null)
         } catch (e: Exception) {
             Result.failure(e)
         }

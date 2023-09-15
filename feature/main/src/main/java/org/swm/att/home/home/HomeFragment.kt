@@ -78,12 +78,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             when(it) {
                 is NetworkState.Init -> {}
                 is NetworkState.Success -> {
-                    for(category in it.data.categories) {
-                        categoryViewPagerAdapter.addFragment(MenuFragment(category))
+                    it.data?.let {resData ->
+                        for(category in resData.categories) {
+                            categoryViewPagerAdapter.addFragment(MenuFragment(category))
+                        }
+                        TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, position ->
+                            tab.text = resData.categories[position].category
+                        }.attach()
                     }
-                    TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, position ->
-                        tab.text = it.data.categories[position].category
-                    }.attach()
                 }
                 is NetworkState.Failure -> {
                     Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
