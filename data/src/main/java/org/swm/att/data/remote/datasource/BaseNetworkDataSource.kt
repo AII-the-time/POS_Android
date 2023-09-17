@@ -20,7 +20,7 @@ abstract class BaseNetworkDataSource {
                 status = HttpResponseStatus.create(response.code()),
                 httpCode = response.code(),
                 errorRequestUrl = response.raw().request.url.toString(),
-                msg = errorResponse?.message ?: "예상치 못한 오류가 발생했습니다.\n 다시 시도해주세요!",
+                msg = errorResponse?.toast ?: "예상치 못한 오류가 발생했습니다.\n 다시 시도해주세요!",
                 cause = Throwable(errorBody)
             )
         }
