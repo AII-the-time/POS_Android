@@ -2,6 +2,10 @@ package org.swm.att.data.remote.datasource
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import org.swm.att.data.remote.response.BaseErrorDTO
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.HttpResponseStatus
 import retrofit2.Response
@@ -12,13 +16,21 @@ abstract class BaseNetworkDataSource {
             return flow { emit(response.body()!!) }
         } else {
             val errorBody = response.errorBody()?.string()
+            val errorResponse = jsonAdapter.fromJson(errorBody)
             throw HttpResponseException(
                 status = HttpResponseStatus.create(response.code()),
-                httpCode =  response.code(),
+                httpCode = response.code(),
                 errorRequestUrl = response.raw().request.url.toString(),
-                msg = "Http request Failed (${response.code()}) ${response.message()}, $errorBody",
+                msg = errorResponse?.toast ?: "예상치 못한 오류가 발생했습니다.\n 다시 시도해주세요!",
                 cause = Throwable(errorBody)
             )
         }
+    }
+
+    companion object {
+        val moshi: Moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+        val jsonAdapter: JsonAdapter<BaseErrorDTO> = moshi.adapter(BaseErrorDTO::class.java)
     }
 }

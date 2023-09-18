@@ -3,17 +3,13 @@ package org.swm.att.home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 import org.swm.att.common_ui.base.BaseListAdapter
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.home.databinding.ItemOrderedMenuBinding
-import org.swm.att.home.home.pay.OrderedMenuViewHolder
-import org.swm.att.home.home.pay.PayViewModel
 
-class OrderedMenuAdapter(
-    private val payViewModel: PayViewModel,
-    private val selected: Boolean
-): BaseListAdapter<OrderedMenuVO, OrderedMenuViewHolder>(
+class OrderedMenuAdapter: BaseListAdapter<OrderedMenuVO, OrderedMenuViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { old, new -> old.id == new.id && old.options == new.options },
         onContentTheSame = { old, new -> old == new }
@@ -29,12 +25,14 @@ class OrderedMenuAdapter(
 
     override fun bindViewHolder(holder: OrderedMenuViewHolder, item: OrderedMenuVO) {
         holder.bind(item)
-        holder.itemView.setOnClickListener {
-            if (selected) {
-                payViewModel.moveSelectedMenuToOrderedList(item)
-            } else {
-                payViewModel.moveOrderedMenuToSelectedList(item)
-            }
-        }
+    }
+}
+
+class OrderedMenuViewHolder(
+    private val binding: ItemOrderedMenuBinding
+): RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(orderedMenu: OrderedMenuVO) {
+        binding.orderedMenu = orderedMenu
     }
 }
