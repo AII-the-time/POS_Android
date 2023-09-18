@@ -16,7 +16,7 @@ data class OrderReceiptDTO(
     val totalPrice: String?,
     @field:Json(name = "createdAt")
     val createdAt: String?,
-    @field:Json(name = "orderItems")
+    @field:Json(name = "orderitems")
     val orderItems: List<OrderedMenuOfBillDTO>,
     @field:Json(name = "mileage")
     val mileage: MileagePaymentOfBillDTO?,
