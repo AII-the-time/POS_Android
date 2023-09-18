@@ -2,19 +2,35 @@ package org.swm.att.home.bills
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import org.swm.att.domain.constant.PayMethod
-import org.swm.att.domain.constant.PayState
-import org.swm.att.domain.entity.response.MileagePaymentOfBillVO
-import org.swm.att.domain.entity.response.OptionTypeVO
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import org.swm.att.common_ui.base.BaseViewModel
+import org.swm.att.common_ui.util.state.UiState
+import org.swm.att.domain.entity.HttpResponseException
+import org.swm.att.domain.entity.response.OrderBillVO
+import org.swm.att.domain.entity.response.OrderBillsVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
-import org.swm.att.domain.entity.response.OrderedMenuOfBillVO
-import org.swm.att.domain.entity.response.PaymentOfBillVO
+import org.swm.att.domain.repository.AttOrderRepository
 import java.util.Date
+import javax.inject.Inject
 
-class BillViewModel: ViewModel() {
-    private val _selectedBillInfo = MutableLiveData<OrderReceiptVO>()
-    val selectedBillInfo: LiveData<OrderReceiptVO> = _selectedBillInfo
+@HiltViewModel
+class BillViewModel @Inject constructor(
+    private val attOrderRepository: AttOrderRepository
+): BaseViewModel() {
+    private val _selectedBillInfo = MutableStateFlow<UiState<OrderReceiptVO>>(UiState.Loading)
+    val selectedBillInfo: StateFlow<UiState<OrderReceiptVO>> = _selectedBillInfo
+    private val _selectedBillInfoData = MutableLiveData<OrderReceiptVO>()
+    val selectedBillInfoData: LiveData<OrderReceiptVO> = _selectedBillInfoData
+
+    private val _orderBills = MutableStateFlow<UiState<OrderBillsVO>>(UiState.Loading)
+    val orderBills: StateFlow<UiState<OrderBillsVO>> = _orderBills
+    private val _orderBillsData = MutableLiveData<List<OrderBillVO>>()
+    val orderBillsData: LiveData<List<OrderBillVO>> = _orderBillsData
+
     private val _selectedBillId = MutableLiveData(0)
     val selectedBillId: LiveData<Int> = _selectedBillId
     private val _currentSelectedBillId = MutableLiveData<Int>()
@@ -23,53 +39,40 @@ class BillViewModel: ViewModel() {
     val filteringStartDate: LiveData<Date> = _filteringStartDate
     private val _filteringEndDate = MutableLiveData<Date?>()
     val filteringEndDate: LiveData<Date?> = _filteringEndDate
+    private var page: Int = 1
 
-    fun getSelectedBillInfo(selectedBillId: Int) {
-        val mock = OrderReceiptVO(
-            paymentState = PayState.CANCELED,
-            totalPrice = 6000.toBigDecimal(),
-            createdAt = "2021-08-01 12:00:00",
-            orderItems = listOf(
-                OrderedMenuOfBillVO(
-                    id = 1,
-                    count = 3,
-                    price = 6000.toBigDecimal(),
-                    menuName = "아메리카노",
-                    options = listOf(
-                        OptionTypeVO(
-                            id = 4,
-                            name = "옵션1",
-                            price = 1000,
-                        )
-                    ),
-                    detail = "얼음 많이 주세요."
-                ),
-                OrderedMenuOfBillVO(
-                    id = 1,
-                    count = 3,
-                    price = 6000.toBigDecimal(),
-                    menuName = "카페라떼",
-                    options = listOf(
-                        OptionTypeVO(
-                            id = 4,
-                            name = "옵션1",
-                            price = 1000,
-                        )
-                    ),
-                    detail = "얼음 많이 주세요."
-                )
-            ),
-            mileage = MileagePaymentOfBillVO(
-                use = 100.toBigDecimal(),
-                save = 100.toBigDecimal(),
-            ),
-            pay = PaymentOfBillVO(
-                paymentMethod = PayMethod.CARD,
-                price = 6000.toBigDecimal()
-            )
-        )
+    fun getSelectedBillInfo(storeId: Int, selectedBillId: Int) {
+        viewModelScope.launch(attExceptionHandler) {
+            // 추후 storeId, selectedBillId 사용
+            attOrderRepository.getOrderBill(storeId, selectedBillId)
+                .collect { result ->
+                    result.onSuccess {
+                        _selectedBillInfoData.value = it
+                        _selectedBillInfo.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "결제 상세 내역 불러오기 실패"
+                        _selectedBillInfo.value = UiState.Error(errorMsg)
+                    }
+                }
+        }
+    }
 
-        _selectedBillInfo.value = mock
+    fun getNextOrderBills(storeId: Int) {
+        viewModelScope.launch(attExceptionHandler) {
+            attOrderRepository.getOrderBills(storeId, page, 20)
+                .collect { result ->
+                    result.onSuccess {
+                        val data = _orderBillsData.value?.toMutableList() ?: mutableListOf()
+                        data.addAll(it.orders)
+                        _orderBillsData.postValue(data)
+                        _orderBills.value = UiState.Success(it)
+                        page += 1
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "결제 내역 불러오기 실패"
+                        _orderBills.value = UiState.Error(errorMsg)
+                    }
+                }
+        }
     }
 
 
@@ -85,6 +88,10 @@ class BillViewModel: ViewModel() {
         _filteringStartDate.value = startDate
         _filteringEndDate.value = endDate
         // filtering api 연결 필요
+    }
+
+    fun getSizeOfOrderBills(): Int {
+        return orderBillsData.value?.size ?: 0
     }
 
 }

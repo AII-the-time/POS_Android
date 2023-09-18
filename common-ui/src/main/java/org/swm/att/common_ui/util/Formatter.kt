@@ -10,6 +10,7 @@ object Formatter {
     private val decimalFormat = DecimalFormat("#,###")
     private val baseDateFormatter = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
     private val baseDateTimeFormatter = SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분", Locale.KOREA)
+    private val baseDateTimeStringFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.KOREA)
     private val today = Calendar.getInstance().apply {
         set(Calendar.HOUR, 0)
         set(Calendar.MINUTE, 0)
@@ -29,8 +30,16 @@ object Formatter {
         return baseDateFormatter.format(date)
     }
 
-    fun getDataTimeBaseFormattingResult(date: Date): String {
-        return baseDateTimeFormatter.format(date)
+    fun <T> getDataTimeBaseFormattingResult(date: T?): String {
+        date?.let {
+            return if (date is String) {
+                val date = baseDateTimeStringFormatter.parse(date)
+                baseDateTimeFormatter.format(date)
+            } else {
+                baseDateTimeFormatter.format(date)
+            }
+        }
+        return ""
     }
 
     fun isToday(date: Date): Boolean {

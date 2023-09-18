@@ -4,7 +4,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.constant.PayState
-import org.swm.att.domain.entity.response.MileagePaymentOfBillVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.entity.response.PaymentOfBillVO
 
@@ -16,7 +15,7 @@ data class OrderReceiptDTO(
     val totalPrice: String?,
     @field:Json(name = "createdAt")
     val createdAt: String?,
-    @field:Json(name = "orderItems")
+    @field:Json(name = "orderitems")
     val orderItems: List<OrderedMenuOfBillDTO>,
     @field:Json(name = "mileage")
     val mileage: MileagePaymentOfBillDTO?,
@@ -28,7 +27,7 @@ data class OrderReceiptDTO(
         totalPrice = totalPrice?.toBigDecimal() ?: (-1).toBigDecimal(),
         createdAt = createdAt ?: "Unknown",
         orderItems = orderItems.map { it.toVO() },
-        mileage = mileage?.toVO() ?: MileagePaymentOfBillVO((-1).toBigDecimal(), (-1).toBigDecimal()),
+        mileage = mileage?.toVO(),
         pay = pay?.toVO() ?: PaymentOfBillVO(PayMethod.UNKNOWN, (-1).toBigDecimal())
     )
 }
