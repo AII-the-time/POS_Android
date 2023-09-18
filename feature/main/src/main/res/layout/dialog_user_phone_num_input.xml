@@ -113,47 +113,6 @@
             android:layout_marginTop="17dp"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_preorder_request"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/divider_phone_num_display"
-            app:layout_constraintStart_toStartOf="@id/divider_phone_num_display"
-            app:layout_constraintEnd_toEndOf="@id/divider_phone_num_display">
-
-            <TextView
-                android:id="@+id/tv_preorder_request_des"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:text="@string/tv_preorder_request_des"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/edt_preorder_request"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <EditText
-                android:id="@+id/edt_preorder_request"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/tv_preorder_request_hint"
-                android:textSize="12sp"
-                android:textColor="@color/black"
-                android:background="@drawable/shape_round_8"
-                android:backgroundTint="@color/back_color"
-                android:padding="10dp"
-                android:layout_marginTop="5dp"
-                android:inputType="text"
-                app:layout_constraintTop_toBottomOf="@id/tv_preorder_request_des"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_earn_mileage_btns"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

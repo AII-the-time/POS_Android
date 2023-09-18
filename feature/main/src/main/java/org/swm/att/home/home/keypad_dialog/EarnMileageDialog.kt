@@ -84,7 +84,11 @@ class EarnMileageDialog(
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 earnMileageViewModel.getMileageState.collect { uiState ->
                     when(uiState) {
-                        is UiState.Success -> navigateToPayFragment(uiState.data)
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                navigateToPayFragment(it)
+                            }
+                        }
                         is UiState.Error -> {
                             Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                             binding.btnRegisterNewCustomer.visibility = View.VISIBLE
@@ -124,7 +128,9 @@ class EarnMileageDialog(
                 when(uiState) {
                     is UiState.Success -> {
                         Toast.makeText(requireContext(), "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                        navigateToPayFragment(uiState.data)
+                        uiState.data?.let {
+                            navigateToPayFragment(it)
+                        }
                     }
                     is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     is UiState.Loading -> {/* nothing */}

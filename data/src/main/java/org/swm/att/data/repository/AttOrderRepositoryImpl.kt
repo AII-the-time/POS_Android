@@ -10,22 +10,20 @@ import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PaymentVO
 import org.swm.att.domain.entity.response.OrderVO
-import org.swm.att.domain.entity.response.PaymentResultVO
 import org.swm.att.domain.repository.AttOrderRepository
 import javax.inject.Inject
 
 class AttOrderRepositoryImpl @Inject constructor(
     private val orderDataSource: OrderDataSource
 ): AttOrderRepository {
-    override suspend fun postOrder(storeId: Int, mileageId: Int?, totalPrice: Int, orderedMenus: OrderedMenusVO): Flow<Result<OrderVO>> = flow {
+    override suspend fun postOrder(storeId: Int, totalPrice: Int, orderedMenus: OrderedMenusVO): Flow<Result<OrderVO>> = flow {
         try {
             orderDataSource.postOrder(
                 storeId,
                 OrderedMenusDTO(
                     totalPrice = totalPrice,
-                    mileageId = mileageId,
                     menus = orderedMenus.menus?.map { OrderedMenuDTO(
-                        Id = it.id,
+                        id = it.id,
                         count = it.count ?: 1,
                         options = it.options.map { option -> option.id },
                         detail = it.detail
@@ -39,17 +37,19 @@ class AttOrderRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postPayment(storeId: Int, paymentVO: PaymentVO): Flow<Result<PaymentResultVO>> = flow {
+    override suspend fun postPayment(storeId: Int, paymentVO: PaymentVO): Flow<Result<Nothing?>> = flow {
         try {
             orderDataSource.postPayment(
                 storeId,
                 PaymentDTO(
+                    orderId = paymentVO.orderId,
                     paymentMethod = PayMethod.toString(paymentVO.paymentMethod),
-                    price = paymentVO.price,
-                    orderId = paymentVO.orderId
+                    mileageId = paymentVO.mileageId,
+                    useMileage = paymentVO.useMileage,
+                    saveMileage = paymentVO.saveMileage
                 )
             ).collect {
-                emit(Result.success(it.toVO()))
+                emit(Result.success(null))
             }
         } catch (e: Exception) {
             emit(Result.failure(e))

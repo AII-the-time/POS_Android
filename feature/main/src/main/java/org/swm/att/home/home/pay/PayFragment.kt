@@ -26,7 +26,6 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     private val payViewModel by viewModels<PayViewModel>()
     private val args by navArgs<PayFragmentArgs>()
     private lateinit var orderedMenuAdapter: OrderedMenuAdapter
-    private lateinit var selectedOrderedMenuAdapter: OrderedMenuAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,25 +39,17 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         setPayBtnClickListener()
         setPatchMileageStateObserver()
         setPostOrderStateObserver()
-        setPostPaymentStateObserver()
         setPostUseMileageStateObserver()
+        setPostPaymentStateObserver()
     }
 
     private fun initOrderedMenuRecyclerView() {
-        orderedMenuAdapter = OrderedMenuAdapter(payViewModel, false)
+        orderedMenuAdapter = OrderedMenuAdapter()
         binding.rvOrderedMenuList.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = orderedMenuAdapter
         }
-
-        selectedOrderedMenuAdapter = OrderedMenuAdapter(payViewModel, true)
-        binding.rvSelectedOrderItemList.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = selectedOrderedMenuAdapter
-        }
-
     }
 
     private fun setMileage() {
@@ -84,11 +75,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setMenusMapObserver() {
         payViewModel.orderedMenuMap.observe(viewLifecycleOwner) {
-            orderedMenuAdapter.submitList(payViewModel.getOrderedMenuList())
-        }
-
-        payViewModel.selectedOrderedMenuMap.observe(viewLifecycleOwner) {
-            selectedOrderedMenuAdapter.submitList(payViewModel.getSelectedOrderedMenuList())
+            orderedMenuAdapter.submitList(payViewModel.getSelectedOrderedMenuList())
         }
     }
 
@@ -107,13 +94,13 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setPayBtnClickListener() {
         binding.btnPayByCard.setOnClickListener {
-            payViewModel.postOrder(PayMethod.CARD)
+            payViewModel.getOrderIdAndPostPayment(PayMethod.CARD)
         }
         binding.btnPayByCash.setOnClickListener {
-            payViewModel.postOrder(PayMethod.CASH)
+            payViewModel.getOrderIdAndPostPayment(PayMethod.CASH)
         }
         binding.btnPayByEasy.setOnClickListener {
-            payViewModel.postOrder(PayMethod.EASY)
+            payViewModel.getOrderIdAndPostPayment(PayMethod.BANK)
         }
     }
 
@@ -122,7 +109,9 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 payViewModel.patchMileageState.collect { uiState ->
                     when(uiState) {
-                        is UiState.Success -> Toast.makeText(requireContext(), "보유 마일리지: ${uiState.data.mileage}", Toast.LENGTH_SHORT).show()
+                        is UiState.Success -> {
+                            Toast.makeText(requireContext(), "보유 마일리지: ${uiState.data?.mileage}", Toast.LENGTH_SHORT).show()
+                        }
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                         is UiState.Loading -> {/* nothing */}
                     }
@@ -147,14 +136,11 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setPostPaymentStateObserver() {
         lifecycleScope.launch {
-            payViewModel.postPaymentState.collect { uiState ->
+            payViewModel.postOrderState.collect { uiState ->
                 when(uiState) {
                     is UiState.Success -> {
                         Toast.makeText(requireContext(), "결제가 완료되었습니다!", Toast.LENGTH_SHORT).show()
-                        if (uiState.data.leftPrice == 0) {
-                            payViewModel.patchMileage()
-                            findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
-                        }
+                        findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
                     }
                     is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     is UiState.Loading -> {/* nothing */}
