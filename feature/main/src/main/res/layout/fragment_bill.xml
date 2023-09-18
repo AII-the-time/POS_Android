@@ -13,6 +13,7 @@
             type="org.swm.att.home.bills.BillViewModel"/>
         <import type="android.view.View" />
         <import type="org.swm.att.domain.constant.PayState" />
+        <import type="org.swm.att.common_ui.util.Formatter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -154,7 +155,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="2023년 7월 23일 14:50"
-                android:text="@{billViewModel.selectedBillInfoData.createdAt}"
+                android:text="@{Formatter.INSTANCE.getDataTimeBaseFormattingResult(billViewModel.selectedBillInfoData.createdAt)}"
                 android:textSize="12sp"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="20dp"
