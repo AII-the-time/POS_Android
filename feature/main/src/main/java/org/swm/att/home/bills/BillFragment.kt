@@ -2,10 +2,17 @@ package org.swm.att.home.bills
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.constant.PayState
 import org.swm.att.domain.entity.response.OrderBillVO
@@ -14,6 +21,7 @@ import org.swm.att.home.adapter.OrderBillItemAdapter
 import org.swm.att.home.adapter.OrderedMenuOfBillAdapter
 import org.swm.att.home.databinding.FragmentBillBinding
 
+@AndroidEntryPoint
 class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
     private lateinit var orderBillItemAdapter: OrderBillItemAdapter
     private lateinit var orderedMenuOfBillAdapter: OrderedMenuOfBillAdapter
@@ -56,8 +64,21 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
     }
 
     private fun setObserver() {
-        billViewModel.selectedBillInfo.observe(viewLifecycleOwner) {
-            orderedMenuOfBillAdapter.submitList(it.orderItems)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                billViewModel.selectedBillInfo.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                orderedMenuOfBillAdapter.submitList(it.orderItems)
+
+                            }
+                        }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        is UiState.Loading -> { /* nothing */ }
+                    }
+                }
+            }
         }
         billViewModel.currentSelectedBillId.observe(viewLifecycleOwner) {
             val pastId = billViewModel.selectedBillId.value

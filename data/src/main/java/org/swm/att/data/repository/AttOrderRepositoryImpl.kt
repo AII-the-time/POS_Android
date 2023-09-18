@@ -9,6 +9,8 @@ import org.swm.att.data.remote.request.PaymentDTO
 import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PaymentVO
+import org.swm.att.domain.entity.response.OrderBillsVO
+import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.entity.response.OrderVO
 import org.swm.att.domain.repository.AttOrderRepository
 import javax.inject.Inject
@@ -50,6 +52,26 @@ class AttOrderRepositoryImpl @Inject constructor(
                 )
             ).collect {
                 emit(Result.success(null))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun getOrderBills(storeId: Int, page: Int, count: Int): Flow<Result<OrderBillsVO>> = flow {
+        try {
+            orderDataSource.getOrderBills(storeId, page, count).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun getOrderBill(storeId: Int, orderId: Int): Flow<Result<OrderReceiptVO>> = flow {
+        try {
+            orderDataSource.getOrderBill(storeId, orderId).collect {
+                emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {
             emit(Result.failure(e))

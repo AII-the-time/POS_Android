@@ -32,12 +32,14 @@ class OrderBillItemAdapter(
         super.onBindViewHolder(holder, position)
         val item = getItem(position)
         holder.itemView.setOnClickListener {
-            billViewModel.getSelectedBillInfo(item.orderId)
+            // storeId 임시로 1로 설정
+            billViewModel.getSelectedBillInfo(1, item.orderId)
             billViewModel.setCurrentSelectedBillId(position)
         }
 
         if (position == 0) {
-            billViewModel.getSelectedBillInfo(item.orderId)
+            // storeId 임시로 1로 설정
+            billViewModel.getSelectedBillInfo(1, item.orderId)
             holder.itemView.setBackgroundResource(R.color.main_trans)
         }
     }
