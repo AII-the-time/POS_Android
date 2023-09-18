@@ -2,18 +2,24 @@ package org.swm.att.home.bills
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
-import org.swm.att.domain.constant.PayMethod
-import org.swm.att.domain.constant.PayState
-import org.swm.att.domain.entity.response.OrderBillVO
+import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderBillItemAdapter
 import org.swm.att.home.adapter.OrderedMenuOfBillAdapter
 import org.swm.att.home.databinding.FragmentBillBinding
 
+@AndroidEntryPoint
 class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
     private lateinit var orderBillItemAdapter: OrderBillItemAdapter
     private lateinit var orderedMenuOfBillAdapter: OrderedMenuOfBillAdapter
@@ -25,7 +31,7 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
         setBillFilteringBtnClickListener()
         setDataBinding()
         setObserver()
-        initMockData()
+        initOrderBillsData()
     }
 
     private fun initOrderBillItemRecyclerView() {
@@ -34,6 +40,16 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = orderBillItemAdapter
+            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val lastVisibleItem = (this@apply.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    if (billViewModel.getSizeOfOrderBills() <= lastVisibleItem + 5) {
+                        billViewModel.getNextOrderBills(1)
+                    }
+
+                }
+            })
         }
 
         orderedMenuOfBillAdapter = OrderedMenuOfBillAdapter()
@@ -56,9 +72,35 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
     }
 
     private fun setObserver() {
-        billViewModel.selectedBillInfo.observe(viewLifecycleOwner) {
-            orderedMenuOfBillAdapter.submitList(it.orderItems)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                billViewModel.selectedBillInfo.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                orderedMenuOfBillAdapter.submitList(it.orderItems)
+
+                            }
+                        }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        is UiState.Loading -> { /* nothing */ }
+                    }
+                }
+            }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                billViewModel.orderBills.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> { /* nothing */ }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        is UiState.Loading -> { /* nothing */ }
+                    }
+                }
+            }
+        }
+
         billViewModel.currentSelectedBillId.observe(viewLifecycleOwner) {
             val pastId = billViewModel.selectedBillId.value
             binding.rvBills[it].setBackgroundResource(R.color.main_trans)
@@ -71,60 +113,14 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
                 }
             }
         }
+
+        billViewModel.orderBillsData.observe(viewLifecycleOwner) {
+            orderBillItemAdapter.submitList(it)
+            binding.totalCountOfBill = it.size
+        }
     }
 
-    private fun initMockData() {
-        val mock = listOf(
-            OrderBillVO(
-                orderId = 1,
-                paymentState = PayState.CANCELED,
-                paymentMethod = PayMethod.CARD,
-                totalCount = 3,
-                totalPrice = 6000.toBigDecimal(),
-                createdAt = "2021-08-01 12:00:00",
-            ),
-            OrderBillVO(
-                orderId = 1,
-                paymentState = PayState.PAID,
-                paymentMethod = PayMethod.CARD,
-                totalCount = 3,
-                totalPrice = 6000.toBigDecimal(),
-                createdAt = "2021-08-01 12:00:00",
-            ),
-            OrderBillVO(
-                orderId = 1,
-                paymentState = PayState.PAID,
-                paymentMethod = PayMethod.CARD,
-                totalCount = 3,
-                totalPrice = 6000.toBigDecimal(),
-                createdAt = "2021-08-10 12:00:00",
-            ),
-            OrderBillVO(
-                orderId = 1,
-                paymentState = PayState.PAID,
-                paymentMethod = PayMethod.CARD,
-                totalCount = 3,
-                totalPrice = 3000.toBigDecimal(),
-                createdAt = "2021-08-01 12:00:00",
-            ),
-            OrderBillVO(
-                orderId = 1,
-                paymentState = PayState.PAID,
-                paymentMethod = PayMethod.CARD,
-                totalCount = 3,
-                totalPrice = 6000.toBigDecimal(),
-                createdAt = "2021-08-01 12:00:00",
-            ),
-            OrderBillVO(
-                orderId = 1,
-                paymentState = PayState.PAID,
-                paymentMethod = PayMethod.CARD,
-                totalCount = 3,
-                totalPrice = 6000.toBigDecimal(),
-                createdAt = "2021-08-01 12:00:00",
-            )
-        )
-        orderBillItemAdapter.submitList(mock)
-        binding.totalCountOfBill = mock.size
+    private fun initOrderBillsData() {
+        billViewModel.getNextOrderBills(1)
     }
 }

@@ -8,6 +8,6 @@ data class OrderReceiptVO(
     val totalPrice: BigDecimal,
     val createdAt: String,
     val orderItems: List<OrderedMenuOfBillVO>,
-    val mileage: MileagePaymentOfBillVO,
+    val mileage: MileagePaymentOfBillVO?,
     val pay: PaymentOfBillVO
 )

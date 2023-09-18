@@ -84,7 +84,7 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:text="@{preorderRegisterViewModel.totalPrice}"
+                    android:text="@{preorderRegisterViewModel.totalPrice == null ? `0원`: preorderRegisterViewModel.totalPrice}"
                     tools:text="18,000원"
                     app:layout_constraintEnd_toEndOf="parent" />
 
