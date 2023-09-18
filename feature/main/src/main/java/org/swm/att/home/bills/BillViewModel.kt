@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseViewModel
 import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.domain.entity.HttpResponseException
+import org.swm.att.domain.entity.response.OrderBillVO
+import org.swm.att.domain.entity.response.OrderBillsVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.repository.AttOrderRepository
 import java.util.Date
@@ -24,6 +26,11 @@ class BillViewModel @Inject constructor(
     private val _selectedBillInfoData = MutableLiveData<OrderReceiptVO>()
     val selectedBillInfoData: LiveData<OrderReceiptVO> = _selectedBillInfoData
 
+    private val _orderBills = MutableStateFlow<UiState<OrderBillsVO>>(UiState.Loading)
+    val orderBills: StateFlow<UiState<OrderBillsVO>> = _orderBills
+    private val _orderBillsData = MutableLiveData<List<OrderBillVO>>()
+    val orderBillsData: LiveData<List<OrderBillVO>> = _orderBillsData
+
     private val _selectedBillId = MutableLiveData(0)
     val selectedBillId: LiveData<Int> = _selectedBillId
     private val _currentSelectedBillId = MutableLiveData<Int>()
@@ -32,18 +39,37 @@ class BillViewModel @Inject constructor(
     val filteringStartDate: LiveData<Date> = _filteringStartDate
     private val _filteringEndDate = MutableLiveData<Date?>()
     val filteringEndDate: LiveData<Date?> = _filteringEndDate
+    private var page: Int = 1
 
     fun getSelectedBillInfo(storeId: Int, selectedBillId: Int) {
         viewModelScope.launch(attExceptionHandler) {
             // 추후 storeId, selectedBillId 사용
-            attOrderRepository.getOrderBill(1, 1)
+            attOrderRepository.getOrderBill(storeId, selectedBillId)
                 .collect { result ->
                     result.onSuccess {
                         _selectedBillInfoData.value = it
                         _selectedBillInfo.value = UiState.Success(it)
                     }.onFailure {
-                        val errorMsg = if (it is HttpResponseException) it.message else "결제 내역 불러오기 실패"
+                        val errorMsg = if (it is HttpResponseException) it.message else "결제 상세 내역 불러오기 실패"
                         _selectedBillInfo.value = UiState.Error(errorMsg)
+                    }
+                }
+        }
+    }
+
+    fun getNextOrderBills(storeId: Int) {
+        viewModelScope.launch(attExceptionHandler) {
+            attOrderRepository.getOrderBills(storeId, page, 20)
+                .collect { result ->
+                    result.onSuccess {
+                        val data = _orderBillsData.value?.toMutableList() ?: mutableListOf()
+                        data.addAll(it.orders)
+                        _orderBillsData.postValue(data)
+                        _orderBills.value = UiState.Success(it)
+                        page += 1
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "결제 내역 불러오기 실패"
+                        _orderBills.value = UiState.Error(errorMsg)
                     }
                 }
         }
@@ -62,6 +88,10 @@ class BillViewModel @Inject constructor(
         _filteringStartDate.value = startDate
         _filteringEndDate.value = endDate
         // filtering api 연결 필요
+    }
+
+    fun getSizeOfOrderBills(): Int {
+        return orderBillsData.value?.size ?: 0
     }
 
 }
