@@ -1,5 +1,7 @@
 package org.swm.att.data.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey
 import org.swm.att.data.remote.datasource.UserDataSource
@@ -16,9 +18,10 @@ class AttPosUserRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
     private val attEncryptedPrefDataSource: AttEncryptedPrefDataSource
 ): AttPosUserRepository {
-    override suspend fun refreshToken(refreshToken: String): Result<TokenVO> {
-        val response = userDataSource.refreshToken(refreshToken)
-        return Result.success(response.toVO())
+    override suspend fun refreshToken(refreshToken: String): Flow<Result<TokenVO>> = flow {
+        userDataSource.refreshToken(refreshToken).collect {
+            emit(Result.success(it.toVO()))
+        }
     }
 
     override suspend fun saveAccessToken(accessToken: String) {
@@ -43,41 +46,44 @@ class AttPosUserRepositoryImpl @Inject constructor(
         return attEncryptedPrefDataSource.getStrValue(PreferenceKey.REFRESH_TOKEN)
     }
 
-    override suspend fun getMileage(storeId: Int, phoneNumber: String): Result<MileageVO> {
-        return try {
-            val response = userDataSource.getMileage(storeId, phoneNumber)
-            Result.success(response.toVO())
+    override suspend fun getMileage(storeId: Int, phoneNumber: String): Flow<Result<MileageVO>> = flow {
+        try {
+            userDataSource.getMileage(storeId, phoneNumber).collect {
+                emit(Result.success(it.toVO()))
+            }
         } catch (e: Exception) {
-            Result.failure(e)
+            emit(Result.failure(e))
         }
     }
 
-    override suspend fun patchMileage(storeId: Int, mileage: MileageVO): Result<MileageVO> {
-        return try {
-            val response = userDataSource.patchMileage(
+    override suspend fun patchMileage(storeId: Int, mileage: MileageVO): Flow<Result<MileageVO>> = flow {
+        try {
+            userDataSource.patchMileage(
                 storeId,
                 MileageDTO(
                     mileageId = mileage.mileageId,
                     mileage = mileage.mileage
                 )
-            )
-            Result.success(response.toVO())
+            ).collect {
+                emit(Result.success(it.toVO()))
+            }
         } catch (e: Exception) {
-            Result.failure(e)
+            emit(Result.failure(e))
         }
     }
 
-    override suspend fun registerCustomer(storeId: Int, phone: PhoneNumVO): Result<MileageIdVO> {
-        return try {
-            val response = userDataSource.registerCustomer(
+    override suspend fun registerCustomer(storeId: Int, phone: PhoneNumVO): Flow<Result<MileageIdVO>> = flow {
+        try {
+            userDataSource.registerCustomer(
                 storeId,
                 PhoneNumDTO(
                     phone = phone.phone
                 )
-            )
-            Result.success(response.toVO())
+            ).collect {
+                emit(Result.success(it.toVO()))
+            }
         } catch (e: Exception) {
-            Result.failure(e)
+            emit(Result.failure(e))
         }
     }
 

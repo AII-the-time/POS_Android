@@ -1,5 +1,7 @@
 package org.swm.att.data.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.OrderDataSource
 import org.swm.att.data.remote.request.OrderedMenuDTO
 import org.swm.att.data.remote.request.OrderedMenusDTO
@@ -14,9 +16,9 @@ import javax.inject.Inject
 class AttOrderRepositoryImpl @Inject constructor(
     private val orderDataSource: OrderDataSource
 ): AttOrderRepository {
-    override suspend fun postOrder(storeId: Int, totalPrice: Int, orderedMenus: OrderedMenusVO): Result<OrderVO> {
-        return try {
-            val response = orderDataSource.postOrder(
+    override suspend fun postOrder(storeId: Int, totalPrice: Int, orderedMenus: OrderedMenusVO): Flow<Result<OrderVO>> = flow {
+        try {
+            orderDataSource.postOrder(
                 storeId,
                 OrderedMenusDTO(
                     totalPrice = totalPrice,
@@ -27,15 +29,16 @@ class AttOrderRepositoryImpl @Inject constructor(
                         detail = it.detail
                     )} ?: listOf()
                 )
-            )
-            Result.success(response.toVO())
+            ).collect {
+                emit(Result.success(it.toVO()))
+            }
         } catch (e: Exception) {
-            Result.failure(e)
+            emit(Result.failure(e))
         }
     }
 
-    override suspend fun postPayment(storeId: Int, paymentVO: PaymentVO): Result<Nothing?> {
-        return try {
+    override suspend fun postPayment(storeId: Int, paymentVO: PaymentVO): Flow<Result<Nothing?>> = flow {
+        try {
             orderDataSource.postPayment(
                 storeId,
                 PaymentDTO(
@@ -45,10 +48,11 @@ class AttOrderRepositoryImpl @Inject constructor(
                     useMileage = paymentVO.useMileage,
                     saveMileage = paymentVO.saveMileage
                 )
-            )
-            Result.success(null)
+            ).collect {
+                emit(Result.success(null))
+            }
         } catch (e: Exception) {
-            Result.failure(e)
+            emit(Result.failure(e))
         }
     }
 }

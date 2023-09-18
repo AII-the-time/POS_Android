@@ -1,5 +1,7 @@
 package org.swm.att.data.remote.datasource
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -9,10 +11,9 @@ import org.swm.att.domain.entity.HttpResponseStatus
 import retrofit2.Response
 
 abstract class BaseNetworkDataSource {
-
-    protected fun <T> checkResponse(response: Response<T>): T {
+    protected fun <T> checkResponse(response: Response<T>): Flow<T> {
         if (response.isSuccessful) {
-            return response.body()!!
+            return flow { emit(response.body()!!) }
         } else {
             val errorBody = response.errorBody()?.string()
             val errorResponse = jsonAdapter.fromJson(errorBody)

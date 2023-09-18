@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseViewModel
-import org.swm.att.common_ui.util.state.NetworkState
+import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
@@ -25,8 +27,8 @@ class HomeViewModel @Inject constructor(
     val midPhoneNumber: LiveData<Stack<String>> = _midPhoneNumber
     private val _endPhoneNumber = MutableLiveData<Stack<String>>()
     val endPhoneNumber: LiveData<Stack<String>> = _endPhoneNumber
-    private val _getMenuState: MutableLiveData<NetworkState<CategoriesVO>> = MutableLiveData(NetworkState.Init)
-    val getMenuState: LiveData<NetworkState<CategoriesVO>> = _getMenuState
+    private val _getMenuState = MutableStateFlow<UiState<CategoriesVO>>(UiState.Loading)
+    val getMenuState: StateFlow<UiState<CategoriesVO>> = _getMenuState
 
     fun setSelectedMenusVO(selectedMenusVO: OrderedMenusVO) {
         selectedMenusVO.menus?.let {
@@ -40,13 +42,15 @@ class HomeViewModel @Inject constructor(
 
     fun getCategories() {
         viewModelScope.launch(attExceptionHandler) {
-            // mock data를 위해 임시로 sotreId를 1로 지정
+            // mock data를 위해 임시로 storeId를 1로 지정
             attMenuRepository.getMenu(1)
-                .onSuccess {
-                    _getMenuState.postValue(NetworkState.Success(it))
-                }.onFailure {
-                    val errorMsg = if (it is HttpResponseException) it.message else "메뉴 불러오기 실패"
-                    _getMenuState.postValue(NetworkState.Failure(errorMsg))
+                .collect { result ->
+                    result.onSuccess { category ->
+                        _getMenuState.value = UiState.Success(category)
+                    }.onFailure { e ->
+                        val errorMsg = if (e is HttpResponseException) e.message else "메뉴 불러오기 실패"
+                        _getMenuState.value = UiState.Error(errorMsg)
+                    }
                 }
         }
     }
