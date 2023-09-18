@@ -1,6 +1,5 @@
 package org.swm.att.home.bills
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -43,7 +42,6 @@ class BillViewModel @Inject constructor(
                         _selectedBillInfoData.value = it
                         _selectedBillInfo.value = UiState.Success(it)
                     }.onFailure {
-                        Log.d("BillViewModel", "getSelectedBillInfo: $it")
                         val errorMsg = if (it is HttpResponseException) it.message else "결제 내역 불러오기 실패"
                         _selectedBillInfo.value = UiState.Error(errorMsg)
                     }

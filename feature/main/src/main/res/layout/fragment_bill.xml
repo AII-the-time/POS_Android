@@ -194,56 +194,77 @@
                     app:layout_constraintTop_toBottomOf="@id/rv_receipt_menu_items"
                     app:layout_constraintBottom_toTopOf="@id/btn_pay_cancel">
 
-                    <TextView
-                        android:id="@+id/tv_mileage_use_des"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_mileage_use"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/tv_mileage_use_des"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
+                        android:visibility="@{billViewModel.selectedBillInfoData.mileage == null ? View.GONE : View.VISIBLE}"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/tv_mileage_use"
-                        app:layout_constraintBottom_toTopOf="@id/tv_mileage_earn_des"/>
+                        app:layout_constraintBottom_toTopOf="@id/cl_mileage_earn">
 
-                    <TextView
-                        android:id="@+id/tv_mileage_use"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="1,400원"
-                        android:text="@{String.format(`%s원`,billViewModel.selectedBillInfoData.mileage.use.toString())}"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:layout_marginStart="9dp"
-                        app:layout_constraintTop_toTopOf="@id/tv_mileage_use_des"
-                        app:layout_constraintStart_toEndOf="@id/tv_mileage_use_des"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_mileage_use_des"/>
+                        <TextView
+                            android:id="@+id/tv_mileage_use_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_mileage_use_des"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/tv_mileage_use"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                    <TextView
-                        android:id="@+id/tv_mileage_earn_des"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tv_mileage_earn_des"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintTop_toBottomOf="@id/tv_mileage_use_des"
-                        app:layout_constraintStart_toStartOf="@id/tv_mileage_use_des"
-                        app:layout_constraintEnd_toStartOf="@id/tv_mileage_earn"
-                        app:layout_constraintBottom_toTopOf="@id/tv_pay_method_des"/>
+                        <TextView
+                            android:id="@+id/tv_mileage_use"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="1,400원"
+                            android:text="@{String.format(`%s원`,billViewModel.selectedBillInfoData.mileage.use.toString())}"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:layout_marginStart="9dp"
+                            app:layout_constraintTop_toTopOf="@id/tv_mileage_use_des"
+                            app:layout_constraintStart_toEndOf="@id/tv_mileage_use_des"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_mileage_use_des"/>
 
-                    <TextView
-                        android:id="@+id/tv_mileage_earn"
-                        android:layout_width="wrap_content"
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_mileage_earn"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="1,400원"
-                        android:text="@{String.format(`%s원`, billViewModel.selectedBillInfoData.mileage.save.toString())}"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:layout_marginStart="9dp"
-                        app:layout_constraintTop_toTopOf="@id/tv_mileage_earn_des"
-                        app:layout_constraintStart_toEndOf="@id/tv_mileage_earn_des"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_mileage_earn_des"/>
+                        android:visibility="@{billViewModel.selectedBillInfoData.mileage == null ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintBottom_toTopOf="@id/tv_pay_method_des"
+                        app:layout_constraintTop_toBottomOf="@id/cl_mileage_use"
+                        tools:layout_editor_absoluteX="11dp">
+
+                        <TextView
+                            android:id="@+id/tv_mileage_earn_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/tv_mileage_earn_des"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/tv_mileage_earn"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_mileage_earn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="9dp"
+                            android:text="@{String.format(`%s원`, billViewModel.selectedBillInfoData.mileage.save.toString())}"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_mileage_earn_des"
+                            app:layout_constraintStart_toEndOf="@id/tv_mileage_earn_des"
+                            app:layout_constraintTop_toTopOf="@id/tv_mileage_earn_des"
+                            tools:text="1,400원" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
                         android:id="@+id/tv_pay_method_des"
@@ -253,10 +274,10 @@
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="4dp"
-                        app:layout_constraintTop_toBottomOf="@id/tv_mileage_earn_des"
-                        app:layout_constraintStart_toStartOf="@id/tv_mileage_earn_des"
+                        app:layout_constraintTop_toBottomOf="@id/cl_mileage_earn"
+                        app:layout_constraintStart_toStartOf="@id/cl_mileage_earn"
                         app:layout_constraintEnd_toStartOf="@id/tv_pay_method"
-                        app:layout_constraintBottom_toTopOf="@id/tv_mileage_earn_des"/>
+                        app:layout_constraintBottom_toTopOf="@id/cl_mileage_earn"/>
 
                     <TextView
                         android:id="@+id/tv_pay_method"
