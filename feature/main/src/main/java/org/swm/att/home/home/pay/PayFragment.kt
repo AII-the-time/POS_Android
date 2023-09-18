@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
-import org.swm.att.common_ui.util.state.NetworkState
+import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.home.R
@@ -36,6 +40,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
         setPatchMileageStateObserver()
         setPostOrderStateObserver()
         setPostUseMileageStateObserver()
+        setPostPaymentStateObserver()
     }
 
     private fun initOrderedMenuRecyclerView() {
@@ -100,38 +105,58 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     }
 
     private fun setPatchMileageStateObserver() {
-        payViewModel.patchMileageState.observe(viewLifecycleOwner) {
-            when(it) {
-                is NetworkState.Init -> {}
-                is NetworkState.Success -> Toast.makeText(requireContext(), "보유 마일리지: ${it.data?.mileage}", Toast.LENGTH_SHORT).show()
-                is NetworkState.Failure -> {
-                    Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                payViewModel.patchMileageState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            Toast.makeText(requireContext(), "보유 마일리지: ${uiState.data?.mileage}", Toast.LENGTH_SHORT).show()
+                        }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        is UiState.Loading -> {/* nothing */}
+                    }
                 }
             }
         }
     }
 
     private fun setPostOrderStateObserver() {
-        payViewModel.postOrderState.observe(viewLifecycleOwner) {
-            when(it) {
-                is NetworkState.Init -> {}
-                is NetworkState.Success -> {
-                    Toast.makeText(requireContext(), "결제가 완료되었습니다!", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                payViewModel.postOrderState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        is UiState.Loading -> {/* nothing */}
+                    }
                 }
-                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setPostPaymentStateObserver() {
+        lifecycleScope.launch {
+            payViewModel.postOrderState.collect { uiState ->
+                when(uiState) {
+                    is UiState.Success -> {
+                        Toast.makeText(requireContext(), "결제가 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.action_fragment_pay_to_fragment_home)
+                    }
+                    is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    is UiState.Loading -> {/* nothing */}
+                }
             }
         }
     }
 
     private fun setPostUseMileageStateObserver() {
-        payViewModel.postUseMileageState.observe(viewLifecycleOwner) {
-            when(it) {
-                is NetworkState.Init -> {}
-                is NetworkState.Success -> {
-                    Toast.makeText(requireContext(), "마일리지 사용이 완료되었습니다!", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            payViewModel.postUseMileageState.collect { uiState ->
+                when(uiState) {
+                    is UiState.Success -> Toast.makeText(requireContext(), "마일리지 사용이 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                    is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    is UiState.Loading -> {/* nothing */}
                 }
-                is NetworkState.Failure -> Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
             }
         }
     }

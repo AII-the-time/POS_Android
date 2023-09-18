@@ -50,14 +50,15 @@ class MainViewModel @Inject constructor(
 
     private fun refreshToken(curRefresh: String) {
         viewModelScope.launch {
-            try {
-                attPosUserRepository.refreshToken(curRefresh).onSuccess { newTokenVO ->
-                    attPosUserRepository.saveRefreshToken(newTokenVO.accessToken)
-                    attPosUserRepository.saveAccessToken(newTokenVO.refreshToken)
+            attPosUserRepository.refreshToken(curRefresh)
+                .collect { result ->
+                    result.onSuccess {
+                        attPosUserRepository.saveRefreshToken(it.accessToken)
+                        attPosUserRepository.saveAccessToken(it.refreshToken)
+                    }.onFailure {
+                        Log.d("MainViewModel", "${it.message}")
+                    }
                 }
-            } catch (e: Exception) {
-                Log.d("MainViewModel", "${e.message}")
-            }
         }
     }
 
