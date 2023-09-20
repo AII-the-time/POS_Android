@@ -18,8 +18,8 @@ object Formatter {
         set(Calendar.MILLISECOND, 0)
     }.time
 
-    fun getStringBaseCurrencyUnit(currency: String): String {
-        return if (currency.isEmpty()) {
+    fun getStringBaseCurrencyUnit(currency: String?): String {
+        return if (currency.isNullOrEmpty()) {
             ""
         } else {
             decimalFormat.format(currency.replace(",", "").toDouble())
