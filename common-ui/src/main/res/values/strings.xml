@@ -48,6 +48,8 @@
 
     <!--  hint  -->
     <string name="edt_menu_custom_option">상세옵션 입력 시 작성</string>
+    <string name="edt_register_menu_name">메뉴 이름을 입력해주세요.</string>
+    <string name="edt_register_menu_price">ex) 6,000</string>
 
     <!--  etc  -->
     <string name="btn_plus_menu_item">+</string>
@@ -143,4 +145,21 @@
     <string name="tv_preorder_detail_hint">ex) 얼음 많이 주세요.</string>
     <string name="tv_hour_for_picker">시</string>
     <string name="tv_minute_for_picker">분</string>
+    <string name="tv_modify_category_name"><u>카테고리 수정</u></string>
+    <string name="tv_register_menu">메뉴 추가</string>
+    <string name="chip_manufactured_menu">제조 메뉴</string>
+    <string name="chip_none_manufactured_menu">비제조 메뉴</string>
+    <string name="tv_recipe_name_des">품목</string>
+    <string name="tv_recipe_amount_des">수량</string>
+    <string name="tv_recipe_unit_des">단위</string>
+    <string name="btn_modify_menu">레시피 수정</string>
+    <string name="btn_delete_menu">메뉴 삭제</string>
+    <string name="btn_modify_options">옵션 설정</string>
+    <string name="btn_register_menu">메뉴 등록</string>
+    <string name="tv_no_menu_recipe_des">레시피를 추가해주세요!</string>
+    <string name="tv_no_menu_option_des">옵션을 추가해주세요!</string>
+    <string name="tv_no_menu_des">메뉴를 등록해주세요!</string>
+    <string name="tv_price_unit">원</string>
+    <string name="tv_register_recipe_des">레시피 설정</string>
+    <string name="tv_register_option_des">옵션 설정</string>
 </resources>
