@@ -6,6 +6,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import org.swm.att.common_ui.base.BaseListAdapter
 import org.swm.att.common_ui.util.ItemDiffCallback
+import org.swm.att.domain.entity.response.BaseWithId
 import org.swm.att.domain.entity.response.OrderBillVO
 import org.swm.att.home.R
 
@@ -14,9 +15,9 @@ import org.swm.att.home.databinding.ItemBillBinding
 
 class OrderBillItemAdapter(
     private val billViewModel: BillViewModel
-): BaseListAdapter<OrderBillVO, BillViewHolder>(
+): BaseListAdapter<BaseWithId, BillViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { old, new -> old.orderId == new.orderId },
+        onItemsTheSame = { old, new -> old.id == new.id },
         onContentTheSame = { old, new -> old == new }
     )
 ) {
@@ -28,25 +29,27 @@ class OrderBillItemAdapter(
         return BillViewHolder(binding as ItemBillBinding)
     }
 
+    override fun bindViewHolder(holder: BillViewHolder, item: BaseWithId) {
+        holder.bind(item as OrderBillVO)
+    }
+
     override fun onBindViewHolder(holder: BillViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         val item = getItem(position)
         holder.itemView.setOnClickListener {
             // storeId 임시로 1로 설정
-            billViewModel.getSelectedBillInfo(1, item.orderId)
+            billViewModel.getSelectedBillInfo(1, item.id)
             billViewModel.setCurrentSelectedBillId(position)
         }
 
         if (position == 0) {
             // storeId 임시로 1로 설정
-            billViewModel.getSelectedBillInfo(1, item.orderId)
+            billViewModel.getSelectedBillInfo(1, item.id)
             holder.itemView.setBackgroundResource(R.color.main_trans)
         }
     }
 
-    override fun bindViewHolder(holder: BillViewHolder, item: OrderBillVO) {
-        holder.bind(item)
-    }
+
 }
 
 class BillViewHolder(
