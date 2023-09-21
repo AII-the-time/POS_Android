@@ -15,13 +15,13 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.home.R
-import org.swm.att.home.adapter.OrderBillItemAdapter
+import org.swm.att.home.adapter.SelectableItemAdapter
 import org.swm.att.home.adapter.OrderedMenuOfBillAdapter
 import org.swm.att.home.databinding.FragmentBillBinding
 
 @AndroidEntryPoint
 class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
-    private lateinit var orderBillItemAdapter: OrderBillItemAdapter
+    private lateinit var orderBillItemAdapter: SelectableItemAdapter
     private lateinit var orderedMenuOfBillAdapter: OrderedMenuOfBillAdapter
     private val billViewModel: BillViewModel by viewModels()
 
@@ -35,7 +35,7 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
     }
 
     private fun initOrderBillItemRecyclerView() {
-        orderBillItemAdapter = OrderBillItemAdapter(billViewModel)
+        orderBillItemAdapter = SelectableItemAdapter(billViewModel)
         binding.rvBills.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
