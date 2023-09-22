@@ -7,7 +7,8 @@ import java.util.UUID
 
 @JsonClass(generateAdapter = true)
 data class OptionDTO(
-    val id: String?,
+    @field:Json(name = "id")
+    val id: Int?,
     @field:Json(name = "optionType")
     val optionType: String?,
     @field:Json(name = "options")
@@ -15,9 +16,9 @@ data class OptionDTO(
 ) {
     fun toVO(): OptionVO {
         return OptionVO(
-            UUID.randomUUID().toString(),
-            optionType ?: "",
-            options?.map { it.toVO() } ?: listOf()
+            id = id ?: -1,
+            optionType = optionType ?: "Unknown",
+            options = options?.map { it.toVO() } ?: listOf()
         )
     }
 }

@@ -42,3 +42,11 @@ data class OrderedMenuOfBillVO(
     val options: List<OptionTypeVO>,
     val detail: String
 ): java.io.Serializable, BaseRecyclerViewItem()
+
+@Serializable
+data class OptionVO(
+    override val id: Int,
+    override val viewType: String = "OPTION",
+    val optionType: String,
+    val options: List<OptionTypeVO>
+): java.io.Serializable, BaseRecyclerViewItem()
