@@ -42,13 +42,3 @@ data class OrderedMenuOfBillVO(
     val options: List<OptionTypeVO>,
     val detail: String
 ): java.io.Serializable, BaseRecyclerViewItem()
-
-data class MenuWithRecipeVO(
-    override val id: Int,
-    override val viewType: String = "MENU_WITH_RECIPE",
-    val categoryName: String,
-    val menuName: String,
-    val price: BigDecimal,
-    val option: List<OptionVO>,
-    val recipe: List<RecipeVO>
-): BaseRecyclerViewItem()
