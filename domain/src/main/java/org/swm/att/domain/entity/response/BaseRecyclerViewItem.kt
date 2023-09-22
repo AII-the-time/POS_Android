@@ -50,3 +50,11 @@ data class OptionVO(
     val optionType: String,
     val options: List<OptionTypeVO>
 ): java.io.Serializable, BaseRecyclerViewItem()
+
+data class RecipeVO(
+    override val id: Int,
+    override val viewType: String = "RECIPE",
+    val name: String,
+    val amount: Int,
+    val unit: String
+): BaseRecyclerViewItem()
