@@ -1,9 +1,10 @@
 package org.swm.att.home.home.option
 
 import androidx.core.view.get
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import org.swm.att.common_ui.R
+import org.swm.att.common_ui.base.BaseInteractiveViewHolder
+import org.swm.att.domain.entity.response.BaseRecyclerViewItem
 import org.swm.att.domain.entity.response.OptionTypeVO
 import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.home.databinding.ItemMenuOptionBinding
@@ -11,12 +12,13 @@ import org.swm.att.home.databinding.ItemMenuOptionBinding
 class MenuOptionViewHolder(
     private val binding: ItemMenuOptionBinding,
     private val menuOptionViewModel: MenuOptionViewModel
-): RecyclerView.ViewHolder(binding.root) {
+): BaseInteractiveViewHolder(binding, menuOptionViewModel){
 
-    fun bind(menuOption: OptionVO) {
-        binding.option = menuOption
-        binding.cgMenuOptionType.tag = menuOption.id
-        setChipGroup(menuOption)
+    override fun bind(item: BaseRecyclerViewItem) {
+        val item = item as OptionVO
+        binding.option = item
+        binding.cgMenuOptionType.tag = item.id
+        setChipGroup(item)
         setChipGroupClickListener()
     }
 
