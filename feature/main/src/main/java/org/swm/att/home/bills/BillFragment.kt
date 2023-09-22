@@ -16,13 +16,13 @@ import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.home.R
 import org.swm.att.home.adapter.SelectableItemAdapter
-import org.swm.att.home.adapter.OrderedMenuOfBillAdapter
+import org.swm.att.home.adapter.BaseRecyclerViewAdapter
 import org.swm.att.home.databinding.FragmentBillBinding
 
 @AndroidEntryPoint
 class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
     private lateinit var orderBillItemAdapter: SelectableItemAdapter
-    private lateinit var orderedMenuOfBillAdapter: OrderedMenuOfBillAdapter
+    private lateinit var orderedMenuOfBillAdapter: BaseRecyclerViewAdapter
     private val billViewModel: BillViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,7 +52,7 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
             })
         }
 
-        orderedMenuOfBillAdapter = OrderedMenuOfBillAdapter()
+        orderedMenuOfBillAdapter = BaseRecyclerViewAdapter()
         binding.rvReceiptMenuItems.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
@@ -79,7 +79,6 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
                         is UiState.Success -> {
                             uiState.data?.let {
                                 orderedMenuOfBillAdapter.submitList(it.orderItems)
-
                             }
                         }
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()

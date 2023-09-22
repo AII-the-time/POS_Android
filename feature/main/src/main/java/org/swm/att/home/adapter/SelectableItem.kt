@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
-import org.swm.att.common_ui.base.BaseSelectableViewHolder
+import org.swm.att.common_ui.base.BaseRecyclerViewViewHolder
 import org.swm.att.common_ui.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.constant.SelectedItemViewType
-import org.swm.att.domain.entity.response.BaseSelectableItem
+import org.swm.att.domain.entity.response.BaseRecyclerViewItem
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.entity.response.OrderBillVO
 import org.swm.att.home.R
@@ -18,17 +18,17 @@ import org.swm.att.home.databinding.ItemRegisteredMenuBinding
 
 class SelectableItemAdapter(
     private val viewModel: BaseSelectableViewViewModel
-): ListAdapter<BaseSelectableItem, BaseSelectableViewHolder>(
+): ListAdapter<BaseRecyclerViewItem, BaseRecyclerViewViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { old, new -> old.id == new.id },
         onContentTheSame = { old, new -> old == new }
     )
 ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseSelectableViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseRecyclerViewViewHolder {
         return getViewHolder(parent, SelectedItemViewType.getViewTypeByOrdinal(viewType))
     }
 
-    override fun onBindViewHolder(holder: BaseSelectableViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseRecyclerViewViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
         holder.itemView.setOnClickListener {
@@ -56,7 +56,7 @@ class SelectableItemAdapter(
             }
         }
 
-        fun getViewHolder(viewGroup: ViewGroup, viewType: SelectedItemViewType): BaseSelectableViewHolder {
+        fun getViewHolder(viewGroup: ViewGroup, viewType: SelectedItemViewType): BaseRecyclerViewViewHolder {
             val binding: ViewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.context), getLayoutByViewType(viewType), viewGroup, false)
             return when(viewType) {
                 SelectedItemViewType.BILL -> BillViewHolder(binding as ItemBillBinding)
@@ -68,16 +68,16 @@ class SelectableItemAdapter(
 
 class BillViewHolder(
     private val binding: ItemBillBinding
-): BaseSelectableViewHolder(binding) {
-    override fun bind(item: BaseSelectableItem) {
+): BaseRecyclerViewViewHolder(binding) {
+    override fun bind(item: BaseRecyclerViewItem) {
         binding.bill = item as OrderBillVO
     }
 }
 
 class RegisteredMenuVIewHolder(
     private val binding: ItemRegisteredMenuBinding
-): BaseSelectableViewHolder(binding) {
-    override fun bind(item: BaseSelectableItem) {
+): BaseRecyclerViewViewHolder(binding) {
+    override fun bind(item: BaseRecyclerViewItem) {
         binding.menu = item as MenuVO
     }
 }
