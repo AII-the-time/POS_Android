@@ -79,7 +79,7 @@ class BillViewModel @Inject constructor(
         _currentSelectedBillId.value = position
     }
 
-    fun changeSelectedState() {
+    override fun changeSelectedState() {
         _selectedBillId.postValue(currentSelectedBillId.value)
     }
 
