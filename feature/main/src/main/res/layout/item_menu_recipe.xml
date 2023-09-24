@@ -2,19 +2,28 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="recipeVO"
+            type="org.swm.att.domain.entity.response.RecipeVO" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_recipe_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:backgroundTint="@color/black"
-            android:textCursorDrawable="@color/black"
+            android:backgroundTint="@color/main_trans"
+            android:text="@{recipeVO.name}"
             android:textColor="@color/black"
             android:hint="ex) 원두"
+            android:textCursorDrawable="@color/main_trans"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:maxLength="10"
@@ -30,9 +39,8 @@
             android:id="@+id/et_recipe_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:backgroundTint="@color/black"
-            android:textCursorDrawable="@color/black"
+            android:backgroundTint="@color/main_trans"
+            android:text="@{String.valueOf(recipeVO.amount)}"
             android:textColor="@color/black"
             android:hint="ex) 20"
             android:paddingStart="10dp"
@@ -40,6 +48,7 @@
             android:maxLength="10"
             android:inputType="text"
             android:textSize="14sp"
+            android:textCursorDrawable="@color/main_trans"
             app:layout_constraintHorizontal_weight="1"
             android:layout_marginStart="20dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -49,18 +58,20 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_recipe_unit"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="@color/main_color"
             android:hint="단위"
             android:layout_marginStart="20dp"
-            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/et_recipe_amount"
             app:layout_constraintBottom_toBottomOf="@id/et_recipe_amount"
             app:layout_constraintStart_toEndOf="@id/et_recipe_amount"
             app:layout_constraintEnd_toStartOf="@id/btn_delete_recipe">
 
             <AutoCompleteTextView
+                android:id="@+id/act_menu_unit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none" />
@@ -73,6 +84,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/ic_system_minus_mdpi"
+            android:visibility="invisible"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/til_recipe_unit"
