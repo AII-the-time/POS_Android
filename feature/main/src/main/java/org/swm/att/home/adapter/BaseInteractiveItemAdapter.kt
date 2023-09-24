@@ -13,9 +13,8 @@ import org.swm.att.domain.entity.response.BaseRecyclerViewItem
 import org.swm.att.home.R
 import org.swm.att.home.databinding.ItemMenuOptionBinding
 import org.swm.att.home.databinding.ItemMenuRecipeBinding
-import org.swm.att.home.home.option.MenuOptionViewHolder
-import org.swm.att.home.home.option.MenuOptionViewModel
 import org.swm.att.home.recipe.MenuRecipeViewHolder
+import org.swm.att.home.recipe.MenuSelectedOptionViewHolder
 import org.swm.att.home.recipe.RecipeViewModel
 
 class BaseInteractiveItemAdapter(
@@ -42,8 +41,15 @@ class BaseInteractiveItemAdapter(
     private fun getViewHolder(viewGroup: ViewGroup, viewType: BaseInteractiveViewType): BaseInteractiveViewHolder {
         val binding: ViewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.context), getLayoutByViewType(viewType), viewGroup, false)
         return when(viewType) {
-            BaseInteractiveViewType.RECIPE -> MenuRecipeViewHolder(binding as ItemMenuRecipeBinding, viewModel as RecipeViewModel)
-            BaseInteractiveViewType.OPTION -> MenuOptionViewHolder(binding as ItemMenuOptionBinding, viewModel as MenuOptionViewModel)
+            BaseInteractiveViewType.RECIPE -> MenuRecipeViewHolder(
+                binding as ItemMenuRecipeBinding,
+                viewModel as RecipeViewModel
+            )
+
+            BaseInteractiveViewType.OPTION -> MenuSelectedOptionViewHolder(
+                binding as ItemMenuOptionBinding,
+                viewModel as RecipeViewModel
+            )
         }
     }
 
