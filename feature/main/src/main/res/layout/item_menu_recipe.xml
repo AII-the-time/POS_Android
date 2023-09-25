@@ -84,7 +84,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/ic_system_minus_mdpi"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/til_recipe_unit"
