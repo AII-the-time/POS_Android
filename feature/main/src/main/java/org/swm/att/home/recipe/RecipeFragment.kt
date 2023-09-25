@@ -1,9 +1,10 @@
 package org.swm.att.home.recipe
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.annotation.MenuRes
 import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -30,6 +31,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMenusRecyclerView()
+        setCategoryDetailBtnClickListener()
         setObserver()
         setDataBinding()
         initData()
@@ -56,6 +58,32 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             layoutManager = LinearLayoutManager(requireContext())
             adapter = optionsAdapter
         }
+    }
+
+    private fun setCategoryDetailBtnClickListener() {
+        binding.ibCategoryDetail.setOnClickListener { view ->
+            showMenu(view, R.menu.item_category_detail)
+        }
+    }
+
+    private fun showMenu(view: View, @MenuRes menuRes: Int) {
+        val popUp = PopupMenu(requireContext(), view)
+        popUp.menuInflater.inflate(menuRes, popUp.menu)
+
+        popUp.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.item_category_modify -> {
+                    /*todo*/
+                    true
+                }
+                R.id.item_category_delete -> {
+                    /*todo*/
+                    true
+                }
+                else -> false
+            }
+        }
+        popUp.show()
     }
 
     private fun setObserver() {
@@ -96,8 +124,6 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             binding.edtCategoryName.setText(String.format("%s(%d건)", it.category, it.menus.size))
         }
         recipeViewModel.selectedMenuInfo.observe(viewLifecycleOwner) {
-            Log.d("RecipeFragment", "setObserver: ${it.recipe}")
-            Log.d("RecipeFragment", "setObserver: ${it.option}")
             recipesAdapter.submitList(it.recipe)
             optionsAdapter.submitList(it.option)
         }

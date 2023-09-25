@@ -62,16 +62,14 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/rv_category_menu_list"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tv_modify_category"/>
+                app:layout_constraintEnd_toStartOf="@id/ib_category_detail"/>
 
-            <TextView
-                android:id="@+id/tv_modify_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tv_modify_category_name"
-                android:textColor="@color/black"
-                android:textSize="12sp"
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_category_detail"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginEnd="20dp"
+                android:background="@drawable/ic_system_more_bk_mdpi"
                 app:layout_constraintStart_toEndOf="@id/edt_category_name"
                 app:layout_constraintTop_toTopOf="@id/edt_category_name"
                 app:layout_constraintBottom_toBottomOf="@id/edt_category_name"
@@ -288,6 +286,7 @@
                             android:id="@+id/divider_menu_recipe_section"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/main_trans"
                             app:layout_constraintBottom_toTopOf="@id/cl_menu_recipe_section"
                             app:layout_constraintTop_toBottomOf="@id/tv_register_recipe_des" />
 
@@ -355,6 +354,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:background="@drawable/ic_system_plus_mdpi"
+                                    android:visibility="gone"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@id/tv_recipe_unit_des"
@@ -406,6 +406,7 @@
                             android:id="@+id/divider_menu_option_section"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/main_trans"
                             app:layout_constraintBottom_toTopOf="@id/cl_menu_option_section"
                             app:layout_constraintTop_toBottomOf="@id/tv_register_menu_option_des" />
 

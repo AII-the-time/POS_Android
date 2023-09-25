@@ -162,6 +162,9 @@
     <string name="tv_register_recipe_des">레시피 설정</string>
     <string name="tv_register_option_des">옵션 설정</string>
     <string name="tv_category_no_item">메뉴를 등록해주세요!</string>
+    <string name="tv_category_modify">수정</string>
+    <string name="tv_category_delete">삭제</string>
+    <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>
         <item>ml</item>
