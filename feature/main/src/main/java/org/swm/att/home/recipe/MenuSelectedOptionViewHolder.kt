@@ -1,29 +1,35 @@
-package org.swm.att.home.home.option
+package org.swm.att.home.recipe
 
-import androidx.core.view.get
+import androidx.core.view.children
+import androidx.core.view.doOnAttach
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.google.android.material.chip.Chip
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.base.BaseInteractiveViewHolder
 import org.swm.att.domain.entity.response.BaseRecyclerViewItem
-import org.swm.att.domain.entity.response.OptionTypeVO
 import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.home.databinding.ItemMenuOptionBinding
 
-class MenuOptionViewHolder(
+class MenuSelectedOptionViewHolder(
     private val binding: ItemMenuOptionBinding,
-    private val menuOptionViewModel: MenuOptionViewModel
-): BaseInteractiveViewHolder(binding, menuOptionViewModel){
+    private val menuRecipeViewModel: RecipeViewModel
+) : BaseInteractiveViewHolder(binding, menuRecipeViewModel) {
+    private lateinit var lifecycleOwner: LifecycleOwner
+
+    init {
+        itemView.doOnAttach {
+            lifecycleOwner = it.findViewTreeLifecycleOwner()!!
+            setObserver()
+        }
+    }
 
     override fun bind(item: BaseRecyclerViewItem) {
-        val item = item as OptionVO
-        binding.option = item
-        binding.cgMenuOptionType.tag = item.id
+        binding.option = item as OptionVO
         setChipGroup(item)
-        setChipGroupClickListener()
     }
 
     private fun setChipGroup(menuOption: OptionVO) {
-        binding.cgMenuOptionType.isSingleSelection = true
         menuOption.options.let {
             for (index in it.indices) {
                 val type = it[index]
@@ -39,22 +45,18 @@ class MenuOptionViewHolder(
                     } else {
                         context.getString(R.string.tv_menu_option_type_with_no_price, type.name)
                     }
+                    isChecked = true
+                    isEnabled = false
                 }
                 binding.cgMenuOptionType.addView(chip)
             }
         }
     }
 
-    private fun setChipGroupClickListener() {
-        binding.cgMenuOptionType.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId != -1) {
-                val optionType = group[checkedId].tag as OptionTypeVO
-                menuOptionViewModel.changeSelectedOption(
-                    binding.cgMenuOptionType.tag.toString(),
-                    optionType
-                )
-            } else {
-                menuOptionViewModel.removeOption(binding.cgMenuOptionType.tag.toString())
+    private fun setObserver() {
+        menuRecipeViewModel.isModify.observe(lifecycleOwner) {
+            binding.cgMenuOptionType.children.iterator().forEach { chip ->
+                chip.isEnabled = it
             }
         }
     }

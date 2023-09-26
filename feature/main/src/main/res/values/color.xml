@@ -2,4 +2,5 @@
 <resources>
     <color name="main_trans">#5B312222</color>
     <color name="back_color">#F5F4F3</color>
+    <color name="white">#FFFFFF</color>
 </resources>

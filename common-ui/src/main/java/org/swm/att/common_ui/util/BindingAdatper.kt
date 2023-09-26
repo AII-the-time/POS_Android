@@ -1,7 +1,10 @@
 package org.swm.att.common_ui.util
 
+import android.os.Build
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.databinding.BindingAdapter
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
@@ -158,4 +161,12 @@ fun setEndDateText(view: TextView, endDateText: Date?) {
     } else {
         null
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.Q)
+@BindingAdapter("setEditTextStyleByIsModify")
+fun setEditTextStyleByIsModify(view: AppCompatEditText, isModify: Boolean) {
+    view.isEnabled = isModify
+    view.isFocusable = isModify
+    view.isFocusableInTouchMode = isModify
 }
