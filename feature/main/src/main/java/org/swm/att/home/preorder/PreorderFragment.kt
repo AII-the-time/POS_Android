@@ -13,13 +13,13 @@ import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.home.MainViewModel
 import org.swm.att.home.R
-import org.swm.att.home.adapter.OrderedMenuOfBillAdapter
+import org.swm.att.home.adapter.BaseRecyclerViewAdapter
 import org.swm.att.home.adapter.PreorderListItemAdapter
 import org.swm.att.home.constant.NavDestinationType
 import org.swm.att.home.databinding.FragmentPreorderBinding
 
 class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment_preorder) {
-    private lateinit var preorderMenuOfBillAdapter: OrderedMenuOfBillAdapter
+    private lateinit var preorderMenuOfBillAdapter: BaseRecyclerViewAdapter
     private lateinit var validPreorderListAdapter: PreorderListItemAdapter
     private lateinit var pastPreorderListAdapter: PreorderListItemAdapter
     private val preorderViewModel: PreorderViewModel by viewModels()
@@ -37,7 +37,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     }
 
     private fun initPreorderRecyclerView() {
-        preorderMenuOfBillAdapter = OrderedMenuOfBillAdapter()
+        preorderMenuOfBillAdapter = BaseRecyclerViewAdapter()
         binding.rvPreorderMenuItems.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())

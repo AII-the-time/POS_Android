@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.swm.att.common_ui.base.BaseViewModel
+import org.swm.att.common_ui.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.OrderBillVO
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BillViewModel @Inject constructor(
     private val attOrderRepository: AttOrderRepository
-): BaseViewModel() {
+): BaseSelectableViewViewModel() {
     private val _selectedBillInfo = MutableStateFlow<UiState<OrderReceiptVO>>(UiState.Loading)
     val selectedBillInfo: StateFlow<UiState<OrderReceiptVO>> = _selectedBillInfo
     private val _selectedBillInfoData = MutableLiveData<OrderReceiptVO>()
@@ -41,10 +41,10 @@ class BillViewModel @Inject constructor(
     val filteringEndDate: LiveData<Date?> = _filteringEndDate
     private var page: Int = 1
 
-    fun getSelectedBillInfo(storeId: Int, selectedBillId: Int) {
+    override fun getSelectedItem(storeId: Int, selectedItemId: Int) {
         viewModelScope.launch(attExceptionHandler) {
             // 추후 storeId, selectedBillId 사용
-            attOrderRepository.getOrderBill(storeId, selectedBillId)
+            attOrderRepository.getOrderBill(storeId, selectedItemId)
                 .collect { result ->
                     result.onSuccess {
                         _selectedBillInfoData.value = it
@@ -75,12 +75,11 @@ class BillViewModel @Inject constructor(
         }
     }
 
-
-    fun setCurrentSelectedBillId(currentSelectedBillId: Int) {
-        _currentSelectedBillId.value = currentSelectedBillId
+    override fun setCurrentSelectedItemId(position: Int) {
+        _currentSelectedBillId.value = position
     }
 
-    fun changeSelectedState() {
+    override fun changeSelectedState() {
         _selectedBillId.postValue(currentSelectedBillId.value)
     }
 

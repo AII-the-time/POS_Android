@@ -22,7 +22,7 @@ data class OrderBillDTO(
     val createdAt: String?
 ) {
     fun toVO() = OrderBillVO(
-        orderId = orderId ?: -1,
+        id = orderId ?: -1,
         paymentState = PayState.toPayState(paymentState ?: "Unknown"),
         paymentMethod = PayMethod.toPayMethod(paymentMethod ?: "Unknown"),
         totalCount = totalCount ?: -1,

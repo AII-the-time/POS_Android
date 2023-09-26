@@ -33,7 +33,6 @@
     <string name="key_pad_0">0</string>
     <string name="key_pad_clear">지우기</string>
     <string name="key_pad_enter">완료</string>
-
     <!--  description  -->
     <string name="menu_home_des">menu for home</string>
     <string name="menu_order_des">menu for order</string>
@@ -45,16 +44,25 @@
     <string name="menu_setting_des">menu for setting</string>
     <string name="category_tab_layout_des">tab layout for category</string>
     <string name="close_dialog">close dialog</string>
-
     <!--  hint  -->
     <string name="edt_menu_custom_option">상세옵션 입력 시 작성</string>
-
+    <string name="edt_register_menu_name">메뉴 이름을 입력해주세요.</string>
+    <string name="edt_register_menu_price">ex) 6,000</string>
+    <!--  format  -->
+    <string name="tv_filtering_start">%s</string>
+    <string name="tv_filtering_end">- %s</string>
+    <string name="tv_custom_price_text">%s원</string>
+    <string name="tv_custom_total_count_text">총 %s개 금액</string>
+    <string name="tv_mileage_text">%s점</string>
+    <string name="tv_customer_number">%s 님</string>
+    <string name="tv_visit_time">%d번째 방문</string>
+    <string name="tv_menu_option_type_with_price">%s(+%d원)</string>
+    <string name="tv_menu_option_type_with_no_price">%s</string>
+    <string name="tv_use_all_mileage">사용가능 포인트 전체 사용(%s점)</string>
     <!--  etc  -->
     <string name="btn_plus_menu_item">+</string>
     <string name="btn_minus_menu_item">-</string>
     <string name="btn_delete_selected_menu_item">x</string>
-    <string name="tv_custom_price_text">%s원</string>
-    <string name="tv_custom_total_count_text">총 %s개 금액</string>
     <string name="cafe_pos">CAFEPOS</string>
     <string name="tv_order_des">주문 내역</string>
     <string name="tv_cancel_all"><u>내역 전체취소</u></string>
@@ -68,14 +76,11 @@
     <string name="pass_earn_mileage">적립 안함</string>
     <string name="tv_modify_order"><u>주문 수정</u></string>
     <string name="tv_customer_info_des">회원 정보</string>
-    <string name="tv_customer_number">%s 님</string>
-    <string name="tv_visit_time">%d번째 방문</string>
     <string name="tv_last_visit_date_des">마지막 방문</string>
     <string name="tv_earned_mileage_des">적립 예상 포인트</string>
     <string name="tv_mileage_des">포인트 현황</string>
     <string name="tv_cur_mileage_des">사용 가능한 포인트</string>
     <string name="tv_use_mileage_des">오늘 사용 포인트</string>
-    <string name="tv_mileage_text">%s점</string>
     <string name="tv_payment_des">결제 내역</string>
     <string name="tv_total_price_des">총 금액</string>
     <string name="tv_total_mileage_use_des">포인트 결제</string>
@@ -86,12 +91,9 @@
     <string name="tv_menu_option_picker_des">옵션 추가</string>
     <string name="tv_menu_custom_option_des">상세옵션</string>
     <string name="btn_menu_option_add">옵션 추가</string>
-    <string name="tv_menu_option_type_with_price">%s(+%d원)</string>
-    <string name="tv_menu_option_type_with_no_price">%s</string>
     <string name="btn_use_mileage">선결제/포인트 사용</string>
     <string name="btn_not_use">사용 안 함</string>
     <string name="tv_use_mileage_dl_des">포인트 사용</string>
-    <string name="tv_use_all_mileage">사용가능 포인트 전체 사용(%s점)</string>
     <string name="btn_register_new_customer">마일리지 등록</string>
     <string name="tv_search_result_des">검색결과</string>
     <string name="tv_receipt_des">영수증</string>
@@ -110,8 +112,7 @@
     <string name="tv_bill_filtering_des">기간별 검색</string>
     <string name="btn_bill_filtering_search">검색</string>
     <string name="tv_no_filtering">전체</string>
-    <string name="tv_filtering_start">%s</string>
-    <string name="tv_filtering_end">- %s</string>
+
     <string name="tv_preorder_input_user_info">고객 정보</string>
     <string name="tv_preorder_request_des">요청사항</string>
     <string name="tv_preorder_request_hint">ex) 얼음 많이 주세요.</string>
@@ -143,4 +144,30 @@
     <string name="tv_preorder_detail_hint">ex) 얼음 많이 주세요.</string>
     <string name="tv_hour_for_picker">시</string>
     <string name="tv_minute_for_picker">분</string>
+    <string name="tv_modify_category_name"><u>카테고리 수정</u></string>
+    <string name="tv_register_menu">메뉴 추가</string>
+    <string name="chip_manufactured_menu">제조 메뉴</string>
+    <string name="chip_none_manufactured_menu">비제조 메뉴</string>
+    <string name="tv_recipe_name_des">품목</string>
+    <string name="tv_recipe_amount_des">수량</string>
+    <string name="tv_recipe_unit_des">단위</string>
+    <string name="btn_modify_menu">레시피 수정</string>
+    <string name="btn_delete_menu">메뉴 삭제</string>
+    <string name="btn_modify_options">옵션 설정</string>
+    <string name="btn_register_menu">메뉴 등록</string>
+    <string name="tv_no_menu_recipe_des">레시피를 추가해주세요!</string>
+    <string name="tv_no_menu_option_des">옵션을 추가해주세요!</string>
+    <string name="tv_no_menu_des">메뉴를 등록해주세요!</string>
+    <string name="tv_price_unit">원</string>
+    <string name="tv_register_recipe_des">레시피 설정</string>
+    <string name="tv_register_option_des">옵션 설정</string>
+    <string name="tv_category_no_item">메뉴를 등록해주세요!</string>
+    <string name="tv_category_modify">수정</string>
+    <string name="tv_category_delete">삭제</string>
+    <!--  레시피 unit  -->
+    <string-array name="recipe_unit">
+        <item>g</item>
+        <item>ml</item>
+        <item>개</item>
+    </string-array>
 </resources>
