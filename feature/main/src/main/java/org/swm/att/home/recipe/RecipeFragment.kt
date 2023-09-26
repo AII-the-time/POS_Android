@@ -32,6 +32,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         super.onViewCreated(view, savedInstanceState)
         initMenusRecyclerView()
         setCategoryDetailBtnClickListener()
+        setRecipeBtnsClickListener()
         setObserver()
         setDataBinding()
         initData()
@@ -66,21 +67,31 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         }
     }
 
+    private fun setRecipeBtnsClickListener() {
+        binding.btnModifyRecipe.setOnClickListener {
+            recipeViewModel.changeModifyState()
+        }
+        binding.btnRegisterRecipe.setOnClickListener {
+            recipeViewModel.changeModifyState()
+        }
+    }
+
     private fun showMenu(view: View, @MenuRes menuRes: Int) {
         val popUp = PopupMenu(requireContext(), view)
-        popUp.menuInflater.inflate(menuRes, popUp.menu)
-
-        popUp.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.item_category_modify -> {
-                    /*todo*/
-                    true
+        popUp.apply {
+            menuInflater.inflate(menuRes, popUp.menu)
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.item_category_modify -> {
+                        /*todo*/
+                        true
+                    }
+                    R.id.item_category_delete -> {
+                        /*todo*/
+                        true
+                    }
+                    else -> false
                 }
-                R.id.item_category_delete -> {
-                    /*todo*/
-                    true
-                }
-                else -> false
             }
         }
         popUp.show()
@@ -167,6 +178,9 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         addItemChip.apply {
             id = chipId
             text = "+"
+            setOnClickListener {
+                // 새로운 카테고리 추가 api 연결
+            }
         }
         binding.cgMenuCategories.addView(addItemChip)
     }

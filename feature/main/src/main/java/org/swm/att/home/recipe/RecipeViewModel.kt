@@ -34,6 +34,9 @@ class RecipeViewModel @Inject constructor(
     private val _getCategories = MutableStateFlow<UiState<CategoriesVO>>(UiState.Loading)
     val getCategories: StateFlow<UiState<CategoriesVO>> = _getCategories
 
+    private val _isModify = MutableLiveData(false)
+    val isModify: LiveData<Boolean> = _isModify
+
     override fun getSelectedItem(storeId: Int, selectedItemId: Int) {
         _selectedMenuInfo.postValue(
             MenuWithRecipeVO(
@@ -128,6 +131,10 @@ class RecipeViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun changeModifyState() {
+        _isModify.postValue(isModify.value?.not() ?: false)
     }
 
 }

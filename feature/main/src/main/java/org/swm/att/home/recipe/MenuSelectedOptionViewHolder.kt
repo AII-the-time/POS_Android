@@ -1,5 +1,9 @@
 package org.swm.att.home.recipe
 
+import androidx.core.view.children
+import androidx.core.view.doOnAttach
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.google.android.material.chip.Chip
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.base.BaseInteractiveViewHolder
@@ -11,6 +15,15 @@ class MenuSelectedOptionViewHolder(
     private val binding: ItemMenuOptionBinding,
     private val menuRecipeViewModel: RecipeViewModel
 ) : BaseInteractiveViewHolder(binding, menuRecipeViewModel) {
+    private lateinit var lifecycleOwner: LifecycleOwner
+
+    init {
+        itemView.doOnAttach {
+            lifecycleOwner = it.findViewTreeLifecycleOwner()!!
+            setObserver()
+        }
+    }
+
     override fun bind(item: BaseRecyclerViewItem) {
         binding.option = item as OptionVO
         setChipGroup(item)
@@ -36,6 +49,14 @@ class MenuSelectedOptionViewHolder(
                     isEnabled = false
                 }
                 binding.cgMenuOptionType.addView(chip)
+            }
+        }
+    }
+
+    private fun setObserver() {
+        menuRecipeViewModel.isModify.observe(lifecycleOwner) {
+            binding.cgMenuOptionType.children.iterator().forEach { chip ->
+                chip.isEnabled = it
             }
         }
     }
