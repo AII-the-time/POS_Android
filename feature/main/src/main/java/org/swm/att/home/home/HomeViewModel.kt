@@ -13,6 +13,7 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
+import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.repository.AttMenuRepository
 import java.util.Stack
 import javax.inject.Inject
@@ -29,6 +30,8 @@ class HomeViewModel @Inject constructor(
     val endPhoneNumber: LiveData<Stack<String>> = _endPhoneNumber
     private val _getMenuState = MutableStateFlow<UiState<CategoriesVO>>(UiState.Loading)
     val getMenuState: StateFlow<UiState<CategoriesVO>> = _getMenuState
+    private val _getMenuInfoState = MutableStateFlow<UiState<MenuVO>>(UiState.Loading)
+    val getMenuInfoState: StateFlow<UiState<MenuVO>> = _getMenuInfoState
 
     fun setSelectedMenusVO(selectedMenusVO: OrderedMenusVO) {
         selectedMenusVO.menus?.let {
@@ -52,6 +55,31 @@ class HomeViewModel @Inject constructor(
                         _getMenuState.value = UiState.Error(errorMsg)
                     }
                 }
+        }
+    }
+
+    fun getMenuInfo(menuId: Int) {
+        _getMenuInfoState.value = UiState.Loading
+        viewModelScope.launch(attExceptionHandler) {
+            attMenuRepository.getMenuInfo(1, menuId).collect { result ->
+                result.onSuccess { menu ->
+                    if (menu.option.isNotEmpty()) {
+                        _getMenuInfoState.value = UiState.Success(menu)
+                    } else {
+                        addSelectedMenu(
+                            OrderedMenuVO(
+                                id = menu.id,
+                                name = menu.name,
+                                price = menu.price,
+                                options = emptyList()
+                            )
+                        )
+                    }
+                }.onFailure {  e ->
+                    val errorMsg = if (e is HttpResponseException) e.message else "메뉴 옵션 불러오기 실패"
+                    _getMenuInfoState.value = UiState.Error(errorMsg)
+                }
+            }
         }
     }
 

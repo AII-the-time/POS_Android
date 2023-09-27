@@ -13,14 +13,17 @@ data class MenuDTO(
     @field:Json(name = "price")
     val price: Int?,
     @field:Json(name = "option")
-    val option: List<OptionDTO>?
+    val option: List<OptionDTO>?,
+    @field:Json(name = "recipe")
+    val recipe: List<RecipeDTO>?
 ) {
     fun toVO(): MenuVO {
         return MenuVO(
             id = id ?: -1,
             name = name ?: "",
             price = price ?: -1,
-            option = option?.map { it.toVO() } ?: listOf()
+            option = option?.map { it.toVO() } ?: listOf(),
+            recipe = recipe?.map { it.toVO() } ?: listOf(),
         )
     }
 }
