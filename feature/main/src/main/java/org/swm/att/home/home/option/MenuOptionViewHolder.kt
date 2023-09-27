@@ -17,7 +17,7 @@ class MenuOptionViewHolder(
     override fun bind(item: BaseRecyclerViewItem) {
         val item = item as OptionVO
         binding.option = item
-        binding.cgMenuOptionType.tag = item.id
+        binding.cgMenuOptionType.tag = item
         setChipGroup(item)
         setChipGroupClickListener()
     }
@@ -50,7 +50,7 @@ class MenuOptionViewHolder(
             if (checkedId != -1) {
                 val optionType = group[checkedId].tag as OptionTypeVO
                 menuOptionViewModel.changeSelectedOption(
-                    binding.cgMenuOptionType.tag.toString(),
+                    group.tag.toString(),
                     optionType
                 )
             } else {

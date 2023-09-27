@@ -24,6 +24,7 @@ import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
 import org.swm.att.home.home.keypad_dialog.EarnMileageDialog
 import org.swm.att.home.home.menu.MenuFragment
+import org.swm.att.home.home.option.MenuOptionDialog
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -41,6 +42,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setCategories()
         setCategoriesObserver()
         setSelectedMenuObserver()
+        setSelectedMenuInfoObserver()
         setDataBinding()
         setOrderBtnListener()
         setPreorderBtnClickListener()
@@ -106,6 +108,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         homeViewModel.selectedMenuMap.observe(viewLifecycleOwner) {
             it?.let {
                 selectedMenuAdapter.submitList(it.toList())
+            }
+        }
+    }
+
+    private fun setSelectedMenuInfoObserver() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.getMenuInfoState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Loading -> {/* nothing */ }
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                val menuOptionDialog = MenuOptionDialog(homeViewModel, it)
+                                menuOptionDialog.show(
+                                    requireActivity().supportFragmentManager,
+                                    MenuOptionDialog::class.java.simpleName
+                                )
+                            }
+                        }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }

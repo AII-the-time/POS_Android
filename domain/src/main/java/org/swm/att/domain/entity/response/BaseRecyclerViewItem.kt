@@ -28,6 +28,7 @@ data class MenuVO(
     val name: String,
     val price: Int,
     val option: List<OptionVO>,
+    val recipe: List<RecipeVO>,
     val detail: String? = null
 ): java.io.Serializable, BaseRecyclerViewItem()
 
@@ -51,10 +52,11 @@ data class OptionVO(
     val options: List<OptionTypeVO>
 ): java.io.Serializable, BaseRecyclerViewItem()
 
+@Serializable
 data class RecipeVO(
     override val id: Int,
     override val viewType: String = "RECIPE",
     val name: String,
     val amount: Int,
     val unit: String
-): BaseRecyclerViewItem()
+): java.io.Serializable, BaseRecyclerViewItem()
