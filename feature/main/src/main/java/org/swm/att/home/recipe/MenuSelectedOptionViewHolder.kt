@@ -30,6 +30,7 @@ class MenuSelectedOptionViewHolder(
     }
 
     private fun setChipGroup(menuOption: OptionVO) {
+        binding.cgMenuOptionType.removeAllViews()
         menuOption.options.let {
             for (index in it.indices) {
                 val type = it[index]
@@ -45,7 +46,7 @@ class MenuSelectedOptionViewHolder(
                     } else {
                         context.getString(R.string.tv_menu_option_type_with_no_price, type.name)
                     }
-                    isChecked = true
+                    isChecked = type.isSelectable
                     isEnabled = false
                 }
                 binding.cgMenuOptionType.addView(chip)
