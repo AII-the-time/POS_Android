@@ -51,6 +51,10 @@ class RecipeViewModel @Inject constructor(
         _currentSelectedMenuId.value = position
     }
 
+    fun setSelectedMenuId(menuId: Int) {
+        _selectedMenuId.value = menuId
+    }
+
     fun setSelectedCategory(category: CategoryVO) {
         _selectedCategory.value = category
     }
