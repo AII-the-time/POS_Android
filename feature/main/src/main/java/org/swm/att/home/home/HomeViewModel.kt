@@ -15,7 +15,6 @@ import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
-import java.util.Stack
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,10 +23,6 @@ class HomeViewModel @Inject constructor(
 ): BaseViewModel() {
     private val _selectedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
     val selectedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _selectedMenuMap
-    private val _midPhoneNumber = MutableLiveData<Stack<String>>()
-    val midPhoneNumber: LiveData<Stack<String>> = _midPhoneNumber
-    private val _endPhoneNumber = MutableLiveData<Stack<String>>()
-    val endPhoneNumber: LiveData<Stack<String>> = _endPhoneNumber
     private val _getMenuState = MutableStateFlow<UiState<CategoriesVO>>(UiState.Loading)
     val getMenuState: StateFlow<UiState<CategoriesVO>> = _getMenuState
     private val _getMenuInfoState = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
@@ -121,39 +116,6 @@ class HomeViewModel @Inject constructor(
         _selectedMenuMap.postValue(mutableMapOf())
     }
 
-    fun addPhoneNumber(number: String) {
-        val mid = _midPhoneNumber.value ?: Stack()
-        if (mid.size < 4) {
-            mid.push(number)
-            _midPhoneNumber.postValue(mid)
-        } else {
-            val end = _endPhoneNumber.value ?: Stack()
-            if(end.size < 4) {
-                end.push(number)
-                _endPhoneNumber.postValue(end)
-            }
-        }
-    }
-
-    fun removePhoneNumber() {
-        val end = _endPhoneNumber.value ?: Stack()
-        if (end.isNotEmpty()) {
-            end.pop()
-            _endPhoneNumber.value = end
-        } else {
-            val mid = _midPhoneNumber.value ?: Stack()
-            if (mid.isNotEmpty()) {
-                mid.pop()
-                _midPhoneNumber.value = mid
-            }
-        }
-    }
-
-    fun clearPhoneNumber() {
-        _midPhoneNumber.postValue(Stack())
-        _endPhoneNumber.postValue(Stack())
-    }
-
     fun clearSelectedMenuList() {
         _selectedMenuMap.postValue(mutableMapOf())
     }
@@ -167,15 +129,5 @@ class HomeViewModel @Inject constructor(
         }
 
         return OrderedMenusVO(orderedMenuList)
-    }
-
-    fun getPhoneNumber(): String {
-        val mid = _midPhoneNumber.value ?: Stack()
-        val end = _endPhoneNumber.value ?: Stack()
-        return "010${mid.joinToString("")}${end.joinToString("")}"
-    }
-
-    fun isPhoneNumberValid(phoneNumber: String): Boolean {
-        return phoneNumber.length == 11
     }
 }

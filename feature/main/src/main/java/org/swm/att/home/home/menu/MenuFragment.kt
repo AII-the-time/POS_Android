@@ -7,17 +7,19 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.common_ui.util.ItemTouchHelperCallback
 import org.swm.att.common_ui.util.StartDragListener
 import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryMenuAdapter
 import org.swm.att.home.databinding.FragmentMenuBinding
+import org.swm.att.home.home.HomeViewModel
 
 class MenuFragment(
     private val category: CategoryVO
 ) : BaseFragment<FragmentMenuBinding>(R.layout.fragment_menu) {
     private lateinit var categoryMenuAdapter: CategoryMenuAdapter
-    private val homeViewModel: org.swm.att.home.home.HomeViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,7 +30,7 @@ class MenuFragment(
     private fun initRecyclerView() {
         categoryMenuAdapter = CategoryMenuAdapter(homeViewModel, requireActivity())
         val itemTouchHelperCallback =
-            org.swm.att.common_ui.util.ItemTouchHelperCallback(categoryMenuAdapter)
+            ItemTouchHelperCallback(categoryMenuAdapter)
         val helper = ItemTouchHelper(itemTouchHelperCallback)
         helper.attachToRecyclerView(binding.rvMenuForCategory)
 
