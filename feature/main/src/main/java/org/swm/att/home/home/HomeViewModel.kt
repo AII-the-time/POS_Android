@@ -64,11 +64,12 @@ class HomeViewModel @Inject constructor(
             attMenuRepository.getMenuInfo(1, menuId).collect { result ->
                 result.onSuccess { menu ->
                     if (menu.option.isNotEmpty()) {
+                        menu.menuId = menuId
                         _getMenuInfoState.value = UiState.Success(menu)
                     } else {
                         addSelectedMenu(
                             OrderedMenuVO(
-                                id = menu.id,
+                                id = menuId,
                                 name = menu.menuName,
                                 price = menu.price.toInt(),
                                 options = emptyList()

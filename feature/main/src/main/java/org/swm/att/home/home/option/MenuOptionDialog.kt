@@ -51,7 +51,7 @@ class MenuOptionDialog(
                 detail = binding.edtMenuCustomOption.text.toString()
             }
             val selectedMenuWithOptions = OrderedMenuVO(
-                id = menuVO.id,
+                id = menuVO.menuId ?: -1,
                 name = menuVO.menuName,
                 price = menuVO.price.toInt() + optionsPrice,
                 options = menuOptionViewModel.selectedOptionMap.value?.values?.toList()

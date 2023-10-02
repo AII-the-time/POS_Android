@@ -25,6 +25,7 @@ data class MenuWithRecipeVO(
     override val id: Int,
     override val viewType: String = "MENU",
     val category: String,
+    var menuId: Int? = null,
     val menuName: String,
     val price: BigDecimal,
     val option: List<OptionVO>,
