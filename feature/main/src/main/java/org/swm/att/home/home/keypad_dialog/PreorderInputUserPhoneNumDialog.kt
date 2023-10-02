@@ -1,4 +1,4 @@
-package org.swm.att.home.home.preorder
+package org.swm.att.home.home.keypad_dialog
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,7 @@ import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding
 import org.swm.att.home.home.HomeViewModel
+import org.swm.att.home.home.preorder.PreorderRegisterViewModel
 
 class PreorderInputUserPhoneNumDialog(
     private val homeViewModel: HomeViewModel,

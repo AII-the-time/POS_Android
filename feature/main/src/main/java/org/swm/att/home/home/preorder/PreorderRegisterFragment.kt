@@ -12,6 +12,7 @@ import org.swm.att.home.R
 import org.swm.att.home.adapter.OrderedMenuAdapter
 import org.swm.att.home.databinding.FragmentPreorderRegisterBinding
 import org.swm.att.home.home.HomeViewModel
+import org.swm.att.home.home.keypad_dialog.PreorderInputUserPhoneNumDialog
 
 class PreorderRegisterFragment : BaseFragment<FragmentPreorderRegisterBinding>(R.layout.fragment_preorder_register) {
     private lateinit var orderedMenuAdapter: OrderedMenuAdapter
