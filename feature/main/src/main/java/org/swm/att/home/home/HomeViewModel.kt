@@ -162,6 +162,7 @@ class HomeViewModel @Inject constructor(
         val selectedMenuMap = _selectedMenuMap.value ?: mapOf()
         val orderedMenuList = mutableListOf<OrderedMenuVO>()
         selectedMenuMap.keys.forEach {
+            it.count = selectedMenuMap[it]
             orderedMenuList.add(it)
         }
 
