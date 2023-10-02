@@ -3,6 +3,7 @@ package org.swm.att.data.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.MenuDataSource
+import org.swm.att.data.remote.request.CategoryPostDTO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
@@ -31,4 +32,15 @@ class AttMenuRepositoryImpl @Inject constructor(
                 emit(Result.failure(e))
             }
         }
+
+    override suspend fun postCategory(storeId: Int, categoryName: String): Flow<Result<Unit>> = flow {
+        try {
+            val categoryPostInfo = CategoryPostDTO(categoryName)
+            menuDataSource.postCategory(storeId, categoryPostInfo).collect {
+                emit(Result.success(it))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
 }

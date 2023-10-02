@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.util.state.UiState
@@ -30,6 +31,8 @@ class RecipeViewModel @Inject constructor(
     val currentSelectedMenuId: LiveData<Int> = _currentSelectedMenuId
     private val _getCategories = MutableStateFlow<UiState<CategoriesVO>>(UiState.Loading)
     val getCategories: StateFlow<UiState<CategoriesVO>> = _getCategories
+    private val _postCategoryState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+    val postCategoryState: StateFlow<UiState<Unit>> = _postCategoryState
 
     private val _isModify = MutableLiveData(false)
     val isModify: LiveData<Boolean> = _isModify
@@ -81,4 +84,16 @@ class RecipeViewModel @Inject constructor(
         _isModify.postValue(isModify.value?.not() ?: false)
     }
 
+    fun postCategory(name: String) {
+        viewModelScope.launch(attExceptionHandler) {
+            attMenuRepository.postCategory(1, name).collect { result ->
+                result.onSuccess {
+                    _postCategoryState.value = UiState.Success(it)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "카테고리 추가 실패"
+                    _postCategoryState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
 }

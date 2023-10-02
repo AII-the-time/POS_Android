@@ -1,5 +1,6 @@
 package org.swm.att.data.remote.service
 
+import org.swm.att.data.remote.request.CategoryPostDTO
 import org.swm.att.data.remote.request.OrderedMenusDTO
 import org.swm.att.data.remote.request.PaymentDTO
 import org.swm.att.data.remote.response.CategoriesDTO
@@ -51,4 +52,10 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Path("orderId") orderId: Int
     ): Response<OrderReceiptDTO>
+
+    @POST("menu/category")
+    suspend fun postCategory(
+        @Header("storeId") storeId: Int,
+        @Body category: CategoryPostDTO
+    ): Response<Unit>
 }
