@@ -160,9 +160,26 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 }
             }
         }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.postCategoryState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "카테고리가 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                                initData()
+                            }
+                        }
+                        is UiState.Loading -> { /* nothing */ }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun setCategoryChips(categoriesVO: CategoriesVO) {
+        binding.cgMenuCategories.removeAllViews()
         categoriesVO.categories.let {
             // category chip 추가
             for (index in it.indices) {
@@ -201,7 +218,8 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             id = chipId
             text = "+"
             setOnClickListener {
-                // 새로운 카테고리 추가 api 연결
+                val addCategoryDialog = AddCategoryDialog(recipeViewModel)
+                addCategoryDialog.show(childFragmentManager, "addCategoryDialog")
             }
         }
         binding.cgMenuCategories.addView(addItemChip)
