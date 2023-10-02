@@ -3,6 +3,7 @@ package org.swm.att.home.home.keypad_dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,9 +25,11 @@ class EarnMileageDialog(
     private val homeViewModel: HomeViewModel
 ): BaseDialog<DialogUserPhoneNumInputBinding>(R.layout.dialog_user_phone_num_input) {
     private val earnMileageViewModel by viewModels<EarnMileageViewModel>()
+    private val phoneNumberViewModel: PhoneNumberViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        phoneNumberViewModel.clearPhoneNumber()
         setBtnClickListener()
         setupCustomKeypad()
         setPhoneNumberObserver()
@@ -54,14 +57,14 @@ class EarnMileageDialog(
         binding.customKeypad.apply {
             setLifeCycleOwner(viewLifecycleOwner)
             setOnNumberItemClickListener {
-                homeViewModel.addPhoneNumber(it)
+                phoneNumberViewModel.addPhoneNumber(it)
             }
             setOnClearBtnClickListener {
-                homeViewModel.removePhoneNumber()
+                phoneNumberViewModel.removePhoneNumber()
             }
             setOnEnterBtnClickListener {
-                val phoneNumber = homeViewModel.getPhoneNumber()
-                if (homeViewModel.isPhoneNumberValid(phoneNumber)) {
+                val phoneNumber = phoneNumberViewModel.getPhoneNumber()
+                if (phoneNumberViewModel.isPhoneNumberValid(phoneNumber)) {
                     earnMileageViewModel.getMileage(phoneNumber)
                 } else {
                     Toast.makeText(requireContext(), "휴대폰 번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
@@ -71,10 +74,10 @@ class EarnMileageDialog(
     }
 
     private fun setPhoneNumberObserver() {
-        homeViewModel.midPhoneNumber.observe(viewLifecycleOwner) {
+        phoneNumberViewModel.midPhoneNumber.observe(viewLifecycleOwner) {
             binding.tvPhoneNumberMiddlePart.text = it.joinToString("")
         }
-        homeViewModel.endPhoneNumber.observe(viewLifecycleOwner) {
+        phoneNumberViewModel.endPhoneNumber.observe(viewLifecycleOwner) {
             binding.tvPhoneNumberEndPart.text = it.joinToString("")
         }
     }
@@ -105,16 +108,20 @@ class EarnMileageDialog(
         earnMileageViewModel.initMileage()
         homeViewModel.clearSelectedMenuList()
         val orderedMenus = homeViewModel.getOrderedMenusVO()
-        val customerId = homeViewModel.endPhoneNumber.value?.joinToString("")
+        val customerId = phoneNumberViewModel.endPhoneNumber.value?.joinToString("")
         val action = HomeFragmentDirections
-            .actionFragmentHomeToFragmentPay(OrderedMenus = orderedMenus, Mileage = mileage, CustomerId = customerId)
+            .actionFragmentHomeToFragmentPay(
+                OrderedMenus = orderedMenus,
+                Mileage = mileage,
+                CustomerId = customerId
+            )
         findNavController().navigate(action)
     }
 
     private fun setRegisterBtnClickListener() {
         binding.btnRegisterNewCustomer.setOnClickListener {
-            val phoneNumber = homeViewModel.getPhoneNumber()
-            if (homeViewModel.isPhoneNumberValid(phoneNumber)) {
+            val phoneNumber = phoneNumberViewModel.getPhoneNumber()
+            if (phoneNumberViewModel.isPhoneNumberValid(phoneNumber)) {
                 earnMileageViewModel.registerCustomer(phoneNumber)
             } else {
                 Toast.makeText(requireContext(), "휴대폰 번호를 확인해주세요.", Toast.LENGTH_SHORT).show()

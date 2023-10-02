@@ -3,20 +3,20 @@ package org.swm.att.home.home.keypad_dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding
-import org.swm.att.home.home.HomeViewModel
 import org.swm.att.home.home.preorder.PreorderRegisterViewModel
 
 class PreorderInputUserPhoneNumDialog(
-    private val homeViewModel: HomeViewModel,
     private val preorderRegisterViewModel: PreorderRegisterViewModel
 ): BaseDialog<DialogUserPhoneNumInputBinding>(R.layout.dialog_user_phone_num_input) {
+    private val phoneNumberViewModel: PhoneNumberViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel.clearPhoneNumber()
+        phoneNumberViewModel.clearPhoneNumber()
         initView()
         setBtnClickListener()
         setUpCustomKeypad()
@@ -38,14 +38,14 @@ class PreorderInputUserPhoneNumDialog(
         binding.customKeypad.apply {
             setLifeCycleOwner(viewLifecycleOwner)
             setOnNumberItemClickListener {
-                homeViewModel.addPhoneNumber(it)
+                phoneNumberViewModel.addPhoneNumber(it)
             }
             setOnClearBtnClickListener {
-                homeViewModel.removePhoneNumber()
+                phoneNumberViewModel.removePhoneNumber()
             }
             setOnEnterBtnClickListener {
-                val phoneNumber = homeViewModel.getPhoneNumber()
-                if (homeViewModel.isPhoneNumberValid(phoneNumber)) {
+                val phoneNumber = phoneNumberViewModel.getPhoneNumber()
+                if (phoneNumberViewModel.isPhoneNumberValid(phoneNumber)) {
                     dismiss()
                     preorderRegisterViewModel.setPhoneNumber(phoneNumber)
                 } else {
@@ -56,10 +56,10 @@ class PreorderInputUserPhoneNumDialog(
     }
 
     private fun setPhoneNumberObserver() {
-        homeViewModel.midPhoneNumber.observe(viewLifecycleOwner) {
+        phoneNumberViewModel.midPhoneNumber.observe(viewLifecycleOwner) {
             binding.tvPhoneNumberMiddlePart.text = it.joinToString("")
         }
-        homeViewModel.endPhoneNumber.observe(viewLifecycleOwner) {
+        phoneNumberViewModel.endPhoneNumber.observe(viewLifecycleOwner) {
             binding.tvPhoneNumberEndPart.text = it.joinToString("")
         }
     }
