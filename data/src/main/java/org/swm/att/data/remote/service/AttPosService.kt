@@ -3,7 +3,7 @@ package org.swm.att.data.remote.service
 import org.swm.att.data.remote.request.OrderedMenusDTO
 import org.swm.att.data.remote.request.PaymentDTO
 import org.swm.att.data.remote.response.CategoriesDTO
-import org.swm.att.data.remote.response.MenuDTO
+import org.swm.att.data.remote.response.MenuWithRecipeDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
 import org.swm.att.data.remote.response.OrderDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
@@ -25,7 +25,7 @@ interface AttPosService {
     suspend fun getMenuInfo(
         @Header("StoreId") storeId: Int,
         @Path("menuId") menuId: Int
-    ): Response<MenuDTO>
+    ): Response<MenuWithRecipeDTO>
 
     @POST("order/")
     suspend fun postOrder(

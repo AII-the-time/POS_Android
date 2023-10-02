@@ -134,9 +134,30 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             registeredMenusAdapter.submitList(it.menus)
             binding.edtCategoryName.setText(String.format("%s(%d건)", it.category, it.menus.size))
         }
-        recipeViewModel.selectedMenuInfo.observe(viewLifecycleOwner) {
-            recipesAdapter.submitList(it.recipe)
-            optionsAdapter.submitList(it.option)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.selectedMenuInfo.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                binding.menuWithRecipe = it
+                                recipesAdapter.submitList(it.recipe)
+                                optionsAdapter.submitList(it.option)
+                            }
+                        }
+
+                        is UiState.Loading -> {/* nothing */
+                        }
+
+                        is UiState.Error -> Toast.makeText(
+                            requireContext(),
+                            uiState.errorMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                }
+            }
         }
     }
 

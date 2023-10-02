@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.swm.att.common_ui.base.BaseDialog
 import org.swm.att.domain.entity.request.OrderedMenuVO
-import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.MenuOptionAdapter
 import org.swm.att.home.databinding.DialogMenuOptionBinding
@@ -14,7 +14,7 @@ import org.swm.att.home.home.HomeViewModel
 
 class MenuOptionDialog(
     private val homeViewModel: HomeViewModel,
-    private val menuVO: MenuVO
+    private val menuVO: MenuWithRecipeVO
 ): BaseDialog<DialogMenuOptionBinding>(R.layout.dialog_menu_option) {
     private lateinit var menuOptionAdapter: MenuOptionAdapter
     private val menuOptionViewModel by viewModels<MenuOptionViewModel>()
@@ -52,8 +52,8 @@ class MenuOptionDialog(
             }
             val selectedMenuWithOptions = OrderedMenuVO(
                 id = menuVO.id,
-                name = menuVO.name,
-                price = menuVO.price + optionsPrice,
+                name = menuVO.menuName,
+                price = menuVO.price.toInt() + optionsPrice,
                 options = menuOptionViewModel.selectedOptionMap.value?.values?.toList()
                     ?.sortedBy { it.id } ?: emptyList(),
                 detail = detail

@@ -5,10 +5,17 @@
     tools:context=".recipe.RecipeFragment">
 
     <data>
+
         <variable
             name="recipeViewModel"
             type="org.swm.att.home.recipe.RecipeViewModel" />
+
+        <variable
+            name="menuWithRecipe"
+            type="org.swm.att.domain.entity.response.MenuWithRecipeVO" />
+
         <import type="android.view.View" />
+
         <import type="org.swm.att.common_ui.util.Formatter" />
     </data>
 
@@ -188,7 +195,7 @@
                         android:maxLength="15"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
-                        android:text="@{recipeViewModel.selectedMenuInfo.menuName}"
+                        android:text="@{menuWithRecipe.menuName}"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -222,7 +229,7 @@
                             android:maxLength="15"
                             android:paddingStart="10dp"
                             android:paddingEnd="10dp"
-                            android:text="@{Formatter.INSTANCE.getStringBaseCurrencyUnit(recipeViewModel.selectedMenuInfo.price.toString())}"
+                            android:text="@{Formatter.INSTANCE.getStringBaseCurrencyUnit(menuWithRecipe.price.toString())}"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:backgroundTint="@{recipeViewModel.isModify ? @color/main_trans : @color/white}"
