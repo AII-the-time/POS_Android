@@ -8,7 +8,7 @@ data class OrderedMenusDTO(
     @field:Json(name = "totalPrice")
     val totalPrice: Int?,
     @field:Json(name = "preOrderId")
-    val preOrderId: Int?,
+    val preOrderId: Int? = null,
     @field:Json(name = "menus")
     val menus: List<OrderedMenuDTO>?
 )
