@@ -13,9 +13,8 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
-import org.swm.att.domain.entity.response.MenuVO
+import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
-import java.util.Stack
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,14 +23,10 @@ class HomeViewModel @Inject constructor(
 ): BaseViewModel() {
     private val _selectedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
     val selectedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _selectedMenuMap
-    private val _midPhoneNumber = MutableLiveData<Stack<String>>()
-    val midPhoneNumber: LiveData<Stack<String>> = _midPhoneNumber
-    private val _endPhoneNumber = MutableLiveData<Stack<String>>()
-    val endPhoneNumber: LiveData<Stack<String>> = _endPhoneNumber
     private val _getMenuState = MutableStateFlow<UiState<CategoriesVO>>(UiState.Loading)
     val getMenuState: StateFlow<UiState<CategoriesVO>> = _getMenuState
-    private val _getMenuInfoState = MutableStateFlow<UiState<MenuVO>>(UiState.Loading)
-    val getMenuInfoState: StateFlow<UiState<MenuVO>> = _getMenuInfoState
+    private val _getMenuInfoState = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
+    val getMenuInfoState: StateFlow<UiState<MenuWithRecipeVO>> = _getMenuInfoState
 
     fun setSelectedMenusVO(selectedMenusVO: OrderedMenusVO) {
         selectedMenusVO.menus?.let {
@@ -64,19 +59,20 @@ class HomeViewModel @Inject constructor(
             attMenuRepository.getMenuInfo(1, menuId).collect { result ->
                 result.onSuccess { menu ->
                     if (menu.option.isNotEmpty()) {
+                        menu.menuId = menuId
                         _getMenuInfoState.value = UiState.Success(menu)
                     } else {
                         addSelectedMenu(
                             OrderedMenuVO(
-                                id = menu.id,
-                                name = menu.name,
-                                price = menu.price,
+                                id = menuId,
+                                name = menu.menuName,
+                                price = menu.price.toInt(),
                                 options = emptyList()
                             )
                         )
                     }
                 }.onFailure {  e ->
-                    val errorMsg = if (e is HttpResponseException) e.message else "메뉴 옵션 불러오기 실패"
+                    val errorMsg = if (e is HttpResponseException) e.message else "메뉴 상세 불러오기 실패"
                     _getMenuInfoState.value = UiState.Error(errorMsg)
                 }
             }
@@ -120,39 +116,6 @@ class HomeViewModel @Inject constructor(
         _selectedMenuMap.postValue(mutableMapOf())
     }
 
-    fun addPhoneNumber(number: String) {
-        val mid = _midPhoneNumber.value ?: Stack()
-        if (mid.size < 4) {
-            mid.push(number)
-            _midPhoneNumber.postValue(mid)
-        } else {
-            val end = _endPhoneNumber.value ?: Stack()
-            if(end.size < 4) {
-                end.push(number)
-                _endPhoneNumber.postValue(end)
-            }
-        }
-    }
-
-    fun removePhoneNumber() {
-        val end = _endPhoneNumber.value ?: Stack()
-        if (end.isNotEmpty()) {
-            end.pop()
-            _endPhoneNumber.value = end
-        } else {
-            val mid = _midPhoneNumber.value ?: Stack()
-            if (mid.isNotEmpty()) {
-                mid.pop()
-                _midPhoneNumber.value = mid
-            }
-        }
-    }
-
-    fun clearPhoneNumber() {
-        _midPhoneNumber.postValue(Stack())
-        _endPhoneNumber.postValue(Stack())
-    }
-
     fun clearSelectedMenuList() {
         _selectedMenuMap.postValue(mutableMapOf())
     }
@@ -161,19 +124,10 @@ class HomeViewModel @Inject constructor(
         val selectedMenuMap = _selectedMenuMap.value ?: mapOf()
         val orderedMenuList = mutableListOf<OrderedMenuVO>()
         selectedMenuMap.keys.forEach {
+            it.count = selectedMenuMap[it]
             orderedMenuList.add(it)
         }
 
         return OrderedMenusVO(orderedMenuList)
-    }
-
-    fun getPhoneNumber(): String {
-        val mid = _midPhoneNumber.value ?: Stack()
-        val end = _endPhoneNumber.value ?: Stack()
-        return "010${mid.joinToString("")}${end.joinToString("")}"
-    }
-
-    fun isPhoneNumberValid(phoneNumber: String): Boolean {
-        return phoneNumber.length == 11
     }
 }

@@ -131,16 +131,59 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             }
         }
         recipeViewModel.selectedCategory.observe(viewLifecycleOwner) {
+            if (it.menus.isNotEmpty()) {
+                recipeViewModel.setSelectedMenuId(0)
+            } else {
+                binding.menuWithRecipe = null
+            }
             registeredMenusAdapter.submitList(it.menus)
             binding.edtCategoryName.setText(String.format("%s(%d건)", it.category, it.menus.size))
         }
-        recipeViewModel.selectedMenuInfo.observe(viewLifecycleOwner) {
-            recipesAdapter.submitList(it.recipe)
-            optionsAdapter.submitList(it.option)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.selectedMenuInfo.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                binding.menuWithRecipe = it
+                                recipesAdapter.submitList(it.recipe)
+                                optionsAdapter.submitList(it.option)
+                            }
+                        }
+
+                        is UiState.Loading -> {/* nothing */
+                        }
+
+                        is UiState.Error -> Toast.makeText(
+                            requireContext(),
+                            uiState.errorMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.postCategoryState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "카테고리가 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                                initData()
+                            }
+                        }
+                        is UiState.Loading -> { /* nothing */ }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
     private fun setCategoryChips(categoriesVO: CategoriesVO) {
+        binding.cgMenuCategories.removeAllViews()
         categoriesVO.categories.let {
             // category chip 추가
             for (index in it.indices) {
@@ -179,7 +222,8 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             id = chipId
             text = "+"
             setOnClickListener {
-                // 새로운 카테고리 추가 api 연결
+                val addCategoryDialog = AddCategoryDialog(recipeViewModel)
+                addCategoryDialog.show(childFragmentManager, "addCategoryDialog")
             }
         }
         binding.cgMenuCategories.addView(addItemChip)

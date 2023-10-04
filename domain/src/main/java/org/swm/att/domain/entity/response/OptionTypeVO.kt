@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class OptionTypeVO(
     val id: Int,
     val name: String,
-    val price: Int
+    val price: Int,
+    val isSelectable: Boolean
 ): java.io.Serializable

@@ -43,6 +43,7 @@ class PreorderViewModel: ViewModel() {
                             id = 4,
                             name = "옵션1",
                             price = 1000,
+                            isSelectable = false
                         )
                     ),
                     detail = "얼음 많이 주세요."
@@ -57,6 +58,7 @@ class PreorderViewModel: ViewModel() {
                             id = 4,
                             name = "옵션1",
                             price = 1000,
+                            isSelectable = false
                         )
                     ),
                     detail = "얼음 많이 주세요."
