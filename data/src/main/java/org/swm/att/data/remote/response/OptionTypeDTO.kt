@@ -11,13 +11,16 @@ data class OptionTypeDTO(
     @field:Json(name = "name")
     val name: String?,
     @field:Json(name = "price")
-    val price: Int?
+    val price: Int?,
+    @field:Json(name = "isSelectable")
+    val isSelectable: Boolean?
 ) {
     fun toVO(): OptionTypeVO {
         return OptionTypeVO(
             id ?: -1,
             name ?: "",
-            price ?: -1
+            price ?: -1,
+            isSelectable ?: false
         )
     }
 }

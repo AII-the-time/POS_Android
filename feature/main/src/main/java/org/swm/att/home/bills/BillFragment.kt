@@ -107,7 +107,7 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
             pastId?.let { pastId ->
                 if (pastId != it) {
                     billViewModel.selectedBillId.value?.let { pastId ->
-                        binding.rvBills[pastId].setBackgroundResource(R.color.back_color)
+                        binding.rvBills[pastId].setBackgroundResource(R.color.white)
                     }
                 }
             }

@@ -1,10 +1,8 @@
 package org.swm.att.home.home
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +22,6 @@ import org.swm.att.home.adapter.SelectedMenuAdapter
 import org.swm.att.home.databinding.FragmentHomeBinding
 import org.swm.att.home.home.keypad_dialog.EarnMileageDialog
 import org.swm.att.home.home.menu.MenuFragment
-import org.swm.att.home.home.option.MenuOptionDialog
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -33,7 +30,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val args by navArgs<HomeFragmentArgs>()
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         homeViewModel.clearSelectedMenuList()
@@ -42,7 +38,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setCategories()
         setCategoriesObserver()
         setSelectedMenuObserver()
-        setSelectedMenuInfoObserver()
         setDataBinding()
         setOrderBtnListener()
         setPreorderBtnClickListener()
@@ -112,35 +107,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    private fun setSelectedMenuInfoObserver() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                homeViewModel.getMenuInfoState.collect { uiState ->
-                    when(uiState) {
-                        is UiState.Loading -> {/* nothing */ }
-                        is UiState.Success -> {
-                            uiState.data?.let {
-                                val menuOptionDialog = MenuOptionDialog(homeViewModel, it)
-                                menuOptionDialog.show(
-                                    requireActivity().supportFragmentManager,
-                                    MenuOptionDialog::class.java.simpleName
-                                )
-                            }
-                        }
-                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }
-
     private fun setDataBinding() {
         binding.homeViewHolder = homeViewModel
     }
 
     private fun setOrderBtnListener() {
         binding.btnOrder.setOnClickListener {
-            homeViewModel.clearPhoneNumber()
             val mileageDialog = EarnMileageDialog(homeViewModel)
             mileageDialog.show(requireActivity().supportFragmentManager, "EarnMileageDialog")
         }

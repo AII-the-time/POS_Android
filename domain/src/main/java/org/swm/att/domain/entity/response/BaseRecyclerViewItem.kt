@@ -19,7 +19,18 @@ data class OrderBillVO(
     val totalCount: Int,
     val totalPrice: BigDecimal,
     val createdAt: String
-): BaseRecyclerViewItem()
+) : BaseRecyclerViewItem()
+
+data class MenuWithRecipeVO(
+    override val id: Int,
+    override val viewType: String = "MENU",
+    val category: String,
+    var menuId: Int? = null,
+    val menuName: String,
+    val price: BigDecimal,
+    val option: List<OptionVO>,
+    val recipe: List<RecipeVO>
+) : BaseRecyclerViewItem()
 
 @Serializable
 data class MenuVO(
@@ -28,9 +39,8 @@ data class MenuVO(
     val name: String,
     val price: Int,
     val option: List<OptionVO>,
-    val recipe: List<RecipeVO>,
     val detail: String? = null
-): java.io.Serializable, BaseRecyclerViewItem()
+) : java.io.Serializable, BaseRecyclerViewItem()
 
 @Serializable
 data class OrderedMenuOfBillVO(
