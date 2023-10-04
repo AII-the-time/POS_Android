@@ -84,7 +84,7 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:text="@{preorderRegisterViewModel.totalPrice == null ? `0원`: preorderRegisterViewModel.totalPrice}"
+                    app:customLiveDataPriceText="@{preorderRegisterViewModel.totalPrice}"
                     tools:text="18,000원"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -411,8 +411,8 @@
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         tools:text="18,000원"
+                        app:customLiveDataPriceText="@{preorderRegisterViewModel.totalPrice}"
                         app:layout_constraintHorizontal_weight="4"
-                        android:text="@{preorderRegisterViewModel.totalPrice}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tv_preorder_pay_total_price_des"

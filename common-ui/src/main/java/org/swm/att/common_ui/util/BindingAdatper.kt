@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LiveData
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
 import org.swm.att.common_ui.util.Formatter.getStringBaseCurrencyUnit
@@ -18,6 +19,12 @@ import java.util.Stack
 @BindingAdapter("customPriceText")
 fun setCustomPriceText(view: TextView, price: Int) {
     val currency = getStringBaseCurrencyUnit(price.toString())
+    view.text = view.context.getString(R.string.tv_custom_price_text, currency)
+}
+
+@BindingAdapter("customLiveDataPriceText")
+fun setCustomLiveDataPriceText(view: TextView, price: LiveData<String>) {
+    val currency = getStringBaseCurrencyUnit(price.value ?: "0")
     view.text = view.context.getString(R.string.tv_custom_price_text, currency)
 }
 
