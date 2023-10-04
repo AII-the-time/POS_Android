@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
-import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.home.MainViewModel
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseRecyclerViewAdapter
@@ -146,58 +145,8 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     }
 
     private fun initMockData() {
-        val mock = listOf(
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            )
-        )
 
-        pastPreorderListAdapter.submitList(mock)
-        validPreorderListAdapter.submitList(mock)
+//        pastPreorderListAdapter.submitList(mock)
+//        validPreorderListAdapter.submitList(mock)
     }
 }
