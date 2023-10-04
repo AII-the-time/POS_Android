@@ -6,9 +6,11 @@ import org.swm.att.data.remote.datasource.OrderDataSource
 import org.swm.att.data.remote.request.OrderedMenuDTO
 import org.swm.att.data.remote.request.OrderedMenusDTO
 import org.swm.att.data.remote.request.PaymentDTO
+import org.swm.att.data.remote.request.PreOrderedMenusDTO
 import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PaymentVO
+import org.swm.att.domain.entity.request.PreOrderedMenusVO
 import org.swm.att.domain.entity.response.OrderBillsVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.entity.response.OrderVO
@@ -68,10 +70,38 @@ class AttOrderRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getOrderBill(storeId: Int, orderId: Int): Flow<Result<OrderReceiptVO>> = flow {
+    override suspend fun getOrderBill(storeId: Int, orderId: Int): Flow<Result<OrderReceiptVO>> =
+        flow {
+            try {
+                orderDataSource.getOrderBill(storeId, orderId).collect {
+                    emit(Result.success(it.toVO()))
+                }
+            } catch (e: Exception) {
+                emit(Result.failure(e))
+            }
+        }
+
+    override suspend fun postPreOrder(
+        storeId: Int,
+        preOrderedMenus: PreOrderedMenusVO
+    ): Flow<Result<Unit>> = flow {
         try {
-            orderDataSource.getOrderBill(storeId, orderId).collect {
-                emit(Result.success(it.toVO()))
+            val preOrderedMenusDTO = PreOrderedMenusDTO(
+                totalPrice = preOrderedMenus.totalPrice,
+                menus = preOrderedMenus.menus?.map {
+                    OrderedMenuDTO(
+                        id = it.id,
+                        count = it.count ?: 1,
+                        options = it.options.map { option -> option.id },
+                        detail = it.detail
+                    )
+                } ?: listOf(),
+                phone = preOrderedMenus.phone,
+                memo = preOrderedMenus.memo,
+                orderedFor = preOrderedMenus.orderedFor
+            )
+            orderDataSource.postPreOrder(storeId, preOrderedMenusDTO).collect {
+                emit(Result.success(it))
             }
         } catch (e: Exception) {
             emit(Result.failure(e))

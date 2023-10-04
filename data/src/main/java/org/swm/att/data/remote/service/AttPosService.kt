@@ -3,6 +3,7 @@ package org.swm.att.data.remote.service
 import org.swm.att.data.remote.request.CategoryPostDTO
 import org.swm.att.data.remote.request.OrderedMenusDTO
 import org.swm.att.data.remote.request.PaymentDTO
+import org.swm.att.data.remote.request.PreOrderedMenusDTO
 import org.swm.att.data.remote.response.CategoriesDTO
 import org.swm.att.data.remote.response.MenuWithRecipeDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
@@ -57,5 +58,11 @@ interface AttPosService {
     suspend fun postCategory(
         @Header("storeId") storeId: Int,
         @Body category: CategoryPostDTO
+    ): Response<Unit>
+
+    @POST("preorder/")
+    suspend fun postPreOrder(
+        @Header("storeId") storeId: Int,
+        @Body preOrderedMenus: PreOrderedMenusDTO
     ): Response<Unit>
 }

@@ -3,6 +3,7 @@ package org.swm.att.data.remote.datasource
 import kotlinx.coroutines.flow.Flow
 import org.swm.att.data.remote.request.OrderedMenusDTO
 import org.swm.att.data.remote.request.PaymentDTO
+import org.swm.att.data.remote.request.PreOrderedMenusDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
 import org.swm.att.data.remote.response.OrderDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
@@ -26,5 +27,9 @@ class OrderDataSource @Inject constructor(
 
     suspend fun getOrderBill(storeId: Int, orderId: Int): Flow<OrderReceiptDTO> {
         return checkResponse(attPosService.getOrderBill(storeId, orderId))
+    }
+
+    suspend fun postPreOrder(storeId: Int, preOrderedMenus: PreOrderedMenusDTO): Flow<Unit> {
+        return checkResponse(attPosService.postPreOrder(storeId, preOrderedMenus))
     }
 }
