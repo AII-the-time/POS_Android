@@ -35,6 +35,6 @@ class OrderDataSource @Inject constructor(
     }
 
     suspend fun getPreOrders(storeId: Int, page: Int, date: String?): Flow<PreOrdersDTO> {
-        return checkResponse(attPosService.getPreOrders(storeId, page, 20, date))
+        return checkResponse(attPosService.getPreOrders(storeId, page, 6, date))
     }
 }

@@ -11,8 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.common_ui.util.state.UiState
@@ -57,6 +57,16 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = validPreorderListAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val lastVisibleItem =
+                        (this@apply.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    if (preorderViewModel.preOrdersData.value?.size ?: 0 <= lastVisibleItem + 5 && !preorderViewModel.isEndOfValidPreOrders()) {
+                        preorderViewModel.getNextValidPreOrders(1)
+                    }
+                }
+            })
         }
 
         pastPreorderListAdapter = PreorderListItemAdapter(preorderViewModel, false)
@@ -113,25 +123,30 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 preorderViewModel.getPreOrdersState.collect { uiState ->
-                    when(uiState) {
-                        is UiState.Success -> {
-                            uiState.data?.let {
-                                validPreorderListAdapter.submitList(it.preOrders)
-                                pastPreorderListAdapter.submitList(it.preOrders)
-                            }
+                    when (uiState) {
+                        is UiState.Success -> {/* do nothing */
                         }
-                        is UiState.Loading -> {/* do nothing */}
-                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+
+                        is UiState.Loading -> {/* do nothing */
+                        }
+
+                        is UiState.Error -> Toast.makeText(
+                            requireContext(),
+                            uiState.errorMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
 
                 }
             }
         }
+        preorderViewModel.preOrdersData.observe(viewLifecycleOwner) {
+            validPreorderListAdapter.submitList(it)
+            pastPreorderListAdapter.submitList(it)
+        }
     }
 
     private fun setDataBinding() {
-        binding.pastPreorderListSize = 6
-        binding.validPreorderListSize = 6
         binding.isValid = true
         binding.preorderViewModel = preorderViewModel
     }
@@ -171,6 +186,6 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     }
 
     private fun initMockData() {
-        preorderViewModel.getPreOrders(1)
+        preorderViewModel.getNextValidPreOrders(1)
     }
 }
