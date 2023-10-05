@@ -11,7 +11,13 @@ import org.swm.att.domain.entity.response.PreOrderBillVO
 import org.swm.att.domain.entity.response.PreOrdersVO
 
 interface AttOrderRepository {
-    suspend fun postOrder(storeId: Int, totalPrice: Int, orderedMenus: OrderedMenusVO): Flow<Result<OrderVO>>
+    suspend fun postOrder(
+        storeId: Int,
+        preOrderId: Int?,
+        totalPrice: Int,
+        orderedMenus: OrderedMenusVO
+    ): Flow<Result<OrderVO>>
+
     suspend fun postPayment(storeId: Int, paymentVO: PaymentVO): Flow<Result<Nothing?>>
     suspend fun getOrderBills(storeId: Int, page: Int, count: Int): Flow<Result<OrderBillsVO>>
     suspend fun getOrderBill(storeId: Int, orderId: Int): Flow<Result<OrderReceiptVO>>

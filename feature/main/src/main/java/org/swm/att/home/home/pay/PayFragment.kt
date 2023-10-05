@@ -93,14 +93,15 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     }
 
     private fun setPayBtnClickListener() {
+        val preOrderId = if (args.preOrderId == -1) null else args.preOrderId
         binding.btnPayByCard.setOnClickListener {
-            payViewModel.getOrderIdAndPostPayment(PayMethod.CARD)
+            payViewModel.getOrderIdAndPostPayment(PayMethod.CARD, preOrderId)
         }
         binding.btnPayByCash.setOnClickListener {
-            payViewModel.getOrderIdAndPostPayment(PayMethod.CASH)
+            payViewModel.getOrderIdAndPostPayment(PayMethod.CASH, preOrderId)
         }
         binding.btnPayByEasy.setOnClickListener {
-            payViewModel.getOrderIdAndPostPayment(PayMethod.BANK)
+            payViewModel.getOrderIdAndPostPayment(PayMethod.BANK, preOrderId)
         }
     }
 

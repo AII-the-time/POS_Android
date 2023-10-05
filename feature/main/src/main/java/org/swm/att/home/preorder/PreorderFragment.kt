@@ -180,7 +180,12 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         }
         binding.btnPayBill.setOnClickListener {
             val action =
-                PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = preorderViewModel.getSelectedMenus())
+                PreorderFragmentDirections.actionGlobalFragmentHome(
+                    selectedMenus = preorderViewModel.getSelectedMenus(),
+                    preOrderId = preorderViewModel.preOrdersData.value?.get(
+                        preorderViewModel.selectedValidPreorderId.value ?: 0
+                    )?.preOrderId ?: -1
+                )
             findNavController().navigate(action)
             mainViewModel.directWithGlobalAction(NavDestinationType.Home)
         }

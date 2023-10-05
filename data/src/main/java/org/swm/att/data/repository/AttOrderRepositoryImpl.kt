@@ -22,18 +22,26 @@ import javax.inject.Inject
 class AttOrderRepositoryImpl @Inject constructor(
     private val orderDataSource: OrderDataSource
 ): AttOrderRepository {
-    override suspend fun postOrder(storeId: Int, totalPrice: Int, orderedMenus: OrderedMenusVO): Flow<Result<OrderVO>> = flow {
+    override suspend fun postOrder(
+        storeId: Int,
+        preOrderId: Int?,
+        totalPrice: Int,
+        orderedMenus: OrderedMenusVO
+    ): Flow<Result<OrderVO>> = flow {
         try {
             orderDataSource.postOrder(
                 storeId,
                 OrderedMenusDTO(
                     totalPrice = totalPrice,
-                    menus = orderedMenus.menus?.map { OrderedMenuDTO(
-                        id = it.id,
-                        count = it.count ?: 1,
-                        options = it.options.map { option -> option.id },
-                        detail = it.detail
-                    )} ?: listOf()
+                    preOrderId = preOrderId,
+                    menus = orderedMenus.menus?.map {
+                        OrderedMenuDTO(
+                            id = it.id,
+                            count = it.count ?: 1,
+                            options = it.options.map { option -> option.id },
+                            detail = it.detail
+                        )
+                    } ?: listOf()
                 )
             ).collect {
                 emit(Result.success(it.toVO()))
