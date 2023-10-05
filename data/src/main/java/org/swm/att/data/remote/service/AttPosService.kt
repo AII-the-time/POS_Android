@@ -9,6 +9,7 @@ import org.swm.att.data.remote.response.MenuWithRecipeDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
 import org.swm.att.data.remote.response.OrderDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
+import org.swm.att.data.remote.response.PreOrderBillDTO
 import org.swm.att.data.remote.response.PreOrdersDTO
 import retrofit2.Response
 import retrofit2.http.Body
@@ -74,4 +75,10 @@ interface AttPosService {
         @Query("count") count: Int,
         @Query("date") date: String? = null
     ): Response<PreOrdersDTO>
+
+    @GET("preorder/{preOrderId}")
+    suspend fun getPreOrderBill(
+        @Header("storeId") storeId: Int,
+        @Path("preOrderId") preOrderId: Int
+    ): Response<PreOrderBillDTO>
 }
