@@ -77,8 +77,8 @@ class PreorderViewModel @Inject constructor(
 
     fun getPreordersForFilteringDates(startDate: Date) {
         _filteringStartDate.value = startDate
+        page = 1
         getNextValidPreOrders(1)
-        // filtering api 연결 필요
     }
 
     fun getNextValidPreOrders(storeId: Int) {
