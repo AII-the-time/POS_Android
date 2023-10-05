@@ -11,10 +11,10 @@ import org.swm.att.common_ui.base.BaseViewModel
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.domain.entity.HttpResponseException
-import org.swm.att.domain.entity.response.OptionTypeVO
-import org.swm.att.domain.entity.response.OrderedMenuOfBillVO
+import org.swm.att.domain.entity.request.OrderedMenuVO
+import org.swm.att.domain.entity.request.OrderedMenusVO
+import org.swm.att.domain.entity.response.PreOrderBillVO
 import org.swm.att.domain.entity.response.PreOrdersVO
-import org.swm.att.domain.entity.response.PreorderDetailVO
 import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.domain.repository.AttOrderRepository
 import java.util.Date
@@ -24,8 +24,10 @@ import javax.inject.Inject
 class PreorderViewModel @Inject constructor(
     private val attOrderRepository: AttOrderRepository
 ): BaseViewModel() {
-    private val _selectedPreorderInfo = MutableLiveData<PreorderDetailVO>()
-    val selectedPreorderInfo: LiveData<PreorderDetailVO> = _selectedPreorderInfo
+    private val _selectedPreorderInfo = MutableStateFlow<UiState<PreOrderBillVO>>(UiState.Loading)
+    val selectedPreorderInfo: StateFlow<UiState<PreOrderBillVO>> = _selectedPreorderInfo
+    private val _selectedPreorderInfoData = MutableLiveData<PreOrderBillVO>()
+    val selectedPreorderInfoData: LiveData<PreOrderBillVO> = _selectedPreorderInfoData
     private val _currentSelectedValidPreorderId = MutableLiveData<Int>()
     val currentSelectedValidPreorderId: LiveData<Int> = _currentSelectedValidPreorderId
     private val _currentSelectedPastPreorderId = MutableLiveData<Int>()
@@ -44,48 +46,17 @@ class PreorderViewModel @Inject constructor(
     private var page: Int = 1
 
     fun getSelectedPreorderDetail(selectedPreorderId: Int) {
-        val mock = PreorderDetailVO(
-            orderId = 1,
-            totalCount = 3,
-            totalPrice = "12,000원",
-            orderedAt = "2021-08-01 12:00:00",
-            phone = "01012341234",
-            memo = "얼음 많이 주세요!",
-            orderItems = listOf(
-                OrderedMenuOfBillVO(
-                    id = 1,
-                    count = 3,
-                    price = 6000.toBigDecimal(),
-                    menuName = "아메리카노",
-                    options = listOf(
-                        OptionTypeVO(
-                            id = 4,
-                            name = "옵션1",
-                            price = 1000,
-                            isSelectable = false
-                        )
-                    ),
-                    detail = "얼음 많이 주세요."
-                ),
-                OrderedMenuOfBillVO(
-                    id = 1,
-                    count = 3,
-                    price = 6000.toBigDecimal(),
-                    menuName = "카페라떼",
-                    options = listOf(
-                        OptionTypeVO(
-                            id = 4,
-                            name = "옵션1",
-                            price = 1000,
-                            isSelectable = false
-                        )
-                    ),
-                    detail = "얼음 많이 주세요."
-                )
-            )
-        )
-
-        _selectedPreorderInfo.value = mock
+        viewModelScope.launch(attExceptionHandler) {
+            attOrderRepository.getPreOrderBill(1, selectedPreorderId).collect { result ->
+                result.onSuccess {
+                    _selectedPreorderInfoData.postValue(it)
+                    _selectedPreorderInfo.value = UiState.Success(it)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "예약 내역 불러오기 실패"
+                    _getPreOrdersState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
     }
 
     fun setCurrentSelectedPreorderId(currentSelectedPreorderId: Int, isValid: Boolean) {
@@ -141,5 +112,20 @@ class PreorderViewModel @Inject constructor(
             }
         }
         return false
+    }
+
+    fun getSelectedMenus(): OrderedMenusVO {
+        return OrderedMenusVO(
+            menus = selectedPreorderInfoData.value?.orderitems?.map {
+                OrderedMenuVO(
+                    id = it.id,
+                    name = it.menuName,
+                    price = it.price.toInt(),
+                    count = it.count,
+                    options = it.options,
+                    detail = it.detail
+                )
+            } ?: listOf()
+        )
     }
 }

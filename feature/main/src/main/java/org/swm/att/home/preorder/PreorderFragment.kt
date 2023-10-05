@@ -16,8 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.common_ui.util.state.UiState
-import org.swm.att.domain.entity.request.OrderedMenuVO
-import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.home.MainViewModel
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseRecyclerViewAdapter
@@ -85,8 +83,28 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     }
 
     private fun setObserver() {
-        preorderViewModel.selectedPreorderInfo.observe(viewLifecycleOwner) {
-            preorderMenuOfBillAdapter.submitList(it.orderItems)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preorderViewModel.selectedPreorderInfo.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                preorderMenuOfBillAdapter.submitList(it.orderitems)
+                            }
+                        }
+
+                        is UiState.Loading -> {/* do nothing */
+                        }
+
+                        is UiState.Error -> Toast.makeText(
+                            requireContext(),
+                            uiState.errorMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                }
+            }
         }
         preorderViewModel.currentSelectedValidPreorderId.observe(viewLifecycleOwner) {
             val pastId = preorderViewModel.selectedValidPreorderId.value
@@ -153,30 +171,19 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
 
     private fun setPreorderBtnClickListener() {
         binding.btnModifyPreorderList.setOnClickListener {
-            val action = PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = getSelectedMenus(), isModify = true)
+            val action = PreorderFragmentDirections.actionGlobalFragmentHome(
+                selectedMenus = preorderViewModel.getSelectedMenus(),
+                isModify = true
+            )
             findNavController().navigate(action)
             mainViewModel.directWithGlobalAction(NavDestinationType.Home)
         }
         binding.btnPayBill.setOnClickListener {
-            val action = PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = getSelectedMenus())
+            val action =
+                PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = preorderViewModel.getSelectedMenus())
             findNavController().navigate(action)
             mainViewModel.directWithGlobalAction(NavDestinationType.Home)
         }
-    }
-
-    private fun getSelectedMenus(): OrderedMenusVO {
-        return OrderedMenusVO(
-            preorderViewModel.selectedPreorderInfo.value?.orderItems?.map { orderItem ->
-                OrderedMenuVO(
-                    id = orderItem.id,
-                    name = orderItem.menuName,
-                    price = orderItem.price.toInt(),
-                    count = orderItem.count,
-                    options = orderItem.options,
-                    detail = orderItem.detail
-                )
-            }
-        )
     }
 
     private fun setCancelPreorderBtnClickListener() {
