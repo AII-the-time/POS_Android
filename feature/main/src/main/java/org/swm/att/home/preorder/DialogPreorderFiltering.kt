@@ -7,6 +7,6 @@ class DialogPreorderFiltering(
     private val preorderViewModel: PreorderViewModel
 ): BaseDialogFiltering() {
     override fun onFilteringBtnClick(startDate: Date, endDate: Date?) {
-        preorderViewModel.getPreordersForFilteringDates(startDate, endDate)
+        preorderViewModel.getPreordersForFilteringDates(startDate)
     }
 }

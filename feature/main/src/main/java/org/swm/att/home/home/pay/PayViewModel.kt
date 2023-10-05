@@ -107,10 +107,11 @@ class PayViewModel @Inject constructor(
         _useMileage.postValue(Stack())
     }
 
-    fun getOrderIdAndPostPayment(payMethod: PayMethod) {
+    fun getOrderIdAndPostPayment(payMethod: PayMethod, preOrderId: Int?) {
         viewModelScope.launch(attExceptionHandler) {
             attOrderRepository.postOrder(
                 1,
+                preOrderId,
                 totalPrice.value ?: 0,
                 OrderedMenusVO(
                     menus = totalOrderMenuList.value

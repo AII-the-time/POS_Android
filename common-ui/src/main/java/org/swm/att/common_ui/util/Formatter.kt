@@ -45,4 +45,8 @@ object Formatter {
     fun isToday(date: Date): Boolean {
         return date == today
     }
+
+    fun getStringByDateTimeBaseFormatter(date: Date): String {
+        return baseDateTimeStringFormatter.format(date)
+    }
 }

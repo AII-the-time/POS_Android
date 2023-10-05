@@ -109,11 +109,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setDataBinding() {
         binding.homeViewHolder = homeViewModel
+        binding.isPreorder = args.preOrderId != -1
     }
 
     private fun setOrderBtnListener() {
         binding.btnOrder.setOnClickListener {
-            val mileageDialog = EarnMileageDialog(homeViewModel)
+            val mileageDialog = EarnMileageDialog(homeViewModel, args.preOrderId)
             mileageDialog.show(requireActivity().supportFragmentManager, "EarnMileageDialog")
         }
     }
@@ -132,5 +133,4 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             homeViewModel.clearSelectedMenuList()
         }
     }
-
 }

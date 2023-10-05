@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
 import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.home.R
-import org.swm.att.home.adapter.SelectableItemAdapter
 import org.swm.att.home.adapter.BaseRecyclerViewAdapter
+import org.swm.att.home.adapter.SelectableItemAdapter
 import org.swm.att.home.databinding.FragmentBillBinding
 
 @AndroidEntryPoint
@@ -107,7 +107,7 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
             pastId?.let { pastId ->
                 if (pastId != it) {
                     billViewModel.selectedBillId.value?.let { pastId ->
-                        binding.rvBills[pastId].setBackgroundResource(R.color.white)
+                        binding.rvBills[pastId].setBackgroundResource(R.color.back_color)
                     }
                 }
             }

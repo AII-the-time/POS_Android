@@ -22,7 +22,8 @@ import org.swm.att.home.home.HomeViewModel
 
 @AndroidEntryPoint
 class EarnMileageDialog(
-    private val homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel,
+    private val preOrderId: Int,
 ): BaseDialog<DialogUserPhoneNumInputBinding>(R.layout.dialog_user_phone_num_input) {
     private val earnMileageViewModel by viewModels<EarnMileageViewModel>()
     private val phoneNumberViewModel: PhoneNumberViewModel by activityViewModels()
@@ -47,7 +48,10 @@ class EarnMileageDialog(
             dismiss()
             earnMileageViewModel.initMileage()
             val orderedMenus = homeViewModel.getOrderedMenusVO()
-            val action = HomeFragmentDirections.actionFragmentHomeToFragmentPay(OrderedMenus = orderedMenus)
+            val action = HomeFragmentDirections.actionFragmentHomeToFragmentPay(
+                OrderedMenus = orderedMenus,
+                preOrderId = preOrderId
+            )
             NavHostFragment.findNavController(this).navigate(action)
         }
     }
@@ -113,7 +117,8 @@ class EarnMileageDialog(
             .actionFragmentHomeToFragmentPay(
                 OrderedMenus = orderedMenus,
                 Mileage = mileage,
-                CustomerId = customerId
+                CustomerId = customerId,
+                preOrderId = preOrderId
             )
         findNavController().navigate(action)
     }

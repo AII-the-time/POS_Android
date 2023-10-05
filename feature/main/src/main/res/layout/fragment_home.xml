@@ -6,13 +6,21 @@
     android:background="@color/back_color">
 
     <data>
+
         <variable
             name="homeViewHolder"
             type="org.swm.att.home.home.HomeViewModel" />
+
         <variable
             name="isModifyPreorder"
             type="Boolean"
-            android:value="false"/>
+            android:value="false" />
+
+        <variable
+            name="isPreorder"
+            type="Boolean"
+            android:value="false" />
+
         <import type="android.view.View" />
     </data>
 
@@ -162,6 +170,7 @@
                 android:id="@+id/cl_order_btns"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:visibility="@{isModifyPreorder ? View.GONE : View.VISIBLE}"
                 app:layout_constraintTop_toBottomOf="@id/cl_payment_menu_list"
                 app:layout_constraintBottom_toTopOf="@id/btn_modification_complete">
@@ -176,7 +185,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/btn_order"
                     app:layout_constraintHorizontal_weight="1"
-                    android:layout_marginStart="20dp"
+                    android:visibility="@{isPreorder ? View.GONE : View.VISIBLE}"
                     android:padding="13dp"
                     android:gravity="center"
                     app:setOrderBtnClickable="@{homeViewHolder.selectedMenuMap.size()}"

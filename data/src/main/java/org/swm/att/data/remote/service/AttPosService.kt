@@ -3,11 +3,14 @@ package org.swm.att.data.remote.service
 import org.swm.att.data.remote.request.CategoryPostDTO
 import org.swm.att.data.remote.request.OrderedMenusDTO
 import org.swm.att.data.remote.request.PaymentDTO
+import org.swm.att.data.remote.request.PreOrderedMenusDTO
 import org.swm.att.data.remote.response.CategoriesDTO
 import org.swm.att.data.remote.response.MenuWithRecipeDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
 import org.swm.att.data.remote.response.OrderDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
+import org.swm.att.data.remote.response.PreOrderBillDTO
+import org.swm.att.data.remote.response.PreOrdersDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -58,4 +61,24 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Body category: CategoryPostDTO
     ): Response<Unit>
+
+    @POST("preorder/")
+    suspend fun postPreOrder(
+        @Header("storeId") storeId: Int,
+        @Body preOrderedMenus: PreOrderedMenusDTO
+    ): Response<Unit>
+
+    @GET("preorder/")
+    suspend fun getPreOrders(
+        @Header("storeId") storeId: Int,
+        @Query("page") page: Int,
+        @Query("count") count: Int,
+        @Query("date") date: String? = null
+    ): Response<PreOrdersDTO>
+
+    @GET("preorder/{preOrderId}")
+    suspend fun getPreOrderBill(
+        @Header("storeId") storeId: Int,
+        @Path("preOrderId") preOrderId: Int
+    ): Response<PreOrderBillDTO>
 }
