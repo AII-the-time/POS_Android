@@ -48,12 +48,12 @@ class CategoryMenuAdapter(
                 MenuOptionDialog::class.java.simpleName
             )
         }
-        holder.itemView.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.actionMasked == android.view.MotionEvent.ACTION_DOWN) {
-                onItemDragListener.onStartDrag(holder)
-            }
-            false
-        }
+//        holder.itemView.setOnTouchListener { _, motionEvent ->
+//            if (motionEvent.actionMasked == android.view.MotionEvent.ACTION_DOWN) {
+//                onItemDragListener.onStartDrag(holder)
+//            }
+//            false
+//        }
     }
 
     fun setOnStartDragListener(listener: StartDragListener) {
