@@ -17,9 +17,16 @@ import java.util.Date
 import java.util.Stack
 
 @BindingAdapter("customPriceText")
-fun setCustomPriceText(view: TextView, price: Int) {
-    val currency = getStringBaseCurrencyUnit(price.toString())
-    view.text = view.context.getString(R.string.tv_custom_price_text, currency)
+fun <T> setCustomPriceText(view: TextView, price: T) {
+    if (price is String) {
+        view.text =
+            view.context.getString(R.string.tv_custom_price_text, getStringBaseCurrencyUnit(price))
+    } else if (price is Int) {
+        view.text = view.context.getString(
+            R.string.tv_custom_price_text,
+            getStringBaseCurrencyUnit(price.toString())
+        )
+    }
 }
 
 @BindingAdapter("customLiveDataPriceText")

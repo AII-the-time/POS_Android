@@ -7,6 +7,7 @@
         <variable
             name="preorder"
             type="org.swm.att.domain.entity.response.PreorderVO"/>
+        <import type="org.swm.att.common_ui.util.Formatter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +25,7 @@
             android:layout_marginTop="14dp"
             android:layout_marginStart="14dp"
             android:layout_marginBottom="14dp"
-            android:text="@{preorder.orderedFor}"
+            android:text="@{Formatter.INSTANCE.getDataTimeBaseFormattingResult(preorder.orderedFor)}"
             app:layout_constraintHorizontal_weight="3"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/divider_bill"
@@ -69,7 +70,7 @@
             android:textColor="@color/black"
             android:textSize="11sp"
             android:gravity="center"
-            android:text="@{preorder.totalPrice}"
+            app:customPriceText="@{preorder.totalPrice}"
             app:layout_constraintHorizontal_weight="3"
             app:layout_constraintTop_toTopOf="@id/tv_bill_total_count"
             app:layout_constraintBottom_toBottomOf="@id/tv_bill_total_count"
@@ -78,7 +79,7 @@
 
         <TextView
             android:id="@+id/tv_exist_customer_request"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{preorder.memo == null ? `요청사항 없음` : `요청사항 있음`}"
             tools:text="요청사항 없음"
