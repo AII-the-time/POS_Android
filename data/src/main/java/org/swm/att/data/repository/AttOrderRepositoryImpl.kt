@@ -14,6 +14,7 @@ import org.swm.att.domain.entity.request.PreOrderedMenusVO
 import org.swm.att.domain.entity.response.OrderBillsVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.entity.response.OrderVO
+import org.swm.att.domain.entity.response.PreOrdersVO
 import org.swm.att.domain.repository.AttOrderRepository
 import javax.inject.Inject
 
@@ -102,6 +103,20 @@ class AttOrderRepositoryImpl @Inject constructor(
             )
             orderDataSource.postPreOrder(storeId, preOrderedMenusDTO).collect {
                 emit(Result.success(it))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun getPreOrders(
+        storeId: Int,
+        page: Int,
+        date: String?
+    ): Flow<Result<PreOrdersVO>> = flow {
+        try {
+            orderDataSource.getPreOrders(1, page, date).collect {
+                emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {
             emit(Result.failure(e))

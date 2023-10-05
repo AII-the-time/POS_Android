@@ -9,6 +9,7 @@ import org.swm.att.data.remote.response.MenuWithRecipeDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
 import org.swm.att.data.remote.response.OrderDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
+import org.swm.att.data.remote.response.PreOrdersDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -65,4 +66,12 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Body preOrderedMenus: PreOrderedMenusDTO
     ): Response<Unit>
+
+    @GET("preorder/")
+    suspend fun getPreOrders(
+        @Header("storeId") storeId: Int,
+        @Query("page") page: Int,
+        @Query("count") count: Int,
+        @Query("date") date: String? = null
+    ): Response<PreOrdersDTO>
 }
