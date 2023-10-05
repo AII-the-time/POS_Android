@@ -11,12 +11,6 @@
         <variable
             name="isValid"
             type="Boolean" />
-        <variable
-            name = "validPreorderListSize"
-            type = "int" />
-        <variable
-            name="pastPreorderListSize"
-            type="int" />
         <import type="android.view.View" />
     </data>
 
@@ -92,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="총 3건"
-                    android:text="@{String.format(`%d건`, validPreorderListSize)}"
+                    android:text="@{String.format(`%d건`, preorderViewModel.preOrdersData.size())}"
                     android:textColor="@color/black"
                     android:textSize="10sp"
                     app:layout_constraintTop_toTopOf="@id/tv_today_valid_preorder_list_des"
@@ -136,7 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="총 3건"
-                    android:text="@{String.format(`%d건`, pastPreorderListSize)}"
+                    android:text="@{String.format(`%d건`, preorderViewModel.preOrdersData.size())}"
                     android:textSize="10sp"
                     android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="@id/tv_today_past_preorder_list_des"
