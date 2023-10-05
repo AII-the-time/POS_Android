@@ -125,7 +125,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             pastId?.let { pastId ->
                 if (pastId != it) {
                     recipeViewModel.selectedMenuId.value?.let { pastId ->
-                        binding.rvCategoryMenuList[pastId].setBackgroundResource(R.color.white)
+                        binding.rvCategoryMenuList[pastId].setBackgroundResource(R.color.back_color)
                     }
                 }
             }

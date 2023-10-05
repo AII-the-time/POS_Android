@@ -1,6 +1,5 @@
 package org.swm.att.home.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -43,7 +42,7 @@ class SelectableItemAdapter(
             viewModel.getSelectedItem(1, item.id)
             holder.itemView.setBackgroundResource(R.color.main_trans)
         } else {
-            holder.itemView.setBackgroundResource(R.color.white)
+            holder.itemView.setBackgroundResource(R.color.back_color)
         }
     }
 

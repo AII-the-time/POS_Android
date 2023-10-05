@@ -1,11 +1,11 @@
 package org.swm.att.domain.entity.response
 
-data class PreorderVO(
-    val preOrderId: Int,
-    val createdAt: String,
-    val orderedFor: String,
+data class PreOrderBillVO(
     val totalPrice: String,
     val totalCount: Int,
+    val createdAt: String,
+    val orderedFor: String,
     val phone: String,
     val memo: String? = null,
+    val orderitems: List<OrderedMenuOfBillVO>
 )

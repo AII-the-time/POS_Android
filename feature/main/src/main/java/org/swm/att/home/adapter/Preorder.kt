@@ -16,7 +16,7 @@ class PreorderListItemAdapter(
     private val isValid: Boolean
 ): BaseListAdapter<PreorderVO, PreorderItemViewHolder>(
     ItemDiffCallback(
-        onItemsTheSame = { old, new -> old.orderId == new.orderId },
+        onItemsTheSame = { old, new -> old.preOrderId == new.preOrderId },
         onContentTheSame = { old, new -> old == new }
     )
 ) {
@@ -33,13 +33,13 @@ class PreorderListItemAdapter(
         val item = getItem(position)
         holder.itemView.setOnClickListener {
             // 추후 api 연동 및 실제 데이터 사용
-            preorderViewModel.getSelectedPreorderDetail(item.orderId)
-            preorderViewModel.setCurrentSelectedPreorderId(position, isValid)
+            preorderViewModel.getSelectedPreorderDetail(item.preOrderId)
+            preorderViewModel.setCurrentSelectedPreorderId(position)
         }
 
         if (isValid && position == 0) {
             holder.itemView.setBackgroundResource(R.color.main_trans)
-            preorderViewModel.getSelectedPreorderDetail(item.orderId)
+            preorderViewModel.getSelectedPreorderDetail(item.preOrderId)
         }
     }
 

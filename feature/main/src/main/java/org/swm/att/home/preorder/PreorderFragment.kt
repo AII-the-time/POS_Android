@@ -2,15 +2,20 @@ package org.swm.att.home.preorder
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
-import org.swm.att.domain.entity.request.OrderedMenuVO
-import org.swm.att.domain.entity.request.OrderedMenusVO
-import org.swm.att.domain.entity.response.PreorderVO
+import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.home.MainViewModel
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseRecyclerViewAdapter
@@ -18,10 +23,10 @@ import org.swm.att.home.adapter.PreorderListItemAdapter
 import org.swm.att.home.constant.NavDestinationType
 import org.swm.att.home.databinding.FragmentPreorderBinding
 
+@AndroidEntryPoint
 class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment_preorder) {
     private lateinit var preorderMenuOfBillAdapter: BaseRecyclerViewAdapter
     private lateinit var validPreorderListAdapter: PreorderListItemAdapter
-    private lateinit var pastPreorderListAdapter: PreorderListItemAdapter
     private val preorderViewModel: PreorderViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -49,13 +54,16 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = validPreorderListAdapter
-        }
-
-        pastPreorderListAdapter = PreorderListItemAdapter(preorderViewModel, false)
-        binding.rvPastPreorder.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = pastPreorderListAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val lastVisibleItem =
+                        (this@apply.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    if (preorderViewModel.preOrdersData.value?.size ?: 0 <= lastVisibleItem + 5 && !preorderViewModel.isEndOfValidPreOrders()) {
+                        preorderViewModel.getNextValidPreOrders(1)
+                    }
+                }
+            })
         }
     }
 
@@ -67,76 +75,90 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     }
 
     private fun setObserver() {
-        preorderViewModel.selectedPreorderInfo.observe(viewLifecycleOwner) {
-            preorderMenuOfBillAdapter.submitList(it.orderItems)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preorderViewModel.selectedPreorderInfo.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                preorderMenuOfBillAdapter.submitList(it.orderitems)
+                            }
+                        }
+
+                        is UiState.Loading -> {/* do nothing */
+                        }
+
+                        is UiState.Error -> Toast.makeText(
+                            requireContext(),
+                            uiState.errorMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                }
+            }
         }
-        preorderViewModel.currentSelectedValidPreorderId.observe(viewLifecycleOwner) {
-            val pastId = preorderViewModel.selectedValidPreorderId.value
-            binding.isValid = true
+        preorderViewModel.currentSelectedPreorderId.observe(viewLifecycleOwner) {
+            val pastId = preorderViewModel.selectedPreorderId.value
             binding.rvPreorder[it].setBackgroundResource(R.color.main_trans)
-            preorderViewModel.changeSelectedState(true)
+            preorderViewModel.changeSelectedState()
             pastId?.let { pastId ->
                 if (pastId != it) {
-                    preorderViewModel.selectedValidPreorderId.value?.let { pastId ->
+                    preorderViewModel.selectedPreorderId.value?.let { pastId ->
                         binding.rvPreorder[pastId].setBackgroundResource(R.color.back_color)
                     }
                 }
             }
-            preorderViewModel.selectedPastPreorderId.value?.let { pastId ->
-                binding.rvPastPreorder[pastId].setBackgroundResource(R.color.back_color)
-            }
         }
-        preorderViewModel.currentSelectedPastPreorderId.observe(viewLifecycleOwner) {
-            val pastId = preorderViewModel.selectedPastPreorderId.value
-            binding.rvPastPreorder[it].setBackgroundResource(R.color.main_trans)
-            binding.isValid = false
-            preorderViewModel.changeSelectedState(false)
-            pastId?.let { pastId ->
-                if (pastId != it) {
-                    preorderViewModel.selectedPastPreorderId.value?.let { pastId ->
-                        binding.rvPastPreorder[pastId].setBackgroundResource(R.color.back_color)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preorderViewModel.getPreOrdersState.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> {/* do nothing */
+                        }
+
+                        is UiState.Loading -> {/* do nothing */
+                        }
+
+                        is UiState.Error -> Toast.makeText(
+                            requireContext(),
+                            uiState.errorMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+
                 }
             }
-            preorderViewModel.selectedValidPreorderId.value?.let {  pastId ->
-                binding.rvPreorder[pastId].setBackgroundResource(R.color.back_color)
-            }
+        }
+        preorderViewModel.preOrdersData.observe(viewLifecycleOwner) {
+            validPreorderListAdapter.submitList(it)
         }
     }
 
     private fun setDataBinding() {
-        binding.pastPreorderListSize = 6
-        binding.validPreorderListSize = 6
-        binding.isValid = true
         binding.preorderViewModel = preorderViewModel
     }
 
     private fun setPreorderBtnClickListener() {
         binding.btnModifyPreorderList.setOnClickListener {
-            val action = PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = getSelectedMenus(), isModify = true)
+            val action = PreorderFragmentDirections.actionGlobalFragmentHome(
+                selectedMenus = preorderViewModel.getSelectedMenus(),
+                isModify = true
+            )
             findNavController().navigate(action)
             mainViewModel.directWithGlobalAction(NavDestinationType.Home)
         }
         binding.btnPayBill.setOnClickListener {
-            val action = PreorderFragmentDirections.actionGlobalFragmentHome(selectedMenus = getSelectedMenus())
+            val action =
+                PreorderFragmentDirections.actionGlobalFragmentHome(
+                    selectedMenus = preorderViewModel.getSelectedMenus(),
+                    preOrderId = preorderViewModel.preOrdersData.value?.get(
+                        preorderViewModel.selectedPreorderId.value ?: 0
+                    )?.preOrderId ?: -1
+                )
             findNavController().navigate(action)
             mainViewModel.directWithGlobalAction(NavDestinationType.Home)
         }
-    }
-
-    private fun getSelectedMenus(): OrderedMenusVO {
-        return OrderedMenusVO(
-            preorderViewModel.selectedPreorderInfo.value?.orderItems?.map { orderItem ->
-                OrderedMenuVO(
-                    id = orderItem.id,
-                    name = orderItem.menuName,
-                    price = orderItem.price.toInt(),
-                    count = orderItem.count,
-                    options = orderItem.options,
-                    detail = orderItem.detail
-                )
-            }
-        )
     }
 
     private fun setCancelPreorderBtnClickListener() {
@@ -146,58 +168,6 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     }
 
     private fun initMockData() {
-        val mock = listOf(
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            ),
-            PreorderVO(
-                orderId = 1,
-                totalCount = 3,
-                totalPrice = "12,000",
-                orderedAt = "2021-08-01 12:00:00",
-                phone = "01012341234",
-                memo = "얼음 많이 주세요!",
-            )
-        )
-
-        pastPreorderListAdapter.submitList(mock)
-        validPreorderListAdapter.submitList(mock)
+        preorderViewModel.getNextValidPreOrders(1)
     }
 }
