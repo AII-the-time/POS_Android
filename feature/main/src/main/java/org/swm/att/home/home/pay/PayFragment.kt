@@ -61,8 +61,10 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
     private fun setBtnModifyOrderClickListener() {
         binding.btnModifyOrder.setOnClickListener {
             val orderedMenus = OrderedMenusVO(payViewModel.totalOrderMenuList.value)
-            val action =
-                PayFragmentDirections.actionFragmentPayToFragmentHome(selectedMenus = orderedMenus)
+            val action = PayFragmentDirections.actionFragmentPayToFragmentHome(
+                selectedMenus = orderedMenus,
+                preOrderId = args.preOrderId
+            )
             findNavController().navigate(action)
         }
     }
