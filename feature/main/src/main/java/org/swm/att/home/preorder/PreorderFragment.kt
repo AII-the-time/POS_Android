@@ -27,7 +27,6 @@ import org.swm.att.home.databinding.FragmentPreorderBinding
 class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment_preorder) {
     private lateinit var preorderMenuOfBillAdapter: BaseRecyclerViewAdapter
     private lateinit var validPreorderListAdapter: PreorderListItemAdapter
-    private lateinit var pastPreorderListAdapter: PreorderListItemAdapter
     private val preorderViewModel: PreorderViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -66,13 +65,6 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
                 }
             })
         }
-
-        pastPreorderListAdapter = PreorderListItemAdapter(preorderViewModel, false)
-        binding.rvPastPreorder.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = pastPreorderListAdapter
-        }
     }
 
     private fun setPreorderFilteringBtnClickListener() {
@@ -106,36 +98,16 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
                 }
             }
         }
-        preorderViewModel.currentSelectedValidPreorderId.observe(viewLifecycleOwner) {
-            val pastId = preorderViewModel.selectedValidPreorderId.value
-            binding.isValid = true
+        preorderViewModel.currentSelectedPreorderId.observe(viewLifecycleOwner) {
+            val pastId = preorderViewModel.selectedPreorderId.value
             binding.rvPreorder[it].setBackgroundResource(R.color.main_trans)
-            preorderViewModel.changeSelectedState(true)
+            preorderViewModel.changeSelectedState()
             pastId?.let { pastId ->
                 if (pastId != it) {
-                    preorderViewModel.selectedValidPreorderId.value?.let { pastId ->
+                    preorderViewModel.selectedPreorderId.value?.let { pastId ->
                         binding.rvPreorder[pastId].setBackgroundResource(R.color.back_color)
                     }
                 }
-            }
-            preorderViewModel.selectedPastPreorderId.value?.let { pastId ->
-                binding.rvPastPreorder[pastId].setBackgroundResource(R.color.back_color)
-            }
-        }
-        preorderViewModel.currentSelectedPastPreorderId.observe(viewLifecycleOwner) {
-            val pastId = preorderViewModel.selectedPastPreorderId.value
-            binding.rvPastPreorder[it].setBackgroundResource(R.color.main_trans)
-            binding.isValid = false
-            preorderViewModel.changeSelectedState(false)
-            pastId?.let { pastId ->
-                if (pastId != it) {
-                    preorderViewModel.selectedPastPreorderId.value?.let { pastId ->
-                        binding.rvPastPreorder[pastId].setBackgroundResource(R.color.back_color)
-                    }
-                }
-            }
-            preorderViewModel.selectedValidPreorderId.value?.let {  pastId ->
-                binding.rvPreorder[pastId].setBackgroundResource(R.color.back_color)
             }
         }
         lifecycleScope.launch {
@@ -160,12 +132,10 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         }
         preorderViewModel.preOrdersData.observe(viewLifecycleOwner) {
             validPreorderListAdapter.submitList(it)
-            pastPreorderListAdapter.submitList(it)
         }
     }
 
     private fun setDataBinding() {
-        binding.isValid = true
         binding.preorderViewModel = preorderViewModel
     }
 
@@ -183,7 +153,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
                 PreorderFragmentDirections.actionGlobalFragmentHome(
                     selectedMenus = preorderViewModel.getSelectedMenus(),
                     preOrderId = preorderViewModel.preOrdersData.value?.get(
-                        preorderViewModel.selectedValidPreorderId.value ?: 0
+                        preorderViewModel.selectedPreorderId.value ?: 0
                     )?.preOrderId ?: -1
                 )
             findNavController().navigate(action)

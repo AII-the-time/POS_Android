@@ -28,14 +28,10 @@ class PreorderViewModel @Inject constructor(
     val selectedPreorderInfo: StateFlow<UiState<PreOrderBillVO>> = _selectedPreorderInfo
     private val _selectedPreorderInfoData = MutableLiveData<PreOrderBillVO>()
     val selectedPreorderInfoData: LiveData<PreOrderBillVO> = _selectedPreorderInfoData
-    private val _currentSelectedValidPreorderId = MutableLiveData<Int>()
-    val currentSelectedValidPreorderId: LiveData<Int> = _currentSelectedValidPreorderId
-    private val _currentSelectedPastPreorderId = MutableLiveData<Int>()
-    val currentSelectedPastPreorderId: LiveData<Int> = _currentSelectedPastPreorderId
-    private val _selectedValidPreorderId = MutableLiveData(0)
-    val selectedValidPreorderId: LiveData<Int> = _selectedValidPreorderId
-    private val _selectedPastPreorderId = MutableLiveData<Int>()
-    val selectedPastPreorderId: LiveData<Int> = _selectedPastPreorderId
+    private val _currentSelectedPreorderId = MutableLiveData<Int>()
+    val currentSelectedPreorderId: LiveData<Int> = _currentSelectedPreorderId
+    private val _selectedPreorderId = MutableLiveData(0)
+    val selectedPreorderId: LiveData<Int> = _selectedPreorderId
     private val _filteringStartDate = MutableLiveData<Date?>()
     private val filteringStartDate: LiveData<Date?> = _filteringStartDate
 
@@ -59,20 +55,12 @@ class PreorderViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentSelectedPreorderId(currentSelectedPreorderId: Int, isValid: Boolean) {
-        if (isValid) {
-            _currentSelectedValidPreorderId.value = currentSelectedPreorderId
-        } else {
-            _currentSelectedPastPreorderId.value = currentSelectedPreorderId
-        }
+    fun setCurrentSelectedPreorderId(currentSelectedPreorderId: Int) {
+        _currentSelectedPreorderId.value = currentSelectedPreorderId
     }
 
-    fun changeSelectedState(isValid: Boolean) {
-        if (isValid) {
-            _selectedValidPreorderId.postValue(currentSelectedValidPreorderId.value)
-        } else {
-            _selectedPastPreorderId.postValue(currentSelectedPastPreorderId.value)
-        }
+    fun changeSelectedState() {
+        _selectedPreorderId.postValue(currentSelectedPreorderId.value)
     }
 
     fun getPreordersForFilteringDates(startDate: Date) {

@@ -34,7 +34,7 @@ class PreorderListItemAdapter(
         holder.itemView.setOnClickListener {
             // 추후 api 연동 및 실제 데이터 사용
             preorderViewModel.getSelectedPreorderDetail(item.preOrderId)
-            preorderViewModel.setCurrentSelectedPreorderId(position, isValid)
+            preorderViewModel.setCurrentSelectedPreorderId(position)
         }
 
         if (isValid && position == 0) {
