@@ -2,12 +2,20 @@ package org.swm.att.home.preorder
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.common_ui.util.state.UiState
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.home.MainViewModel
@@ -17,6 +25,7 @@ import org.swm.att.home.adapter.PreorderListItemAdapter
 import org.swm.att.home.constant.NavDestinationType
 import org.swm.att.home.databinding.FragmentPreorderBinding
 
+@AndroidEntryPoint
 class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment_preorder) {
     private lateinit var preorderMenuOfBillAdapter: BaseRecyclerViewAdapter
     private lateinit var validPreorderListAdapter: PreorderListItemAdapter
@@ -101,6 +110,23 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
                 binding.rvPreorder[pastId].setBackgroundResource(R.color.back_color)
             }
         }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preorderViewModel.getPreOrdersState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                validPreorderListAdapter.submitList(it.preOrders)
+                                pastPreorderListAdapter.submitList(it.preOrders)
+                            }
+                        }
+                        is UiState.Loading -> {/* do nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+            }
+        }
     }
 
     private fun setDataBinding() {
@@ -145,8 +171,6 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     }
 
     private fun initMockData() {
-
-//        pastPreorderListAdapter.submitList(mock)
-//        validPreorderListAdapter.submitList(mock)
+        preorderViewModel.getPreOrders(1)
     }
 }

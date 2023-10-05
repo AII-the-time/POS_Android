@@ -3,12 +3,28 @@ package org.swm.att.home.preorder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import org.swm.att.common_ui.base.BaseViewModel
+import org.swm.att.common_ui.util.Formatter
+import org.swm.att.common_ui.util.state.UiState
+import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.OptionTypeVO
 import org.swm.att.domain.entity.response.OrderedMenuOfBillVO
+import org.swm.att.domain.entity.response.PreOrdersVO
 import org.swm.att.domain.entity.response.PreorderDetailVO
+import org.swm.att.domain.repository.AttOrderRepository
 import java.util.Date
+import javax.inject.Inject
 
-class PreorderViewModel: ViewModel() {
+@HiltViewModel
+class PreorderViewModel @Inject constructor(
+    private val attOrderRepository: AttOrderRepository
+): BaseViewModel() {
     private val _selectedPreorderInfo = MutableLiveData<PreorderDetailVO>()
     val selectedPreorderInfo: LiveData<PreorderDetailVO> = _selectedPreorderInfo
     private val _currentSelectedValidPreorderId = MutableLiveData<Int>()
@@ -19,10 +35,13 @@ class PreorderViewModel: ViewModel() {
     val selectedValidPreorderId: LiveData<Int> = _selectedValidPreorderId
     private val _selectedPastPreorderId = MutableLiveData<Int>()
     val selectedPastPreorderId: LiveData<Int> = _selectedPastPreorderId
+    private val _getPreOrdersState = MutableStateFlow<UiState<PreOrdersVO>>(UiState.Loading)
+    val getPreOrdersState: StateFlow<UiState<PreOrdersVO>> = _getPreOrdersState
     private val _filteringStartDate = MutableLiveData<Date?>()
     val filteringStartDate: LiveData<Date?> = _filteringStartDate
     private val _filteringEndDate = MutableLiveData<Date?>()
     val filteringEndDate: LiveData<Date?> = _filteringEndDate
+    private var page: Int = 1
 
     fun getSelectedPreorderDetail(selectedPreorderId: Int) {
         val mock = PreorderDetailVO(
@@ -85,10 +104,26 @@ class PreorderViewModel: ViewModel() {
         }
     }
 
-    fun getPreordersForFilteringDates(startDate: Date, endDate: Date?) {
+    fun getPreordersForFilteringDates(startDate: Date) {
         _filteringStartDate.value = startDate
-        _filteringEndDate.value = endDate
+        getPreOrders(1)
         // filtering api 연결 필요
+    }
+
+    fun getPreOrders(storeId: Int) {
+        viewModelScope.launch(attExceptionHandler) {
+            val date = _filteringStartDate.value?.let { startDate ->
+                Formatter.getStringByDateTimeBaseFormatter(startDate)
+            } ?: null
+            attOrderRepository.getPreOrders(storeId, page, date).collect { result ->
+                result.onSuccess {
+                    _getPreOrdersState.value = UiState.Success(it)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "예약 내역 불러오기 실패"
+                    _getPreOrdersState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
     }
 
 }
