@@ -109,6 +109,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setDataBinding() {
         binding.homeViewHolder = homeViewModel
+        binding.isPreorder = args.preOrderId != -1
     }
 
     private fun setOrderBtnListener() {
