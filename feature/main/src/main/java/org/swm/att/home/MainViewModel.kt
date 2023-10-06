@@ -16,6 +16,7 @@ import org.swm.att.common_ui.presenter.base.BaseViewModel
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.common_ui.util.JWTUtils
 import org.swm.att.common_ui.util.JWTUtils.unixTimeToDateTime
+import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.domain.repository.AttOrderRepository
@@ -127,7 +128,7 @@ class MainViewModel @Inject constructor(
 
     private fun setPreorderAlarm(context: Context) {
         alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val currentTime = Calendar.getInstance().time
+        val currentTime = Calendar.getInstance().time.getUTCDateTime()
 
         for ((index, preorderItem) in todayPreorderList.withIndex()) {
             // 각 아이템에 대한 알람 시간과 기타 설정 가져옴
