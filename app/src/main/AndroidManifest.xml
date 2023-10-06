@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".common_ui.util.alarm.PreorderAlarmDialog"
+            android:name=".common_ui.presenter.alarm.PreorderAlarmDialog"
             android:exported="false"
             android:theme="@style/Theme.DialogTheme" />
 

@@ -85,7 +85,7 @@
             android:gravity="center"
             android:textColor="@color/black"/>
 
-        <org.swm.att.common_ui.util.keypad.CustomKeyPad
+        <org.swm.att.common_ui.presenter.keypad.CustomKeyPad
             android:id="@+id/ckp_use_mileage"
             app:layout_constraintTop_toBottomOf="@id/tv_use_mileage_des"
             app:layout_constraintBottom_toBottomOf="parent"

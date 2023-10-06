@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
-import org.swm.att.common_ui.base.BaseActivity
+import org.swm.att.common_ui.presenter.base.BaseActivity
 import org.swm.att.home.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Date

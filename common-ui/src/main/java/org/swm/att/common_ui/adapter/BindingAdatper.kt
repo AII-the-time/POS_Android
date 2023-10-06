@@ -1,4 +1,4 @@
-package org.swm.att.common_ui.util
+package org.swm.att.common_ui.adapter
 
 import android.os.Build
 import android.widget.TextView

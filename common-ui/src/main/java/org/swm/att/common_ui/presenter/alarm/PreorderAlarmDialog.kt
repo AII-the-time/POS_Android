@@ -1,7 +1,7 @@
-package org.swm.att.common_ui.util.alarm
+package org.swm.att.common_ui.presenter.alarm
 
 import org.swm.att.common_ui.R
-import org.swm.att.common_ui.base.BaseActivity
+import org.swm.att.common_ui.presenter.base.BaseActivity
 import org.swm.att.common_ui.databinding.DailogPreorderAlarmBinding
 
 class PreorderAlarmDialog :

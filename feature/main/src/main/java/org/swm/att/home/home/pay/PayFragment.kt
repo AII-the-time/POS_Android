@@ -12,8 +12,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.swm.att.common_ui.base.BaseFragment
-import org.swm.att.common_ui.util.state.UiState
+import org.swm.att.common_ui.presenter.base.BaseFragment
+import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.home.R

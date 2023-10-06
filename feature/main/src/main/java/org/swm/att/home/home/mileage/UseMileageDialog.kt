@@ -3,7 +3,7 @@ package org.swm.att.home.home.mileage
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import org.swm.att.common_ui.base.BaseDialog
+import org.swm.att.common_ui.presenter.base.BaseDialog
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogUseMileageBinding
 import org.swm.att.home.home.pay.PayViewModel

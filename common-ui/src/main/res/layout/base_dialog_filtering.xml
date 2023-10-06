@@ -23,7 +23,7 @@
             android:layout_marginEnd="20dp"
             tools:ignore="SpeakableTextPresentCheck"/>
 
-        <org.swm.att.common_ui.util.calendar.CustomCalendar
+        <org.swm.att.common_ui.presenter.calendar.CustomCalendar
             android:id="@+id/custom_calendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

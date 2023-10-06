@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.swm.att.common_ui.base.BaseDialog
+import org.swm.att.common_ui.presenter.base.BaseDialog
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.home.R

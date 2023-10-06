@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
-import org.swm.att.common_ui.base.BaseRecyclerViewViewHolder
+import org.swm.att.common_ui.presenter.base.BaseRecyclerViewViewHolder
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.constant.BaseItemViewType
 import org.swm.att.domain.entity.request.OrderedMenuVO

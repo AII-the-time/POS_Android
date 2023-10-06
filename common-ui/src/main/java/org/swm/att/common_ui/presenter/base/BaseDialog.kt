@@ -1,4 +1,4 @@
-package org.swm.att.common_ui.base
+package org.swm.att.common_ui.presenter.base
 
 import android.app.Dialog
 import android.content.Context

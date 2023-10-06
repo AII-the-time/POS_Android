@@ -1,6 +1,5 @@
-package org.swm.att.common_ui.util.token
+package org.swm.att.common_ui.util
 
-import android.util.Log
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId

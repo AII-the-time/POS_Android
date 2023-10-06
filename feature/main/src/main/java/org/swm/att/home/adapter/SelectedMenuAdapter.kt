@@ -3,7 +3,7 @@ package org.swm.att.home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import org.swm.att.common_ui.base.BaseListAdapter
+import org.swm.att.common_ui.presenter.base.BaseListAdapter
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.home.databinding.ItemSelectedMenuBinding

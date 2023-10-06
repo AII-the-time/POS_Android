@@ -12,8 +12,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.swm.att.common_ui.base.BaseDialog
-import org.swm.att.common_ui.util.state.UiState
+import org.swm.att.common_ui.presenter.base.BaseDialog
+import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding

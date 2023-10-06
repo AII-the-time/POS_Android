@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
-import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.util.ItemTouchHelperCallback
 import org.swm.att.common_ui.util.StartDragListener
-import org.swm.att.common_ui.util.state.UiState
+import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryMenuAdapter

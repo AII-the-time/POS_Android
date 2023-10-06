@@ -7,8 +7,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.swm.att.common_ui.base.BaseSelectableViewViewModel
-import org.swm.att.common_ui.util.state.UiState
+import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
+import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.OrderBillVO
 import org.swm.att.domain.entity.response.OrderBillsVO

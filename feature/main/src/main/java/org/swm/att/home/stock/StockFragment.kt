@@ -1,6 +1,6 @@
 package org.swm.att.home.stock
 
-import org.swm.att.common_ui.base.BaseFragment
+import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.home.R
 import org.swm.att.home.databinding.FragmentStockBinding
 

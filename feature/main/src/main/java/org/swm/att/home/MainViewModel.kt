@@ -12,10 +12,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import org.swm.att.common_ui.base.BaseViewModel
+import org.swm.att.common_ui.presenter.base.BaseViewModel
 import org.swm.att.common_ui.util.Formatter
-import org.swm.att.common_ui.util.token.JWTUtils
-import org.swm.att.common_ui.util.token.JWTUtils.unixTimeToDateTime
+import org.swm.att.common_ui.util.JWTUtils
+import org.swm.att.common_ui.util.JWTUtils.unixTimeToDateTime
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.domain.repository.AttOrderRepository
