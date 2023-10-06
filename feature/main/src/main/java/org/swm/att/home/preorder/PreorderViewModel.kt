@@ -93,7 +93,7 @@ class PreorderViewModel @Inject constructor(
         _getPreOrdersState.value.apply {
             if (this is UiState.Success) {
                 this.data?.let {
-                    return it.endPage > page
+                    return it.lastPage > page
                 }
             } else {
                 return false
