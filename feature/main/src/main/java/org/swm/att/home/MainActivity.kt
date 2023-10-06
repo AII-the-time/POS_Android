@@ -1,5 +1,6 @@
 package org.swm.att.home
 
+import android.os.Bundle
 import android.widget.CheckBox
 import androidx.activity.viewModels
 import androidx.navigation.NavController
@@ -15,6 +16,11 @@ import java.util.Locale
 class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val mainViewModel by viewModels<MainViewModel>()
     private lateinit var navController: NavController
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setPreorderAlarm()
+    }
 
     override fun onResume() {
         super.onResume()
@@ -71,5 +77,14 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 mainViewModel.changedCurSelectedScreen()
             }
         }
+    }
+
+    private fun setPreorderAlarm() {
+        mainViewModel.getTodayPreorder(1, this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainViewModel.cancelAllPreorderAlarm()
     }
 }
