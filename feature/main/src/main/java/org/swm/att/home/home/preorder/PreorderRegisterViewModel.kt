@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseViewModel
 import org.swm.att.common_ui.util.Formatter.getStringByDateTimeBaseFormatter
 import org.swm.att.common_ui.state.UiState
+import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PreOrderedMenusVO
@@ -60,7 +61,7 @@ class PreorderRegisterViewModel @Inject constructor(
                 orderedMenus.value?.menus ?: listOf(),
                 phoneNumber,
                 memo,
-                getStringByDateTimeBaseFormatter(preorderDate.value)
+                getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime())
             )
             attOrderRepository.postPreOrder(1, preOrderedMenus).collect { result ->
                 result.onSuccess {

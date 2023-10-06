@@ -8,8 +8,11 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import org.swm.att.common_ui.R
+import org.swm.att.common_ui.util.Formatter.getDataTimeBaseFormattingResult
 import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
+import org.swm.att.common_ui.util.Formatter.getDateFromString
 import org.swm.att.common_ui.util.Formatter.getStringBaseCurrencyUnit
+import org.swm.att.common_ui.util.getRTCDateTime
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OptionTypeVO
@@ -183,4 +186,12 @@ fun setEditTextStyleByIsModify(view: AppCompatEditText, isModify: Boolean) {
     view.isEnabled = isModify
     view.isFocusable = isModify
     view.isFocusableInTouchMode = isModify
+}
+
+@BindingAdapter("localTimeText")
+fun setLocalTimeText(view: TextView, date: String?) {
+    date?.let {
+        val localTime = getDateFromString(it).getRTCDateTime()
+        view.text = getDataTimeBaseFormattingResult(localTime)
+    }
 }

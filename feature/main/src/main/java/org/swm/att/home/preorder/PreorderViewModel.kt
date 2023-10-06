@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseViewModel
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.common_ui.state.UiState
+import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
@@ -72,7 +73,7 @@ class PreorderViewModel @Inject constructor(
     fun getNextValidPreOrders(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
             val date = filteringStartDate.value?.let { startDate ->
-                Formatter.getStringByDateTimeBaseFormatter(startDate)
+                Formatter.getStringByDateTimeBaseFormatter(startDate.getUTCDateTime())
             }
             attOrderRepository.getPreOrders(storeId, page, date).collect { result ->
                 result.onSuccess {
