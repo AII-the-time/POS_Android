@@ -35,7 +35,7 @@
             android:theme="@style/Theme.DialogTheme" />
 
         <receiver
-            android:name=".home.reciever.AlarmReceiver"
+            android:name=".common_ui.receiver.AlarmReceiver"
             android:enabled="true" />
         <!-- sentry setting -->
         <meta-data

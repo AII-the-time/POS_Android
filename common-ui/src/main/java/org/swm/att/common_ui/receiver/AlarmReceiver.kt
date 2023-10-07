@@ -1,4 +1,4 @@
-package org.swm.att.home.reciever
+package org.swm.att.common_ui.receiver
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
