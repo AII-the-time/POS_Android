@@ -80,7 +80,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun setPreorderAlarm() {
-        mainViewModel.getTodayPreorder(1, this)
+        mainViewModel.getTodayPreorder(1)
     }
 
     override fun onDestroy() {

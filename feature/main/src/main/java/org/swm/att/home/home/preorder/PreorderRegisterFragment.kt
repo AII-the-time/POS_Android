@@ -105,7 +105,6 @@ class PreorderRegisterFragment : BaseFragment<FragmentPreorderRegisterBinding>(R
                             ).show()
                             findNavController().navigate(R.id.action_global_fragment_home)
                         }
-
                         is UiState.Loading -> { /* do nothing */
                         }
 

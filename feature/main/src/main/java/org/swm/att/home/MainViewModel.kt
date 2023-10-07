@@ -1,18 +1,16 @@
 package org.swm.att.home
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.swm.att.common_ui.presenter.base.BaseViewModel
+import org.swm.att.common_ui.util.AlarmManager
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.common_ui.util.JWTUtils
 import org.swm.att.common_ui.util.JWTUtils.unixTimeToDateTime
@@ -22,15 +20,14 @@ import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.domain.repository.AttOrderRepository
 import org.swm.att.domain.repository.AttPosUserRepository
 import org.swm.att.home.constant.NavDestinationType
-import org.swm.att.home.reciever.AlarmReceiver
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val attPosUserRepository: AttPosUserRepository,
-    private val attOrderRepository: AttOrderRepository
+    private val attOrderRepository: AttOrderRepository,
+    @ApplicationContext private val context: Context
 ) : BaseViewModel() {
     private val _refreshExist = MutableLiveData<Boolean>()
     val refreshExist: LiveData<Boolean> = _refreshExist
@@ -41,9 +38,7 @@ class MainViewModel @Inject constructor(
     private val _isGlobalAction = MutableLiveData(false)
     val isGlobalAction: LiveData<Boolean> = _isGlobalAction
 
-    private lateinit var alarmManager: AlarmManager
     private val todayPreorderList = arrayListOf<PreorderVO>()
-    private val todayPreorderPendingIntent = arrayListOf<PendingIntent>()
     private var page = 1
 
     fun checkRefreshToken() {
@@ -106,17 +101,19 @@ class MainViewModel @Inject constructor(
         return curSelectedScreen.value != destination
     }
 
-    fun getTodayPreorder(storeId: Int, context: Context) {
+    fun getTodayPreorder(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
-            val date = Formatter.getStringByDateTimeBaseFormatter(Calendar.getInstance().time)
+            val date =
+                Formatter.getStringByDateTimeBaseFormatter(Calendar.getInstance().time.getUTCDateTime())
             attOrderRepository.getPreOrders(storeId, page, date).collect { result ->
                 result.onSuccess {
+                    Log.d("getTodayPreorder", it.toString())
                     todayPreorderList.addAll(it.preOrders)
                     page += 1
                     if (page < it.lastPage) {
-                        getTodayPreorder(storeId, context)
+                        getTodayPreorder(storeId)
                     } else {
-                        setPreorderAlarm(context)
+                        setPreorderAlarm()
                     }
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "예약 내역 불러오기 실패"
@@ -126,37 +123,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun setPreorderAlarm(context: Context) {
-        alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val currentTime = Calendar.getInstance().time.getUTCDateTime()
-
-        for ((index, preorderItem) in todayPreorderList.withIndex()) {
+    private fun setPreorderAlarm() {
+        for (preorderItem in todayPreorderList) {
             // 각 아이템에 대한 알람 시간과 기타 설정 가져옴
-            val alarmTime = Formatter.getDateFromString(preorderItem.orderedFor)
-            if (alarmTime.after(currentTime)) {
-                // 알림을 발생시킬 때 사용하는 PendingIntent 생성, 전달할 데이터 설정 가능
-                // api 31 이상부터 FLAG_MUTABLE / FLAG_IMMUTABLE 사용 가능
-                val alarmIntent = Intent(context, AlarmReceiver::class.java)
-                val pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    index,
-                    alarmIntent,
-                    FLAG_IMMUTABLE
-                )
-                todayPreorderPendingIntent.add(pendingIntent)
-                //setExact를 통해 정확한 시간에 알람 실행되도록 함
-                alarmManager.setExact(
-                    AlarmManager.RTC,
-                    alarmTime.time - TimeUnit.MINUTES.toMillis(10),
-                    pendingIntent
-                )
-            }
+            AlarmManager.setPreorderAlarm(context, preorderItem.orderedFor)
         }
     }
 
     fun cancelAllPreorderAlarm() {
-        for (pendingIntent in todayPreorderPendingIntent) {
-            alarmManager.cancel(pendingIntent)
-        }
+        AlarmManager.cancelAllAlarm(context)
     }
 }
