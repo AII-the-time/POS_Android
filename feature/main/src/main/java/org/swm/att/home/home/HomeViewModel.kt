@@ -13,7 +13,6 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
-import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
 
@@ -25,8 +24,6 @@ class HomeViewModel @Inject constructor(
     val selectedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _selectedMenuMap
     private val _getMenuState = MutableStateFlow<UiState<CategoriesVO>>(UiState.Loading)
     val getMenuState: StateFlow<UiState<CategoriesVO>> = _getMenuState
-    private val _getMenuInfoState = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
-    val getMenuInfoState: StateFlow<UiState<MenuWithRecipeVO>> = _getMenuInfoState
 
     fun setSelectedMenusVO(selectedMenusVO: OrderedMenusVO) {
         selectedMenusVO.menus?.let {
@@ -50,32 +47,6 @@ class HomeViewModel @Inject constructor(
                         _getMenuState.value = UiState.Error(errorMsg)
                     }
                 }
-        }
-    }
-
-    fun getMenuInfo(menuId: Int) {
-        _getMenuInfoState.value = UiState.Loading
-        viewModelScope.launch(attExceptionHandler) {
-            attMenuRepository.getMenuInfo(1, menuId).collect { result ->
-                result.onSuccess { menu ->
-                    if (menu.option.isNotEmpty()) {
-                        menu.menuId = menuId
-                        _getMenuInfoState.value = UiState.Success(menu)
-                    } else {
-                        addSelectedMenu(
-                            OrderedMenuVO(
-                                id = menuId,
-                                name = menu.menuName,
-                                price = menu.price.toInt(),
-                                options = emptyList()
-                            )
-                        )
-                    }
-                }.onFailure {  e ->
-                    val errorMsg = if (e is HttpResponseException) e.message else "메뉴 상세 불러오기 실패"
-                    _getMenuInfoState.value = UiState.Error(errorMsg)
-                }
-            }
         }
     }
 
@@ -127,7 +98,6 @@ class HomeViewModel @Inject constructor(
             it.count = selectedMenuMap[it]
             orderedMenuList.add(it)
         }
-
         return OrderedMenusVO(orderedMenuList)
     }
 }
