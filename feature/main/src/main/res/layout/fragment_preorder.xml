@@ -135,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="2023년 7월 23일 14:50"
-                app:localTimeText="@{preorderViewModel.selectedPreorderInfoData.orderedFor}"
+                app:localDateTimeText="@{preorderViewModel.selectedPreorderInfoData.orderedFor}"
                 android:textSize="12sp"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="20dp"

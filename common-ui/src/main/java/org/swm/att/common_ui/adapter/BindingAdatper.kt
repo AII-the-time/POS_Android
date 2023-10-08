@@ -188,8 +188,8 @@ fun setEditTextStyleByIsModify(view: AppCompatEditText, isModify: Boolean) {
     view.isFocusableInTouchMode = isModify
 }
 
-@BindingAdapter("localTimeText")
-fun setLocalTimeText(view: TextView, date: String?) {
+@BindingAdapter("localDateTimeText")
+fun setLocalDateTimeText(view: TextView, date: String?) {
     date?.let {
         val localTime = getDateFromString(it).getRTCDateTime()
         view.text = getDataTimeBaseFormattingResult(localTime)
