@@ -70,7 +70,11 @@ class PreorderRegisterViewModel @Inject constructor(
             attOrderRepository.postPreOrder(1, preOrderedMenus).collect { result ->
                 result.onSuccess {
                     _postPreOrderState.value = UiState.Success()
-                    addPreorderToAlarmManager(getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime()))
+                    addPreorderToAlarmManager(
+                        getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime()),
+                        phoneNumber,
+                        orderedMenus.value?.menus?.size ?: -1
+                    )
                 }.onFailure {
                     val errorMsg =
                         if (it is HttpResponseException) it.message else "예약 주문 등록 실패하였습니다."
@@ -80,7 +84,11 @@ class PreorderRegisterViewModel @Inject constructor(
         }
     }
 
-    private fun addPreorderToAlarmManager(preorderDate: String) {
-        AlarmManager.setPreorderAlarm(context, preorderDate)
+    private fun addPreorderToAlarmManager(
+        preorderDate: String,
+        phoneNumber: String,
+        totalOrderCount: Int
+    ) {
+        AlarmManager.setPreorderAlarm(context, preorderDate, phoneNumber, totalOrderCount)
     }
 }

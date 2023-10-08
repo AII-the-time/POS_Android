@@ -126,7 +126,12 @@ class MainViewModel @Inject constructor(
     private fun setPreorderAlarm() {
         for (preorderItem in todayPreorderList) {
             // 각 아이템에 대한 알람 시간과 기타 설정 가져옴
-            AlarmManager.setPreorderAlarm(context, preorderItem.orderedFor)
+            AlarmManager.setPreorderAlarm(
+                context,
+                preorderItem.orderedFor,
+                preorderItem.phone,
+                preorderItem.totalCount
+            )
         }
     }
 

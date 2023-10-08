@@ -12,12 +12,20 @@ import java.util.concurrent.TimeUnit
 object AlarmManager {
     private val pendingIntentList = mutableListOf<PendingIntent>()
 
-    fun setPreorderAlarm(context: Context, preorderDate: String) {
+    fun setPreorderAlarm(
+        context: Context,
+        preorderDate: String,
+        phoneNumber: String,
+        totalOrderCount: Int
+    ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val currentTime = Calendar.getInstance().time.getUTCDateTime()
         val alarmTime = Formatter.getDateFromString(preorderDate)
         if (alarmTime.after(currentTime)) {
             val alarmIntent = Intent(context, AlarmReceiver::class.java)
+            alarmIntent.putExtra("preorderDate", preorderDate)
+            alarmIntent.putExtra("phoneNumber", phoneNumber)
+            alarmIntent.putExtra("totalOrderCount", totalOrderCount)
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
                 UUID.randomUUID().variant(),

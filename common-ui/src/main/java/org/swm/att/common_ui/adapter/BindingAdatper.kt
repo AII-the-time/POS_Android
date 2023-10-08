@@ -12,6 +12,7 @@ import org.swm.att.common_ui.util.Formatter.getDataTimeBaseFormattingResult
 import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
 import org.swm.att.common_ui.util.Formatter.getDateFromString
 import org.swm.att.common_ui.util.Formatter.getStringBaseCurrencyUnit
+import org.swm.att.common_ui.util.Formatter.getTimeFromString
 import org.swm.att.common_ui.util.getRTCDateTime
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.MileageVO
@@ -193,5 +194,13 @@ fun setLocalDateTimeText(view: TextView, date: String?) {
     date?.let {
         val localTime = getDateFromString(it).getRTCDateTime()
         view.text = getDataTimeBaseFormattingResult(localTime)
+    }
+}
+
+@BindingAdapter("localTimeText")
+fun setLocalTimeText(view: TextView, date: String?) {
+    date?.let {
+        val localTime = getDateFromString(it).getRTCDateTime()
+        view.text = getTimeFromString(localTime)
     }
 }

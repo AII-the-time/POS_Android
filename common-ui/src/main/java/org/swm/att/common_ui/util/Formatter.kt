@@ -9,6 +9,7 @@ import java.util.Locale
 object Formatter {
     private val decimalFormat = DecimalFormat("#,###")
     private val baseDateFormatter = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+    private val baseTimeFormatter = SimpleDateFormat("HH시 mm분", Locale.KOREA)
     private val baseDateTimeFormatter = SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분", Locale.KOREA)
     private val baseDateTimeStringFormatter =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.KOREA)
@@ -21,6 +22,10 @@ object Formatter {
 
     fun getDateFromString(date: String): Date {
         return baseDateTimeStringFormatter.parse(date)
+    }
+
+    fun getTimeFromString(date: Date): String {
+        return baseTimeFormatter.format(date)
     }
 
     fun getStringBaseCurrencyUnit(currency: String?): String {
