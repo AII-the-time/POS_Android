@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.google.android.material.chip.Chip
 import org.swm.att.common_ui.R
-import org.swm.att.common_ui.base.BaseInteractiveViewHolder
+import org.swm.att.common_ui.presenter.base.BaseInteractiveViewHolder
 import org.swm.att.domain.entity.response.BaseRecyclerViewItem
 import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.home.databinding.ItemMenuOptionBinding

@@ -6,13 +6,16 @@ import org.swm.att.domain.entity.response.PreOrdersVO
 
 @JsonClass(generateAdapter = true)
 data class PreOrdersDTO(
-    @field:Json(name = "endPage")
-    val endPage: Int?,
+    @field:Json(name = "lastPage")
+    val lastPage: Int?,
+    @field:Json(name = "totalPreOrderCount")
+    val totalPreorderCount: Int?,
     @field:Json(name = "preOrders")
     val preOrders: List<PreOrderDTO>?
 ) {
     fun toVO() = PreOrdersVO(
-        endPage = endPage ?: -1,
+        lastPage = lastPage ?: -1,
+        totalPreorderCount = totalPreorderCount ?: -1,
         preOrders = preOrders?.map { it.toVO() } ?: listOf()
     )
 }

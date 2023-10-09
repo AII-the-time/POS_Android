@@ -2,7 +2,7 @@ package org.swm.att.home.recipe
 
 import android.os.Bundle
 import android.view.View
-import org.swm.att.common_ui.base.BaseDialog
+import org.swm.att.common_ui.presenter.base.BaseDialog
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogAddCategoryBinding
 

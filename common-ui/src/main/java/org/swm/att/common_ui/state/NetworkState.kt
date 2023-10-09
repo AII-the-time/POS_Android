@@ -1,4 +1,4 @@
-package org.swm.att.common_ui.util.state
+package org.swm.att.common_ui.state
 
 sealed interface NetworkState<out T> {
     object Init: NetworkState<Nothing>

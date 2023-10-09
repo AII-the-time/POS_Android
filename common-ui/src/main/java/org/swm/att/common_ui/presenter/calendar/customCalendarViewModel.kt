@@ -1,8 +1,8 @@
-package org.swm.att.common_ui.util.calendar
+package org.swm.att.common_ui.presenter.calendar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.swm.att.common_ui.base.BaseViewModel
+import org.swm.att.common_ui.presenter.base.BaseViewModel
 import java.util.Calendar
 import java.util.Date
 

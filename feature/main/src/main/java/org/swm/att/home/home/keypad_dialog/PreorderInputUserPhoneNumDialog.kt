@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import org.swm.att.common_ui.base.BaseDialog
+import org.swm.att.common_ui.presenter.base.BaseDialog
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding
 import org.swm.att.home.home.preorder.PreorderRegisterViewModel

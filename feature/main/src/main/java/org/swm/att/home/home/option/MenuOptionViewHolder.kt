@@ -3,7 +3,7 @@ package org.swm.att.home.home.option
 import androidx.core.view.get
 import com.google.android.material.chip.Chip
 import org.swm.att.common_ui.R
-import org.swm.att.common_ui.base.BaseInteractiveViewHolder
+import org.swm.att.common_ui.presenter.base.BaseInteractiveViewHolder
 import org.swm.att.domain.entity.response.BaseRecyclerViewItem
 import org.swm.att.domain.entity.response.OptionTypeVO
 import org.swm.att.domain.entity.response.OptionVO

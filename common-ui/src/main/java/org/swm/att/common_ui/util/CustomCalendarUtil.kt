@@ -1,4 +1,4 @@
-package org.swm.att.common_ui.util.calendar
+package org.swm.att.common_ui.util
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,10 +7,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.swm.att.common_ui.R
-import org.swm.att.common_ui.base.BaseListAdapter
+import org.swm.att.common_ui.presenter.base.BaseListAdapter
 import org.swm.att.common_ui.databinding.CustomCalendarDateBinding
+import org.swm.att.common_ui.presenter.calendar.CustomCalendarViewModel
 import org.swm.att.common_ui.util.Formatter.isToday
-import org.swm.att.common_ui.util.ItemDiffCallback
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -19,7 +19,7 @@ class CustomCalendarAdapter(
     private val customCalendarViewModel: CustomCalendarViewModel,
     private val lifecycleOwner: LifecycleOwner,
     private val isDatePicker: Boolean = false
-): BaseListAdapter<Date, CustomCalendarDateViewHolder> (
+): BaseListAdapter<Date, CustomCalendarDateViewHolder>(
     ItemDiffCallback(
         onItemsTheSame = { old, new -> old == new },
         onContentTheSame = { old, new -> old == new }

@@ -1,11 +1,11 @@
-package org.swm.att.common_ui.base
+package org.swm.att.common_ui.presenter.base
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import org.swm.att.common_ui.R
 import org.swm.att.common_ui.databinding.BaseDialogFilteringBinding
-import org.swm.att.common_ui.util.calendar.CustomCalendarViewModel
+import org.swm.att.common_ui.presenter.calendar.CustomCalendarViewModel
 import java.util.Date
 
 abstract class BaseDialogFiltering : BaseDialog<BaseDialogFilteringBinding>(R.layout.base_dialog_filtering) {

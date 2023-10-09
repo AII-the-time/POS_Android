@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.swm.att.common_ui.base.BaseSelectableViewViewModel
-import org.swm.att.common_ui.util.state.UiState
+import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
+import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.CategoryVO

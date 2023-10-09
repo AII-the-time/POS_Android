@@ -1,6 +1,6 @@
 package org.swm.att.home.bills
 
-import org.swm.att.common_ui.base.BaseDialogFiltering
+import org.swm.att.common_ui.presenter.base.BaseDialogFiltering
 import java.util.Date
 
 class DialogBillFiltering(

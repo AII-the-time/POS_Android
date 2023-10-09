@@ -19,6 +19,7 @@
         <item name="chipBackgroundColor">@drawable/selector_option_type_chip_item</item>
         <item name="android:textColor">@drawable/selector_option_type_chip_text</item>
     </style>
+
     <style name="Widget.App.CategoryChip" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipStrokeColor">@color/main_color</item>
         <item name="chipStrokeWidth">1dp</item>
@@ -26,5 +27,18 @@
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.SmallComponent</item>
         <item name="chipBackgroundColor">@drawable/selector_category_chip_item</item>
         <item name="android:textColor">@drawable/selector_category_chip_text</item>
+    </style>
+    <!--  dialog for notification  -->
+    <style name="Theme.DialogTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end|top</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 </resources>

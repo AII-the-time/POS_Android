@@ -1,4 +1,4 @@
-package org.swm.att.common_ui.util.state
+package org.swm.att.common_ui.state
 
 sealed class UiState<out T> {
     // Loading의 경우, 상태의 데이터가 필요 없기 때문에 단 하나의 인스턴스만 있어도 된다.

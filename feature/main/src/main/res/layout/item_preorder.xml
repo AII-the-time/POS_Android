@@ -25,7 +25,7 @@
             android:layout_marginTop="14dp"
             android:layout_marginStart="14dp"
             android:layout_marginBottom="14dp"
-            android:text="@{Formatter.INSTANCE.getDataTimeBaseFormattingResult(preorder.orderedFor)}"
+            app:localDateTimeText="@{preorder.orderedFor}"
             app:layout_constraintHorizontal_weight="3"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/divider_bill"
