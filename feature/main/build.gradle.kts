@@ -12,7 +12,6 @@ android {
 
     defaultConfig {
         minSdk = ProjectConfig.minSdk
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -51,7 +50,6 @@ dependencies {
     kapt(libs.moshi.kapt)
     implementation(libs.bundles.navigation)
     implementation(libs.flexbox)
-    implementation(libs.bundles.basic.test)
     implementation(libs.sentry)
     implementation(libs.kotlin.coroutines)
 }
