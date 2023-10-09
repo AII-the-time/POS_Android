@@ -66,7 +66,9 @@ dependencies {
     implementation(libs.bundles.navigation)
 
     //Test
-    implementation(libs.bundles.basic.test)
+    testImplementation(libs.bundles.basic.test)
+    testImplementation(libs.arch.core.testing)
+    testImplementation(libs.mockk)
 
     //hilt
     implementation(libs.hilt)

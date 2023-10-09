@@ -38,8 +38,7 @@ android {
 
 dependencies {
     api(project(":domain"))
-
     implementation(libs.bundles.androidx.ui.foundation)
     implementation(libs.material)
-    implementation(libs.bundles.basic.test)
+    testImplementation(libs.bundles.basic.test)
 }

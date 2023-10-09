@@ -16,6 +16,7 @@ lifecycle = "2.6.1"
 fragment = "1.5.7"
 preferences-datastore = "1.0.0"
 security-crypto = "1.0.0"
+arch-core = "2.1.0"
 
 # Test Libraries
 junit = "4.13.2"
@@ -51,6 +52,9 @@ secret = "2.0.1"
 #sentry
 setnry = "6.29.0"
 
+#mock for test
+mockk = "1.13.7"
+
 [libraries]
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
@@ -58,13 +62,14 @@ kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serial
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen"}
+splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 viewpager2 = { module = "androidx.viewpager2:viewpager2" , version.ref = "viewpager2" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 preferences-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "preferences-datastore" }
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
+arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "arch-core" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
@@ -93,6 +98,8 @@ navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref 
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 
 sentry = { module = "io.sentry:sentry-android", version.ref = "setnry" }
+
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [bundles]
 androidx-ui-foundation = ["core-ktx", "appcompat", "constraintlayout", "lifecycle-viewmodel", "fragment"]
