@@ -3,6 +3,7 @@ package org.swm.att.home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ListAdapter
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.common_ui.util.ItemTouchHelperListener
@@ -11,8 +12,9 @@ import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.home.R
 import org.swm.att.home.home.HomeViewModel
 import org.swm.att.home.home.menu.MenuViewHolder
+import org.swm.att.home.home.option.MenuOptionDialog
 
-class CategoryMenuAdapter(
+class CategoryMenuAdapter (
     private val homeViewModel: HomeViewModel
 ) : ListAdapter<MenuVO, MenuViewHolder>(
     ItemDiffCallback<MenuVO>(
@@ -37,7 +39,8 @@ class CategoryMenuAdapter(
         val menu = getItem(position)
         holder.bind(menu)
         holder.itemView.setOnClickListener {
-            homeViewModel.getMenuInfo(menu.id)
+            val menuOptionDialog = MenuOptionDialog(homeViewModel, menu.id)
+            menuOptionDialog.show((holder.itemView.context as FragmentActivity).supportFragmentManager, "MenuOptionDialog")
         }
 //        holder.itemView.setOnTouchListener { _, motionEvent ->
 //            if (motionEvent.actionMasked == android.view.MotionEvent.ACTION_DOWN) {

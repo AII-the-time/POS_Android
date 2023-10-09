@@ -85,7 +85,7 @@
             android:gravity="center"
             android:textColor="@color/black"/>
 
-        <org.swm.att.common_ui.util.keypad.CustomKeyPad
+        <org.swm.att.common_ui.presenter.keypad.CustomKeyPad
             android:id="@+id/ckp_use_mileage"
             app:layout_constraintTop_toBottomOf="@id/tv_use_mileage_des"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -99,7 +99,7 @@
             android:id="@+id/btn_close_use_mileage_dialog"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:background="@drawable/ic_system_close_mdpi"
+            android:background="@drawable/ic_system_close_bk_mdpi"
             android:scaleType="fitXY"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -7,9 +7,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.swm.att.common_ui.base.BaseViewModel
+import org.swm.att.common_ui.presenter.base.BaseViewModel
+import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter
-import org.swm.att.common_ui.util.state.UiState
+import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
@@ -64,15 +65,17 @@ class PreorderViewModel @Inject constructor(
     }
 
     fun getPreordersForFilteringDates(startDate: Date) {
+        if (startDate == filteringStartDate.value) return
         _filteringStartDate.value = startDate
         page = 1
+        _preOrdersData.value = listOf()
         getNextValidPreOrders(1)
     }
 
     fun getNextValidPreOrders(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
             val date = filteringStartDate.value?.let { startDate ->
-                Formatter.getStringByDateTimeBaseFormatter(startDate)
+                Formatter.getStringByDateTimeBaseFormatter(startDate.getUTCDateTime())
             }
             attOrderRepository.getPreOrders(storeId, page, date).collect { result ->
                 result.onSuccess {
@@ -93,7 +96,7 @@ class PreorderViewModel @Inject constructor(
         _getPreOrdersState.value.apply {
             if (this is UiState.Success) {
                 this.data?.let {
-                    return it.endPage > page
+                    return it.lastPage > page - 1
                 }
             } else {
                 return false

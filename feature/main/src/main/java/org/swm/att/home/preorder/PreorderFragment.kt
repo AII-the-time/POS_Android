@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.swm.att.common_ui.base.BaseFragment
-import org.swm.att.common_ui.util.state.UiState
+import org.swm.att.common_ui.presenter.base.BaseFragment
+import org.swm.att.common_ui.state.UiState
 import org.swm.att.home.MainViewModel
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseRecyclerViewAdapter

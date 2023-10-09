@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import org.swm.att.common_ui.base.BaseListAdapter
+import org.swm.att.common_ui.presenter.base.BaseListAdapter
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.home.R

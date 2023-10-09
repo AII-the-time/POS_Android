@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ListAdapter
-import org.swm.att.common_ui.base.BaseInteractiveViewHolder
+import org.swm.att.common_ui.presenter.base.BaseInteractiveViewHolder
 import org.swm.att.common_ui.util.ItemDiffCallback
 import org.swm.att.domain.constant.BaseInteractiveViewType
 import org.swm.att.domain.entity.response.BaseRecyclerViewItem

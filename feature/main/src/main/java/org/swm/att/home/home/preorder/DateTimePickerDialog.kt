@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import org.swm.att.common_ui.base.BaseDialog
-import org.swm.att.common_ui.util.calendar.CustomCalendarViewModel
+import org.swm.att.common_ui.presenter.base.BaseDialog
+import org.swm.att.common_ui.presenter.calendar.CustomCalendarViewModel
 import org.swm.att.home.R
 import org.swm.att.home.databinding.DialogDateTimePickerBinding
 import java.util.Calendar
