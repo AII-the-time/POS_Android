@@ -67,18 +67,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/rv_category_menu_list"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ib_category_detail"/>
+                app:layout_constraintEnd_toStartOf="@id/tv_category_modify" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_category_detail"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            <TextView
+                android:id="@+id/tv_category_modify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/ic_system_more_bk_mdpi"
+                android:text="@string/tv_modify_category_name"
+                android:textColor="@color/black"
+                android:textSize="11sp"
                 app:layout_constraintStart_toEndOf="@id/edt_category_name"
                 app:layout_constraintTop_toTopOf="@id/edt_category_name"
                 app:layout_constraintBottom_toBottomOf="@id/edt_category_name"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/tv_no_menu_des"
@@ -190,7 +192,7 @@
                         android:id="@+id/edt_menu_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
+                        android:layout_marginStart="20dp"
                         android:hint="@string/edt_register_menu_name"
                         android:maxLength="15"
                         android:paddingStart="10dp"
@@ -231,6 +233,7 @@
                             android:paddingEnd="10dp"
                             android:text="@{Formatter.INSTANCE.getStringBaseCurrencyUnit(menuWithRecipe.price.toString())}"
                             android:textColor="@color/black"
+                            android:textStyle="bold"
                             android:textSize="20sp"
                             android:backgroundTint="@{recipeViewModel.isModify ? @color/main_trans : @color/white}"
                             setEditTextStyleByIsModify="@{recipeViewModel.isModify}"
