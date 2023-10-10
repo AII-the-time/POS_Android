@@ -62,10 +62,11 @@
                 android:textCursorDrawable="@color/black"
                 android:layout_marginTop="15dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginBottom="15dp"
                 android:enabled="false"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/rv_category_menu_list"
+                app:layout_constraintBottom_toTopOf="@id/cl_new_item"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tv_category_modify" />
 
@@ -94,16 +95,45 @@
                 app:layout_constraintTop_toBottomOf="@id/edt_category_name"
                 app:layout_constraintBottom_toTopOf="@id/btn_register_menu"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_new_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/main_color"
+                android:paddingTop="18dp"
+                android:paddingBottom="18dp"
+                android:visibility="@{recipeViewModel.isCreate ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@id/rv_category_menu_list"
+                app:layout_constraintTop_toBottomOf="@id/edt_category_name">
+
+                <TextView
+                    android:id="@+id/tv_menu_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:gravity="start"
+                    android:text="@string/tv_new_menu_item"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="새로운 메뉴" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_category_menu_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="15dp"
                 android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@id/edt_category_name"
-                app:layout_constraintBottom_toTopOf="@id/btn_register_menu"/>
+                app:layout_constraintBottom_toTopOf="@id/btn_register_menu"
+                app:layout_constraintTop_toBottomOf="@id/cl_new_item" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btn_register_menu"
@@ -116,6 +146,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/shape_oval_stroke"
+                android:visibility="@{recipeViewModel.isCreate ? View.GONE : View.VISIBLE}"
                 app:layout_constraintTop_toBottomOf="@id/rv_category_menu_list"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -169,7 +200,7 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:visibility="@{menuWithRecipe == null ? View.VISIBLE: View.INVISIBLE}"
+                android:visibility="@{menuWithRecipe == null &amp;&amp; !recipeViewModel.isCreate ? View.VISIBLE: View.INVISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -178,7 +209,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{menuWithRecipe == null ? View.INVISIBLE: View.VISIBLE}">
+                android:visibility="@{(menuWithRecipe != null) || (menuWithRecipe == null &amp;&amp; recipeViewModel.isCreate) ? View.VISIBLE: View.INVISIBLE}">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_menu_name_and_price"
@@ -201,8 +232,8 @@
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:backgroundTint="@{recipeViewModel.isModify ? @color/main_trans : @color/white}"
-                        setEditTextStyleByIsModify="@{recipeViewModel.isModify}"
+                        setEditTextStyleByIsModify="@{recipeViewModel.isModify || recipeViewModel.isCreate}"
+                        android:backgroundTint="@{recipeViewModel.isModify || recipeViewModel.isCreate ? @color/main_trans : @color/white}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/cl_menu_price"
                         app:layout_constraintHorizontal_weight="5"
@@ -235,8 +266,8 @@
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="20sp"
-                            android:backgroundTint="@{recipeViewModel.isModify ? @color/main_trans : @color/white}"
-                            setEditTextStyleByIsModify="@{recipeViewModel.isModify}"
+                            setEditTextStyleByIsModify="@{recipeViewModel.isModify || recipeViewModel.isCreate}"
+                            android:backgroundTint="@{recipeViewModel.isModify || recipeViewModel.isCreate ? @color/main_trans : @color/white}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/tv_price_unit_des"
                             app:layout_constraintHorizontal_chainStyle="packed"
@@ -309,7 +340,7 @@
                                 android:id="@+id/cl_recipe_col_des"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="25dp"
+                                android:layout_marginTop="12dp"
                                 app:layout_constraintBottom_toTopOf="@id/rv_menu_recipe"
                                 app:layout_constraintTop_toTopOf="parent">
 
@@ -362,7 +393,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:background="@drawable/ic_system_plus_mdpi"
-                                    android:visibility="@{recipeViewModel.isModify ? View.VISIBLE : View.GONE}"
+                                    android:visibility="@{recipeViewModel.isModify || recipeViewModel.isCreate ? View.VISIBLE : View.GONE}"
                                     android:layout_marginStart="20dp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -381,7 +412,7 @@
                                 android:textStyle="bold"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="10dp"
-                                android:visibility="@{menuWithRecipe.recipe.size() == 0 ? View.VISIBLE : View.INVISIBLE}"
+                                android:visibility="@{recipeViewModel.isCreate || menuWithRecipe.recipe.size() == 0 ? View.VISIBLE : View.INVISIBLE}"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -394,7 +425,8 @@
                                 android:layout_marginTop="12dp"
                                 android:nestedScrollingEnabled="false"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/cl_recipe_col_des" />
+                                app:layout_constraintTop_toBottomOf="@id/cl_recipe_col_des"
+                                tools:layout_editor_absoluteX="0dp" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -440,7 +472,7 @@
                                 android:textStyle="bold"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="10dp"
-                                android:visibility="@{menuWithRecipe.option.size() == 0 ? View.VISIBLE : View.INVISIBLE}"
+                                android:visibility="@{recipeViewModel.isCreate || menuWithRecipe.option.size() == 0 ? View.VISIBLE : View.INVISIBLE}"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -485,7 +517,7 @@
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:visibility="@{recipeViewModel.isModify ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{recipeViewModel.isModify || recipeViewModel.isCreate ? View.GONE : View.VISIBLE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -505,7 +537,7 @@
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:visibility="@{recipeViewModel.isModify ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{recipeViewModel.isModify || recipeViewModel.isCreate ? View.GONE : View.VISIBLE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/btn_modify_recipe"
@@ -526,7 +558,7 @@
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:visibility="@{recipeViewModel.isModify ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{recipeViewModel.isModify || recipeViewModel.isCreate ? View.VISIBLE : View.GONE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.453"

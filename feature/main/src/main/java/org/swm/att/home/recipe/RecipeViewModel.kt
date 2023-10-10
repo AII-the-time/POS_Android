@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.state.UiState
@@ -36,8 +35,11 @@ class RecipeViewModel @Inject constructor(
 
     private val _isModify = MutableLiveData(false)
     val isModify: LiveData<Boolean> = _isModify
+    private val _isCreate = MutableLiveData(false)
+    val isCreate: LiveData<Boolean> = _isCreate
 
     override fun getSelectedItem(storeId: Int, selectedItemId: Int) {
+        _selectedMenuInfo.value = UiState.Loading
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getMenuInfo(1, selectedItemId).collect() { result ->
                 result.onSuccess {
@@ -51,6 +53,9 @@ class RecipeViewModel @Inject constructor(
     }
 
     override fun setCurrentSelectedItemId(position: Int) {
+        if (position != -1) {
+            changeCreateState(false)
+        }
         _currentSelectedMenuId.value = position
     }
 
@@ -82,6 +87,10 @@ class RecipeViewModel @Inject constructor(
 
     fun changeModifyState() {
         _isModify.postValue(isModify.value?.not() ?: false)
+    }
+
+    fun changeCreateState(state: Boolean) {
+        _isCreate.postValue(state)
     }
 
     fun postCategory(name: String) {

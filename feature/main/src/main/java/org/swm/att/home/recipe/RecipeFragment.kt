@@ -6,6 +6,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.MenuRes
 import androidx.core.view.get
+import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +34,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         initMenusRecyclerView()
         setCategoryDetailBtnClickListener()
         setRecipeBtnsClickListener()
+        setBtnRegisterMenuClickListener()
         setObserver()
         setDataBinding()
         initData()
@@ -73,6 +75,15 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         }
         binding.btnRegisterRecipe.setOnClickListener {
             recipeViewModel.changeModifyState()
+        }
+    }
+
+    private fun setBtnRegisterMenuClickListener() {
+        binding.btnRegisterMenu.setOnClickListener {
+            recipeViewModel.changeCreateState(true)
+            recipeViewModel.setCurrentSelectedItemId(-1)
+            binding.menuWithRecipe = null
+            // TODO: 옵션 가져오는 api 붙이고, 그에 따라 visible 설정
         }
     }
 
@@ -119,16 +130,19 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             }
         }
         recipeViewModel.currentSelectedMenuId.observe(viewLifecycleOwner) {
+            if (it != -1) {
+                binding.rvCategoryMenuList[it].setBackgroundResource(R.color.main_trans)
+            }
             val pastId = recipeViewModel.selectedMenuId.value
-            binding.rvCategoryMenuList[it].setBackgroundResource(R.color.main_trans)
-            recipeViewModel.changeSelectedState()
+            val currentListSize = binding.rvCategoryMenuList.size
             pastId?.let { pastId ->
-                if (pastId != it) {
+                if (pastId != it && pastId > -1 && currentListSize > 0) {
                     recipeViewModel.selectedMenuId.value?.let { pastId ->
                         binding.rvCategoryMenuList[pastId].setBackgroundResource(R.color.back_color)
                     }
                 }
             }
+            recipeViewModel.changeSelectedState()
         }
         recipeViewModel.selectedCategory.observe(viewLifecycleOwner) {
             if (it.menus.isNotEmpty()) {
@@ -202,6 +216,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                     setOnCheckedChangeListener { _, isChecked ->
                         if (isChecked) {
                             recipeViewModel.setSelectedCategory(type)
+                            recipeViewModel.changeCreateState(false)
                         }
                     }
                 }

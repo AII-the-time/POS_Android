@@ -168,6 +168,7 @@
     <string name="tv_add_category_des">카테고리 생성</string>
     <string name="tv_preorder_customer">%s님의 주문</string>
     <string name="tv_order_total_count">총 %d건</string>
+    <string name="tv_new_menu_item">새로운 메뉴</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>
