@@ -60,15 +60,28 @@ class RecipeViewModel @Inject constructor(
         if (position != -1) {
             changeCreateState(false)
         }
-        _currentSelectedMenuId.value = position
+        val currentSelectedCategory = _selectedCategory.value
+        val pastSelectedId = _currentSelectedMenuId.value
+        currentSelectedCategory?.let { category ->
+            category.menus[position].isFocused = true
+            pastSelectedId?.let { pastId ->
+                if (pastId != position) {
+                    category.menus[pastId].isFocused = false
+                }
+            }
+            // focused 값을 변경함 새 리스트 submit
+            _selectedCategory.postValue(category)
+        }
+        // 이전에 선택된 item 업데이트
+        pastSelectedId?.let {
+            changeSelectedState()
+        }
+        // 현재 선택된 item 업데이트
+        _currentSelectedMenuId.postValue(position)
     }
-
-    fun setSelectedMenuId(menuId: Int) {
-        _selectedMenuId.value = menuId
-    }
-
     fun setSelectedCategory(category: CategoryVO) {
         _selectedCategory.value = category
+        setCurrentSelectedItemId(0)
     }
 
     override fun changeSelectedState() {
@@ -80,7 +93,6 @@ class RecipeViewModel @Inject constructor(
             attMenuRepository.getMenu(storeId).collect { result ->
                 result.onSuccess {
                     _getCategories.value = UiState.Success(it)
-                    _selectedMenuId.value = 0
                 }.onFailure {  e ->
                     val errorMsg = if (e is HttpResponseException) e.message else "메뉴 불러오기 실패"
                     _getCategories.value = UiState.Error(errorMsg)

@@ -5,8 +5,6 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.MenuRes
-import androidx.core.view.get
-import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -132,30 +130,20 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        is UiState.Loading -> { /* nothing */ }
+                        is UiState.Loading -> { /* nothing */
+                        }
                     }
                 }
             }
         }
         recipeViewModel.currentSelectedMenuId.observe(viewLifecycleOwner) {
-            if (it != -1) {
-                binding.rvCategoryMenuList[it].setBackgroundResource(R.color.main_trans)
-            }
-            val pastId = recipeViewModel.selectedMenuId.value
-            val currentListSize = binding.rvCategoryMenuList.size
-            pastId?.let { pastId ->
-                if (pastId != it && pastId > -1 && currentListSize > 0) {
-                    recipeViewModel.selectedMenuId.value?.let { pastId ->
-                        binding.rvCategoryMenuList[pastId].setBackgroundResource(R.color.back_color)
-                    }
-                }
-            }
-            recipeViewModel.changeSelectedState()
+            registeredMenusAdapter.notifyItemChanged(it)
+        }
+        recipeViewModel.selectedMenuId.observe(viewLifecycleOwner) {
+            registeredMenusAdapter.notifyItemChanged(it)
         }
         recipeViewModel.selectedCategory.observe(viewLifecycleOwner) {
-            if (it.menus.isNotEmpty()) {
-                recipeViewModel.setSelectedMenuId(0)
-            } else {
+            if (it.menus.isEmpty()) {
                 binding.menuWithRecipe = null
             }
             registeredMenusAdapter.submitList(it.menus)
