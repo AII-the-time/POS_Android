@@ -18,7 +18,8 @@ data class OrderBillVO(
     val paymentMethod: PayMethod,
     val totalCount: Int,
     val totalPrice: BigDecimal,
-    val createdAt: String
+    val createdAt: String,
+    var isFocused: Boolean = false
 ) : BaseRecyclerViewItem()
 
 data class MenuWithRecipeVO(
@@ -81,4 +82,5 @@ data class PreorderVO(
     val totalCount: Int,
     val phone: String,
     val memo: String? = null,
+    var isFocused: Boolean = false
 ) : BaseRecyclerViewItem()
