@@ -38,14 +38,6 @@ class SelectableItemAdapter(
             viewModel.setCurrentSelectedItemId(position)
             viewModel.getSelectedItem(1, item.id)
         }
-
-        if (position == 0) {
-            // storeId 임시로 1로 설정
-            viewModel.getSelectedItem(1, item.id)
-            holder.itemView.setBackgroundResource(R.color.main_trans)
-        } else {
-            holder.itemView.setBackgroundResource(R.color.back_color)
-        }
     }
 
     override fun getItemViewType(position: Int): Int {
