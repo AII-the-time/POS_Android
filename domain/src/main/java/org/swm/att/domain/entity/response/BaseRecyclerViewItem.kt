@@ -39,7 +39,8 @@ data class MenuVO(
     val name: String,
     val price: Int,
     val option: List<OptionVO>,
-    val detail: String? = null
+    val detail: String? = null,
+    var isFocused: Boolean = false
 ) : java.io.Serializable, BaseRecyclerViewItem()
 
 @Serializable
