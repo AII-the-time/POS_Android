@@ -57,7 +57,23 @@ class PreorderViewModel @Inject constructor(
     }
 
     override fun setCurrentSelectedItemId(position: Int) {
-        _currentSelectedPreorderId.value = position
+        val preorderList = preOrdersData.value
+        val pastSelectedId = currentSelectedPreorderId.value
+        preorderList?.let { preorders ->
+            preorders[position].isFocused = true
+            pastSelectedId?.let { pastId ->
+                if (pastId != position) {
+                    preorders[pastId].isFocused = false
+                }
+            }
+            _preOrdersData.postValue(preorders)
+        }
+
+        pastSelectedId?.let {
+            changeSelectedState()
+        }
+
+        _currentSelectedPreorderId.postValue(position)
     }
 
     override fun changeSelectedState() {
@@ -83,6 +99,11 @@ class PreorderViewModel @Inject constructor(
                     data.addAll(it.preOrders)
                     _preOrdersData.postValue(data)
                     _getPreOrdersState.value = UiState.Success(it)
+                    if (page == 1) {
+                        data[0].isFocused = true
+                        _currentSelectedPreorderId.postValue(0)
+                        getSelectedItem(storeId, data[0].id)
+                    }
                     page += 1
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "예약 내역 불러오기 실패"

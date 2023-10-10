@@ -143,11 +143,19 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             registeredMenusAdapter.notifyItemChanged(it)
         }
         recipeViewModel.selectedCategory.observe(viewLifecycleOwner) {
-            if (it.menus.isEmpty()) {
-                binding.menuWithRecipe = null
+            it?.let {
+                if (it.menus.isEmpty()) {
+                    binding.menuWithRecipe = null
+                }
+                registeredMenusAdapter.submitList(it.menus)
+                binding.edtCategoryName.setText(
+                    String.format(
+                        "%s(%d건)",
+                        it.category,
+                        it.menus.size
+                    )
+                )
             }
-            registeredMenusAdapter.submitList(it.menus)
-            binding.edtCategoryName.setText(String.format("%s(%d건)", it.category, it.menus.size))
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

@@ -31,7 +31,7 @@ class BillViewModel @Inject constructor(
     private val _orderBillsData = MutableLiveData<List<OrderBillVO>>()
     val orderBillsData: LiveData<List<OrderBillVO>> = _orderBillsData
 
-    private val _selectedBillId = MutableLiveData(0)
+    private val _selectedBillId = MutableLiveData<Int>()
     val selectedBillId: LiveData<Int> = _selectedBillId
     private val _currentSelectedBillId = MutableLiveData<Int>()
     val currentSelectedBillId: LiveData<Int> = _currentSelectedBillId
@@ -64,6 +64,11 @@ class BillViewModel @Inject constructor(
                     result.onSuccess {
                         val data = _orderBillsData.value?.toMutableList() ?: mutableListOf()
                         data.addAll(it.orders)
+                        if (page == 1) {
+                            data[0].isFocused = true
+                            _currentSelectedBillId.postValue(0)
+                            getSelectedItem(storeId, data[0].id)
+                        }
                         _orderBillsData.postValue(data)
                         _orderBills.value = UiState.Success(it)
                         page += 1
@@ -76,7 +81,23 @@ class BillViewModel @Inject constructor(
     }
 
     override fun setCurrentSelectedItemId(position: Int) {
-        _currentSelectedBillId.value = position
+        val currentOrderBills = _orderBillsData.value
+        val pastSelectedId = currentSelectedBillId.value
+        currentOrderBills?.let { bills ->
+            bills[position].isFocused = true
+            pastSelectedId?.let {
+                if (it != position) {
+                    bills[it].isFocused = false
+                }
+            }
+            _orderBillsData.postValue(bills)
+        }
+
+        pastSelectedId?.let {
+            changeSelectedState()
+        }
+
+        _currentSelectedBillId.postValue(position)
     }
 
     override fun changeSelectedState() {

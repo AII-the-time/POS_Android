@@ -23,8 +23,8 @@ class RecipeViewModel @Inject constructor(
 ): BaseSelectableViewViewModel() {
     private val _selectedMenuInfo = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
     val selectedMenuInfo: StateFlow<UiState<MenuWithRecipeVO>> = _selectedMenuInfo
-    private val _selectedCategory = MutableLiveData<CategoryVO>()
-    val selectedCategory: LiveData<CategoryVO> = _selectedCategory
+    private val _selectedCategory = MutableLiveData<CategoryVO?>()
+    val selectedCategory: LiveData<CategoryVO?> = _selectedCategory
     private val _selectedMenuId = MutableLiveData<Int>()
     val selectedMenuId: LiveData<Int> = _selectedMenuId
     private val _currentSelectedMenuId = MutableLiveData<Int>()
@@ -61,7 +61,7 @@ class RecipeViewModel @Inject constructor(
             changeCreateState(false)
         }
         val currentSelectedCategory = _selectedCategory.value
-        val pastSelectedId = _currentSelectedMenuId.value
+        val pastSelectedId = currentSelectedMenuId.value
         currentSelectedCategory?.let { category ->
             category.menus[position].isFocused = true
             pastSelectedId?.let { pastId ->
@@ -79,9 +79,16 @@ class RecipeViewModel @Inject constructor(
         // 현재 선택된 item 업데이트
         _currentSelectedMenuId.postValue(position)
     }
+
     fun setSelectedCategory(category: CategoryVO) {
         _selectedCategory.value = category
+        setDefaultSelectedState(category)
+    }
+
+    private fun setDefaultSelectedState(category: CategoryVO) {
         setCurrentSelectedItemId(0)
+        _selectedCategory.value = null
+        getSelectedItem(1, category.menus[0].id)
     }
 
     override fun changeSelectedState() {

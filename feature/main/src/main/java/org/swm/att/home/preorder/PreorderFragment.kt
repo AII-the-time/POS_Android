@@ -3,7 +3,6 @@ package org.swm.att.home.preorder
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -99,16 +98,10 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             }
         }
         preorderViewModel.currentSelectedPreorderId.observe(viewLifecycleOwner) {
-            val pastId = preorderViewModel.selectedPreorderId.value
-            binding.rvPreorder[it].setBackgroundResource(R.color.main_trans)
-            preorderViewModel.changeSelectedState()
-            pastId?.let { pastId ->
-                if (pastId != it) {
-                    preorderViewModel.selectedPreorderId.value?.let { pastId ->
-                        binding.rvPreorder[pastId].setBackgroundResource(R.color.back_color)
-                    }
-                }
-            }
+            validPreorderListAdapter.notifyItemChanged(it)
+        }
+        preorderViewModel.selectedPreorderId.observe(viewLifecycleOwner) {
+            validPreorderListAdapter.notifyItemChanged(it)
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
