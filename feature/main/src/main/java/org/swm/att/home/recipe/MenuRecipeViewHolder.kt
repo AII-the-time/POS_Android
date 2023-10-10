@@ -23,7 +23,7 @@ class MenuRecipeViewHolder(
         }
     }
 
-    override fun bind(item: BaseRecyclerViewItem) {
+    override fun bind(item: BaseRecyclerViewItem, position: Int?) {
         binding.apply {
             recipeVO = item as RecipeVO
             recipeViewModel = menuRecipeViewModel

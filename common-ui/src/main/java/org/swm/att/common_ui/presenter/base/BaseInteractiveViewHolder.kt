@@ -9,5 +9,5 @@ abstract class BaseInteractiveViewHolder(
     binding: ViewDataBinding,
     private val viewModel: ViewModel
 ): RecyclerView.ViewHolder(binding.root) {
-    abstract fun bind(item: BaseRecyclerViewItem)
+    abstract fun bind(item: BaseRecyclerViewItem, position: Int? = null)
 }

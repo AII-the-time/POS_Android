@@ -24,7 +24,7 @@ class MenuSelectedOptionViewHolder(
         }
     }
 
-    override fun bind(item: BaseRecyclerViewItem) {
+    override fun bind(item: BaseRecyclerViewItem, position: Int?) {
         binding.option = item as OptionVO
         setChipGroup(item)
     }
