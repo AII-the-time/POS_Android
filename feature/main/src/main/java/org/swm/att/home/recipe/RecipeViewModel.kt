@@ -13,6 +13,7 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
+import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
 
@@ -37,6 +38,9 @@ class RecipeViewModel @Inject constructor(
     val isModify: LiveData<Boolean> = _isModify
     private val _isCreate = MutableLiveData(false)
     val isCreate: LiveData<Boolean> = _isCreate
+
+    private val _recipeListForNewMenu = MutableLiveData<List<RecipeVO>>()
+    val recipeListForNewMenu: LiveData<List<RecipeVO>> = _recipeListForNewMenu
 
     override fun getSelectedItem(storeId: Int, selectedItemId: Int) {
         _selectedMenuInfo.value = UiState.Loading
@@ -103,6 +107,27 @@ class RecipeViewModel @Inject constructor(
                     _postCategoryState.value = UiState.Error(errorMsg)
                 }
             }
+        }
+    }
+
+    fun addTempNewRecipe() {
+        val newRecipeTemp = RecipeVO(
+            id = -1,
+            viewType = "RECIPE",
+            name = "",
+            amount = 0,
+            unit = "g"
+        )
+        val currentRecipeList = _recipeListForNewMenu.value?.toMutableList() ?: mutableListOf()
+        currentRecipeList.add(newRecipeTemp)
+        _recipeListForNewMenu.postValue(currentRecipeList)
+    }
+
+    fun deleteRecipeByPosition(position: Int?) {
+        position?.let {
+            val currentRecipeList = _recipeListForNewMenu.value?.toMutableList() ?: mutableListOf()
+            currentRecipeList.removeAt(position)
+            _recipeListForNewMenu.postValue(currentRecipeList)
         }
     }
 }

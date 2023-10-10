@@ -412,7 +412,7 @@
                                 android:textStyle="bold"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="10dp"
-                                android:visibility="@{recipeViewModel.isCreate || menuWithRecipe.recipe.size() == 0 ? View.VISIBLE : View.INVISIBLE}"
+                                android:visibility="@{recipeViewModel.recipeListForNewMenu.size > 0 || menuWithRecipe.recipe.size() > 0 ? View.INVISIBLE : View.VISIBLE}"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"

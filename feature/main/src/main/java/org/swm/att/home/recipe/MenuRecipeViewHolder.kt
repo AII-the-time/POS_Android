@@ -18,8 +18,8 @@ class MenuRecipeViewHolder(
 
     init {
         itemView.doOnAttach {
+            binding.recipeViewModel = menuRecipeViewModel
             lifecycleOwner = it.findViewTreeLifecycleOwner()!!
-            setObserver()
         }
     }
 
@@ -29,6 +29,7 @@ class MenuRecipeViewHolder(
             recipeViewModel = menuRecipeViewModel
         }
         initUnitMenu()
+        setBtnDeleteRecipeClickListener(position)
     }
 
     private fun initUnitMenu() {
@@ -42,19 +43,9 @@ class MenuRecipeViewHolder(
         }
     }
 
-    private fun setObserver() {
-        menuRecipeViewModel.isModify.observe(lifecycleOwner) {
-            binding.etRecipeName.isEnabled = it
-            binding.etRecipeAmount.isEnabled = it
-            if (it) {
-                binding.tilRecipeUnit.visibility = android.view.View.VISIBLE
-                binding.tvRecipeUnit.visibility = android.view.View.GONE
-                binding.btnDeleteRecipe.visibility = android.view.View.VISIBLE
-            } else {
-                binding.tilRecipeUnit.visibility = android.view.View.GONE
-                binding.tvRecipeUnit.visibility = android.view.View.VISIBLE
-                binding.btnDeleteRecipe.visibility = android.view.View.GONE
-            }
+    private fun setBtnDeleteRecipeClickListener(position: Int?) {
+        binding.btnDeleteRecipe.setOnClickListener {
+            menuRecipeViewModel.deleteRecipeByPosition(position)
         }
     }
 }

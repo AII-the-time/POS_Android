@@ -10,6 +10,7 @@
         <variable
             name="recipeVO"
             type="org.swm.att.domain.entity.response.RecipeVO" />
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,6 +65,7 @@
             android:text="@{recipeVO.unit}"
             android:textColor="@color/black"
             android:textSize="14sp"
+            android:visibility="@{recipeViewModel.isModify || recipeViewModel.isCreate ? View.GONE : View.VISIBLE}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/et_recipe_amount"
@@ -77,7 +79,7 @@
             app:boxBackgroundColor="@color/white"
             app:boxStrokeColor="@color/main_color"
             android:hint="단위"
-            android:visibility="gone"
+            android:visibility="@{recipeViewModel.isModify || recipeViewModel.isCreate ? View.VISIBLE : View.GONE}"
             android:layout_marginStart="20dp"
             app:layout_constraintTop_toTopOf="@id/et_recipe_amount"
             app:layout_constraintBottom_toBottomOf="@id/et_recipe_amount"
@@ -98,7 +100,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/ic_system_minus_mdpi"
-            android:visibility="gone"
+            android:visibility="@{recipeViewModel.isModify || recipeViewModel.isCreate ? View.VISIBLE : View.GONE}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/til_recipe_unit"

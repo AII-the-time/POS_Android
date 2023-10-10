@@ -35,6 +35,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         setCategoryDetailBtnClickListener()
         setRecipeBtnsClickListener()
         setBtnRegisterMenuClickListener()
+        setBtnAddRecipeClickListener()
         setObserver()
         setDataBinding()
         initData()
@@ -101,11 +102,18 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         /*todo*/
                         true
                     }
+
                     else -> false
                 }
             }
         }
         popUp.show()
+    }
+
+    private fun setBtnAddRecipeClickListener() {
+        binding.btnAddRecipe.setOnClickListener {
+            recipeViewModel.addTempNewRecipe()
+        }
     }
 
     private fun setObserver() {
@@ -184,15 +192,29 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                     when(uiState) {
                         is UiState.Success -> {
                             uiState.data?.let {
-                                Toast.makeText(requireContext(), "카테고리가 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "카테고리가 추가되었습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 initData()
                             }
                         }
-                        is UiState.Loading -> { /* nothing */ }
-                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+
+                        is UiState.Loading -> { /* nothing */
+                        }
+
+                        is UiState.Error -> Toast.makeText(
+                            requireContext(),
+                            uiState.errorMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
+        }
+        recipeViewModel.recipeListForNewMenu.observe(viewLifecycleOwner) {
+            recipesAdapter.submitList(it)
         }
     }
 
