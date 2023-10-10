@@ -68,10 +68,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setCategories() {
         categoryViewPagerAdapter = CategoryViewPagerAdapter(this)
         binding.vpCategory.adapter = categoryViewPagerAdapter
-
-        if (homeViewModel.getMenuState.value == UiState.Loading) {
-            homeViewModel.getCategories()
-        }
+        homeViewModel.getCategories()
     }
 
     private fun setCategoriesObserver() {
@@ -85,7 +82,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                                     categoryViewPagerAdapter.addFragment(MenuFragment(category))
                                 }
                                 TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, position ->
-                                    tab.text = it.categories[position].category
+                                    if (position < it.categories.size) {
+                                        tab.text = it.categories[position].category
+                                    }
                                 }.attach()
                             }
                         }
