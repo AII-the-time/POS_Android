@@ -54,12 +54,14 @@ class AttMenuRepositoryImpl @Inject constructor(
                 price = newMenu.price,
                 categoryId = newMenu.categoryId,
                 option = newMenu.option,
-                recipe = newMenu.recipe.map { RecipeDTO(
-                    id = it.id,
-                    name = it.name,
-                    amount = it.amount,
-                    unit = it.unit
-                ) }
+                recipe = newMenu.recipe?.map {
+                    RecipeDTO(
+                        id = it.id,
+                        name = it.name,
+                        amount = it.amount,
+                        unit = it.unit
+                    )
+                }
             )
             menuDataSource.postNewMenu(storeId, menuDTO).collect {
                 emit(Result.success(it))

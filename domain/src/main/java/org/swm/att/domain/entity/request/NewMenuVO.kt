@@ -6,6 +6,6 @@ data class NewMenuVO(
     val name: String,
     val price: Int,
     val categoryId: Int,
-    val option: List<Int>,
-    val recipe: List<RecipeVO>
+    val option: List<Int>? = null,
+    val recipe: List<RecipeVO>? = null
 )
