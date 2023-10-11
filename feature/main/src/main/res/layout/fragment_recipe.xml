@@ -341,7 +341,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
-                                app:layout_constraintBottom_toTopOf="@id/rv_menu_recipe"
                                 app:layout_constraintTop_toTopOf="parent">
 
                                 <TextView
@@ -366,10 +365,11 @@
                                     android:textColor="@color/black"
                                     android:textSize="12sp"
                                     android:textStyle="bold"
-                                    android:gravity="end"
+                                    android:layout_marginStart="10dp"
+                                    android:gravity="start"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="@id/tv_recipe_unit_des"
-                                    app:layout_constraintHorizontal_weight="1"
+                                    app:layout_constraintHorizontal_weight="2"
                                     app:layout_constraintStart_toEndOf="@id/tv_recipe_name_des"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -381,10 +381,11 @@
                                     android:textColor="@color/black"
                                     android:textSize="12sp"
                                     android:textStyle="bold"
-                                    android:gravity="end"
+                                    android:layout_marginStart="10dp"
+                                    android:gravity="start"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toStartOf="@id/btn_add_recipe"
-                                    app:layout_constraintHorizontal_weight="1"
+                                    app:layout_constraintHorizontal_weight="2"
                                     app:layout_constraintStart_toEndOf="@id/tv_recipe_amount_des"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -394,7 +395,7 @@
                                     android:layout_height="24dp"
                                     android:background="@drawable/ic_system_plus_mdpi"
                                     android:visibility="@{recipeViewModel.isModify || recipeViewModel.isCreate ? View.VISIBLE : View.GONE}"
-                                    android:layout_marginStart="20dp"
+                                    android:layout_marginStart="10dp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@id/tv_recipe_unit_des"
@@ -422,7 +423,7 @@
                                 android:id="@+id/rv_menu_recipe"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="2dp"
                                 android:nestedScrollingEnabled="false"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/cl_recipe_col_des"
