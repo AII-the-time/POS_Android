@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
+import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryViewPagerAdapter
 import org.swm.att.home.adapter.SelectedMenuAdapter
@@ -78,24 +79,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     when (uiState) {
                         is UiState.Success ->  {
                             uiState.data?.let {
-                                for(category in it.categories) {
-                                    categoryViewPagerAdapter.addFragment(MenuFragment(category))
+                                clearViewPagerAdapter()
+                                for (index in it.categories.indices) {
+                                    categoryViewPagerAdapter.addFragment(MenuFragment(index))
                                 }
-                                TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, position ->
-                                    if (position < it.categories.size) {
-                                        tab.text = it.categories[position].category
-                                    }
-                                }.attach()
+                                setTabMediator(it)
                             }
                         }
+
                         is UiState.Error -> {
-                            Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT)
+                                .show()
                         }
-                        is UiState.Loading -> {/* nothing */}
+
+                        is UiState.Loading -> {/* nothing */
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun clearViewPagerAdapter() {
+        categoryViewPagerAdapter.clearFragment()
+    }
+
+    private fun setTabMediator(categoryList: CategoriesVO) {
+        TabLayoutMediator(binding.tabView, binding.vpCategory) { tab, position ->
+            tab.text = categoryList.categories[position].category
+        }.attach()
     }
 
     private fun setSelectedMenuObserver() {
