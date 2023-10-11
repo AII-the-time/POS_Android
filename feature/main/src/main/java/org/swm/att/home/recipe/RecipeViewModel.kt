@@ -16,6 +16,7 @@ import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -122,6 +123,7 @@ class RecipeViewModel @Inject constructor(
 
     fun changeCreateState(state: Boolean) {
         _isCreate.postValue(state)
+        _recipeListForNewMenu.postValue(emptyList())
     }
 
     fun postCategory(name: String) {
@@ -141,7 +143,7 @@ class RecipeViewModel @Inject constructor(
         val currentRecipeList = _recipeListForNewMenu.value?.toMutableList() ?: mutableListOf()
         currentRecipeList.add(
             RecipeVO(
-                id = -1,
+                id = UUID.randomUUID().variant(),
                 viewType = "RECIPE",
                 name = "",
                 amount = "",
