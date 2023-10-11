@@ -16,7 +16,6 @@ import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,6 +48,7 @@ class RecipeViewModel @Inject constructor(
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getMenuInfo(1, selectedItemId).collect() { result ->
                 result.onSuccess {
+                    _recipeListForNewMenu.postValue(it.recipe)
                     _selectedMenuInfo.value = UiState.Success(it)
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "메뉴 상세 불러오기 실패"
@@ -141,9 +141,11 @@ class RecipeViewModel @Inject constructor(
 
     fun addTempNewRecipe() {
         val currentRecipeList = _recipeListForNewMenu.value?.toMutableList() ?: mutableListOf()
+        val index = currentRecipeList.size
         currentRecipeList.add(
+            index,
             RecipeVO(
-                id = UUID.randomUUID().variant(),
+                id = index,
                 viewType = "RECIPE",
                 name = "",
                 amount = "",
