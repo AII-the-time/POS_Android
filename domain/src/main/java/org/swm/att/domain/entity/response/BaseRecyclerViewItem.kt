@@ -68,9 +68,9 @@ data class OptionVO(
 data class RecipeVO(
     override val id: Int,
     override val viewType: String = "RECIPE",
-    val name: String,
-    val amount: Int,
-    val unit: String
+    var name: String,
+    var amount: String,
+    var unit: String
 ) : java.io.Serializable, BaseRecyclerViewItem()
 
 data class PreorderVO(

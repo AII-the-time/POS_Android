@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.entity.HttpResponseException
+import org.swm.att.domain.entity.request.NewMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
@@ -63,9 +64,11 @@ class RecipeViewModel @Inject constructor(
         val currentSelectedCategory = _selectedCategory.value
         val pastSelectedId = currentSelectedMenuId.value
         currentSelectedCategory?.let { category ->
-            category.menus[position].isFocused = true
+            if (position != -1) {
+                category.menus[position].isFocused = true
+            }
             pastSelectedId?.let { pastId ->
-                if (pastId != position) {
+                if (pastId != position && pastId != -1) {
                     category.menus[pastId].isFocused = false
                 }
             }
@@ -83,12 +86,17 @@ class RecipeViewModel @Inject constructor(
     fun setSelectedCategory(category: CategoryVO) {
         _selectedCategory.value = category
         setDefaultSelectedState(category)
+        resetRecipeListForNewMenu()
     }
 
     private fun setDefaultSelectedState(category: CategoryVO) {
         setCurrentSelectedItemId(0)
         _selectedCategory.value = null
         getSelectedItem(1, category.menus[0].id)
+    }
+
+    private fun resetRecipeListForNewMenu() {
+        _recipeListForNewMenu.postValue(emptyList())
     }
 
     override fun changeSelectedState() {
@@ -130,15 +138,16 @@ class RecipeViewModel @Inject constructor(
     }
 
     fun addTempNewRecipe() {
-        val newRecipeTemp = RecipeVO(
-            id = -1,
-            viewType = "RECIPE",
-            name = "",
-            amount = 0,
-            unit = "g"
-        )
         val currentRecipeList = _recipeListForNewMenu.value?.toMutableList() ?: mutableListOf()
-        currentRecipeList.add(newRecipeTemp)
+        currentRecipeList.add(
+            RecipeVO(
+                id = -1,
+                viewType = "RECIPE",
+                name = "",
+                amount = "",
+                unit = "g"
+            )
+        )
         _recipeListForNewMenu.postValue(currentRecipeList)
     }
 
@@ -148,5 +157,48 @@ class RecipeViewModel @Inject constructor(
             currentRecipeList.removeAt(position)
             _recipeListForNewMenu.postValue(currentRecipeList)
         }
+    }
+
+    fun postNewMenu(storeId: Int, name: String?, price: String?) {
+        viewModelScope.launch(attExceptionHandler) {
+            try {
+                val newMenuItem = checkCreateNewMenu(name, price)
+                attMenuRepository.postNewMenu(storeId, newMenuItem).collect { result ->
+                    result.onSuccess {
+                        _postCategoryState.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "메뉴 추가 실패"
+                        _postCategoryState.value = UiState.Error(errorMsg)
+                    }
+                }
+            } catch (e: Exception) {
+                _postCategoryState.value = UiState.Error(e.message ?: "메뉴 추가 실패")
+            }
+        }
+    }
+
+    private fun checkCreateNewMenu(name: String?, price: String?): NewMenuVO {
+        try {
+            return NewMenuVO(
+                name = requireNotNull(name),
+                price = requireNotNull(price).toInt(),
+                categoryId = requireNotNull(_selectedCategory.value?.categoryId),
+                option = emptyList(),
+                recipe = checkContentInRecipeListEmpty()
+            )
+        } catch (e: NumberFormatException) {
+            throw Exception("가격은 숫자만 입력해주세요!")
+        } catch (e: IllegalArgumentException) {
+            throw Exception("메뉴 이름과 가격을 모두 입력해주세요!")
+        }
+    }
+
+    private fun checkContentInRecipeListEmpty(): List<RecipeVO>? {
+        for (recipe in _recipeListForNewMenu.value ?: emptyList()) {
+            if (recipe.name.isEmpty() || recipe.amount.isEmpty()) {
+                throw Exception("레시피 내용을 모두 입력해주세요!")
+            }
+        }
+        return _recipeListForNewMenu.value
     }
 }

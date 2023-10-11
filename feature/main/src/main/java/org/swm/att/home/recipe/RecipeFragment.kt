@@ -34,6 +34,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         setRecipeBtnsClickListener()
         setBtnRegisterMenuClickListener()
         setBtnAddRecipeClickListener()
+        setBtnRegisterRecipeClickLIistener()
         setObserver()
         setDataBinding()
         initData()
@@ -79,8 +80,8 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
 
     private fun setBtnRegisterMenuClickListener() {
         binding.btnRegisterMenu.setOnClickListener {
-            recipeViewModel.changeCreateState(true)
             recipeViewModel.setCurrentSelectedItemId(-1)
+            recipeViewModel.changeCreateState(true)
             binding.menuWithRecipe = null
             // TODO: 옵션 가져오는 api 붙이고, 그에 따라 visible 설정
         }
@@ -114,6 +115,16 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         }
     }
 
+    private fun setBtnRegisterRecipeClickLIistener() {
+        binding.btnRegisterRecipe.setOnClickListener {
+            recipeViewModel.postNewMenu(
+                1,
+                binding.edtMenuName.text.toString(),
+                binding.edtMenuPrice.text.toString()
+            )
+        }
+    }
+
     private fun setObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -137,10 +148,14 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             }
         }
         recipeViewModel.currentSelectedMenuId.observe(viewLifecycleOwner) {
-            registeredMenusAdapter.notifyItemChanged(it)
+            if (it != -1) {
+                registeredMenusAdapter.notifyItemChanged(it)
+            }
         }
         recipeViewModel.selectedMenuId.observe(viewLifecycleOwner) {
-            registeredMenusAdapter.notifyItemChanged(it)
+            if (it != -1) {
+                registeredMenusAdapter.notifyItemChanged(it)
+            }
         }
         recipeViewModel.selectedCategory.observe(viewLifecycleOwner) {
             it?.let {
