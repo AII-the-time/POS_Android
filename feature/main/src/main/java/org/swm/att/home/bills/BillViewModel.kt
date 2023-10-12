@@ -64,7 +64,7 @@ class BillViewModel @Inject constructor(
                     result.onSuccess {
                         val data = _orderBillsData.value?.toMutableList() ?: mutableListOf()
                         data.addAll(it.orders)
-                        if (page == 1) {
+                        if (page == 1 && data.isNotEmpty()) {
                             data[0].isFocused = true
                             _currentSelectedBillId.postValue(0)
                             getSelectedItem(storeId, data[0].id)
