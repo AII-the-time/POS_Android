@@ -22,6 +22,7 @@
             android:name=".home.MainActivity"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,12 +31,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".common_ui.presenter.alarm.PreorderAlarmDialog"
+            android:name=".home.util.alarm.PreorderAlarmDialog"
             android:exported="false"
             android:theme="@style/Theme.DialogTheme" />
 
         <receiver
-            android:name=".common_ui.receiver.AlarmReceiver"
+            android:name=".home.util.alarm.AlarmReceiver"
             android:enabled="true" />
         <!-- sentry setting -->
         <meta-data

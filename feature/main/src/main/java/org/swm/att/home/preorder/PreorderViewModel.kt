@@ -40,7 +40,9 @@ class PreorderViewModel @Inject constructor(
     val getPreOrdersState: StateFlow<UiState<PreOrdersVO>> = _getPreOrdersState
     private val _preOrdersData = MutableLiveData<List<PreorderVO>>()
     val preOrdersData: LiveData<List<PreorderVO>> = _preOrdersData
+
     private var page: Int = 1
+    private var preorderIdForAlarm: Int = -1
 
     override fun getSelectedItem(storeId: Int, selectedItemId: Int) {
         viewModelScope.launch(attExceptionHandler) {
@@ -97,13 +99,8 @@ class PreorderViewModel @Inject constructor(
                 result.onSuccess {
                     val data = _preOrdersData.value?.toMutableList() ?: mutableListOf()
                     data.addAll(it.preOrders)
-                    _preOrdersData.postValue(data)
+                    _preOrdersData.postValue(setDefaultSelectedPreorderItem(storeId, data))
                     _getPreOrdersState.value = UiState.Success(it)
-                    if (page == 1 && data.isNotEmpty()) {
-                        data[0].isFocused = true
-                        _currentSelectedPreorderId.postValue(0)
-                        getSelectedItem(storeId, data[0].id)
-                    }
                     page += 1
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "예약 내역 불러오기 실패"
@@ -111,6 +108,19 @@ class PreorderViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun setDefaultSelectedPreorderItem(storeId: Int, data: MutableList<PreorderVO>): MutableList<PreorderVO> {
+        if (page == 1 && data.isNotEmpty()) {
+            if (preorderIdForAlarm != -1) {
+                getSelectedItem(storeId, preorderIdForAlarm)
+            } else {
+                data[0].isFocused = true
+                _currentSelectedPreorderId.postValue(0)
+                getSelectedItem(storeId, data[0].id)
+            }
+        }
+        return data
     }
 
     fun isEndOfValidPreOrders(): Boolean {
@@ -139,5 +149,9 @@ class PreorderViewModel @Inject constructor(
                 )
             } ?: listOf()
         )
+    }
+
+    fun setPreorderIdForAlarm(preorderId: Int) {
+        preorderIdForAlarm = preorderId
     }
 }

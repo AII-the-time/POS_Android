@@ -9,6 +9,7 @@ import org.swm.att.data.remote.response.OrderDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
 import org.swm.att.data.remote.response.PreOrderBillDTO
 import org.swm.att.data.remote.response.PreOrdersDTO
+import org.swm.att.data.remote.response.PreorderIdDTO
 import org.swm.att.data.remote.service.AttPosService
 import javax.inject.Inject
 
@@ -36,7 +37,7 @@ class OrderDataSource @Inject constructor(
         return checkResponse(attPosService.getOrderBill(storeId, orderId))
     }
 
-    suspend fun postPreOrder(storeId: Int, preOrderedMenus: PreOrderedMenusDTO): Flow<Unit> {
+    suspend fun postPreOrder(storeId: Int, preOrderedMenus: PreOrderedMenusDTO): Flow<PreorderIdDTO> {
         return checkResponse(attPosService.postPreOrder(storeId, preOrderedMenus))
     }
 

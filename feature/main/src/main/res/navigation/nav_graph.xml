@@ -155,7 +155,12 @@
         android:id="@+id/fragment_preorder"
         android:name="org.swm.att.home.preorder.PreorderFragment"
         android:label="@string/fragment_preorder"
-        tools:layout="@layout/fragment_preorder" />
+        tools:layout="@layout/fragment_preorder" >
+        <argument
+            android:name="preorderId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
     <fragment
         android:id="@+id/fragment_stock"
         android:name="org.swm.att.home.stock.StockFragment"
