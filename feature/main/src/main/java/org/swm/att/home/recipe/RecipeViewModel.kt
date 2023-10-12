@@ -85,9 +85,22 @@ class RecipeViewModel @Inject constructor(
     }
 
     fun setSelectedCategory(category: CategoryVO) {
+        processPastSelectedItemBeforeChange()
         _selectedCategory.value = category
         setDefaultSelectedState(category)
         resetRecipeListForNewMenu()
+    }
+
+    private fun processPastSelectedItemBeforeChange() {
+        val pastSelectedCategory = _selectedCategory.value
+        pastSelectedCategory?.let { category ->
+            val pastSelectedId = currentSelectedMenuId.value
+            pastSelectedId?.let { pastId ->
+                category.menus[pastId].isFocused = false
+                _selectedCategory.postValue(category)
+            }
+        }
+        _currentSelectedMenuId.value = -1
     }
 
     private fun setDefaultSelectedState(category: CategoryVO) {

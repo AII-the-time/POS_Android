@@ -247,7 +247,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         false
                     }
                     setOnCheckedChangeListener { _, isChecked ->
-                        if (isChecked) {
+                        if (isChecked && recipeViewModel.selectedCategory.value != type) {
                             recipeViewModel.setSelectedCategory(type)
                             recipeViewModel.changeCreateState(false)
                         }
