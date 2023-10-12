@@ -3,7 +3,6 @@ package org.swm.att.home.bills
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -92,25 +91,28 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 billViewModel.orderBills.collect { uiState ->
                     when (uiState) {
-                        is UiState.Success -> { /* nothing */ }
-                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
-                        is UiState.Loading -> { /* nothing */ }
+                        is UiState.Success -> { /* nothing */
+                        }
+
+                        is UiState.Error -> Toast.makeText(
+                            requireContext(),
+                            uiState.errorMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        is UiState.Loading -> { /* nothing */
+                        }
                     }
                 }
             }
         }
 
         billViewModel.currentSelectedBillId.observe(viewLifecycleOwner) {
-            val pastId = billViewModel.selectedBillId.value
-            binding.rvBills[it].setBackgroundResource(R.color.main_trans)
-            billViewModel.changeSelectedState()
-            pastId?.let { pastId ->
-                if (pastId != it) {
-                    billViewModel.selectedBillId.value?.let { pastId ->
-                        binding.rvBills[pastId].setBackgroundResource(R.color.back_color)
-                    }
-                }
-            }
+            orderBillItemAdapter.notifyItemChanged(it)
+        }
+
+        billViewModel.selectedBillId.observe(viewLifecycleOwner) {
+            orderBillItemAdapter.notifyItemChanged(it)
         }
 
         billViewModel.orderBillsData.observe(viewLifecycleOwner) {

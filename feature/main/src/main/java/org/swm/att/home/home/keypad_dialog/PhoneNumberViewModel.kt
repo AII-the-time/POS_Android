@@ -11,6 +11,19 @@ class PhoneNumberViewModel : ViewModel() {
     private val _endPhoneNumber = MutableLiveData<Stack<String>>()
     val endPhoneNumber: LiveData<Stack<String>> = _endPhoneNumber
 
+    fun setPhoneNumber(number: String) {
+        _midPhoneNumber.postValue(getStackOfCharFromStrArg(number, 3, 7))
+        _endPhoneNumber.postValue(getStackOfCharFromStrArg(number, 7, 11))
+    }
+
+    private fun getStackOfCharFromStrArg(number: String, str: Int, end: Int): Stack<String> {
+        return Stack<String>().apply {
+            number.substring(str, end).forEach {
+                push(it.toString())
+            }
+        }
+    }
+
     fun addPhoneNumber(number: String) {
         val mid = _midPhoneNumber.value ?: Stack()
         if (mid.size < 4) {

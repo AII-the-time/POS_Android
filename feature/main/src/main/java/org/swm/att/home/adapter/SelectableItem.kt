@@ -12,8 +12,10 @@ import org.swm.att.domain.constant.SelectedItemViewType
 import org.swm.att.domain.entity.response.BaseRecyclerViewItem
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.entity.response.OrderBillVO
+import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.home.R
 import org.swm.att.home.databinding.ItemBillBinding
+import org.swm.att.home.databinding.ItemPreorderBinding
 import org.swm.att.home.databinding.ItemRegisteredMenuBinding
 
 class SelectableItemAdapter(
@@ -33,16 +35,8 @@ class SelectableItemAdapter(
         holder.bind(item)
         holder.itemView.setOnClickListener {
             // storeId 임시로 1로 설정
-            viewModel.getSelectedItem(1, item.id)
             viewModel.setCurrentSelectedItemId(position)
-        }
-
-        if (position == 0) {
-            // storeId 임시로 1로 설정
             viewModel.getSelectedItem(1, item.id)
-            holder.itemView.setBackgroundResource(R.color.main_trans)
-        } else {
-            holder.itemView.setBackgroundResource(R.color.back_color)
         }
     }
 
@@ -55,6 +49,7 @@ class SelectableItemAdapter(
             return when(viewType) {
                 SelectedItemViewType.BILL -> R.layout.item_bill
                 SelectedItemViewType.MENU -> R.layout.item_registered_menu
+                SelectedItemViewType.PREORDER -> R.layout.item_preorder
             }
         }
 
@@ -63,6 +58,7 @@ class SelectableItemAdapter(
             return when(viewType) {
                 SelectedItemViewType.BILL -> BillViewHolder(binding as ItemBillBinding)
                 SelectedItemViewType.MENU -> RegisteredMenuVIewHolder(binding as ItemRegisteredMenuBinding)
+                SelectedItemViewType.PREORDER -> PreorderItemViewHolder(binding as ItemPreorderBinding)
             }
         }
     }
@@ -78,8 +74,16 @@ class BillViewHolder(
 
 class RegisteredMenuVIewHolder(
     private val binding: ItemRegisteredMenuBinding
-): BaseRecyclerViewViewHolder(binding) {
+) : BaseRecyclerViewViewHolder(binding) {
     override fun bind(item: BaseRecyclerViewItem) {
         binding.menu = item as MenuVO
+    }
+}
+
+class PreorderItemViewHolder(
+    private val binding: ItemPreorderBinding
+) : BaseRecyclerViewViewHolder(binding) {
+    override fun bind(item: BaseRecyclerViewItem) {
+        binding.preorder = item as PreorderVO
     }
 }

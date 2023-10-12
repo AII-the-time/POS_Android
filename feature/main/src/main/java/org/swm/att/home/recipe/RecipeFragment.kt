@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.MenuRes
-import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +32,9 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         initMenusRecyclerView()
         setCategoryDetailBtnClickListener()
         setRecipeBtnsClickListener()
+        setBtnRegisterMenuClickListener()
+        setBtnAddRecipeClickListener()
+        setBtnRegisterRecipeClickLIistener()
         setObserver()
         setDataBinding()
         initData()
@@ -62,7 +64,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     }
 
     private fun setCategoryDetailBtnClickListener() {
-        binding.ibCategoryDetail.setOnClickListener { view ->
+        binding.tvCategoryModify.setOnClickListener { view ->
             showMenu(view, R.menu.item_category_detail)
         }
     }
@@ -73,6 +75,15 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         }
         binding.btnRegisterRecipe.setOnClickListener {
             recipeViewModel.changeModifyState()
+        }
+    }
+
+    private fun setBtnRegisterMenuClickListener() {
+        binding.btnRegisterMenu.setOnClickListener {
+            recipeViewModel.setCurrentSelectedItemId(-1)
+            recipeViewModel.changeCreateState(true)
+            binding.menuWithRecipe = null
+            // TODO: 옵션 가져오는 api 붙이고, 그에 따라 visible 설정
         }
     }
 
@@ -90,11 +101,28 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         /*todo*/
                         true
                     }
+
                     else -> false
                 }
             }
         }
         popUp.show()
+    }
+
+    private fun setBtnAddRecipeClickListener() {
+        binding.btnAddRecipe.setOnClickListener {
+            recipeViewModel.addTempNewRecipe()
+        }
+    }
+
+    private fun setBtnRegisterRecipeClickLIistener() {
+        binding.btnRegisterRecipe.setOnClickListener {
+            recipeViewModel.postNewMenu(
+                1,
+                binding.edtMenuName.text.toString(),
+                binding.edtMenuPrice.text.toString()
+            )
+        }
     }
 
     private fun setObserver() {
@@ -113,31 +141,36 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        is UiState.Loading -> { /* nothing */ }
+                        is UiState.Loading -> { /* nothing */
+                        }
                     }
                 }
             }
         }
         recipeViewModel.currentSelectedMenuId.observe(viewLifecycleOwner) {
-            val pastId = recipeViewModel.selectedMenuId.value
-            binding.rvCategoryMenuList[it].setBackgroundResource(R.color.main_trans)
-            recipeViewModel.changeSelectedState()
-            pastId?.let { pastId ->
-                if (pastId != it) {
-                    recipeViewModel.selectedMenuId.value?.let { pastId ->
-                        binding.rvCategoryMenuList[pastId].setBackgroundResource(R.color.back_color)
-                    }
-                }
+            if (it != -1) {
+                registeredMenusAdapter.notifyItemChanged(it)
+            }
+        }
+        recipeViewModel.selectedMenuId.observe(viewLifecycleOwner) {
+            if (it != -1) {
+                registeredMenusAdapter.notifyItemChanged(it)
             }
         }
         recipeViewModel.selectedCategory.observe(viewLifecycleOwner) {
-            if (it.menus.isNotEmpty()) {
-                recipeViewModel.setSelectedMenuId(0)
-            } else {
-                binding.menuWithRecipe = null
+            it?.let {
+                if (it.menus.isEmpty()) {
+                    binding.menuWithRecipe = null
+                }
+                registeredMenusAdapter.submitList(it.menus)
+                binding.edtCategoryName.setText(
+                    String.format(
+                        "%s(%d건)",
+                        it.category,
+                        it.menus.size
+                    )
+                )
             }
-            registeredMenusAdapter.submitList(it.menus)
-            binding.edtCategoryName.setText(String.format("%s(%d건)", it.category, it.menus.size))
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -170,15 +203,29 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                     when(uiState) {
                         is UiState.Success -> {
                             uiState.data?.let {
-                                Toast.makeText(requireContext(), "카테고리가 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "카테고리가 추가되었습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 initData()
                             }
                         }
-                        is UiState.Loading -> { /* nothing */ }
-                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+
+                        is UiState.Loading -> { /* nothing */
+                        }
+
+                        is UiState.Error -> Toast.makeText(
+                            requireContext(),
+                            uiState.errorMsg,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
+        }
+        recipeViewModel.recipeListForNewMenu.observe(viewLifecycleOwner) {
+            recipesAdapter.submitList(it)
         }
     }
 
@@ -200,8 +247,9 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         false
                     }
                     setOnCheckedChangeListener { _, isChecked ->
-                        if (isChecked) {
+                        if (isChecked && recipeViewModel.selectedCategory.value != type) {
                             recipeViewModel.setSelectedCategory(type)
+                            recipeViewModel.changeCreateState(false)
                         }
                     }
                 }

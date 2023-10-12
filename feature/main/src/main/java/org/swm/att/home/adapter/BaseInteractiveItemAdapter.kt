@@ -31,7 +31,7 @@ class BaseInteractiveItemAdapter(
 
     override fun onBindViewHolder(holder: BaseInteractiveViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, position)
     }
 
     override fun getItemViewType(position: Int): Int {

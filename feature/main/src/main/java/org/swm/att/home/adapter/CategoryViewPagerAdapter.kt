@@ -18,4 +18,9 @@ class CategoryViewPagerAdapter(fragment: Fragment): FragmentStateAdapter(fragmen
         fragList.add(fragment)
         notifyItemInserted(fragList.size - 1)
     }
+
+    fun clearFragment() {
+        fragList.clear()
+        notifyDataSetChanged()
+    }
 }

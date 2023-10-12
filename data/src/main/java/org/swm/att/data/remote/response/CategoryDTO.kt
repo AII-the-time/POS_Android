@@ -8,12 +8,15 @@ import org.swm.att.domain.entity.response.CategoryVO
 data class CategoryDTO(
     @field:Json(name = "category")
     val category: String?,
+    @field:Json(name = "categoryId")
+    val categoryId: Int?,
     @field:Json(name = "menus")
     val menus: List<MenuDTO>?
 ) {
     fun toVO(): CategoryVO {
         return CategoryVO(
             category ?: "unknown",
+            categoryId ?: -1,
             menus?.map { it.toVO() } ?: listOf()
         )
     }

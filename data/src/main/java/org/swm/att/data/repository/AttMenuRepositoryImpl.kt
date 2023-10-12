@@ -4,6 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.data.remote.request.CategoryPostDTO
+import org.swm.att.data.remote.request.NewMenuDTO
+import org.swm.att.data.remote.response.RecipeDTO
+import org.swm.att.domain.entity.request.NewMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
@@ -37,6 +40,30 @@ class AttMenuRepositoryImpl @Inject constructor(
         try {
             val categoryPostInfo = CategoryPostDTO(categoryName)
             menuDataSource.postCategory(storeId, categoryPostInfo).collect {
+                emit(Result.success(it))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun postNewMenu(storeId: Int, newMenu: NewMenuVO): Flow<Result<Unit>> = flow {
+        try {
+            val menuDTO = NewMenuDTO(
+                name = newMenu.name,
+                price = newMenu.price,
+                categoryId = newMenu.categoryId,
+                option = newMenu.option,
+                recipe = newMenu.recipe?.map {
+                    RecipeDTO(
+                        id = it.id,
+                        name = it.name,
+                        amount = it.amount.toInt(),
+                        unit = it.unit
+                    )
+                }
+            )
+            menuDataSource.postNewMenu(storeId, menuDTO).collect {
                 emit(Result.success(it))
             }
         } catch (e: Exception) {

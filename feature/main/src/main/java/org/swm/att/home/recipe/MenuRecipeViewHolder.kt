@@ -2,6 +2,7 @@ package org.swm.att.home.recipe
 
 import android.widget.ArrayAdapter
 import androidx.core.view.doOnAttach
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import org.swm.att.common_ui.R
@@ -18,17 +19,19 @@ class MenuRecipeViewHolder(
 
     init {
         itemView.doOnAttach {
+            binding.recipeViewModel = menuRecipeViewModel
             lifecycleOwner = it.findViewTreeLifecycleOwner()!!
-            setObserver()
         }
     }
 
-    override fun bind(item: BaseRecyclerViewItem) {
+    override fun bind(item: BaseRecyclerViewItem, position: Int?) {
         binding.apply {
             recipeVO = item as RecipeVO
             recipeViewModel = menuRecipeViewModel
         }
         initUnitMenu()
+        setBtnDeleteRecipeClickListener(position)
+        setEdtTextChangeListener(position)
     }
 
     private fun initUnitMenu() {
@@ -42,18 +45,23 @@ class MenuRecipeViewHolder(
         }
     }
 
-    private fun setObserver() {
-        menuRecipeViewModel.isModify.observe(lifecycleOwner) {
-            binding.etRecipeName.isEnabled = it
-            binding.etRecipeAmount.isEnabled = it
-            if (it) {
-                binding.tilRecipeUnit.visibility = android.view.View.VISIBLE
-                binding.tvRecipeUnit.visibility = android.view.View.GONE
-                binding.btnDeleteRecipe.visibility = android.view.View.VISIBLE
-            } else {
-                binding.tilRecipeUnit.visibility = android.view.View.GONE
-                binding.tvRecipeUnit.visibility = android.view.View.VISIBLE
-                binding.btnDeleteRecipe.visibility = android.view.View.GONE
+    private fun setBtnDeleteRecipeClickListener(position: Int?) {
+        binding.btnDeleteRecipe.setOnClickListener {
+            menuRecipeViewModel.deleteRecipeByPosition(position)
+        }
+    }
+
+    private fun setEdtTextChangeListener(position: Int?) {
+        position?.let {
+            binding.etRecipeAmount.addTextChangedListener {
+                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.amount =
+                    it.toString()
+            }
+            binding.etRecipeName.addTextChangedListener {
+                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.name = it.toString()
+            }
+            binding.actMenuUnit.addTextChangedListener {
+                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.unit = it.toString()
             }
         }
     }

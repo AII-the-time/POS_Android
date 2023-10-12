@@ -19,7 +19,13 @@ interface AttOrderRepository {
     ): Flow<Result<OrderVO>>
 
     suspend fun postPayment(storeId: Int, paymentVO: PaymentVO): Flow<Result<Nothing?>>
-    suspend fun getOrderBills(storeId: Int, page: Int, count: Int): Flow<Result<OrderBillsVO>>
+    suspend fun getOrderBills(
+        storeId: Int,
+        page: Int,
+        date: String?,
+        count: Int
+    ): Flow<Result<OrderBillsVO>>
+
     suspend fun getOrderBill(storeId: Int, orderId: Int): Flow<Result<OrderReceiptVO>>
     suspend fun postPreOrder(storeId: Int, preOrderedMenus: PreOrderedMenusVO): Flow<Result<Unit>>
     suspend fun getPreOrders(storeId: Int, page: Int, date: String?): Flow<Result<PreOrdersVO>>
