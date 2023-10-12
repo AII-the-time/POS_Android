@@ -147,7 +147,8 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
                     selectedMenus = preorderViewModel.getSelectedMenus(),
                     preOrderId = preorderViewModel.preOrdersData.value?.get(
                         preorderViewModel.selectedPreorderId.value ?: 0
-                    )?.id ?: -1
+                    )?.id ?: -1,
+                    customerPhoneNumber = preorderViewModel.selectedPreorderInfoData.value?.phone
                 )
             findNavController().navigate(action)
             mainViewModel.directWithGlobalAction(NavDestinationType.Home)

@@ -125,7 +125,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setOrderBtnListener() {
         binding.btnOrder.setOnClickListener {
-            val mileageDialog = EarnMileageDialog(homeViewModel, args.preOrderId)
+            val mileageDialog =
+                EarnMileageDialog(homeViewModel, args.preOrderId, args.customerPhoneNumber)
             mileageDialog.show(requireActivity().supportFragmentManager, "EarnMileageDialog")
         }
     }
