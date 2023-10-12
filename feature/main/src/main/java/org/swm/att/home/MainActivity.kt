@@ -1,6 +1,8 @@
 package org.swm.att.home
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.CheckBox
 import androidx.activity.viewModels
 import androidx.navigation.NavController
@@ -84,7 +86,24 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        Log.d("MainActivity", "onDestroy")
         mainViewModel.cancelAllPreorderAlarm()
+        super.onDestroy()
+    }
+
+    private fun checkPreorderAlarm(preorderId: Int?) {
+        preorderId?.let {
+            if (preorderId != -1) {
+                val navHost =
+                    supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                navHost.navController.navigate(R.id.action_global_fragment_preorder)
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val preorderId = intent?.getIntExtra("preorderId", -1)
+        checkPreorderAlarm(preorderId)
     }
 }
