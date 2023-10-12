@@ -18,7 +18,8 @@ data class OrderBillVO(
     val paymentMethod: PayMethod,
     val totalCount: Int,
     val totalPrice: BigDecimal,
-    val createdAt: String
+    val createdAt: String,
+    var isFocused: Boolean = false
 ) : BaseRecyclerViewItem()
 
 data class MenuWithRecipeVO(
@@ -39,7 +40,8 @@ data class MenuVO(
     val name: String,
     val price: Int,
     val option: List<OptionVO>,
-    val detail: String? = null
+    val detail: String? = null,
+    var isFocused: Boolean = false
 ) : java.io.Serializable, BaseRecyclerViewItem()
 
 @Serializable
@@ -60,13 +62,25 @@ data class OptionVO(
     override val viewType: String = "OPTION",
     val optionType: String,
     val options: List<OptionTypeVO>
-): java.io.Serializable, BaseRecyclerViewItem()
+) : java.io.Serializable, BaseRecyclerViewItem()
 
 @Serializable
 data class RecipeVO(
     override val id: Int,
     override val viewType: String = "RECIPE",
-    val name: String,
-    val amount: Int,
-    val unit: String
-): java.io.Serializable, BaseRecyclerViewItem()
+    var name: String,
+    var amount: String,
+    var unit: String
+) : java.io.Serializable, BaseRecyclerViewItem()
+
+data class PreorderVO(
+    override val id: Int,
+    override val viewType: String = "PREORDER",
+    val createdAt: String,
+    val orderedFor: String,
+    val totalPrice: String,
+    val totalCount: Int,
+    val phone: String,
+    val memo: String? = null,
+    var isFocused: Boolean = false
+) : BaseRecyclerViewItem()

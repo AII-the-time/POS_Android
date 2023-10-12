@@ -23,8 +23,13 @@ class OrderDataSource @Inject constructor(
         return checkResponse(attPosService.postPayment(storeId, paymentDTO))
     }
 
-    suspend fun getOrderBills(storeId: Int, page: Int, count: Int): Flow<OrderBillsDTO> {
-        return checkResponse(attPosService.getOrderBills(storeId, page, count))
+    suspend fun getOrderBills(
+        storeId: Int,
+        page: Int,
+        date: String?,
+        count: Int
+    ): Flow<OrderBillsDTO> {
+        return checkResponse(attPosService.getOrderBills(storeId, page, date, count))
     }
 
     suspend fun getOrderBill(storeId: Int, orderId: Int): Flow<OrderReceiptDTO> {

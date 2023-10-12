@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.swm.att.common_ui.presenter.base.BaseViewModel
+import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.common_ui.util.getUTCDateTime
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PreorderViewModel @Inject constructor(
     private val attOrderRepository: AttOrderRepository
-): BaseViewModel() {
+) : BaseSelectableViewViewModel() {
     private val _selectedPreorderInfo = MutableStateFlow<UiState<PreOrderBillVO>>(UiState.Loading)
     val selectedPreorderInfo: StateFlow<UiState<PreOrderBillVO>> = _selectedPreorderInfo
     private val _selectedPreorderInfoData = MutableLiveData<PreOrderBillVO>()
@@ -42,9 +42,9 @@ class PreorderViewModel @Inject constructor(
     val preOrdersData: LiveData<List<PreorderVO>> = _preOrdersData
     private var page: Int = 1
 
-    fun getSelectedPreorderDetail(selectedPreorderId: Int) {
+    override fun getSelectedItem(storeId: Int, selectedItemId: Int) {
         viewModelScope.launch(attExceptionHandler) {
-            attOrderRepository.getPreOrderBill(1, selectedPreorderId).collect { result ->
+            attOrderRepository.getPreOrderBill(1, selectedItemId).collect { result ->
                 result.onSuccess {
                     _selectedPreorderInfoData.postValue(it)
                     _selectedPreorderInfo.value = UiState.Success(it)
@@ -56,11 +56,27 @@ class PreorderViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentSelectedPreorderId(currentSelectedPreorderId: Int) {
-        _currentSelectedPreorderId.value = currentSelectedPreorderId
+    override fun setCurrentSelectedItemId(position: Int) {
+        val preorderList = preOrdersData.value
+        val pastSelectedId = currentSelectedPreorderId.value
+        preorderList?.let { preorders ->
+            preorders[position].isFocused = true
+            pastSelectedId?.let { pastId ->
+                if (pastId != position) {
+                    preorders[pastId].isFocused = false
+                }
+            }
+            _preOrdersData.postValue(preorders)
+        }
+
+        pastSelectedId?.let {
+            changeSelectedState()
+        }
+
+        _currentSelectedPreorderId.postValue(position)
     }
 
-    fun changeSelectedState() {
+    override fun changeSelectedState() {
         _selectedPreorderId.postValue(currentSelectedPreorderId.value)
     }
 
@@ -83,6 +99,11 @@ class PreorderViewModel @Inject constructor(
                     data.addAll(it.preOrders)
                     _preOrdersData.postValue(data)
                     _getPreOrdersState.value = UiState.Success(it)
+                    if (page == 1 && data.isNotEmpty()) {
+                        data[0].isFocused = true
+                        _currentSelectedPreorderId.postValue(0)
+                        getSelectedItem(storeId, data[0].id)
+                    }
                     page += 1
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "예약 내역 불러오기 실패"

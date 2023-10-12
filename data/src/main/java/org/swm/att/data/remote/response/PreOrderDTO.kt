@@ -22,7 +22,7 @@ data class PreOrderDTO(
     val memo: String?
 ) {
     fun toVO() = PreorderVO(
-        preOrderId = preOrderId ?: -1,
+        id = preOrderId ?: -1,
         createdAt = createdAt ?: "Unknown",
         orderedFor = orderedFor ?: "Unknown",
         totalCount = totalCount ?: -1,

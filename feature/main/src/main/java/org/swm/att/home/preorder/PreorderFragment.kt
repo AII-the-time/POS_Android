@@ -3,7 +3,6 @@ package org.swm.att.home.preorder
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -19,14 +18,14 @@ import org.swm.att.common_ui.state.UiState
 import org.swm.att.home.MainViewModel
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseRecyclerViewAdapter
-import org.swm.att.home.adapter.PreorderListItemAdapter
+import org.swm.att.home.adapter.SelectableItemAdapter
 import org.swm.att.home.constant.NavDestinationType
 import org.swm.att.home.databinding.FragmentPreorderBinding
 
 @AndroidEntryPoint
 class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment_preorder) {
     private lateinit var preorderMenuOfBillAdapter: BaseRecyclerViewAdapter
-    private lateinit var validPreorderListAdapter: PreorderListItemAdapter
+    private lateinit var validPreorderListAdapter: SelectableItemAdapter
     private val preorderViewModel: PreorderViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -49,7 +48,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             adapter = preorderMenuOfBillAdapter
         }
 
-        validPreorderListAdapter = PreorderListItemAdapter(preorderViewModel, true)
+        validPreorderListAdapter = SelectableItemAdapter(preorderViewModel)
         binding.rvPreorder.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
@@ -99,16 +98,10 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
             }
         }
         preorderViewModel.currentSelectedPreorderId.observe(viewLifecycleOwner) {
-            val pastId = preorderViewModel.selectedPreorderId.value
-            binding.rvPreorder[it].setBackgroundResource(R.color.main_trans)
-            preorderViewModel.changeSelectedState()
-            pastId?.let { pastId ->
-                if (pastId != it) {
-                    preorderViewModel.selectedPreorderId.value?.let { pastId ->
-                        binding.rvPreorder[pastId].setBackgroundResource(R.color.back_color)
-                    }
-                }
-            }
+            validPreorderListAdapter.notifyItemChanged(it)
+        }
+        preorderViewModel.selectedPreorderId.observe(viewLifecycleOwner) {
+            validPreorderListAdapter.notifyItemChanged(it)
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -154,7 +147,8 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
                     selectedMenus = preorderViewModel.getSelectedMenus(),
                     preOrderId = preorderViewModel.preOrdersData.value?.get(
                         preorderViewModel.selectedPreorderId.value ?: 0
-                    )?.preOrderId ?: -1
+                    )?.id ?: -1,
+                    customerPhoneNumber = preorderViewModel.selectedPreorderInfoData.value?.phone
                 )
             findNavController().navigate(action)
             mainViewModel.directWithGlobalAction(NavDestinationType.Home)

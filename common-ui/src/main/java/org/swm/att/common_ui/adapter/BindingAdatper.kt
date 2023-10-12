@@ -1,10 +1,12 @@
 package org.swm.att.common_ui.adapter
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import org.swm.att.common_ui.R
@@ -203,4 +205,11 @@ fun setLocalTimeText(view: TextView, date: String?) {
         val localTime = getDateFromString(it).getRTCDateTime()
         view.text = getTimeFromString(localTime)
     }
+}
+
+@SuppressLint("UseCompatLoadingForDrawables")
+@BindingAdapter("setSelectableItemBackground")
+fun setSelectableItemBackground(view: ConstraintLayout, isFocused: Boolean) {
+    view.background =
+        if (isFocused) view.context.getDrawable(R.color.main_trans) else view.context.getDrawable(R.color.back_color)
 }

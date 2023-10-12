@@ -70,9 +70,14 @@ class AttOrderRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getOrderBills(storeId: Int, page: Int, count: Int): Flow<Result<OrderBillsVO>> = flow {
+    override suspend fun getOrderBills(
+        storeId: Int,
+        page: Int,
+        date: String?,
+        count: Int
+    ): Flow<Result<OrderBillsVO>> = flow {
         try {
-            orderDataSource.getOrderBills(storeId, page, count).collect {
+            orderDataSource.getOrderBills(storeId, page, date, count).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {

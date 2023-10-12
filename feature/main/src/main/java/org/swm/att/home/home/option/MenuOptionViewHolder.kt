@@ -14,7 +14,7 @@ class MenuOptionViewHolder(
     private val menuOptionViewModel: MenuOptionViewModel
 ): BaseInteractiveViewHolder(binding, menuOptionViewModel){
 
-    override fun bind(item: BaseRecyclerViewItem) {
+    override fun bind(item: BaseRecyclerViewItem, position: Int?) {
         val item = item as OptionVO
         binding.option = item
         binding.cgMenuOptionType.tag = item

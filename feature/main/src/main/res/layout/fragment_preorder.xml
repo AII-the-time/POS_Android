@@ -282,6 +282,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:visibility="@{preorderViewModel.selectedPreorderInfoData == null ? View.GONE : View.VISIBLE}"
                 app:layout_constraintTop_toBottomOf="@id/cl_preorder_request"
                 app:layout_constraintBottom_toBottomOf="parent">
 

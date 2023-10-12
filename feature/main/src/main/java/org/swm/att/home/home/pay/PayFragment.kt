@@ -83,7 +83,7 @@ class PayFragment : BaseFragment<FragmentPayBinding>(R.layout.fragment_pay) {
 
     private fun setDataBinding() {
         binding.payViewModel = payViewModel
-        binding.customerId = args.CustomerId
+        binding.customerId = args.customerPhoneNumber
         binding.lifecycleOwner = viewLifecycleOwner
     }
 

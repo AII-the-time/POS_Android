@@ -1,6 +1,7 @@
 package org.swm.att.data.remote.service
 
 import org.swm.att.data.remote.request.CategoryPostDTO
+import org.swm.att.data.remote.request.NewMenuDTO
 import org.swm.att.data.remote.request.OrderedMenusDTO
 import org.swm.att.data.remote.request.PaymentDTO
 import org.swm.att.data.remote.request.PreOrderedMenusDTO
@@ -47,6 +48,7 @@ interface AttPosService {
     suspend fun getOrderBills(
         @Header("storeId") storeId: Int,
         @Query("page") page: Int,
+        @Query("date") date: String? = null,
         @Query("count") count: Int
     ): Response<OrderBillsDTO>
 
@@ -81,4 +83,10 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Path("preOrderId") preOrderId: Int
     ): Response<PreOrderBillDTO>
+
+    @POST("menu/")
+    suspend fun postNewMenu(
+        @Header("storeId") storeId: Int,
+        @Body newMenu: NewMenuDTO
+    ): Response<Unit>
 }

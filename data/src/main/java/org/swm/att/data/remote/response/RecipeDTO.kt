@@ -18,7 +18,7 @@ data class RecipeDTO(
     fun toVO() = RecipeVO(
         id = id ?: -1,
         name = name ?: "Unknown",
-        amount = amount ?: -1,
+        amount = amount?.toString() ?: "-1",
         unit = unit ?: "Unknown"
     )
 }

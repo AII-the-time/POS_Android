@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.state.UiState
+import org.swm.att.common_ui.util.Formatter
+import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.OrderBillVO
 import org.swm.att.domain.entity.response.OrderBillsVO
@@ -31,7 +33,7 @@ class BillViewModel @Inject constructor(
     private val _orderBillsData = MutableLiveData<List<OrderBillVO>>()
     val orderBillsData: LiveData<List<OrderBillVO>> = _orderBillsData
 
-    private val _selectedBillId = MutableLiveData(0)
+    private val _selectedBillId = MutableLiveData<Int>()
     val selectedBillId: LiveData<Int> = _selectedBillId
     private val _currentSelectedBillId = MutableLiveData<Int>()
     val currentSelectedBillId: LiveData<Int> = _currentSelectedBillId
@@ -59,11 +61,19 @@ class BillViewModel @Inject constructor(
 
     fun getNextOrderBills(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
-            attOrderRepository.getOrderBills(storeId, page, 20)
+            val date = filteringStartDate.value?.let { startDate ->
+                Formatter.getStringByDateTimeBaseFormatter(startDate.getUTCDateTime())
+            }
+            attOrderRepository.getOrderBills(storeId, page, date, 20)
                 .collect { result ->
                     result.onSuccess {
                         val data = _orderBillsData.value?.toMutableList() ?: mutableListOf()
                         data.addAll(it.orders)
+                        if (page == 1 && data.isNotEmpty()) {
+                            data[0].isFocused = true
+                            _currentSelectedBillId.postValue(0)
+                            getSelectedItem(storeId, data[0].id)
+                        }
                         _orderBillsData.postValue(data)
                         _orderBills.value = UiState.Success(it)
                         page += 1
@@ -76,17 +86,35 @@ class BillViewModel @Inject constructor(
     }
 
     override fun setCurrentSelectedItemId(position: Int) {
-        _currentSelectedBillId.value = position
+        val currentOrderBills = _orderBillsData.value
+        val pastSelectedId = currentSelectedBillId.value
+        currentOrderBills?.let { bills ->
+            bills[position].isFocused = true
+            pastSelectedId?.let {
+                if (it != position) {
+                    bills[it].isFocused = false
+                }
+            }
+            _orderBillsData.postValue(bills)
+        }
+
+        pastSelectedId?.let {
+            changeSelectedState()
+        }
+
+        _currentSelectedBillId.postValue(position)
     }
 
     override fun changeSelectedState() {
         _selectedBillId.postValue(currentSelectedBillId.value)
     }
 
-    fun getBillsForFilteringDates(startDate: Date, endDate: Date?) {
+    fun getBillsForFilteringDates(startDate: Date) {
+        if (startDate == filteringStartDate.value) return
         _filteringStartDate.value = startDate
-        _filteringEndDate.value = endDate
-        // filtering api 연결 필요
+        page = 1
+        _orderBillsData.value = listOf()
+        getNextOrderBills(1)
     }
 
     fun getSizeOfOrderBills(): Int {
