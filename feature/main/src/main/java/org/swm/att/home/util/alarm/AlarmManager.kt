@@ -17,7 +17,8 @@ object AlarmManager {
         context: Context,
         preorderDate: String,
         phoneNumber: String,
-        totalOrderCount: Int
+        totalOrderCount: Int,
+        preorderId: Int
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val currentTime = Calendar.getInstance().time.getUTCDateTime()
@@ -27,9 +28,10 @@ object AlarmManager {
             alarmIntent.putExtra("preorderDate", preorderDate)
             alarmIntent.putExtra("phoneNumber", phoneNumber)
             alarmIntent.putExtra("totalOrderCount", totalOrderCount)
+            alarmIntent.putExtra("preorderId", preorderId)
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
-                UUID.randomUUID().variant(),
+                UUID.randomUUID().hashCode(),
                 alarmIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )

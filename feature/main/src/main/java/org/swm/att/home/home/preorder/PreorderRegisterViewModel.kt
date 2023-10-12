@@ -73,7 +73,8 @@ class PreorderRegisterViewModel @Inject constructor(
                     addPreorderToAlarmManager(
                         getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime()),
                         phoneNumber,
-                        orderedMenus.value?.menus?.size ?: -1
+                        orderedMenus.value?.menus?.size ?: -1,
+                        it.preOrderId
                     )
                 }.onFailure {
                     val errorMsg =
@@ -87,8 +88,9 @@ class PreorderRegisterViewModel @Inject constructor(
     private fun addPreorderToAlarmManager(
         preorderDate: String,
         phoneNumber: String,
-        totalOrderCount: Int
+        totalOrderCount: Int,
+        preorderId: Int
     ) {
-        AlarmManager.setPreorderAlarm(context, preorderDate, phoneNumber, totalOrderCount)
+        AlarmManager.setPreorderAlarm(context, preorderDate, phoneNumber, totalOrderCount, preorderId)
     }
 }
