@@ -1,10 +1,11 @@
-package org.swm.att.common_ui.util
+package org.swm.att.home.util.alarm
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import org.swm.att.common_ui.receiver.AlarmReceiver
+import org.swm.att.common_ui.util.Formatter
+import org.swm.att.common_ui.util.getUTCDateTime
 import java.util.Calendar
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -16,7 +17,8 @@ object AlarmManager {
         context: Context,
         preorderDate: String,
         phoneNumber: String,
-        totalOrderCount: Int
+        totalOrderCount: Int,
+        preorderId: Int
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val currentTime = Calendar.getInstance().time.getUTCDateTime()
@@ -26,9 +28,10 @@ object AlarmManager {
             alarmIntent.putExtra("preorderDate", preorderDate)
             alarmIntent.putExtra("phoneNumber", phoneNumber)
             alarmIntent.putExtra("totalOrderCount", totalOrderCount)
+            alarmIntent.putExtra("preorderId", preorderId)
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
-                UUID.randomUUID().variant(),
+                UUID.randomUUID().hashCode(),
                 alarmIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )

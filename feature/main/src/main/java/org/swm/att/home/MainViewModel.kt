@@ -10,7 +10,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.swm.att.common_ui.presenter.base.BaseViewModel
-import org.swm.att.common_ui.util.AlarmManager
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.common_ui.util.JWTUtils
 import org.swm.att.common_ui.util.JWTUtils.unixTimeToDateTime
@@ -20,6 +19,7 @@ import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.domain.repository.AttOrderRepository
 import org.swm.att.domain.repository.AttPosUserRepository
 import org.swm.att.home.constant.NavDestinationType
+import org.swm.att.home.util.alarm.AlarmManager
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -130,7 +130,8 @@ class MainViewModel @Inject constructor(
                 context,
                 preorderItem.orderedFor,
                 preorderItem.phone,
-                preorderItem.totalCount
+                preorderItem.totalCount,
+                preorderItem.id
             )
         }
     }

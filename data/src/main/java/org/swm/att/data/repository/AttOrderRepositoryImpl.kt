@@ -16,6 +16,7 @@ import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.entity.response.OrderVO
 import org.swm.att.domain.entity.response.PreOrderBillVO
 import org.swm.att.domain.entity.response.PreOrdersVO
+import org.swm.att.domain.entity.response.PreorderIdVO
 import org.swm.att.domain.repository.AttOrderRepository
 import javax.inject.Inject
 
@@ -99,7 +100,7 @@ class AttOrderRepositoryImpl @Inject constructor(
     override suspend fun postPreOrder(
         storeId: Int,
         preOrderedMenus: PreOrderedMenusVO
-    ): Flow<Result<Unit>> = flow {
+    ): Flow<Result<PreorderIdVO>> = flow {
         try {
             val preOrderedMenusDTO = PreOrderedMenusDTO(
                 totalPrice = preOrderedMenus.totalPrice,
@@ -116,7 +117,7 @@ class AttOrderRepositoryImpl @Inject constructor(
                 orderedFor = preOrderedMenus.orderedFor
             )
             orderDataSource.postPreOrder(storeId, preOrderedMenusDTO).collect {
-                emit(Result.success(it))
+                emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {
             emit(Result.failure(e))
