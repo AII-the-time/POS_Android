@@ -1,8 +1,8 @@
-package org.swm.att.common_ui.presenter.alarm
+package org.swm.att.home.util.alarm
 
-import org.swm.att.common_ui.R
-import org.swm.att.common_ui.databinding.DailogPreorderAlarmBinding
 import org.swm.att.common_ui.presenter.base.BaseActivity
+import org.swm.att.home.R
+import org.swm.att.home.databinding.DailogPreorderAlarmBinding
 
 class PreorderAlarmDialog :
     BaseActivity<DailogPreorderAlarmBinding>(R.layout.dailog_preorder_alarm) {

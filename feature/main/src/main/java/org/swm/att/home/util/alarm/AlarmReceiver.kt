@@ -1,10 +1,9 @@
-package org.swm.att.common_ui.receiver
+package org.swm.att.home.util.alarm
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import org.swm.att.common_ui.presenter.alarm.PreorderAlarmDialog
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(p0: Context?, p1: Intent?) {

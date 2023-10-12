@@ -10,7 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.swm.att.common_ui.presenter.base.BaseViewModel
-import org.swm.att.common_ui.util.AlarmManager
+import org.swm.att.home.util.alarm.AlarmManager
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.common_ui.util.JWTUtils
 import org.swm.att.common_ui.util.JWTUtils.unixTimeToDateTime
