@@ -43,6 +43,7 @@ class PreorderAlarmDialog :
                 mainIntent,
                 PendingIntent.FLAG_IMMUTABLE
             ).send()
+            finish()
         }
     }
 }

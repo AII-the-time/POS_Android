@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +29,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     private lateinit var validPreorderListAdapter: SelectableItemAdapter
     private val preorderViewModel: PreorderViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
+    private val navArgs by navArgs<PreorderFragmentArgs>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,7 +39,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         setDataBinding() // api 달면 수정할 부분
         setPreorderBtnClickListener()
         setCancelPreorderBtnClickListener()
-        initMockData()
+        initData()
     }
 
     private fun initPreorderRecyclerView() {
@@ -161,7 +163,9 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
         }
     }
 
-    private fun initMockData() {
+    private fun initData() {
+        val preorderId = navArgs.preorderId
+        preorderViewModel.setPreorderIdForAlarm(preorderId!!)
         preorderViewModel.getNextValidPreOrders(1)
     }
 }
