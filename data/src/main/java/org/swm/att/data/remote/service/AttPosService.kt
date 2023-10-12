@@ -48,6 +48,7 @@ interface AttPosService {
     suspend fun getOrderBills(
         @Header("storeId") storeId: Int,
         @Query("page") page: Int,
+        @Query("date") date: String? = null,
         @Query("count") count: Int
     ): Response<OrderBillsDTO>
 

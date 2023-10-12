@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.state.UiState
+import org.swm.att.common_ui.util.Formatter
+import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.OrderBillVO
 import org.swm.att.domain.entity.response.OrderBillsVO
@@ -59,7 +61,10 @@ class BillViewModel @Inject constructor(
 
     fun getNextOrderBills(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
-            attOrderRepository.getOrderBills(storeId, page, 20)
+            val date = filteringStartDate.value?.let { startDate ->
+                Formatter.getStringByDateTimeBaseFormatter(startDate.getUTCDateTime())
+            }
+            attOrderRepository.getOrderBills(storeId, page, date, 20)
                 .collect { result ->
                     result.onSuccess {
                         val data = _orderBillsData.value?.toMutableList() ?: mutableListOf()
@@ -104,10 +109,12 @@ class BillViewModel @Inject constructor(
         _selectedBillId.postValue(currentSelectedBillId.value)
     }
 
-    fun getBillsForFilteringDates(startDate: Date, endDate: Date?) {
+    fun getBillsForFilteringDates(startDate: Date) {
+        if (startDate == filteringStartDate.value) return
         _filteringStartDate.value = startDate
-        _filteringEndDate.value = endDate
-        // filtering api 연결 필요
+        page = 1
+        _orderBillsData.value = listOf()
+        getNextOrderBills(1)
     }
 
     fun getSizeOfOrderBills(): Int {
