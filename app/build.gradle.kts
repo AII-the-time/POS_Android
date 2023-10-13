@@ -21,12 +21,12 @@ android {
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders["SENTRY_DSN"] = gradleLocalProperties(rootDir).getProperty("SENTRY_DSN")
     }
 
     buildTypes {
         debug {
             buildConfigField("String", "ATT_BASE_URL", "\"${gradleLocalProperties(rootDir).getProperty("ATT_DEBUG_BASE_URL")}\"")
+            manifestPlaceholders["SENTRY_DSN"] = gradleLocalProperties(rootDir).getProperty("SENTRY_DSN_DEBUG")
         }
         release {
             isMinifyEnabled = false
@@ -34,6 +34,7 @@ android {
                     getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
             buildConfigField("String", "ATT_BASE_URL", "\"${gradleLocalProperties(rootDir).getProperty("ATT_RELEASE_BASE_URL")}\"")
+            manifestPlaceholders["SENTRY_DSN"] = gradleLocalProperties(rootDir).getProperty("SENTRY_DSN_RELEASE")
         }
     }
     compileOptions {
