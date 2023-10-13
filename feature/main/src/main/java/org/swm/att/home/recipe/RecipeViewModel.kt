@@ -64,49 +64,55 @@ class RecipeViewModel @Inject constructor(
         }
         val currentSelectedCategory = _selectedCategory.value
         val pastSelectedId = currentSelectedMenuId.value
-        currentSelectedCategory?.let { category ->
+        if (!currentSelectedCategory?.menus.isNullOrEmpty()) {
+            // 현재 선택된 item의 focused 값을 true로 변경
             if (position != -1) {
-                category.menus[position].isFocused = true
+                currentSelectedCategory!!.menus[position].isFocused = true
+                getSelectedItem(1, currentSelectedCategory.menus[position].id)
             }
+            // 이전에 선택된 item의 focused 값을 false로 변경
             pastSelectedId?.let { pastId ->
                 if (pastId != position && pastId != -1) {
-                    category.menus[pastId].isFocused = false
+                    currentSelectedCategory!!.menus[pastId].isFocused = false
                 }
             }
             // focused 값을 변경함 새 리스트 submit
-            _selectedCategory.postValue(category)
+            _selectedCategory.postValue(currentSelectedCategory)
+
+            // 이전에 선택된 item 업데이트
+            pastSelectedId?.let {
+                changeSelectedState()
+            }
+            // 현재 선택된 item 업데이트
+            _currentSelectedMenuId.postValue(position)
         }
-        // 이전에 선택된 item 업데이트
-        pastSelectedId?.let {
-            changeSelectedState()
-        }
-        // 현재 선택된 item 업데이트
-        _currentSelectedMenuId.postValue(position)
     }
 
     fun setSelectedCategory(category: CategoryVO) {
-        processPastSelectedItemBeforeChange()
+        processPastSelectedItemBeforeCategoryChange()
         _selectedCategory.value = category
-        setDefaultSelectedState(category)
+        setDefaultSelectedState()
         resetRecipeListForNewMenu()
     }
 
-    private fun processPastSelectedItemBeforeChange() {
+    private fun processPastSelectedItemBeforeCategoryChange() {
         val pastSelectedCategory = _selectedCategory.value
+        // 이전 category의 선택된 item의 focused 값을 false로 변경
         pastSelectedCategory?.let { category ->
             val pastSelectedId = currentSelectedMenuId.value
             pastSelectedId?.let { pastId ->
-                category.menus[pastId].isFocused = false
-                _selectedCategory.postValue(category)
+                if (pastId != -1) {
+                    category.menus[pastId].isFocused = false
+                    changeSelectedState()
+                }
             }
         }
+        // 이전 category의 선택된 item을 초기화
         _currentSelectedMenuId.value = -1
     }
 
-    private fun setDefaultSelectedState(category: CategoryVO) {
+    private fun setDefaultSelectedState() {
         setCurrentSelectedItemId(0)
-        _selectedCategory.value = null
-        getSelectedItem(1, category.menus[0].id)
     }
 
     private fun resetRecipeListForNewMenu() {
