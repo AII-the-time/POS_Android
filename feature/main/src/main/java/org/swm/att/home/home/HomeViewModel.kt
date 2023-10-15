@@ -102,4 +102,8 @@ class HomeViewModel @Inject constructor(
         }
         return OrderedMenusVO(orderedMenuList)
     }
+
+    fun clearGetMenuState() {
+        _getMenuState.value = UiState.Loading
+    }
 }

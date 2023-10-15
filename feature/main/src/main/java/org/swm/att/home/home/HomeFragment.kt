@@ -36,13 +36,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         homeViewModel.clearSelectedMenuList()
         initRecyclerView()
         setSelectedMenuList()
-        setCategories()
         setCategoriesObserver()
         setSelectedMenuObserver()
         setDataBinding()
         setOrderBtnListener()
         setPreorderBtnClickListener()
         setModifyPreorderBtnClickListener()
+        setCategories()
     }
 
     private fun setSelectedMenuList() {
@@ -78,8 +78,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 homeViewModel.getMenuState.collect { uiState ->
                     when (uiState) {
                         is UiState.Success ->  {
+                            clearViewPagerAdapter()
                             uiState.data?.let {
-                                clearViewPagerAdapter()
                                 for (index in it.categories.indices) {
                                     categoryViewPagerAdapter.addFragment(MenuFragment(index))
                                 }
@@ -92,8 +92,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                                 .show()
                         }
 
-                        is UiState.Loading -> {/* nothing */
-                        }
+                        is UiState.Loading -> {/* nothing */}
                     }
                 }
             }
@@ -144,5 +143,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             //주문 내역 업데이트 api 연결 필요
             homeViewModel.clearSelectedMenuList()
         }
+    }
+
+    override fun onDestroy() {
+        // TODO: activityViewModels와 기존 값 clear하는 방법 중 고민해보기
+        homeViewModel.clearGetMenuState()
+        super.onDestroy()
     }
 }
