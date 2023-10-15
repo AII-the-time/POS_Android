@@ -44,7 +44,7 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
                     super.onScrolled(recyclerView, dx, dy)
                     val lastVisibleItem = (this@apply.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                     if (billViewModel.getSizeOfOrderBills() <= lastVisibleItem + 5) {
-                        billViewModel.getNextOrderBills(1)
+                        billViewModel.getNextOrderBills()
                     }
 
                 }
@@ -122,6 +122,6 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
     }
 
     private fun initOrderBillsData() {
-        billViewModel.getNextOrderBills(1)
+        billViewModel.getNextOrderBills()
     }
 }

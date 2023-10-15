@@ -14,11 +14,13 @@ import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.repository.AttMenuRepository
+import org.swm.att.domain.repository.AttPosUserRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val attMenuRepository: AttMenuRepository
+    private val attMenuRepository: AttMenuRepository,
+    private val attPosUserRepository: AttPosUserRepository
 ): BaseViewModel() {
     private val _selectedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
     val selectedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _selectedMenuMap
@@ -37,8 +39,8 @@ class HomeViewModel @Inject constructor(
 
     fun getCategories() {
         viewModelScope.launch(attExceptionHandler) {
-            // mock data를 위해 임시로 storeId를 1로 지정
-            attMenuRepository.getMenu(1)
+            val storeId = attPosUserRepository.getStoreId()
+            attMenuRepository.getMenu(storeId)
                 .collect { result ->
                     result.onSuccess { category ->
                         _getMenuState.value = UiState.Success(category)

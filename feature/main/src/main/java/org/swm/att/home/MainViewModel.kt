@@ -145,17 +145,17 @@ class MainViewModel @Inject constructor(
         return curSelectedScreen.value != destination
     }
 
-    fun getTodayPreorder(storeId: Int) {
+    fun getTodayPreorder() {
         viewModelScope.launch(attExceptionHandler) {
             val date =
                 Formatter.getStringByDateTimeBaseFormatter(Calendar.getInstance().time.getUTCDateTime())
+            val storeId = attPosUserRepository.getStoreId()
             attOrderRepository.getPreOrders(storeId, page, date).collect { result ->
                 result.onSuccess {
-                    Log.d("getTodayPreorder", it.toString())
                     todayPreorderList.addAll(it.preOrders)
                     page += 1
                     if (page < it.lastPage) {
-                        getTodayPreorder(storeId)
+                        getTodayPreorder()
                     } else {
                         setPreorderAlarm()
                     }

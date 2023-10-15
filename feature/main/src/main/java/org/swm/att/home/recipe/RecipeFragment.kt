@@ -118,7 +118,6 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     private fun setBtnRegisterRecipeClickLIistener() {
         binding.btnRegisterRecipe.setOnClickListener {
             recipeViewModel.postNewMenu(
-                1,
                 binding.edtMenuName.text.toString(),
                 binding.edtMenuPrice.text.toString()
             )
@@ -283,7 +282,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
 
     private fun initData() {
         //임시로 1번 storeId로 설정
-        recipeViewModel.getRegisteredMenus(1)
+        recipeViewModel.getRegisteredMenus()
     }
 
 }

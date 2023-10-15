@@ -18,12 +18,14 @@ import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OrderVO
 import org.swm.att.domain.entity.response.PaymentResultVO
 import org.swm.att.domain.repository.AttOrderRepository
+import org.swm.att.domain.repository.AttPosUserRepository
 import java.util.Stack
 import javax.inject.Inject
 
 @HiltViewModel
 class PayViewModel @Inject constructor(
-    private val attOrderRepository: AttOrderRepository
+    private val attOrderRepository: AttOrderRepository,
+    private val attPosUserRepository: AttPosUserRepository
 ): BaseViewModel() {
     private val _orderedMenuMap = MutableLiveData<MutableMap<OrderedMenuVO, Int>?>()
     val orderedMenuMap: LiveData<MutableMap<OrderedMenuVO, Int>?> = _orderedMenuMap
@@ -43,6 +45,7 @@ class PayViewModel @Inject constructor(
     val postUseMileageState: StateFlow<UiState<PaymentResultVO>> = _postUseMileageState
     private val _postOrderState = MutableStateFlow<UiState<OrderVO>>(UiState.Loading)
     val postOrderState: StateFlow<UiState<OrderVO>> = _postOrderState
+    private var storeId: Int? = null
 
     fun setMileage(mileageVO: MileageVO) {
         _mileage.postValue(mileageVO)
@@ -110,7 +113,7 @@ class PayViewModel @Inject constructor(
     fun getOrderIdAndPostPayment(payMethod: PayMethod, preOrderId: Int?) {
         viewModelScope.launch(attExceptionHandler) {
             attOrderRepository.postOrder(
-                1,
+                getStoreId(),
                 preOrderId,
                 totalPrice.value ?: 0,
                 OrderedMenusVO(
@@ -131,7 +134,7 @@ class PayViewModel @Inject constructor(
         val cost = (getPriceFromMap(orderedMenuMap.value)) - (useMileage.value?.joinToString("")?.toInt() ?: 0)
         viewModelScope.launch(attExceptionHandler) {
             attOrderRepository.postPayment(
-                1,
+                getStoreId(),
                 PaymentVO(
                     orderId = id,
                     paymentMethod = payMethod,
@@ -149,6 +152,13 @@ class PayViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun getStoreId(): Int {
+        if (storeId == null) {
+            storeId = attPosUserRepository.getStoreId()
+        }
+        return storeId as Int
     }
 
     companion object {

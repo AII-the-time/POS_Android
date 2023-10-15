@@ -27,10 +27,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setPreorderAlarm()
         //checkRefreshToken()
         //TODO: 회원가입 화면이 나오기 전까지 임시 accessToken, refreshToken 사용
         checkStoreId()
+        setPreorderAlarm()
         setBindingData()
         setObserver()
         setNavController()
@@ -109,7 +109,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun setPreorderAlarm() {
-        mainViewModel.getTodayPreorder(1)
+        mainViewModel.getTodayPreorder()
     }
 
     override fun onDestroy() {

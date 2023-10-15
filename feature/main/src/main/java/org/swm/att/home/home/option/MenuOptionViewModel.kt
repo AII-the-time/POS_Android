@@ -13,11 +13,13 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionTypeVO
 import org.swm.att.domain.repository.AttMenuRepository
+import org.swm.att.domain.repository.AttPosUserRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class MenuOptionViewModel @Inject constructor(
-    private val attMenuRepository: AttMenuRepository
+    private val attMenuRepository: AttMenuRepository,
+    private val attPosUserRepository: AttPosUserRepository
 ): BaseViewModel() {
     private val _selectedOptionMap = MutableLiveData<Map<String, OptionTypeVO>>()
     val selectedOptionMap: LiveData<Map<String, OptionTypeVO>> = _selectedOptionMap
@@ -39,7 +41,8 @@ class MenuOptionViewModel @Inject constructor(
     fun getMenuInfo(menuId: Int) {
         _getMenuInfoState.value = UiState.Loading
         viewModelScope.launch(attExceptionHandler) {
-            attMenuRepository.getMenuInfo(1, menuId).collect { result ->
+            val storeId = attPosUserRepository.getStoreId()
+            attMenuRepository.getMenuInfo(storeId, menuId).collect { result ->
                 result.onSuccess { menu ->
                     menu.menuId = menuId
                     _getMenuInfoState.value = UiState.Success(menu)

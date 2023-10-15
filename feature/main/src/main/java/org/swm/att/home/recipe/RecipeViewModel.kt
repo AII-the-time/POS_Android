@@ -16,11 +16,13 @@ import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
+import org.swm.att.domain.repository.AttPosUserRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor(
-    private val attMenuRepository: AttMenuRepository
+    private val attMenuRepository: AttMenuRepository,
+    private val attPosUserRepository: AttPosUserRepository
 ): BaseSelectableViewViewModel() {
     private val _selectedMenuInfo = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
     val selectedMenuInfo: StateFlow<UiState<MenuWithRecipeVO>> = _selectedMenuInfo
@@ -43,10 +45,12 @@ class RecipeViewModel @Inject constructor(
     private val _recipeListForNewMenu = MutableLiveData<List<RecipeVO>>()
     val recipeListForNewMenu: LiveData<List<RecipeVO>> = _recipeListForNewMenu
 
-    override fun getSelectedItem(storeId: Int, selectedItemId: Int) {
+    private var storeId: Int? = null
+
+    override fun getSelectedItem(selectedItemId: Int) {
         _selectedMenuInfo.value = UiState.Loading
         viewModelScope.launch(attExceptionHandler) {
-            attMenuRepository.getMenuInfo(1, selectedItemId).collect() { result ->
+            attMenuRepository.getMenuInfo(getStoreId(), selectedItemId).collect() { result ->
                 result.onSuccess {
                     _recipeListForNewMenu.postValue(it.recipe)
                     _selectedMenuInfo.value = UiState.Success(it)
@@ -68,7 +72,7 @@ class RecipeViewModel @Inject constructor(
             // 현재 선택된 item의 focused 값을 true로 변경
             if (position != -1) {
                 currentSelectedCategory!!.menus[position].isFocused = true
-                getSelectedItem(1, currentSelectedCategory.menus[position].id)
+                getSelectedItem(currentSelectedCategory.menus[position].id)
             }
             // 이전에 선택된 item의 focused 값을 false로 변경
             pastSelectedId?.let { pastId ->
@@ -123,9 +127,9 @@ class RecipeViewModel @Inject constructor(
         _selectedMenuId.postValue(currentSelectedMenuId.value)
     }
 
-    fun getRegisteredMenus(storeId: Int) {
+    fun getRegisteredMenus() {
         viewModelScope.launch(attExceptionHandler) {
-            attMenuRepository.getMenu(storeId).collect { result ->
+            attMenuRepository.getMenu(getStoreId()).collect { result ->
                 result.onSuccess {
                     _getCategories.value = UiState.Success(it)
                 }.onFailure {  e ->
@@ -147,7 +151,7 @@ class RecipeViewModel @Inject constructor(
 
     fun postCategory(name: String) {
         viewModelScope.launch(attExceptionHandler) {
-            attMenuRepository.postCategory(1, name).collect { result ->
+            attMenuRepository.postCategory(getStoreId(), name).collect { result ->
                 result.onSuccess {
                     _postCategoryState.value = UiState.Success(it)
                 }.onFailure {
@@ -182,11 +186,11 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
-    fun postNewMenu(storeId: Int, name: String?, price: String?) {
+    fun postNewMenu(name: String?, price: String?) {
         viewModelScope.launch(attExceptionHandler) {
             try {
                 val newMenuItem = checkCreateNewMenu(name, price)
-                attMenuRepository.postNewMenu(storeId, newMenuItem).collect { result ->
+                attMenuRepository.postNewMenu(getStoreId(), newMenuItem).collect { result ->
                     result.onSuccess {
                         _postCategoryState.value = UiState.Success(it)
                     }.onFailure {
@@ -223,5 +227,12 @@ class RecipeViewModel @Inject constructor(
             }
         }
         return _recipeListForNewMenu.value
+    }
+
+    private suspend fun getStoreId(): Int {
+        if (storeId == null) {
+            storeId = attPosUserRepository.getStoreId()
+        }
+        return storeId as Int
     }
 }
