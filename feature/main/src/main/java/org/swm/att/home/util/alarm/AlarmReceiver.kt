@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import java.util.UUID
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(p0: Context?, p1: Intent?) {
@@ -16,6 +17,6 @@ class AlarmReceiver : BroadcastReceiver() {
         intent.putExtra("phoneNumber", phoneNumber)
         intent.putExtra("totalOrderCount", totalOrderCount)
         intent.putExtra("preorderId", preorderId)
-        PendingIntent.getActivity(p0, 0, intent, PendingIntent.FLAG_IMMUTABLE).send()
+        PendingIntent.getActivity(p0, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_IMMUTABLE).send()
     }
 }
