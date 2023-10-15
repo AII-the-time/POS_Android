@@ -7,15 +7,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.swm.att.common_ui.presenter.base.BaseViewModel
+import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.common_ui.util.JWTUtils
 import org.swm.att.common_ui.util.JWTUtils.unixTimeToDateTime
 import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
+import org.swm.att.domain.entity.request.StoreVO
 import org.swm.att.domain.entity.response.PreorderVO
+import org.swm.att.domain.entity.response.StoreIdVO
 import org.swm.att.domain.repository.AttOrderRepository
 import org.swm.att.domain.repository.AttPosUserRepository
 import org.swm.att.home.constant.NavDestinationType
@@ -41,6 +46,11 @@ class MainViewModel @Inject constructor(
     private val todayPreorderList = arrayListOf<PreorderVO>()
     private var page = 1
 
+    private val _storeIdExist = MutableLiveData<Int>()
+    val storeIdExist: LiveData<Int> = _storeIdExist
+    private val _registerStoreState = MutableStateFlow<UiState<StoreIdVO>>(UiState.Loading)
+    val registerStoreState: StateFlow<UiState<StoreIdVO>> = _registerStoreState
+
     fun checkRefreshToken() {
         viewModelScope.launch {
             val curRefreshToken = attPosUserRepository.getRefreshToken()
@@ -48,11 +58,45 @@ class MainViewModel @Inject constructor(
                 _refreshExist.postValue(false)
             } else {
                 //refresh token 만료 확인
+                _refreshExist.postValue(true)
                 val refreshDecodeStr = JWTUtils.decodeToken(curRefreshToken)
                 if (checkRefreshExpire(refreshDecodeStr)) {
                     refreshToken(curRefreshToken)
                 }
             }
+        }
+    }
+
+    fun checkStoreId() {
+        viewModelScope.launch(attExceptionHandler) {
+            val storeId = attPosUserRepository.getStoreId()
+            Log.d("MainViewModel", "checkStoreId: $storeId")
+            if (storeId == -1) {
+                // TODO 새로운 가게 등록 화면으로 전환 -> _storeIdExist 활용
+                // 임시 token을 활용해 가게 바로 등록
+                attPosUserRepository.registerStore(
+                    StoreVO(
+                        name = "temp",
+                        address = "temp",
+                        openingHours = emptyList()
+                    )
+                ).collect { result ->
+                    result.onSuccess {
+                        _registerStoreState.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "가게 등록 실패"
+                        _registerStoreState.value = UiState.Error(errorMsg)
+                    }
+                }
+            }
+
+        }
+    }
+
+    fun setStoreId(storeId: Int) {
+        viewModelScope.launch(attExceptionHandler)  {
+            Log.d("MainViewModel", "setStoreId: $storeId")
+            attPosUserRepository.saveStoreId(storeId)
         }
     }
 

@@ -50,6 +50,17 @@ class AttPosUserRepositoryImpl @Inject constructor(
         return attEncryptedPrefDataSource.getAccessToken(PreferenceKey.REFRESH_TOKEN)
     }
 
+    override suspend fun saveStoreId(storeId: Int) {
+        attEncryptedPrefDataSource.setStoreId(
+            preferenceKey = PreferenceKey.STORE_ID,
+            value = storeId
+        )
+    }
+
+    override suspend fun getStoreId(): Int {
+        return attEncryptedPrefDataSource.getStoreId(PreferenceKey.STORE_ID)
+    }
+
     override suspend fun getMileage(storeId: Int, phoneNumber: String): Flow<Result<MileageVO>> = flow {
         try {
             userDataSource.getMileage(storeId, phoneNumber).collect {
