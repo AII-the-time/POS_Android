@@ -1,8 +1,10 @@
 package org.swm.att.data.remote.service
 
 import org.swm.att.data.remote.request.PhoneNumDTO
+import org.swm.att.data.remote.request.StoreDTO
 import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.data.remote.response.MileageIdDTO
+import org.swm.att.data.remote.response.StoreIdDTO
 import org.swm.att.data.remote.response.TokenDTO
 import retrofit2.Response
 import retrofit2.http.Body
@@ -36,5 +38,10 @@ interface AttPosUserService {
         @Header("StoreId") storeId: Int,
         @Body phone: PhoneNumDTO
     ): Response<MileageIdDTO>
+
+    @POST("store")
+    suspend fun registerStore(
+        @Body store: StoreDTO
+    ): Response<StoreIdDTO>
 
 }
