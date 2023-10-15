@@ -8,6 +8,7 @@ import org.swm.att.data.remote.request.NewMenuDTO
 import org.swm.att.data.remote.response.RecipeDTO
 import org.swm.att.domain.entity.request.NewMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
+import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
@@ -47,7 +48,7 @@ class AttMenuRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postNewMenu(storeId: Int, newMenu: NewMenuVO): Flow<Result<Unit>> = flow {
+    override suspend fun postNewMenu(storeId: Int, newMenu: NewMenuVO): Flow<Result<MenuIdVO>> = flow {
         try {
             val menuDTO = NewMenuDTO(
                 name = newMenu.name,
@@ -64,7 +65,7 @@ class AttMenuRepositoryImpl @Inject constructor(
                 }
             )
             menuDataSource.postNewMenu(storeId, menuDTO).collect {
-                emit(Result.success(it))
+                emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {
             emit(Result.failure(e))

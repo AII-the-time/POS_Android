@@ -13,6 +13,7 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.NewMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.CategoryVO
+import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
@@ -36,6 +37,8 @@ class RecipeViewModel @Inject constructor(
     val getCategories: StateFlow<UiState<CategoriesVO>> = _getCategories
     private val _postCategoryState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
     val postCategoryState: StateFlow<UiState<Unit>> = _postCategoryState
+    private val _postMenuState = MutableStateFlow<UiState<MenuIdVO>>(UiState.Loading)
+    val postMenuState: StateFlow<UiState<MenuIdVO>> = _postMenuState
 
     private val _isModify = MutableLiveData(false)
     val isModify: LiveData<Boolean> = _isModify
@@ -192,14 +195,14 @@ class RecipeViewModel @Inject constructor(
                 val newMenuItem = checkCreateNewMenu(name, price)
                 attMenuRepository.postNewMenu(getStoreId(), newMenuItem).collect { result ->
                     result.onSuccess {
-                        _postCategoryState.value = UiState.Success(it)
+                        _postMenuState.value = UiState.Success(it)
                     }.onFailure {
                         val errorMsg = if (it is HttpResponseException) it.message else "메뉴 추가 실패"
-                        _postCategoryState.value = UiState.Error(errorMsg)
+                        _postMenuState.value = UiState.Error(errorMsg)
                     }
                 }
             } catch (e: Exception) {
-                _postCategoryState.value = UiState.Error(e.message ?: "메뉴 추가 실패")
+                _postMenuState.value = UiState.Error(e.message ?: "메뉴 추가 실패")
             }
         }
     }

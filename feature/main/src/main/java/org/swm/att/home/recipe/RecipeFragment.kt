@@ -34,7 +34,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         setRecipeBtnsClickListener()
         setBtnRegisterMenuClickListener()
         setBtnAddRecipeClickListener()
-        setBtnRegisterRecipeClickLIistener()
+        setBtnRegisterRecipeClickListener()
         setObserver()
         setDataBinding()
         initData()
@@ -101,7 +101,6 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         /*todo*/
                         true
                     }
-
                     else -> false
                 }
             }
@@ -115,7 +114,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         }
     }
 
-    private fun setBtnRegisterRecipeClickLIistener() {
+    private fun setBtnRegisterRecipeClickListener() {
         binding.btnRegisterRecipe.setOnClickListener {
             recipeViewModel.postNewMenu(
                 binding.edtMenuName.text.toString(),
@@ -193,6 +192,22 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         ).show()
                     }
 
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.postMenuState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "메뉴가 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                                initData()
+                            }
+                        }
+                        is UiState.Loading -> { /* nothing */ }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
