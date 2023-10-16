@@ -5,11 +5,15 @@ import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey
 import org.swm.att.data.remote.datasource.UserDataSource
+import org.swm.att.data.remote.request.OpeningHourDTO
 import org.swm.att.data.remote.request.PhoneNumDTO
+import org.swm.att.data.remote.request.StoreDTO
 import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.domain.entity.request.PhoneNumVO
+import org.swm.att.domain.entity.request.StoreVO
 import org.swm.att.domain.entity.response.MileageIdVO
 import org.swm.att.domain.entity.response.MileageVO
+import org.swm.att.domain.entity.response.StoreIdVO
 import org.swm.att.domain.entity.response.TokenVO
 import org.swm.att.domain.repository.AttPosUserRepository
 import javax.inject.Inject
@@ -25,25 +29,36 @@ class AttPosUserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveAccessToken(accessToken: String) {
-        attEncryptedPrefDataSource.setStrValue(
+        attEncryptedPrefDataSource.setAccessToken(
             preferenceKey = PreferenceKey.ACCESS_TOKEN,
             value = accessToken
         )
     }
 
     override suspend fun saveRefreshToken(refreshToken: String) {
-        attEncryptedPrefDataSource.setStrValue(
+        attEncryptedPrefDataSource.setAccessToken(
             preferenceKey = PreferenceKey.REFRESH_TOKEN,
             value = refreshToken
         )
     }
 
     override suspend fun getAccessToken(): String {
-        return attEncryptedPrefDataSource.getStrValue(PreferenceKey.ACCESS_TOKEN)
+        return attEncryptedPrefDataSource.getAccessToken(PreferenceKey.ACCESS_TOKEN)
     }
 
     override suspend fun getRefreshToken(): String {
-        return attEncryptedPrefDataSource.getStrValue(PreferenceKey.REFRESH_TOKEN)
+        return attEncryptedPrefDataSource.getAccessToken(PreferenceKey.REFRESH_TOKEN)
+    }
+
+    override suspend fun saveStoreId(storeId: Int) {
+        attEncryptedPrefDataSource.setStoreId(
+            preferenceKey = PreferenceKey.STORE_ID,
+            value = storeId
+        )
+    }
+
+    override suspend fun getStoreId(): Int {
+        return attEncryptedPrefDataSource.getStoreId(PreferenceKey.STORE_ID)
     }
 
     override suspend fun getMileage(storeId: Int, phoneNumber: String): Flow<Result<MileageVO>> = flow {
@@ -82,6 +97,26 @@ class AttPosUserRepositoryImpl @Inject constructor(
             ).collect {
                 emit(Result.success(it.toVO()))
             }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun registerStore(store: StoreVO): Flow<Result<StoreIdVO>> = flow {
+        try {
+            userDataSource.registerStore(
+                StoreDTO(
+                    store.name,
+                    store.address,
+                    store.openingHours?.map {
+                        OpeningHourDTO(
+                            it.day,
+                            it.open,
+                            it.close
+                        )
+                    }
+                )
+            ).collect { emit(Result.success(it.toVO())) }
         } catch (e: Exception) {
             emit(Result.failure(e))
         }

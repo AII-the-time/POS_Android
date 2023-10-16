@@ -34,9 +34,8 @@ class SelectableItemAdapter(
         val item = getItem(position)
         holder.bind(item)
         holder.itemView.setOnClickListener {
-            // storeId 임시로 1로 설정
             viewModel.setCurrentSelectedItemId(position)
-            viewModel.getSelectedItem(1, item.id)
+            viewModel.getSelectedItem(item.id)
         }
     }
 

@@ -61,7 +61,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
                     val lastVisibleItem =
                         (this@apply.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                     if (preorderViewModel.preOrdersData.value?.size ?: 0 <= lastVisibleItem + 5 && !preorderViewModel.isEndOfValidPreOrders()) {
-                        preorderViewModel.getNextValidPreOrders(1)
+                        preorderViewModel.getNextValidPreOrders()
                     }
                 }
             })
@@ -166,6 +166,6 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     private fun initData() {
         val preorderId = navArgs.preorderId
         preorderViewModel.setPreorderIdForAlarm(preorderId!!)
-        preorderViewModel.getNextValidPreOrders(1)
+        preorderViewModel.getNextValidPreOrders()
     }
 }

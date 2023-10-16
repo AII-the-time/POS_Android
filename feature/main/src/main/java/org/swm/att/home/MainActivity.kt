@@ -10,6 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.presenter.base.BaseActivity
 import org.swm.att.home.databinding.ActivityMainBinding
 import org.swm.att.home.home.HomeFragmentDirections
+import org.swm.att.home.util.alarm.AlarmManager
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -21,20 +22,15 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setPreorderAlarm()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkRefreshToken()
+        //TODO: 로그인 과정 추가되면 수정
+        //checkRefreshToken()
         setNavController()
         setBindingData()
         setObserver()
     }
-
-    private fun checkRefreshToken() {
-        mainViewModel.checkRefreshToken()
-    }
+//    private fun checkRefreshToken() {
+//        mainViewModel.checkRefreshToken()
+//    }
 
     private fun setNavController() {
         val navHost =
@@ -50,11 +46,14 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun setObserver() {
-        mainViewModel.refreshExist.observe(this) { exist ->
-            if (exist == false) {
-//                로그인 및 회원가입으로 화면 전환
-            }
-        }
+//        mainViewModel.refreshExist.observe(this) { exist ->
+//            if (exist == false) {
+//                // 로그인 및 회원가입으로 화면 전환
+//            } else {
+//                // storeId 확인
+//                mainViewModel.checkStoreId()
+//            }
+//        }
 
         mainViewModel.selectedScreen.observe(this) { destination ->
             mainViewModel.isGlobalAction.value?.let {
@@ -64,7 +63,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 } else {
                     mainViewModel.resetIsGlobalAction()
                 }
-
                 if (mainViewModel.isDestinationDiff(destination)) {
                     changeNavDestination()
                 }
@@ -81,12 +79,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    private fun setPreorderAlarm() {
-        mainViewModel.getTodayPreorder(1)
-    }
-
     override fun onDestroy() {
-        mainViewModel.cancelAllPreorderAlarm()
+        AlarmManager.cancelAllAlarm(this)
         super.onDestroy()
     }
 

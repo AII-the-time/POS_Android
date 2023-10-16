@@ -16,12 +16,14 @@ import org.swm.att.domain.entity.response.OrderBillVO
 import org.swm.att.domain.entity.response.OrderBillsVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.repository.AttOrderRepository
+import org.swm.att.domain.repository.AttPosUserRepository
 import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class BillViewModel @Inject constructor(
-    private val attOrderRepository: AttOrderRepository
+    private val attOrderRepository: AttOrderRepository,
+    private val attPosUserRepository: AttPosUserRepository
 ): BaseSelectableViewViewModel() {
     private val _selectedBillInfo = MutableStateFlow<UiState<OrderReceiptVO>>(UiState.Loading)
     val selectedBillInfo: StateFlow<UiState<OrderReceiptVO>> = _selectedBillInfo
@@ -41,12 +43,13 @@ class BillViewModel @Inject constructor(
     val filteringStartDate: LiveData<Date> = _filteringStartDate
     private val _filteringEndDate = MutableLiveData<Date?>()
     val filteringEndDate: LiveData<Date?> = _filteringEndDate
-    private var page: Int = 1
 
-    override fun getSelectedItem(storeId: Int, selectedItemId: Int) {
+    private var page: Int = 1
+    private var storeId: Int? = null
+
+    override fun getSelectedItem(selectedItemId: Int) {
         viewModelScope.launch(attExceptionHandler) {
-            // 추후 storeId, selectedBillId 사용
-            attOrderRepository.getOrderBill(storeId, selectedItemId)
+            attOrderRepository.getOrderBill(getStoreId(), selectedItemId)
                 .collect { result ->
                     result.onSuccess {
                         _selectedBillInfoData.value = it
@@ -59,12 +62,12 @@ class BillViewModel @Inject constructor(
         }
     }
 
-    fun getNextOrderBills(storeId: Int) {
+    fun getNextOrderBills() {
         viewModelScope.launch(attExceptionHandler) {
             val date = filteringStartDate.value?.let { startDate ->
                 Formatter.getStringByDateTimeBaseFormatter(startDate.getUTCDateTime())
             }
-            attOrderRepository.getOrderBills(storeId, page, date, 20)
+            attOrderRepository.getOrderBills(getStoreId(), page, date, 20)
                 .collect { result ->
                     result.onSuccess {
                         val data = _orderBillsData.value?.toMutableList() ?: mutableListOf()
@@ -72,7 +75,7 @@ class BillViewModel @Inject constructor(
                         if (page == 1 && data.isNotEmpty()) {
                             data[0].isFocused = true
                             _currentSelectedBillId.postValue(0)
-                            getSelectedItem(storeId, data[0].id)
+                            getSelectedItem(data[0].id)
                         }
                         _orderBillsData.postValue(data)
                         _orderBills.value = UiState.Success(it)
@@ -95,7 +98,6 @@ class BillViewModel @Inject constructor(
                     bills[it].isFocused = false
                 }
             }
-            _orderBillsData.postValue(bills)
         }
 
         pastSelectedId?.let {
@@ -114,11 +116,17 @@ class BillViewModel @Inject constructor(
         _filteringStartDate.value = startDate
         page = 1
         _orderBillsData.value = listOf()
-        getNextOrderBills(1)
+        getNextOrderBills()
     }
 
     fun getSizeOfOrderBills(): Int {
         return orderBillsData.value?.size ?: 0
     }
 
+    private suspend fun getStoreId(): Int {
+        if (storeId == null) {
+            storeId = attPosUserRepository.getStoreId()
+        }
+        return storeId as Int
+    }
 }

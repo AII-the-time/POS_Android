@@ -83,15 +83,6 @@ class MenuOptionDialog(
                                 menu = menuWithRecipe
                                 if (menuWithRecipe.option.isNotEmpty()) {
                                     menuOptionAdapter.submitList(menuWithRecipe.option)
-                                } else {
-                                    homeViewModel.addSelectedMenu(
-                                        OrderedMenuVO(
-                                            id = menuWithRecipe.menuId ?: -1,
-                                            name = menuWithRecipe.menuName,
-                                            price = menuWithRecipe.price.toInt(),
-                                            options = emptyList()
-                                        )
-                                    )
                                 }
                             }
                         }

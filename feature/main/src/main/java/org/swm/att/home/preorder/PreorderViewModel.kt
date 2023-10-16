@@ -18,12 +18,14 @@ import org.swm.att.domain.entity.response.PreOrderBillVO
 import org.swm.att.domain.entity.response.PreOrdersVO
 import org.swm.att.domain.entity.response.PreorderVO
 import org.swm.att.domain.repository.AttOrderRepository
+import org.swm.att.domain.repository.AttPosUserRepository
 import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class PreorderViewModel @Inject constructor(
-    private val attOrderRepository: AttOrderRepository
+    private val attOrderRepository: AttOrderRepository,
+    private val attPosUserRepository: AttPosUserRepository
 ) : BaseSelectableViewViewModel() {
     private val _selectedPreorderInfo = MutableStateFlow<UiState<PreOrderBillVO>>(UiState.Loading)
     val selectedPreorderInfo: StateFlow<UiState<PreOrderBillVO>> = _selectedPreorderInfo
@@ -44,9 +46,11 @@ class PreorderViewModel @Inject constructor(
     private var page: Int = 1
     private var preorderIdForAlarm: Int = -1
 
-    override fun getSelectedItem(storeId: Int, selectedItemId: Int) {
+    private var storeId: Int? = null
+
+    override fun getSelectedItem(selectedItemId: Int) {
         viewModelScope.launch(attExceptionHandler) {
-            attOrderRepository.getPreOrderBill(1, selectedItemId).collect { result ->
+            attOrderRepository.getPreOrderBill(getStoreId(), selectedItemId).collect { result ->
                 result.onSuccess {
                     _selectedPreorderInfoData.postValue(it)
                     _selectedPreorderInfo.value = UiState.Success(it)
@@ -68,7 +72,6 @@ class PreorderViewModel @Inject constructor(
                     preorders[pastId].isFocused = false
                 }
             }
-            _preOrdersData.postValue(preorders)
         }
 
         pastSelectedId?.let {
@@ -87,19 +90,19 @@ class PreorderViewModel @Inject constructor(
         _filteringStartDate.value = startDate
         page = 1
         _preOrdersData.value = listOf()
-        getNextValidPreOrders(1)
+        getNextValidPreOrders()
     }
 
-    fun getNextValidPreOrders(storeId: Int) {
+    fun getNextValidPreOrders() {
         viewModelScope.launch(attExceptionHandler) {
             val date = filteringStartDate.value?.let { startDate ->
                 Formatter.getStringByDateTimeBaseFormatter(startDate.getUTCDateTime())
             }
-            attOrderRepository.getPreOrders(storeId, page, date).collect { result ->
+            attOrderRepository.getPreOrders(getStoreId(), page, date).collect { result ->
                 result.onSuccess {
                     val data = _preOrdersData.value?.toMutableList() ?: mutableListOf()
                     data.addAll(it.preOrders)
-                    _preOrdersData.postValue(setDefaultSelectedPreorderItem(storeId, data))
+                    _preOrdersData.postValue(setDefaultSelectedPreorderItem(data))
                     _getPreOrdersState.value = UiState.Success(it)
                     page += 1
                 }.onFailure {
@@ -110,14 +113,14 @@ class PreorderViewModel @Inject constructor(
         }
     }
 
-    private fun setDefaultSelectedPreorderItem(storeId: Int, data: MutableList<PreorderVO>): MutableList<PreorderVO> {
+    private fun setDefaultSelectedPreorderItem(data: MutableList<PreorderVO>): MutableList<PreorderVO> {
         if (page == 1 && data.isNotEmpty()) {
             if (preorderIdForAlarm != -1) {
-                getSelectedItem(storeId, preorderIdForAlarm)
+                getSelectedItem(preorderIdForAlarm)
             } else {
                 data[0].isFocused = true
                 _currentSelectedPreorderId.postValue(0)
-                getSelectedItem(storeId, data[0].id)
+                getSelectedItem(data[0].id)
             }
         }
         return data
@@ -153,5 +156,12 @@ class PreorderViewModel @Inject constructor(
 
     fun setPreorderIdForAlarm(preorderId: Int) {
         preorderIdForAlarm = preorderId
+    }
+
+    private suspend fun getStoreId(): Int {
+        if (storeId == null) {
+            storeId = attPosUserRepository.getStoreId()
+        }
+        return storeId as Int
     }
 }

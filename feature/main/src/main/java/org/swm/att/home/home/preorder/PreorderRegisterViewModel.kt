@@ -18,6 +18,7 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PreOrderedMenusVO
 import org.swm.att.domain.repository.AttOrderRepository
+import org.swm.att.domain.repository.AttPosUserRepository
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
@@ -25,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PreorderRegisterViewModel @Inject constructor(
     private val attOrderRepository: AttOrderRepository,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val attPosUserRepository: AttPosUserRepository
 ) : BaseViewModel() {
     private val _orderedMenus = MutableStateFlow<OrderedMenusVO?>(null)
     val orderedMenus: StateFlow<OrderedMenusVO?> = _orderedMenus
@@ -67,7 +69,8 @@ class PreorderRegisterViewModel @Inject constructor(
                 memo,
                 getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime())
             )
-            attOrderRepository.postPreOrder(1, preOrderedMenus).collect { result ->
+            val storeId = attPosUserRepository.getStoreId()
+            attOrderRepository.postPreOrder(storeId, preOrderedMenus).collect { result ->
                 result.onSuccess {
                     _postPreOrderState.value = UiState.Success()
                     addPreorderToAlarmManager(
