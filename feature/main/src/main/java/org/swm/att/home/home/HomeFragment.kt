@@ -33,7 +33,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel.clearSelectedMenuList()
+        clearUiValues()
         initRecyclerView()
         setCategoriesObserver()
         setSelectedMenuObserver()
@@ -42,6 +42,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setPreorderBtnClickListener()
         setModifyPreorderBtnClickListener()
         checkStoreId()
+    }
+
+    private fun clearUiValues() {
+        homeViewModel.clearUiValues()
     }
 
     private fun setSelectedMenuList() {
@@ -90,7 +94,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                         is UiState.Success -> {
                             Toast.makeText(requireContext(), "가게 등록이 완료되었습니다!", Toast.LENGTH_SHORT).show()
                             uiState.data?.let {
-                                homeViewModel.setStoreId(it.storeId)
                                 setPreorderAlarm()
                                 setSelectedMenuList()
                                 setCategories()
@@ -148,7 +151,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setDataBinding() {
-        binding.homeViewHolder = homeViewModel
+        binding.homeViewModel = homeViewModel
         binding.isPreorder = args.preOrderId != -1
     }
 
@@ -191,6 +194,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setPreorderAlarm() {
-        homeViewModel.getTodayPreorder()
+        if (!homeViewModel.isRegisteredPreorderAlarm()) {
+            homeViewModel.getTodayPreorder()
+        }
     }
 }

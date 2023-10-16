@@ -149,6 +149,8 @@ class HomeViewModel @Inject constructor(
             ).collect { result ->
                 result.onSuccess {
                     _registerStoreState.value = UiState.Success(it)
+                    setStoreId(it.storeId)
+                    _storeIdExist.postValue(it.storeId)
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "가게 등록 실패"
                     _registerStoreState.value = UiState.Error(errorMsg)
@@ -196,5 +198,15 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(attExceptionHandler)  {
             attPosUserRepository.saveStoreId(storeId)
         }
+    }
+
+    fun clearUiValues() {
+        _registerStoreState.value = UiState.Loading
+        _getMenuState.value = UiState.Loading
+        clearSelectedMenuList()
+    }
+
+    fun isRegisteredPreorderAlarm(): Boolean {
+        return todayPreorderList.isNotEmpty()
     }
 }

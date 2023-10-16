@@ -8,12 +8,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.ItemTouchHelperCallback
-import org.swm.att.common_ui.util.StartDragListener
 import org.swm.att.home.R
 import org.swm.att.home.adapter.CategoryMenuAdapter
 import org.swm.att.home.databinding.FragmentMenuBinding
@@ -38,11 +36,11 @@ class MenuFragment(
         val helper = ItemTouchHelper(itemTouchHelperCallback)
         helper.attachToRecyclerView(binding.rvMenuForCategory)
 
-        categoryMenuAdapter.setOnStartDragListener(object : StartDragListener {
-            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-                helper.startDrag(viewHolder)
-            }
-        })
+//        categoryMenuAdapter.setOnStartDragListener(object : StartDragListener {
+//            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+//                helper.startDrag(viewHolder)
+//            }
+//        })
 
         binding.rvMenuForCategory.apply {
             setHasFixedSize(true)
@@ -61,9 +59,7 @@ class MenuFragment(
                                 categoryMenuAdapter.submitList(it.categories[position].menus)
                             }
                         }
-
-                        else -> {/* nothing */
-                        }
+                        else -> {/* nothing */}
                     }
                 }
             }
