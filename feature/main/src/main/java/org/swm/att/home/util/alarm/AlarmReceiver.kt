@@ -13,10 +13,13 @@ class AlarmReceiver : BroadcastReceiver() {
         val phoneNumber = p1?.getStringExtra("phoneNumber")
         val totalOrderCount = p1?.getIntExtra("totalOrderCount", -1)
         val preorderId = p1?.getIntExtra("preorderId", -1)
-        intent.putExtra("preorderDate", preorderDate)
-        intent.putExtra("phoneNumber", phoneNumber)
-        intent.putExtra("totalOrderCount", totalOrderCount)
-        intent.putExtra("preorderId", preorderId)
+        intent.apply {
+            putExtra("preorderDate", preorderDate)
+            putExtra("phoneNumber", phoneNumber)
+            putExtra("totalOrderCount", totalOrderCount)
+            putExtra("preorderId", preorderId)
+            addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        }
         PendingIntent.getActivity(p0, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_IMMUTABLE).send()
     }
 }
