@@ -72,7 +72,6 @@ class PreorderViewModel @Inject constructor(
                     preorders[pastId].isFocused = false
                 }
             }
-            _preOrdersData.postValue(preorders)
         }
 
         pastSelectedId?.let {
