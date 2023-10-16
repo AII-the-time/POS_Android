@@ -202,6 +202,7 @@ class HomeViewModel @Inject constructor(
 
     fun clearUiValues() {
         _registerStoreState.value = UiState.Loading
+        _getMenuState.value = UiState.Loading
         clearSelectedMenuList()
     }
 
