@@ -65,16 +65,28 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
 
     private fun setCategoryDetailBtnClickListener() {
         binding.tvCategoryModify.setOnClickListener { view ->
-            showMenu(view, R.menu.item_category_detail)
+//            showMenu(view, R.menu.item_category_detail)
+            /* todo */
+            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setRecipeBtnsClickListener() {
         binding.btnModifyRecipe.setOnClickListener {
-            recipeViewModel.changeModifyState()
+//            recipeViewModel.changeModifyState()
+            /* todo */
+            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
         }
+
         binding.btnRegisterRecipe.setOnClickListener {
-            recipeViewModel.changeModifyState()
+//            recipeViewModel.changeModifyState()
+            /* todo */
+            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnDeleteRecipe.setOnClickListener {
+            /* todo */
+            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
         }
     }
 

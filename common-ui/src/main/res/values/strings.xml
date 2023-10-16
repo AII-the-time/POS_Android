@@ -91,7 +91,7 @@
     <string name="btn_pay_by_card">신용카드 결제</string>
     <string name="tv_menu_option_picker_des">옵션 추가</string>
     <string name="tv_menu_custom_option_des">상세옵션</string>
-    <string name="btn_menu_option_add">옵션 추가</string>
+    <string name="btn_menu_option_add">메뉴 추가</string>
     <string name="btn_use_mileage">선결제/포인트 사용</string>
     <string name="btn_not_use">사용 안 함</string>
     <string name="tv_use_mileage_dl_des">포인트 사용</string>
@@ -169,6 +169,8 @@
     <string name="tv_preorder_customer">%s님의 주문</string>
     <string name="tv_order_total_count">총 %d건</string>
     <string name="tv_new_menu_item">새로운 메뉴</string>
+    <string name="tv_no_category_des">\'레시피 관리\'에서 새로운 카테고리와 메뉴를 추가해보세요!</string>
+    <string name="tv_ready_for_service">서비스 준비 중 입니다!</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>

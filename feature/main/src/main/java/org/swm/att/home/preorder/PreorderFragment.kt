@@ -136,12 +136,14 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
 
     private fun setPreorderBtnClickListener() {
         binding.btnModifyPreorderList.setOnClickListener {
-            val action = PreorderFragmentDirections.actionGlobalFragmentHome(
-                selectedMenus = preorderViewModel.getSelectedMenus(),
-                isModify = true
-            )
-            findNavController().navigate(action)
-            mainViewModel.directWithGlobalAction(NavDestinationType.Home)
+//            val action = PreorderFragmentDirections.actionGlobalFragmentHome(
+//                selectedMenus = preorderViewModel.getSelectedMenus(),
+//                isModify = true
+//            )
+//            findNavController().navigate(action)
+//            mainViewModel.directWithGlobalAction(NavDestinationType.Home)
+            /* todo */
+            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
         }
         binding.btnPayBill.setOnClickListener {
             val action =
@@ -160,12 +162,13 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
     private fun setCancelPreorderBtnClickListener() {
         binding.btnCancelPreorder.setOnClickListener {
             /* todo */
+            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun initData() {
         val preorderId = navArgs.preorderId
-        preorderViewModel.setPreorderIdForAlarm(preorderId!!)
+        preorderViewModel.setPreorderIdForAlarm(preorderId)
         preorderViewModel.getNextValidPreOrders()
     }
 }

@@ -1,6 +1,7 @@
 package org.swm.att.home.bills
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -28,6 +29,7 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
         super.onViewCreated(view, savedInstanceState)
         initOrderBillItemRecyclerView()
         setBillFilteringBtnClickListener()
+        setBillCancelBtnClickListener()
         setDataBinding()
         setObserver()
         initOrderBillsData()
@@ -63,6 +65,13 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
         binding.btnSearchBill.setOnClickListener {
             val dialog = DialogBillFiltering(billViewModel)
             dialog.show(childFragmentManager, "billFiltering")
+        }
+    }
+
+    private fun setBillCancelBtnClickListener() {
+        binding.btnPayCancel.setOnClickListener {
+            /* todo */
+            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
         }
     }
 
