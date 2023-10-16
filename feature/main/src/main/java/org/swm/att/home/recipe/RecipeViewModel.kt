@@ -66,6 +66,14 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
+    fun setDefaultSelectedItem() {
+        val currentSelectedCategory = _selectedCategory.value
+        if (!currentSelectedCategory?.menus.isNullOrEmpty()) {
+            currentSelectedCategory!!.menus[0].isFocused = true
+            _currentSelectedMenuId.postValue(0)
+        }
+    }
+
     override fun setCurrentSelectedItemId(position: Int) {
         if (position != -1) {
             changeCreateState(false)
@@ -84,8 +92,6 @@ class RecipeViewModel @Inject constructor(
                     currentSelectedCategory!!.menus[pastId].isFocused = false
                 }
             }
-            // focused 값을 변경함 새 리스트 submit
-            _selectedCategory.postValue(currentSelectedCategory)
 
             // 이전에 선택된 item 업데이트
             pastSelectedId?.let {
@@ -99,7 +105,6 @@ class RecipeViewModel @Inject constructor(
     fun setSelectedCategory(category: CategoryVO) {
         processPastSelectedItemBeforeCategoryChange()
         _selectedCategory.value = category
-        setDefaultSelectedState()
         resetRecipeListForNewMenu()
     }
 
@@ -117,10 +122,6 @@ class RecipeViewModel @Inject constructor(
         }
         // 이전 category의 선택된 item을 초기화
         _currentSelectedMenuId.value = -1
-    }
-
-    private fun setDefaultSelectedState() {
-        setCurrentSelectedItemId(0)
     }
 
     private fun resetRecipeListForNewMenu() {

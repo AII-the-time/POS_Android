@@ -161,6 +161,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                     binding.menuWithRecipe = null
                 }
                 registeredMenusAdapter.submitList(it.menus)
+                recipeViewModel.setDefaultSelectedItem()
                 binding.edtCategoryName.setText(
                     String.format(
                         "%s(%d건)",
