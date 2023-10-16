@@ -1,6 +1,7 @@
 package org.swm.att.data.remote.datasource
 
 import org.swm.att.data.remote.request.PhoneNumDTO
+import org.swm.att.data.remote.request.StoreDTO
 import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.data.remote.service.AttPosUserService
 import javax.inject.Inject
@@ -19,4 +20,7 @@ class UserDataSource @Inject constructor(
 
     suspend fun registerCustomer(storeId: Int, phone: PhoneNumDTO) =
         checkResponse(attPosUserService.registerCustomer(storeId, phone))
+
+    suspend fun registerStore(store: StoreDTO) =
+        checkResponse(attPosUserService.registerStore(store))
 }

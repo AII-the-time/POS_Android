@@ -4,6 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import org.swm.att.data.remote.request.CategoryPostDTO
 import org.swm.att.data.remote.request.NewMenuDTO
 import org.swm.att.data.remote.response.CategoriesDTO
+import org.swm.att.data.remote.response.CategoryIdDTO
+import org.swm.att.data.remote.response.MenuIdDTO
 import org.swm.att.data.remote.response.MenuWithRecipeDTO
 import org.swm.att.data.remote.service.AttPosService
 import javax.inject.Inject
@@ -20,11 +22,11 @@ class MenuDataSource @Inject constructor(
         return checkResponse(attPosService.getMenuInfo(storeId, menuId))
     }
 
-    suspend fun postCategory(storeId: Int, categoryPostInfo: CategoryPostDTO): Flow<Unit> {
+    suspend fun postCategory(storeId: Int, categoryPostInfo: CategoryPostDTO): Flow<CategoryIdDTO> {
         return checkResponse(attPosService.postCategory(storeId, categoryPostInfo))
     }
 
-    suspend fun postNewMenu(storeId: Int, newMenu: NewMenuDTO): Flow<Unit> {
+    suspend fun postNewMenu(storeId: Int, newMenu: NewMenuDTO): Flow<MenuIdDTO> {
         return checkResponse(attPosService.postNewMenu(storeId, newMenu))
     }
 }
