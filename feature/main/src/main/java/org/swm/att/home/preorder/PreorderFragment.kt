@@ -168,7 +168,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
 
     private fun initData() {
         val preorderId = navArgs.preorderId
-        preorderViewModel.setPreorderIdForAlarm(preorderId!!)
+        preorderViewModel.setPreorderIdForAlarm(preorderId)
         preorderViewModel.getNextValidPreOrders()
     }
 }
