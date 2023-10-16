@@ -3,19 +3,14 @@ package org.swm.att.home
 import android.content.Intent
 import android.os.Bundle
 import android.widget.CheckBox
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseActivity
-import org.swm.att.common_ui.state.UiState
 import org.swm.att.home.databinding.ActivityMainBinding
 import org.swm.att.home.home.HomeFragmentDirections
+import org.swm.att.home.util.alarm.AlarmManager
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -27,22 +22,15 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //TODO: 로그인 과정 추가되면 수정
         //checkRefreshToken()
-        //TODO: 회원가입 화면이 나오기 전까지 임시 accessToken, refreshToken 사용
-        checkStoreId()
-        setPreorderAlarm()
+        setNavController()
         setBindingData()
         setObserver()
-        setNavController()
     }
-
 //    private fun checkRefreshToken() {
 //        mainViewModel.checkRefreshToken()
 //    }
-
-    private fun checkStoreId() {
-        mainViewModel.checkStoreId()
-    }
 
     private fun setNavController() {
         val navHost =
@@ -58,14 +46,14 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun setObserver() {
-        mainViewModel.refreshExist.observe(this) { exist ->
-            if (exist == false) {
-                // 로그인 및 회원가입으로 화면 전환
-            } else {
-                // storeId 확인
-                mainViewModel.checkStoreId()
-            }
-        }
+//        mainViewModel.refreshExist.observe(this) { exist ->
+//            if (exist == false) {
+//                // 로그인 및 회원가입으로 화면 전환
+//            } else {
+//                // storeId 확인
+//                mainViewModel.checkStoreId()
+//            }
+//        }
 
         mainViewModel.selectedScreen.observe(this) { destination ->
             mainViewModel.isGlobalAction.value?.let {
@@ -75,25 +63,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 } else {
                     mainViewModel.resetIsGlobalAction()
                 }
-
                 if (mainViewModel.isDestinationDiff(destination)) {
                     changeNavDestination()
-                }
-            }
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.registerStoreState.collect { uiState ->
-                    when(uiState) {
-                        is UiState.Success -> {
-                            uiState.data?.let {
-                                mainViewModel.setStoreId(it.storeId)
-                            }
-                        }
-                        is UiState.Loading -> {/* nothing */}
-                        is UiState.Error -> { Toast.makeText(this@MainActivity, uiState.errorMsg, Toast.LENGTH_SHORT).show() }
-                    }
                 }
             }
         }
@@ -108,12 +79,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    private fun setPreorderAlarm() {
-        mainViewModel.getTodayPreorder()
-    }
-
     override fun onDestroy() {
-        mainViewModel.cancelAllPreorderAlarm()
+        AlarmManager.cancelAllAlarm(this)
         super.onDestroy()
     }
 

@@ -70,6 +70,7 @@ class RecipeViewModel @Inject constructor(
         val currentSelectedCategory = _selectedCategory.value
         if (!currentSelectedCategory?.menus.isNullOrEmpty()) {
             currentSelectedCategory!!.menus[0].isFocused = true
+            getSelectedItem(currentSelectedCategory.menus[0].id)
             _currentSelectedMenuId.postValue(0)
         }
     }
@@ -151,7 +152,9 @@ class RecipeViewModel @Inject constructor(
 
     fun changeCreateState(state: Boolean) {
         _isCreate.postValue(state)
-        _recipeListForNewMenu.postValue(emptyList())
+        if (state) {
+            _recipeListForNewMenu.postValue(emptyList())
+        }
     }
 
     fun postCategory(name: String) {

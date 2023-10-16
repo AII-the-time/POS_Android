@@ -203,6 +203,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         is UiState.Success -> {
                             uiState.data?.let {
                                 Toast.makeText(requireContext(), "메뉴가 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                                recipeViewModel.changeCreateState(false)
                                 initData()
                             }
                         }

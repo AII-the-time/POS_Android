@@ -1,6 +1,8 @@
 package org.swm.att.home.home
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -9,6 +11,8 @@ import org.junit.Test
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.repository.AttMenuRepository
+import org.swm.att.domain.repository.AttOrderRepository
+import org.swm.att.domain.repository.AttPosUserRepository
 
 class HomeViewModelTest {
     private lateinit var homeViewModel: HomeViewModel
@@ -19,8 +23,12 @@ class HomeViewModelTest {
     
     @Before
     fun setUp() {
-        val mock = mockk<AttMenuRepository>()
-        homeViewModel = HomeViewModel(mock)
+        val menuRepositoryMock = mockk<AttMenuRepository>()
+        val orderRepositoryMock = mockk<AttOrderRepository>()
+        val userRepositoryMock = mockk<AttPosUserRepository>()
+        val context = mockk<Context>()
+
+        homeViewModel = HomeViewModel(menuRepositoryMock, userRepositoryMock, orderRepositoryMock, context)
         tempMenuItem = OrderedMenuVO(
             id = 1,
             name = "test",

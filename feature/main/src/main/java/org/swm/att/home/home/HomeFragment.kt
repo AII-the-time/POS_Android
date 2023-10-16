@@ -35,14 +35,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         homeViewModel.clearSelectedMenuList()
         initRecyclerView()
-        setSelectedMenuList()
         setCategoriesObserver()
         setSelectedMenuObserver()
         setDataBinding()
         setOrderBtnListener()
         setPreorderBtnClickListener()
         setModifyPreorderBtnClickListener()
-        setCategories()
+        checkStoreId()
     }
 
     private fun setSelectedMenuList() {
@@ -73,6 +72,37 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setCategoriesObserver() {
+        homeViewModel.storeIdExist.observe(viewLifecycleOwner) {
+            if (it != -1) { // storeId가 있는 경우
+                setPreorderAlarm()
+                setSelectedMenuList()
+                setCategories()
+            } else { // storeId가 없는 경우
+                // TODO 새로운 가게 등록 화면으로 전환
+                homeViewModel.registerStore()
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.registerStoreState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            Toast.makeText(requireContext(), "가게 등록이 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                            uiState.data?.let {
+                                homeViewModel.setStoreId(it.storeId)
+                                setPreorderAlarm()
+                                setSelectedMenuList()
+                                setCategories()
+                            }
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> { Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show() }
+                    }
+                }
+            }
+        }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 homeViewModel.getMenuState.collect { uiState ->
@@ -145,9 +175,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
+    private fun checkStoreId() {
+        if (homeViewModel.storeIdExist.value == null) {
+            homeViewModel.checkStoreId()
+        } else {
+            setSelectedMenuList()
+            setCategories()
+        }
+    }
+
     override fun onDestroy() {
         // TODO: activityViewModels와 기존 값 clear하는 방법 중 고민해보기
         homeViewModel.clearGetMenuState()
         super.onDestroy()
+    }
+
+    private fun setPreorderAlarm() {
+        homeViewModel.getTodayPreorder()
     }
 }
