@@ -98,7 +98,6 @@ class BillViewModel @Inject constructor(
                     bills[it].isFocused = false
                 }
             }
-            _orderBillsData.postValue(bills)
         }
 
         pastSelectedId?.let {
