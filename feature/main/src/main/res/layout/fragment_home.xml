@@ -8,7 +8,7 @@
     <data>
 
         <variable
-            name="homeViewHolder"
+            name="homeViewModel"
             type="org.swm.att.home.home.HomeViewModel" />
 
         <variable
@@ -38,6 +38,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/cl_payment"
             app:layout_constraintHorizontal_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_trans"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="'레시피 관리'에서 새로운 카테고리와 메뉴를 추가해보세요!"
+                android:text="@string/tv_no_category_des"
+                app:visibilityByUiState="@{homeViewModel.getMenuState}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <HorizontalScrollView
                 android:id="@+id/sv_tab_view"
@@ -117,7 +131,7 @@
                     android:textColor="@color/black"
                     android:layout_marginEnd="23dp"
                     android:gravity="center"
-                    android:onClick="@{() -> homeViewHolder.deletedAllMenuItem()}"
+                    android:onClick="@{() -> homeViewModel.deletedAllMenuItem()}"
                     app:layout_constraintTop_toTopOf="@id/tv_payment_des"
                     app:layout_constraintBottom_toBottomOf="@id/tv_payment_des"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -159,7 +173,7 @@
                         android:textStyle="bold"
                         android:textSize="14sp"
                         android:textColor="@color/black"
-                        app:customTotalCountText="@{homeViewHolder.selectedMenuMap}" />
+                        app:customTotalCountText="@{homeViewModel.selectedMenuMap}" />
 
                     <TextView
                         android:id="@+id/tv_total_cost"
@@ -171,7 +185,7 @@
                         android:textStyle="bold"
                         android:textSize="14sp"
                         android:textColor="@color/black"
-                        app:customTotalPriceText="@{homeViewHolder.selectedMenuMap}" />
+                        app:customTotalPriceText="@{homeViewModel.selectedMenuMap}" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -199,7 +213,7 @@
                     android:visibility="@{isPreorder ? View.GONE : View.VISIBLE}"
                     android:padding="13dp"
                     android:gravity="center"
-                    app:setOrderBtnClickable="@{homeViewHolder.selectedMenuMap.size()}"
+                    app:setOrderBtnClickable="@{homeViewModel.selectedMenuMap.size()}"
                     android:text="@string/btn_preorder"
                     android:textStyle="bold"
                     android:textSize="14sp"
@@ -218,7 +232,7 @@
                     android:gravity="center"
                     app:layout_constraintHorizontal_weight="2"
                     android:padding="13dp"
-                    app:setOrderBtnClickable="@{homeViewHolder.selectedMenuMap.size()}"
+                    app:setOrderBtnClickable="@{homeViewModel.selectedMenuMap.size()}"
                     android:text="@string/btn_order"
                     android:textSize="14sp"
                     android:textStyle="bold"

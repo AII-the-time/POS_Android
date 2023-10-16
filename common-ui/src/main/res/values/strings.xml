@@ -169,6 +169,7 @@
     <string name="tv_preorder_customer">%s님의 주문</string>
     <string name="tv_order_total_count">총 %d건</string>
     <string name="tv_new_menu_item">새로운 메뉴</string>
+    <string name="tv_no_category_des">\'레시피 관리\'에서 새로운 카테고리와 메뉴를 추가해보세요!</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>

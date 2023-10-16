@@ -2,6 +2,7 @@ package org.swm.att.common_ui.adapter
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
@@ -10,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import org.swm.att.common_ui.R
+import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter.getDataTimeBaseFormattingResult
 import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
 import org.swm.att.common_ui.util.Formatter.getDateFromString
@@ -17,6 +19,7 @@ import org.swm.att.common_ui.util.Formatter.getStringBaseCurrencyUnit
 import org.swm.att.common_ui.util.Formatter.getTimeFromString
 import org.swm.att.common_ui.util.getRTCDateTime
 import org.swm.att.domain.entity.request.OrderedMenuVO
+import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OptionTypeVO
 import java.util.Date
@@ -212,4 +215,20 @@ fun setLocalTimeText(view: TextView, date: String?) {
 fun setSelectableItemBackground(view: ConstraintLayout, isFocused: Boolean) {
     view.background =
         if (isFocused) view.context.getDrawable(R.color.main_trans) else view.context.getDrawable(R.color.back_color)
+}
+
+@BindingAdapter("visibilityByUiState")
+fun setVisibilityByUiState(view: TextView, uiState: UiState<CategoriesVO>) {
+    when (uiState) {
+        is UiState.Success -> {
+            view.visibility = if (uiState.data?.categories.isNullOrEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
+        else -> {
+            view.visibility = View.VISIBLE
+        }
+    }
 }
