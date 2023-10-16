@@ -12,6 +12,7 @@ import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.NewMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
+import org.swm.att.domain.entity.response.CategoryIdVO
 import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
@@ -35,8 +36,8 @@ class RecipeViewModel @Inject constructor(
     val currentSelectedMenuId: LiveData<Int> = _currentSelectedMenuId
     private val _getCategories = MutableStateFlow<UiState<CategoriesVO>>(UiState.Loading)
     val getCategories: StateFlow<UiState<CategoriesVO>> = _getCategories
-    private val _postCategoryState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
-    val postCategoryState: StateFlow<UiState<Unit>> = _postCategoryState
+    private val _postCategoryState = MutableStateFlow<UiState<CategoryIdVO>>(UiState.Loading)
+    val postCategoryState: StateFlow<UiState<CategoryIdVO>> = _postCategoryState
     private val _postMenuState = MutableStateFlow<UiState<MenuIdVO>>(UiState.Loading)
     val postMenuState: StateFlow<UiState<MenuIdVO>> = _postMenuState
 
