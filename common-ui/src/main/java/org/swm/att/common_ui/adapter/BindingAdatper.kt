@@ -80,6 +80,12 @@ fun setCustomTotalPriceText(view: TextView, menuMap: Map<OrderedMenuVO, Int>?) {
     view.text = view.context.getString(R.string.tv_custom_price_text, totalPrice)
 }
 
+@BindingAdapter("saveMileageText")
+fun setSaveMileageText(view: TextView, menuMap: Map<OrderedMenuVO, Int>?) {
+    val saveMileage = (menuMap?.map { it.key.price * it.value }?.sum() ?: 0) * 0.1
+    view.text = getStringBaseCurrencyUnit(saveMileage.toInt().toString())
+}
+
 @BindingAdapter("optionListText")
 fun setOptionListText(view: TextView, optionList: List<OptionTypeVO>?) {
     val optionStr = optionList?.let { list ->
