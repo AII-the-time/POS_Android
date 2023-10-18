@@ -128,10 +128,17 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
 
     private fun setBtnRegisterRecipeClickListener() {
         binding.btnRegisterRecipe.setOnClickListener {
-            recipeViewModel.postNewMenu(
-                binding.edtMenuName.text.toString(),
-                binding.edtMenuPrice.text.toString()
-            )
+            val name = binding.edtMenuName.text.toString()
+            val price = binding.edtMenuPrice.text.toString()
+            if (name.isNullOrEmpty() || price.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "메뉴 이름과 가격을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            } else {
+                recipeViewModel.postNewMenu(
+                    binding.edtMenuName.text.toString(),
+                    binding.edtMenuPrice.text.toString()
+                )
+            }
         }
     }
 

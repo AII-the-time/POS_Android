@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.presenter.base.BaseActivity
+import org.swm.att.home.constant.NavDestinationType
 import org.swm.att.home.databinding.ActivityMainBinding
 import org.swm.att.home.home.HomeFragmentDirections
 import org.swm.att.home.util.alarm.AlarmManager
@@ -91,6 +92,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
                 val action = HomeFragmentDirections.actionGlobalFragmentPreorder(it)
                 navHost.navController.navigate(action)
+                mainViewModel.directWithGlobalAction(NavDestinationType.Preorder)
             }
         }
     }

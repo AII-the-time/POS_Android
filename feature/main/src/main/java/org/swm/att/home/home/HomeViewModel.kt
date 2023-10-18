@@ -67,9 +67,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getCategories() {
+    fun getCategories(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
-            val storeId = attPosUserRepository.getStoreId()
             attMenuRepository.getMenu(storeId)
                 .collect { result ->
                     result.onSuccess { category ->
@@ -159,17 +158,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getTodayPreorder() {
+    fun getTodayPreorder(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
             val date =
                 Formatter.getStringByDateTimeBaseFormatter(Calendar.getInstance().time.getUTCDateTime())
-            val storeId = attPosUserRepository.getStoreId()
             attOrderRepository.getPreOrders(storeId, page, date).collect { result ->
                 result.onSuccess {
                     todayPreorderList.addAll(it.preOrders)
                     page += 1
                     if (page < it.lastPage) {
-                        getTodayPreorder()
+                        getTodayPreorder(storeId)
                     } else {
                         setPreorderAlarm()
                     }
