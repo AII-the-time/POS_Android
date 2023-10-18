@@ -45,10 +45,10 @@ class RecipeViewModel @Inject constructor(
     val getAllOfOptionState: StateFlow<UiState<OptionListVO>> = _getAllOfOptionState
     private var selectedOptionList = mutableListOf<Int>()
 
-    private val _isModify = MutableLiveData(false)
-    val isModify: LiveData<Boolean> = _isModify
-    private val _isCreate = MutableLiveData(false)
-    val isCreate: LiveData<Boolean> = _isCreate
+    private val _isModify = MutableLiveData<Boolean>(null)
+    val isModify: LiveData<Boolean?> = _isModify
+    private val _isCreate = MutableLiveData<Boolean>(null)
+    val isCreate: LiveData<Boolean?> = _isCreate
 
     private val _recipeListForNewMenu = MutableLiveData<List<RecipeVO>>()
     val recipeListForNewMenu: LiveData<List<RecipeVO>> = _recipeListForNewMenu
