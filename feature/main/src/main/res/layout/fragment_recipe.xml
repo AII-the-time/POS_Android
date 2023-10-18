@@ -146,7 +146,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/shape_oval_stroke"
-                android:visibility="@{recipeViewModel.isCreate ? View.GONE : View.VISIBLE}"
+                android:visibility="@{recipeViewModel.selectedCategory == null || recipeViewModel.isCreate ? View.GONE : View.VISIBLE}"
                 app:layout_constraintTop_toBottomOf="@id/rv_category_menu_list"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
