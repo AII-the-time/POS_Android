@@ -1,6 +1,8 @@
 [versions]
 # Kotlin
 kotlinx-coroutines = "1.7.2"
+kotlin = "1.7.21"
+kotlin-serialization = "1.5.1"
 
 # AndroidX Libraries
 core-ktx = "1.8.0"
@@ -12,6 +14,9 @@ datastore = "1.0.0"
 viewpager2 = "1.0.0"
 lifecycle = "2.6.1"
 fragment = "1.5.7"
+preferences-datastore = "1.0.0"
+security-crypto = "1.0.0"
+arch-core = "2.1.0"
 
 # Test Libraries
 junit = "4.13.2"
@@ -20,6 +25,7 @@ androidx-test-espresso = "3.5.1"
 
 # Google Libraries
 material = "1.5.0"
+flexbox = "3.0.0"
 
 # Dependency Injection
 dagger-hilt = "2.46.1"
@@ -38,19 +44,35 @@ glide = "4.15.1"
 google-services = "4.3.15"
 firebase = "32.1.0"
 
+#plugin
+android_plugin = "8.0.2"
+kotlin_android = "1.8.20"
+secret = "2.0.1"
+
+#sentry
+setnry = "6.29.0"
+
+#mock for test
+mockk = "1.13.7"
+
 [libraries]
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen"}
+splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 viewpager2 = { module = "androidx.viewpager2:viewpager2" , version.ref = "viewpager2" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
+preferences-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "preferences-datastore" }
+security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
+arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "arch-core" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
@@ -75,9 +97,22 @@ navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref 
 
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 
+sentry = { module = "io.sentry:sentry-android", version.ref = "setnry" }
+
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
 [bundles]
 androidx-ui-foundation = ["core-ktx", "appcompat", "constraintlayout", "lifecycle-viewmodel", "fragment"]
 okhttp = ["okhttp", "okhttp-bom", "okhttp-logging-interceptor"]
 retrofit = ["retrofit", "retrofit-moshi-converter"]
 navigation = ["navigation-fragment", "navigation-ui"]
 basic-test = ["junit", "androidx-test-junit", "androidx-test-espresso"]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android_plugin" }
+android-library = { id = "com.android.library", version.ref = "android_plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin_android" }
+navigation_safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
+dagger_hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
+secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secret" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
