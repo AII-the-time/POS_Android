@@ -7,7 +7,7 @@ import org.swm.att.data.remote.response.CategoriesDTO
 import org.swm.att.data.remote.response.CategoryIdDTO
 import org.swm.att.data.remote.response.MenuIdDTO
 import org.swm.att.data.remote.response.MenuWithRecipeDTO
-import org.swm.att.data.remote.response.OptionDTO
+import org.swm.att.data.remote.response.OptionListDTO
 import org.swm.att.data.remote.service.AttPosService
 import javax.inject.Inject
 
@@ -31,7 +31,7 @@ class MenuDataSource @Inject constructor(
         return checkResponse(attPosService.postNewMenu(storeId, newMenu))
     }
 
-    suspend fun getAllOFOption(storeId: Int): Flow<OptionDTO> {
+    suspend fun getAllOFOption(storeId: Int): Flow<OptionListDTO> {
         return checkResponse(attPosService.getAllOfOptions(storeId))
     }
 }
