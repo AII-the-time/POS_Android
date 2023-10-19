@@ -58,8 +58,8 @@
                 android:textSize="20sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:background="@null"
-                android:textCursorDrawable="@color/black"
+                android:textCursorDrawable="@null"
+                android:backgroundTint="@color/main_trans"
                 android:layout_marginTop="15dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="15dp"
@@ -222,9 +222,12 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edt_menu_name"
+                        setEditTextStyleByIsModify="@{recipeViewModel.isModify || recipeViewModel.isCreate}"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
+                        android:textCursorDrawable="@null"
+                        android:backgroundTint="@{recipeViewModel.isModify || recipeViewModel.isCreate ? @color/main_trans : @color/white}"
                         android:hint="@string/edt_register_menu_name"
                         android:maxLength="15"
                         android:paddingStart="10dp"
@@ -233,13 +236,12 @@
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        setEditTextStyleByIsModify="@{recipeViewModel.isModify || recipeViewModel.isCreate}"
-                        android:backgroundTint="@{recipeViewModel.isModify || recipeViewModel.isCreate ? @color/main_trans : @color/white}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/cl_menu_price"
                         app:layout_constraintHorizontal_weight="5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
                         tools:text="@string/edt_register_menu_name" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -267,6 +269,7 @@
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="20sp"
+                            android:textCursorDrawable="@null"
                             setEditTextStyleByIsModify="@{recipeViewModel.isModify || recipeViewModel.isCreate}"
                             android:backgroundTint="@{recipeViewModel.isModify || recipeViewModel.isCreate ? @color/main_trans : @color/white}"
                             app:layout_constraintBottom_toBottomOf="parent"
