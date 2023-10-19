@@ -5,6 +5,7 @@ import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.constant.PayState
 import org.swm.att.domain.util.BigDecimalSerializer
 import java.math.BigDecimal
+import java.util.UUID
 
 abstract class BaseRecyclerViewItem {
     abstract val id: Int
@@ -73,7 +74,7 @@ data class RecipeVO(
     var coldRegularAmount: String,
     var unit: String
 ) : java.io.Serializable, BaseRecyclerViewItem() {
-    constructor(): this(-1, "RECIPE", "Unknown", false, "-1", "Unknown")
+    constructor(): this(UUID.randomUUID().hashCode(), "RECIPE", "", false, "", "g")
 }
 
 data class PreorderVO(
