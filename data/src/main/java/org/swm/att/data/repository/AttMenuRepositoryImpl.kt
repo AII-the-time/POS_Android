@@ -1,6 +1,7 @@
 package org.swm.att.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.data.remote.request.CategoryPostDTO
@@ -13,6 +14,7 @@ import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.OptionVO
+import org.swm.att.domain.entity.response.StocksVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
 
@@ -79,6 +81,16 @@ class AttMenuRepositoryImpl @Inject constructor(
     override suspend fun getAllOfOption(storeId: Int): Flow<Result<OptionListVO>> = flow {
         try {
             menuDataSource.getAllOFOption(storeId).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun getAllOfStock(storeId: Int, name: String): Flow<Result<StocksVO>> = flow {
+        try {
+            menuDataSource.getAllOfStocks(storeId, name).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {
