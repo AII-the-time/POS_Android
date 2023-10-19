@@ -412,7 +412,7 @@
                                 android:textColor="@color/main_trans"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="25dp"
                                 android:layout_marginBottom="10dp"
                                 android:visibility="@{recipeViewModel.recipeListForNewMenu.size > 0 || menuWithRecipe.recipe.size() > 0 ? View.INVISIBLE : View.VISIBLE}"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -428,7 +428,7 @@
                                 android:nestedScrollingEnabled="false"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/cl_recipe_col_des"
-                                app:layout_constraintVertical_bias="0.0"
+                                app:layout_constraintVertical_bias="1.0"
                                 tools:layout_editor_absoluteX="0dp" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -474,7 +474,7 @@
                                 android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
+                                android:layout_marginBottom="25dp"
                                 android:visibility="@{menuWithRecipe.option.size() == 0 &amp;&amp; menuWithRecipe != null ? View.VISIBLE : View.INVISIBLE}"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
