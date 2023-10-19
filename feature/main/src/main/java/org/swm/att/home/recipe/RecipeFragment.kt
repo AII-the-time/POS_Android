@@ -2,6 +2,7 @@ package org.swm.att.home.recipe
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.MenuRes
@@ -27,9 +28,12 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     private lateinit var registeredMenusAdapter: SelectableItemAdapter
     private lateinit var recipesAdapter: BaseInteractiveItemAdapter
     private lateinit var optionsAdapter: BaseInteractiveItemAdapter
+    private lateinit var stockArrayAdapter: ArrayAdapter<String>
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMenusRecyclerView()
+        initSearchView()
         setCategoryDetailBtnClickListener()
         setRecipeBtnsClickListener()
         setBtnRegisterMenuClickListener()
@@ -61,6 +65,15 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             layoutManager = LinearLayoutManager(requireContext())
             adapter = optionsAdapter
         }
+    }
+
+    private fun initSearchView() {
+        stockArrayAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            listOf()
+        )
+        binding.actSearchStock.setAdapter(stockArrayAdapter)
     }
 
     private fun setCategoryDetailBtnClickListener() {
@@ -121,9 +134,9 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     }
 
     private fun setBtnAddRecipeClickListener() {
-        binding.btnAddRecipe.setOnClickListener {
-            recipeViewModel.addTempNewRecipe()
-        }
+//        binding.btnAddRecipe.setOnClickListener {
+//            recipeViewModel.addTempNewRecipe()
+//        }
     }
 
     private fun setBtnRegisterRecipeClickListener() {

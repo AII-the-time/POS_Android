@@ -49,6 +49,7 @@
     <string name="edt_register_menu_name">메뉴 이름을 입력해주세요.</string>
     <string name="edt_register_menu_price">ex) 6,000</string>
     <string name="edt_category_name">카테고리 이름을 입력해주세요.</string>
+    <string name="sv_search_stock">재료 검색</string>
     <!--  format  -->
     <string name="tv_filtering_start">%s</string>
     <string name="tv_filtering_end">- %s</string>

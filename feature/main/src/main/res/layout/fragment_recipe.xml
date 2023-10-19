@@ -340,12 +340,38 @@
                             app:layout_constraintBottom_toTopOf="@id/tv_register_menu_option_des"
                             app:layout_constraintTop_toBottomOf="@id/divider_menu_recipe_section">
 
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_search_stock"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                app:startIconDrawable="@drawable/ic_search_no_background_mdpi"
+                                app:endIconMode="clear_text"
+                                app:boxStrokeColor="@color/main_trans"
+                                app:boxBackgroundColor="@color/white"
+                                android:hint="@string/sv_search_stock"
+                                android:visibility="@{recipeViewModel.isCreate || recipeViewModel.isModify ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toTopOf="@id/cl_recipe_col_des">
+                                
+                                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                                    android:id="@+id/act_search_stock"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp"/>
+                                
+                            </com.google.android.material.textfield.TextInputLayout>
+
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/cl_recipe_col_des"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
-                                app:layout_constraintTop_toTopOf="parent">
+                                app:layout_constraintTop_toBottomOf="@id/til_search_stock">
 
                                 <TextView
                                     android:id="@+id/tv_recipe_name_des"
@@ -387,22 +413,11 @@
                                     android:textStyle="bold"
                                     android:layout_marginStart="10dp"
                                     android:gravity="start"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@id/btn_add_recipe"
-                                    app:layout_constraintHorizontal_weight="2"
-                                    app:layout_constraintStart_toEndOf="@id/tv_recipe_amount_des"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <androidx.appcompat.widget.AppCompatButton
-                                    android:id="@+id/btn_add_recipe"
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
-                                    android:background="@drawable/ic_system_plus_mdpi"
-                                    android:visibility="@{recipeViewModel.isModify || recipeViewModel.isCreate ? View.VISIBLE : View.GONE}"
-                                    android:layout_marginStart="10dp"
+                                    android:layout_marginEnd="24dp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toEndOf="@id/tv_recipe_unit_des"
+                                    app:layout_constraintHorizontal_weight="2"
+                                    app:layout_constraintStart_toEndOf="@id/tv_recipe_amount_des"
                                     app:layout_constraintTop_toTopOf="parent" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
