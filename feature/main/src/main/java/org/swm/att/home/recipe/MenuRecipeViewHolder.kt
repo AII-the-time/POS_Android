@@ -25,23 +25,23 @@ class MenuRecipeViewHolder(
     }
 
     override fun bind(item: BaseRecyclerViewItem, position: Int?) {
+        val recipe = item as RecipeVO
         binding.apply {
-            recipeVO = item as RecipeVO
+            recipeVO = recipe
             recipeViewModel = menuRecipeViewModel
         }
-        initUnitMenu()
+        initUnitMenu(recipe.unit)
         setBtnDeleteRecipeClickListener(position)
         setEdtTextChangeListener(position)
     }
 
-    private fun initUnitMenu() {
+    private fun initUnitMenu(unit: String) {
         val unitArray = binding.root.context.resources.getStringArray(R.array.recipe_unit)
         val arrayAdapter =
             ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_menu_unit, unitArray)
         binding.actMenuUnit.apply {
             setAdapter(arrayAdapter)
-            // 단위 'g'을 default로 설정
-            setText(unitArray[0], false)
+            setText(unit, false)
         }
     }
 
@@ -54,7 +54,7 @@ class MenuRecipeViewHolder(
     private fun setEdtTextChangeListener(position: Int?) {
         position?.let {
             binding.etRecipeAmount.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.amount =
+                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.coldRegularAmount =
                     it.toString()
             }
             binding.etRecipeName.addTextChangedListener {

@@ -41,7 +41,7 @@
             android:id="@+id/et_recipe_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(recipeVO.amount)}"
+            android:text="@{String.valueOf(recipeVO.coldRegularAmount)}"
             android:textColor="@color/black"
             android:hint="ex) 20"
             android:paddingStart="10dp"

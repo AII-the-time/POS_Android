@@ -62,7 +62,8 @@ class AttMenuRepositoryImpl @Inject constructor(
                     RecipeDTO(
                         id = it.id,
                         name = it.name,
-                        amount = it.amount.toInt(),
+                        isMixed = it.isMixed,
+                        coldRegularAmount = it.coldRegularAmount.toInt(),
                         unit = it.unit
                     )
                 }

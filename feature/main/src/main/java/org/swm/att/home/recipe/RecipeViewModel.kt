@@ -179,13 +179,7 @@ class RecipeViewModel @Inject constructor(
         val index = currentRecipeList.size
         currentRecipeList.add(
             index,
-            RecipeVO(
-                id = index,
-                viewType = "RECIPE",
-                name = "",
-                amount = "",
-                unit = "g"
-            )
+            RecipeVO()
         )
         _recipeListForNewMenu.postValue(currentRecipeList)
     }
@@ -234,7 +228,7 @@ class RecipeViewModel @Inject constructor(
 
     private fun checkContentInRecipeListEmpty(): List<RecipeVO>? {
         for (recipe in _recipeListForNewMenu.value ?: emptyList()) {
-            if (recipe.name.isEmpty() || recipe.amount.isEmpty()) {
+            if (recipe.coldRegularAmount.isEmpty()) {
                 throw Exception("레시피 내용을 모두 입력해주세요!")
             }
         }
