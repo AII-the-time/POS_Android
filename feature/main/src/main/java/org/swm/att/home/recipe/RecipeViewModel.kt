@@ -16,6 +16,7 @@ import org.swm.att.domain.entity.response.CategoryIdVO
 import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
+import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttPosUserRepository
@@ -40,11 +41,14 @@ class RecipeViewModel @Inject constructor(
     val postCategoryState: StateFlow<UiState<CategoryIdVO>> = _postCategoryState
     private val _postMenuState = MutableStateFlow<UiState<MenuIdVO>>(UiState.Loading)
     val postMenuState: StateFlow<UiState<MenuIdVO>> = _postMenuState
+    private val _getAllOfOptionState = MutableStateFlow<UiState<OptionListVO>>(UiState.Loading)
+    val getAllOfOptionState: StateFlow<UiState<OptionListVO>> = _getAllOfOptionState
+    private var selectedOptionList = mutableListOf<Int>()
 
-    private val _isModify = MutableLiveData(false)
-    val isModify: LiveData<Boolean> = _isModify
-    private val _isCreate = MutableLiveData(false)
-    val isCreate: LiveData<Boolean> = _isCreate
+    private val _isModify = MutableLiveData<Boolean>(null)
+    val isModify: LiveData<Boolean?> = _isModify
+    private val _isCreate = MutableLiveData<Boolean>(null)
+    val isCreate: LiveData<Boolean?> = _isCreate
 
     private val _recipeListForNewMenu = MutableLiveData<List<RecipeVO>>()
     val recipeListForNewMenu: LiveData<List<RecipeVO>> = _recipeListForNewMenu
@@ -218,7 +222,7 @@ class RecipeViewModel @Inject constructor(
                 name = requireNotNull(name),
                 price = requireNotNull(price).toInt(),
                 categoryId = requireNotNull(_selectedCategory.value?.categoryId),
-                option = emptyList(),
+                option = selectedOptionList,
                 recipe = checkContentInRecipeListEmpty()
             )
         } catch (e: NumberFormatException) {
@@ -242,5 +246,35 @@ class RecipeViewModel @Inject constructor(
             storeId = attPosUserRepository.getStoreId()
         }
         return storeId as Int
+    }
+
+    fun getAllOfOption() {
+        viewModelScope.launch(attExceptionHandler) {
+            val storeId = attPosUserRepository.getStoreId()
+            attMenuRepository.getAllOfOption(storeId).collect { result ->
+                result.onSuccess {
+                    _getAllOfOptionState.value = UiState.Success(it)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "옵션 불러오기 실패"
+                    _getAllOfOptionState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
+
+    fun addSelectedOption(optionId: Int) {
+        selectedOptionList.add(optionId)
+    }
+
+    fun removeSelectedOption(optionId: Int) {
+        selectedOptionList.remove(optionId)
+    }
+
+    fun clearSelectedOption() {
+        selectedOptionList = mutableListOf()
+    }
+
+    fun setGetAllOfOptionStateDefault() {
+        _getAllOfOptionState.value = UiState.Loading
     }
 }

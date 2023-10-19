@@ -9,6 +9,7 @@ import org.swm.att.data.remote.response.CategoriesDTO
 import org.swm.att.data.remote.response.CategoryIdDTO
 import org.swm.att.data.remote.response.MenuIdDTO
 import org.swm.att.data.remote.response.MenuWithRecipeDTO
+import org.swm.att.data.remote.response.OptionListDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
 import org.swm.att.data.remote.response.OrderDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
@@ -92,4 +93,9 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Body newMenu: NewMenuDTO
     ): Response<MenuIdDTO>
+
+    @GET("menu/option")
+    suspend fun getAllOfOptions(
+        @Header("storeId") storeId: Int
+    ): Response<OptionListDTO>
 }

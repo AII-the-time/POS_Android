@@ -94,8 +94,8 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         binding.btnRegisterMenu.setOnClickListener {
             recipeViewModel.setCurrentSelectedItemId(-1)
             recipeViewModel.changeCreateState(true)
+            recipeViewModel.getAllOfOption()
             binding.menuWithRecipe = null
-            // TODO: 옵션 가져오는 api 붙이고, 그에 따라 visible 설정
         }
     }
 
@@ -223,6 +223,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                             uiState.data?.let {
                                 Toast.makeText(requireContext(), "메뉴가 추가되었습니다.", Toast.LENGTH_SHORT).show()
                                 recipeViewModel.changeCreateState(false)
+                                recipeViewModel.clearSelectedOption()
                                 initData()
                             }
                         }
@@ -261,6 +262,24 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         }
         recipeViewModel.recipeListForNewMenu.observe(viewLifecycleOwner) {
             recipesAdapter.submitList(it)
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.getAllOfOptionState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.option?.let {
+                                if (it.isNotEmpty()) {
+                                    optionsAdapter.submitList(it)
+                                }
+                                recipeViewModel.setGetAllOfOptionStateDefault()
+                            }
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
@@ -317,8 +336,6 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     }
 
     private fun initData() {
-        //임시로 1번 storeId로 설정
         recipeViewModel.getRegisteredMenus()
     }
-
 }
