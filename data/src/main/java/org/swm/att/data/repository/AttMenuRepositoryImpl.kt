@@ -11,6 +11,8 @@ import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.CategoryIdVO
 import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
+import org.swm.att.domain.entity.response.OptionListVO
+import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
 
@@ -66,6 +68,16 @@ class AttMenuRepositoryImpl @Inject constructor(
                 }
             )
             menuDataSource.postNewMenu(storeId, menuDTO).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun getAllOfOption(storeId: Int): Flow<Result<OptionListVO>> = flow {
+        try {
+            menuDataSource.getAllOFOption(storeId).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {

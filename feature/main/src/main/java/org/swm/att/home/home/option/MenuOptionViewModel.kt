@@ -21,6 +21,7 @@ class MenuOptionViewModel @Inject constructor(
     private val attMenuRepository: AttMenuRepository,
     private val attPosUserRepository: AttPosUserRepository
 ): BaseViewModel() {
+    // TODO: 단순 observe 대상이 아니므로 단순 mutableMap으로 관리하도록 수정
     private val _selectedOptionMap = MutableLiveData<Map<String, OptionTypeVO>>()
     val selectedOptionMap: LiveData<Map<String, OptionTypeVO>> = _selectedOptionMap
     private val _getMenuInfoState = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
