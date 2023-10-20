@@ -114,7 +114,6 @@
     <string name="tv_bill_filtering_des">기간별 검색</string>
     <string name="btn_bill_filtering_search">검색</string>
     <string name="tv_no_filtering">전체</string>
-
     <string name="tv_preorder_input_user_info">고객 정보</string>
     <string name="tv_preorder_request_des">요청사항</string>
     <string name="tv_preorder_request_hint">ex) 얼음 많이 주세요.</string>
@@ -172,6 +171,7 @@
     <string name="tv_new_menu_item">새로운 메뉴</string>
     <string name="tv_no_category_des">\'레시피 관리\'에서 새로운 카테고리와 메뉴를 추가해보세요!</string>
     <string name="tv_ready_for_service">서비스 준비 중 입니다!</string>
+    <string name="tv_item_add_new">+ 재고 추가</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>

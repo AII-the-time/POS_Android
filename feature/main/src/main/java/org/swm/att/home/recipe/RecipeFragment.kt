@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.entity.response.CategoriesVO
+import org.swm.att.domain.entity.response.StockVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseInteractiveItemAdapter
 import org.swm.att.home.adapter.CustomArrayAdapter
@@ -73,9 +74,14 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             requireContext(),
             R.layout.item_simple_text,
             listOf(),
-            onItemClickListener = { stock ->
+            onExistedItemClickListener = { stock ->
                 recipeViewModel.addNewRecipe(stock)
                 binding.actSearchStock.setText("")
+            },
+            onAddNewItemClickListener = {
+                val newItemName = binding.actSearchStock.text.toString()
+                recipeViewModel.postNewStock(newItemName)
+                binding.actSearchStock.isEnabled = false
             }
         )
         binding.actSearchStock.apply {
@@ -286,14 +292,45 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         is UiState.Success -> {
                             uiState.data?.let {
                                 stockArrayAdapter.clear()
-                                stockArrayAdapter.addAll(it.stocks)
+                                if (it.stocks.isNotEmpty()) {
+                                    stockArrayAdapter.addAll(it.stocks)
+                                } else {
+                                    stockArrayAdapter.addCreateNewItem()
+                                }
                                 stockArrayAdapter.notifyDataSetChanged()
+                                recipeViewModel.setGetAllOfStockStateDefault()
                             }
                         }
                         is UiState.Loading -> {/* nothing */}
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     }
 
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.postNewStockState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "재고가 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                                val newStock = StockVO(
+                                    id = it.stockId,
+                                    name = binding.actSearchStock.text.toString(),
+                                    isMixed = false
+                                )
+                                binding.actSearchStock.apply {
+                                    isEnabled = true
+                                    setText("")
+                                }
+                                recipeViewModel.addNewRecipe(newStock)
+                            }
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
