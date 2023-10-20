@@ -6,12 +6,14 @@ import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.data.remote.request.CategoryPostDTO
 import org.swm.att.data.remote.request.NewMenuDTO
 import org.swm.att.data.remote.response.RecipeDTO
+import org.swm.att.data.remote.response.StockDTO
 import org.swm.att.domain.entity.request.NewMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.CategoryIdVO
 import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
+import org.swm.att.domain.entity.response.StockVO
 import org.swm.att.domain.entity.response.StocksVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
@@ -89,6 +91,21 @@ class AttMenuRepositoryImpl @Inject constructor(
     override suspend fun getAllOfStock(storeId: Int, name: String): Flow<Result<StocksVO>> = flow {
         try {
             menuDataSource.getAllOfStocks(storeId, name).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun postNewStock(storeId: Int, newStock: StockVO): Flow<Result<StockVO>> = flow {
+        try {
+            val stockDTO = StockDTO(
+                id = newStock.id,
+                name = newStock.name,
+                isMixed = newStock.isMixed
+            )
+            menuDataSource.postNewStock(storeId, stockDTO).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {
