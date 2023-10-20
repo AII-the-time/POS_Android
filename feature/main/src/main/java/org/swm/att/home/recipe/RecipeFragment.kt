@@ -1,8 +1,9 @@
 package org.swm.att.home.recipe
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.MenuRes
@@ -19,6 +20,7 @@ import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseInteractiveItemAdapter
+import org.swm.att.home.adapter.CustomArrayAdapter
 import org.swm.att.home.adapter.SelectableItemAdapter
 import org.swm.att.home.databinding.FragmentRecipeBinding
 
@@ -28,7 +30,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     private lateinit var registeredMenusAdapter: SelectableItemAdapter
     private lateinit var recipesAdapter: BaseInteractiveItemAdapter
     private lateinit var optionsAdapter: BaseInteractiveItemAdapter
-    private lateinit var stockArrayAdapter: ArrayAdapter<String>
+    private lateinit var stockArrayAdapter: CustomArrayAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,7 +39,6 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         setCategoryDetailBtnClickListener()
         setRecipeBtnsClickListener()
         setBtnRegisterMenuClickListener()
-        setBtnAddRecipeClickListener()
         setBtnRegisterRecipeClickListener()
         setObserver()
         setDataBinding()
@@ -68,12 +69,31 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     }
 
     private fun initSearchView() {
-        stockArrayAdapter = ArrayAdapter(
+        stockArrayAdapter = CustomArrayAdapter(
             requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            listOf()
+            R.layout.item_simple_text,
+            listOf(),
+            onItemClickListener = { stock ->
+                recipeViewModel.addNewRecipe(stock)
+                binding.actSearchStock.setText("")
+            }
         )
-        binding.actSearchStock.setAdapter(stockArrayAdapter)
+        binding.actSearchStock.apply {
+            setAdapter(stockArrayAdapter)
+            addTextChangedListener(object: TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {/* nothing */}
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {/* nothing */}
+
+                override fun afterTextChanged(p0: Editable?) {
+                    p0?.let {
+                        if (!it.isNullOrEmpty()) {
+                            recipeViewModel.getAllOfStocks(it.toString())
+                        }
+                    }
+                }
+            })
+        }
     }
 
     private fun setCategoryDetailBtnClickListener() {
@@ -133,12 +153,6 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         popUp.show()
     }
 
-    private fun setBtnAddRecipeClickListener() {
-//        binding.btnAddRecipe.setOnClickListener {
-//            recipeViewModel.addTempNewRecipe()
-//        }
-    }
-
     private fun setBtnRegisterRecipeClickListener() {
         binding.btnRegisterRecipe.setOnClickListener {
             val name = binding.edtMenuName.text.toString()
@@ -165,14 +179,8 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                                 setCategoryChips(it)
                             }
                         }
-                        is UiState.Error -> Toast.makeText(
-                            requireContext(),
-                            uiState.errorMsg,
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        is UiState.Loading -> { /* nothing */
-                        }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        is UiState.Loading -> { /* nothing */ }
                     }
                 }
             }
@@ -195,11 +203,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 registeredMenusAdapter.submitList(it.menus)
                 recipeViewModel.setDefaultSelectedItem()
                 binding.edtCategoryName.setText(
-                    String.format(
-                        "%s(%d건)",
-                        it.category,
-                        it.menus.size
-                    )
+                    String.format("%s(%d건)", it.category, it.menus.size)
                 )
             }
         }
@@ -208,21 +212,13 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 recipeViewModel.selectedMenuInfo.collect { uiState ->
                     when (uiState) {
                         is UiState.Success -> {
-                            uiState.data?.let {
-                                binding.menuWithRecipe = it
+                            uiState.data?.let { binding.menuWithRecipe = it
                                 recipesAdapter.submitList(it.recipe)
                                 optionsAdapter.submitList(it.option)
                             }
                         }
-
-                        is UiState.Loading -> {/* nothing */
-                        }
-
-                        is UiState.Error -> Toast.makeText(
-                            requireContext(),
-                            uiState.errorMsg,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        is UiState.Loading -> {/* nothing */ }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -252,29 +248,18 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                     when(uiState) {
                         is UiState.Success -> {
                             uiState.data?.let {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "카테고리가 추가되었습니다.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(requireContext(), "카테고리가 추가되었습니다.", Toast.LENGTH_SHORT).show()
                                 initData()
                             }
                         }
-
-                        is UiState.Loading -> { /* nothing */
-                        }
-
-                        is UiState.Error -> Toast.makeText(
-                            requireContext(),
-                            uiState.errorMsg,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        is UiState.Loading -> { /* nothing */ }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
-        recipeViewModel.recipeListForNewMenu.observe(viewLifecycleOwner) {
-            recipesAdapter.submitList(it)
+        recipeViewModel.recipeMapForNewMenu.observe(viewLifecycleOwner) {
+            recipesAdapter.submitList(it.values.toList())
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -291,6 +276,24 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         is UiState.Loading -> {/* nothing */}
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.getAllOfStockState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                stockArrayAdapter.clear()
+                                stockArrayAdapter.addAll(it.stocks)
+                                stockArrayAdapter.notifyDataSetChanged()
+                            }
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             }
         }

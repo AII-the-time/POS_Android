@@ -31,8 +31,8 @@ class MenuRecipeViewHolder(
             recipeViewModel = menuRecipeViewModel
         }
         initUnitMenu(recipe.unit)
-        setBtnDeleteRecipeClickListener(position)
-        setEdtTextChangeListener(position)
+        setBtnDeleteRecipeClickListener(recipe.id)
+        setEdtTextChangeListener(recipe.id)
     }
 
     private fun initUnitMenu(unit: String) {
@@ -45,24 +45,18 @@ class MenuRecipeViewHolder(
         }
     }
 
-    private fun setBtnDeleteRecipeClickListener(position: Int?) {
+    private fun setBtnDeleteRecipeClickListener(stockId: Int) {
         binding.btnDeleteRecipe.setOnClickListener {
-            menuRecipeViewModel.deleteRecipeByPosition(position)
+            menuRecipeViewModel.deleteRecipeByPosition(stockId)
         }
     }
 
-    private fun setEdtTextChangeListener(position: Int?) {
-        position?.let {
-            binding.etRecipeAmount.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.coldRegularAmount =
-                    it.toString()
-            }
-            binding.etRecipeName.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.name = it.toString()
-            }
-            binding.actMenuUnit.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.unit = it.toString()
-            }
+    private fun setEdtTextChangeListener(storeId: Int) {
+        binding.etRecipeAmount.addTextChangedListener {
+            menuRecipeViewModel.recipeMapForNewMenu.value?.get(storeId)?.coldRegularAmount = it.toString()
+        }
+        binding.actMenuUnit.addTextChangedListener {
+            menuRecipeViewModel.recipeMapForNewMenu.value?.get(storeId)?.unit = it.toString()
         }
     }
 }
