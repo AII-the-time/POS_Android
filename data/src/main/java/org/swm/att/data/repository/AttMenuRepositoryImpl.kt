@@ -1,7 +1,6 @@
 package org.swm.att.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.data.remote.request.CategoryPostDTO
@@ -13,7 +12,6 @@ import org.swm.att.domain.entity.response.CategoryIdVO
 import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
-import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.domain.entity.response.StocksVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
@@ -65,7 +63,7 @@ class AttMenuRepositoryImpl @Inject constructor(
                         id = it.id,
                         name = it.name,
                         isMixed = it.isMixed,
-                        coldRegularAmount = it.coldRegularAmount.toInt(),
+                        coldRegularAmount = it.coldRegularAmount?.toInt() ?: 0,
                         unit = it.unit
                     )
                 }

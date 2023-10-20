@@ -71,10 +71,10 @@ data class RecipeVO(
     override val viewType: String = "RECIPE",
     var name: String,
     val isMixed: Boolean,
-    var coldRegularAmount: String,
+    var coldRegularAmount: String?,
     var unit: String
 ) : java.io.Serializable, BaseRecyclerViewItem() {
-    constructor(): this(UUID.randomUUID().hashCode(), "RECIPE", "", false, "", "g")
+    constructor(stock: StockVO): this(stock.id, "RECIPE", stock.name, stock.isMixed, null, "g")
 }
 
 data class PreorderVO(
