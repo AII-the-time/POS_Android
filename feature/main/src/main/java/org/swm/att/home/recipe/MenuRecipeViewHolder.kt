@@ -38,7 +38,7 @@ class MenuRecipeViewHolder(
     private fun initUnitMenu(unit: String) {
         val unitArray = binding.root.context.resources.getStringArray(R.array.recipe_unit)
         val arrayAdapter =
-            ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_menu_unit, unitArray)
+            ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_simple_text, unitArray)
         binding.actMenuUnit.apply {
             setAdapter(arrayAdapter)
             setText(unit, false)
