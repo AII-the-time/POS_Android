@@ -18,6 +18,9 @@ import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.RecipeVO
+import org.swm.att.domain.entity.response.StockIdVO
+import org.swm.att.domain.entity.response.StockVO
+import org.swm.att.domain.entity.response.StocksVO
 import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttPosUserRepository
 import javax.inject.Inject
@@ -27,45 +30,123 @@ class RecipeViewModel @Inject constructor(
     private val attMenuRepository: AttMenuRepository,
     private val attPosUserRepository: AttPosUserRepository
 ): BaseSelectableViewViewModel() {
-    private val _selectedMenuInfo = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
-    val selectedMenuInfo: StateFlow<UiState<MenuWithRecipeVO>> = _selectedMenuInfo
-    private val _selectedCategory = MutableLiveData<CategoryVO?>()
-    val selectedCategory: LiveData<CategoryVO?> = _selectedCategory
-    private val _selectedMenuId = MutableLiveData<Int>()
-    val selectedMenuId: LiveData<Int> = _selectedMenuId
-    private val _currentSelectedMenuId = MutableLiveData<Int>()
-    val currentSelectedMenuId: LiveData<Int> = _currentSelectedMenuId
+    //category
     private val _getCategories = MutableStateFlow<UiState<CategoriesVO>>(UiState.Loading)
     val getCategories: StateFlow<UiState<CategoriesVO>> = _getCategories
     private val _postCategoryState = MutableStateFlow<UiState<CategoryIdVO>>(UiState.Loading)
     val postCategoryState: StateFlow<UiState<CategoryIdVO>> = _postCategoryState
+    private val _selectedCategory = MutableLiveData<CategoryVO?>()
+    val selectedCategory: LiveData<CategoryVO?> = _selectedCategory
+
+    //menu
+    private val _selectedMenuInfo = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
+    val selectedMenuInfo: StateFlow<UiState<MenuWithRecipeVO>> = _selectedMenuInfo
+    private val _selectedMenuId = MutableLiveData<Int>()
+    val selectedMenuId: LiveData<Int> = _selectedMenuId
+    private val _currentSelectedMenuId = MutableLiveData<Int>()
+    val currentSelectedMenuId: LiveData<Int> = _currentSelectedMenuId
     private val _postMenuState = MutableStateFlow<UiState<MenuIdVO>>(UiState.Loading)
     val postMenuState: StateFlow<UiState<MenuIdVO>> = _postMenuState
+
+    //option
     private val _getAllOfOptionState = MutableStateFlow<UiState<OptionListVO>>(UiState.Loading)
     val getAllOfOptionState: StateFlow<UiState<OptionListVO>> = _getAllOfOptionState
     private var selectedOptionList = mutableListOf<Int>()
 
+    //stock
+    private val _getAllOfStockState = MutableStateFlow<UiState<StocksVO>>(UiState.Loading)
+    val getAllOfStockState: StateFlow<UiState<StocksVO>> = _getAllOfStockState
+    private val _postNewStockState = MutableStateFlow<UiState<StockIdVO>>(UiState.Loading)
+    val postNewStockState: StateFlow<UiState<StockIdVO>> = _postNewStockState
+
+    //local value
     private val _isModify = MutableLiveData<Boolean>(null)
     val isModify: LiveData<Boolean?> = _isModify
     private val _isCreate = MutableLiveData<Boolean>(null)
     val isCreate: LiveData<Boolean?> = _isCreate
-
-    private val _recipeListForNewMenu = MutableLiveData<List<RecipeVO>>()
-    val recipeListForNewMenu: LiveData<List<RecipeVO>> = _recipeListForNewMenu
-
+    private val _recipeMapForNewMenu = MutableLiveData<MutableMap<Int, RecipeVO>>()
+    val recipeMapForNewMenu: LiveData<MutableMap<Int, RecipeVO>> = _recipeMapForNewMenu
     private var storeId: Int? = null
 
+    //category
+    fun postCategory(name: String) {
+        viewModelScope.launch(attExceptionHandler) {
+            attMenuRepository.postCategory(getStoreId(), name).collect { result ->
+                result.onSuccess {
+                    _postCategoryState.value = UiState.Success(it)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "카테고리 추가 실패"
+                    _postCategoryState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
+
+    fun setSelectedCategory(category: CategoryVO) {
+        processPastSelectedItemBeforeCategoryChange()
+        _selectedCategory.value = category
+        initRecipeMap(null)
+    }
+
+    private fun processPastSelectedItemBeforeCategoryChange() {
+        val pastSelectedCategory = _selectedCategory.value
+        // 이전 category의 선택된 item의 focused 값을 false로 변경
+        pastSelectedCategory?.let { category ->
+            val pastSelectedId = currentSelectedMenuId.value
+            pastSelectedId?.let { pastId ->
+                if (pastId != -1) {
+                    category.menus[pastId].isFocused = false
+                    changeSelectedState()
+                }
+            }
+        }
+        // 이전 category의 선택된 item을 초기화
+        _currentSelectedMenuId.value = -1
+    }
+
+    //menu
     override fun getSelectedItem(selectedItemId: Int) {
         _selectedMenuInfo.value = UiState.Loading
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getMenuInfo(getStoreId(), selectedItemId).collect() { result ->
                 result.onSuccess {
-                    _recipeListForNewMenu.postValue(it.recipe)
+                    initRecipeMap(it.recipe)
                     _selectedMenuInfo.value = UiState.Success(it)
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "메뉴 상세 불러오기 실패"
                     _selectedMenuInfo.value = UiState.Error(errorMsg)
                 }
+            }
+        }
+    }
+
+    fun getRegisteredMenus() {
+        viewModelScope.launch(attExceptionHandler) {
+            attMenuRepository.getMenu(getStoreId()).collect { result ->
+                result.onSuccess {
+                    _getCategories.value = UiState.Success(it)
+                }.onFailure {  e ->
+                    val errorMsg = if (e is HttpResponseException) e.message else "메뉴 불러오기 실패"
+                    _getCategories.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
+
+    fun postNewMenu(name: String?, price: String?) {
+        viewModelScope.launch(attExceptionHandler) {
+            try {
+                val newMenuItem = checkCreateNewMenu(name, price)
+                attMenuRepository.postNewMenu(getStoreId(), newMenuItem).collect { result ->
+                    result.onSuccess {
+                        _postMenuState.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "메뉴 추가 실패"
+                        _postMenuState.value = UiState.Error(errorMsg)
+                    }
+                }
+            } catch (e: Exception) {
+                _postMenuState.value = UiState.Error(e.message ?: "메뉴 추가 실패")
             }
         }
     }
@@ -107,113 +188,8 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
-    fun setSelectedCategory(category: CategoryVO) {
-        processPastSelectedItemBeforeCategoryChange()
-        _selectedCategory.value = category
-        resetRecipeListForNewMenu()
-    }
-
-    private fun processPastSelectedItemBeforeCategoryChange() {
-        val pastSelectedCategory = _selectedCategory.value
-        // 이전 category의 선택된 item의 focused 값을 false로 변경
-        pastSelectedCategory?.let { category ->
-            val pastSelectedId = currentSelectedMenuId.value
-            pastSelectedId?.let { pastId ->
-                if (pastId != -1) {
-                    category.menus[pastId].isFocused = false
-                    changeSelectedState()
-                }
-            }
-        }
-        // 이전 category의 선택된 item을 초기화
-        _currentSelectedMenuId.value = -1
-    }
-
-    private fun resetRecipeListForNewMenu() {
-        _recipeListForNewMenu.postValue(emptyList())
-    }
-
     override fun changeSelectedState() {
         _selectedMenuId.postValue(currentSelectedMenuId.value)
-    }
-
-    fun getRegisteredMenus() {
-        viewModelScope.launch(attExceptionHandler) {
-            attMenuRepository.getMenu(getStoreId()).collect { result ->
-                result.onSuccess {
-                    _getCategories.value = UiState.Success(it)
-                }.onFailure {  e ->
-                    val errorMsg = if (e is HttpResponseException) e.message else "메뉴 불러오기 실패"
-                    _getCategories.value = UiState.Error(errorMsg)
-                }
-            }
-        }
-    }
-
-    fun changeModifyState() {
-        _isModify.postValue(isModify.value?.not() ?: false)
-    }
-
-    fun changeCreateState(state: Boolean) {
-        _isCreate.postValue(state)
-        if (state) {
-            _recipeListForNewMenu.postValue(emptyList())
-        }
-    }
-
-    fun postCategory(name: String) {
-        viewModelScope.launch(attExceptionHandler) {
-            attMenuRepository.postCategory(getStoreId(), name).collect { result ->
-                result.onSuccess {
-                    _postCategoryState.value = UiState.Success(it)
-                }.onFailure {
-                    val errorMsg = if (it is HttpResponseException) it.message else "카테고리 추가 실패"
-                    _postCategoryState.value = UiState.Error(errorMsg)
-                }
-            }
-        }
-    }
-
-    fun addTempNewRecipe() {
-        val currentRecipeList = _recipeListForNewMenu.value?.toMutableList() ?: mutableListOf()
-        val index = currentRecipeList.size
-        currentRecipeList.add(
-            index,
-            RecipeVO(
-                id = index,
-                viewType = "RECIPE",
-                name = "",
-                amount = "",
-                unit = "g"
-            )
-        )
-        _recipeListForNewMenu.postValue(currentRecipeList)
-    }
-
-    fun deleteRecipeByPosition(position: Int?) {
-        position?.let {
-            val currentRecipeList = _recipeListForNewMenu.value?.toMutableList() ?: mutableListOf()
-            currentRecipeList.removeAt(position)
-            _recipeListForNewMenu.postValue(currentRecipeList)
-        }
-    }
-
-    fun postNewMenu(name: String?, price: String?) {
-        viewModelScope.launch(attExceptionHandler) {
-            try {
-                val newMenuItem = checkCreateNewMenu(name, price)
-                attMenuRepository.postNewMenu(getStoreId(), newMenuItem).collect { result ->
-                    result.onSuccess {
-                        _postMenuState.value = UiState.Success(it)
-                    }.onFailure {
-                        val errorMsg = if (it is HttpResponseException) it.message else "메뉴 추가 실패"
-                        _postMenuState.value = UiState.Error(errorMsg)
-                    }
-                }
-            } catch (e: Exception) {
-                _postMenuState.value = UiState.Error(e.message ?: "메뉴 추가 실패")
-            }
-        }
     }
 
     private fun checkCreateNewMenu(name: String?, price: String?): NewMenuVO {
@@ -233,21 +209,15 @@ class RecipeViewModel @Inject constructor(
     }
 
     private fun checkContentInRecipeListEmpty(): List<RecipeVO>? {
-        for (recipe in _recipeListForNewMenu.value ?: emptyList()) {
-            if (recipe.name.isEmpty() || recipe.amount.isEmpty()) {
+        for (recipe in _recipeMapForNewMenu.value?.values ?: emptyList()) {
+            if (recipe.coldRegularAmount?.isNullOrEmpty() == true) {
                 throw Exception("레시피 내용을 모두 입력해주세요!")
             }
         }
-        return _recipeListForNewMenu.value
+        return _recipeMapForNewMenu.value?.values?.toList()
     }
 
-    private suspend fun getStoreId(): Int {
-        if (storeId == null) {
-            storeId = attPosUserRepository.getStoreId()
-        }
-        return storeId as Int
-    }
-
+    //option
     fun getAllOfOption() {
         viewModelScope.launch(attExceptionHandler) {
             val storeId = attPosUserRepository.getStoreId()
@@ -274,7 +244,78 @@ class RecipeViewModel @Inject constructor(
         selectedOptionList = mutableListOf()
     }
 
+    //stock
+    fun getAllOfStocks(query: String) {
+        viewModelScope.launch(attExceptionHandler) {
+            attMenuRepository.getAllOfStock(getStoreId(), query).collect { result ->
+                result.onSuccess {
+                    _getAllOfStockState.value = UiState.Success(it)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "재고 불러오기 실패"
+                    _getAllOfStockState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
+
+    fun postNewStock(newItemName: String) {
+        viewModelScope.launch(attExceptionHandler) {
+            val newStock = StockVO(newItemName)
+            attMenuRepository.postNewStock(getStoreId(), newStock).collect { result ->
+                result.onSuccess {
+                    _postNewStockState.value = UiState.Success(it)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "재고 추가 실패"
+                    _postNewStockState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
+
+    // recipe
+    private fun initRecipeMap(recipes: List<RecipeVO>?) {
+        val recipeMap = recipes?.map { it.id to it }?.toMap() ?: emptyMap()
+        _recipeMapForNewMenu.postValue(recipeMap.toMutableMap())
+    }
+
+    //local value
+    fun changeModifyState() {
+        _isModify.postValue(isModify.value?.not() ?: false)
+    }
+
+    fun changeCreateState(state: Boolean) {
+        _isCreate.postValue(state)
+        if (state) {
+            _recipeMapForNewMenu.postValue(mutableMapOf())
+        }
+    }
+
+    fun addNewRecipe(stockVO: StockVO) {
+        val currentRecipeMap = recipeMapForNewMenu.value ?: mutableMapOf()
+        currentRecipeMap[stockVO.id] = RecipeVO(stockVO)
+        _recipeMapForNewMenu.postValue(currentRecipeMap)
+    }
+
+    fun deleteRecipeByPosition(stockId: Int) {
+        val currentRecipeMap = recipeMapForNewMenu.value
+        currentRecipeMap?.let { map ->
+            map.remove(stockId)
+            _recipeMapForNewMenu.postValue(currentRecipeMap!!)
+        }
+    }
+
+    private suspend fun getStoreId(): Int {
+        if (storeId == null) {
+            storeId = attPosUserRepository.getStoreId()
+        }
+        return storeId as Int
+    }
+
     fun setGetAllOfOptionStateDefault() {
         _getAllOfOptionState.value = UiState.Loading
+    }
+
+    fun setGetAllOfStockStateDefault() {
+        _getAllOfStockState.value = UiState.Loading
     }
 }

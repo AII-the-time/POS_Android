@@ -107,6 +107,7 @@ proguard/
 *.ipr
 *~
 *.swp
+.DS_Store
 
 # Keystore files
 
