@@ -25,44 +25,38 @@ class MenuRecipeViewHolder(
     }
 
     override fun bind(item: BaseRecyclerViewItem, position: Int?) {
+        val recipe = item as RecipeVO
         binding.apply {
-            recipeVO = item as RecipeVO
+            recipeVO = recipe
             recipeViewModel = menuRecipeViewModel
         }
-        initUnitMenu()
-        setBtnDeleteRecipeClickListener(position)
-        setEdtTextChangeListener(position)
+        initUnitMenu(recipe.unit)
+        setBtnDeleteRecipeClickListener(recipe.id)
+        setEdtTextChangeListener(recipe.id)
     }
 
-    private fun initUnitMenu() {
+    private fun initUnitMenu(unit: String) {
         val unitArray = binding.root.context.resources.getStringArray(R.array.recipe_unit)
         val arrayAdapter =
-            ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_menu_unit, unitArray)
+            ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_simple_text, unitArray)
         binding.actMenuUnit.apply {
             setAdapter(arrayAdapter)
-            // 단위 'g'을 default로 설정
-            setText(unitArray[0], false)
+            setText(unit, false)
         }
     }
 
-    private fun setBtnDeleteRecipeClickListener(position: Int?) {
+    private fun setBtnDeleteRecipeClickListener(stockId: Int) {
         binding.btnDeleteRecipe.setOnClickListener {
-            menuRecipeViewModel.deleteRecipeByPosition(position)
+            menuRecipeViewModel.deleteRecipeByPosition(stockId)
         }
     }
 
-    private fun setEdtTextChangeListener(position: Int?) {
-        position?.let {
-            binding.etRecipeAmount.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.amount =
-                    it.toString()
-            }
-            binding.etRecipeName.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.name = it.toString()
-            }
-            binding.actMenuUnit.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.unit = it.toString()
-            }
+    private fun setEdtTextChangeListener(storeId: Int) {
+        binding.etRecipeAmount.addTextChangedListener {
+            menuRecipeViewModel.recipeMapForNewMenu.value?.get(storeId)?.coldRegularAmount = it.toString()
+        }
+        binding.actMenuUnit.addTextChangedListener {
+            menuRecipeViewModel.recipeMapForNewMenu.value?.get(storeId)?.unit = it.toString()
         }
     }
 }
