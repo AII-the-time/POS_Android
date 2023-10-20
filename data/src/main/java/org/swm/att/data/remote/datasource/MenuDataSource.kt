@@ -9,6 +9,7 @@ import org.swm.att.data.remote.response.MenuIdDTO
 import org.swm.att.data.remote.response.MenuWithRecipeDTO
 import org.swm.att.data.remote.response.OptionListDTO
 import org.swm.att.data.remote.response.StockDTO
+import org.swm.att.data.remote.response.StockIdDTO
 import org.swm.att.data.remote.response.StocksDTO
 import org.swm.att.data.remote.service.AttPosService
 import javax.inject.Inject
@@ -41,7 +42,7 @@ class MenuDataSource @Inject constructor(
         return checkResponse(attPosService.getAllOfStocks(storeId, name))
     }
 
-    suspend fun postNewStock(storeId: Int, newStock: StockDTO): Flow<StockDTO> {
+    suspend fun postNewStock(storeId: Int, newStock: StockDTO): Flow<StockIdDTO> {
         return checkResponse(attPosService.postNewStock(storeId, newStock))
     }
 }

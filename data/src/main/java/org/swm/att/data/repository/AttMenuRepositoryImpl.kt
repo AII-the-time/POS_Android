@@ -13,6 +13,7 @@ import org.swm.att.domain.entity.response.CategoryIdVO
 import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
+import org.swm.att.domain.entity.response.StockIdVO
 import org.swm.att.domain.entity.response.StockVO
 import org.swm.att.domain.entity.response.StocksVO
 import org.swm.att.domain.repository.AttMenuRepository
@@ -98,7 +99,7 @@ class AttMenuRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postNewStock(storeId: Int, newStock: StockVO): Flow<Result<StockVO>> = flow {
+    override suspend fun postNewStock(storeId: Int, newStock: StockVO): Flow<Result<StockIdVO>> = flow {
         try {
             val stockDTO = StockDTO(
                 id = newStock.id,
