@@ -47,6 +47,7 @@
     <!--  hint  -->
     <string name="edt_menu_custom_option">상세옵션 입력 시 작성</string>
     <string name="edt_register_menu_name">메뉴 이름을 입력해주세요.</string>
+    <string name="edt_register_stock_name">ex) 원두</string>
     <string name="edt_register_menu_price">ex) 6,000</string>
     <string name="edt_category_name">카테고리 이름을 입력해주세요.</string>
     <string name="sv_search_stock">재료 검색</string>
@@ -147,20 +148,26 @@
     <string name="tv_minute_for_picker">분</string>
     <string name="tv_modify_category_name"><u>카테고리 수정</u></string>
     <string name="tv_register_menu">메뉴 추가</string>
+    <string name="tv_register_stock">재고 추가</string>
     <string name="chip_manufactured_menu">제조 메뉴</string>
     <string name="chip_none_manufactured_menu">비제조 메뉴</string>
     <string name="tv_recipe_name_des">품목</string>
     <string name="tv_recipe_amount_des">수량</string>
     <string name="tv_recipe_unit_des">단위</string>
     <string name="btn_modify_menu">레시피 수정</string>
+    <string name="btn_modify_stock">재고 수정</string>
     <string name="btn_delete_menu">메뉴 삭제</string>
+    <string name="btn_delete_stock">재고 삭제</string>
     <string name="btn_modify_options">옵션 설정</string>
     <string name="btn_register_menu">메뉴 등록</string>
+    <string name="btn_register_stock">재고 등록</string>
     <string name="tv_no_menu_recipe_des">레시피를 추가해주세요!</string>
     <string name="tv_no_menu_option_des">옵션을 추가해주세요!</string>
     <string name="tv_no_menu_des">메뉴를 등록해주세요!</string>
+    <string name="tv_no_stock_des">재고를 등록해주세요!</string>
     <string name="tv_price_unit">원</string>
     <string name="tv_register_recipe_des">레시피 설정</string>
+    <string name="tv_stock_setting_des">재고 설정</string>
     <string name="tv_register_option_des">옵션 설정</string>
     <string name="tv_category_no_item">메뉴를 등록해주세요!</string>
     <string name="tv_category_modify">수정</string>
@@ -172,6 +179,14 @@
     <string name="tv_no_category_des">\'레시피 관리\'에서 새로운 카테고리와 메뉴를 추가해보세요!</string>
     <string name="tv_ready_for_service">서비스 준비 중 입니다!</string>
     <string name="tv_item_add_new">+ 재고 추가</string>
+    <string name="chip_stock_all">재고 전체</string>
+    <string name="chip_stock_caution">주의/부족</string>
+    <string name="chip_stock_unknown">재고 조사 X</string>
+    <string name="tv_current_stock_amount">현재 수량</string>
+    <string name="tv_stock_notification_reference_amount">알림 기준량</string>
+    <string name="tv_weekly_usage">최근 1주 사용량</string>
+    <string name="tv_inventory_date_des">최근 재고\n조사일</string>
+    <string name="tv_menu_related_stock_des">관련 메뉴</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>
