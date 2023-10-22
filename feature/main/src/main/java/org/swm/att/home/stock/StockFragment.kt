@@ -33,6 +33,8 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
         initUsingMenuRecyclerView()
         initSearchView()
         initUnitMenu()
+        setAddStockBtnClickListener()
+        setStockBtnsClickListener()
         setObserver()
         initStockData()
         setDataBinding()
@@ -105,6 +107,19 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
         }
     }
 
+    private fun setAddStockBtnClickListener() {
+        binding.btnAddStock.setOnClickListener {
+            stockViewModel.changeCreateState(true)
+        }
+    }
+
+    private fun setStockBtnsClickListener() {
+        binding.btnCancelRegisterStock.setOnClickListener {
+            stockViewModel.changeCreateState(false)
+            stockViewModel.getLastSelectedStock()
+        }
+    }
+
     private fun setObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -125,6 +140,7 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
                         is UiState.Success -> {
                             uiState.data?.let {
                                 binding.stockDetail = it
+                                binding.actStockUnit.setText(it.unit, false)
                             }
                         }
                         is UiState.Loading -> {/* nothing */}

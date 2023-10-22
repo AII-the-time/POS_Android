@@ -45,9 +45,11 @@ class StockViewModel @Inject constructor(
     private var storeId: Int? = null
     private val _isCreate = MutableLiveData<Boolean>(null)
     val isCreate: LiveData<Boolean?> = _isCreate
+    private var lastSelectedStockId: Int? = null
 
     //selectable override
     override fun getSelectedItem(selectedItemId: Int) {
+        lastSelectedStockId = selectedItemId
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getStockById(getStoreId(), selectedItemId).collect { result ->
                 result.onSuccess {
@@ -104,6 +106,12 @@ class StockViewModel @Inject constructor(
                 it.name.contains(query)
             } ?: arrayListOf()
             _currentResultStockList.postValue(result)
+        }
+    }
+
+    fun getLastSelectedStock() {
+        lastSelectedStockId?.let {
+            getSelectedItem(it)
         }
     }
 
