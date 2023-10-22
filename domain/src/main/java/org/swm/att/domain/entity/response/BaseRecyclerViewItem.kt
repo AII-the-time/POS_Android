@@ -87,3 +87,11 @@ data class PreorderVO(
     val memo: String? = null,
     var isFocused: Boolean = false
 ) : BaseRecyclerViewItem()
+
+data class StockWithStateVO(
+    override val id: Int,
+    override val viewType: String = "STOCK_WITH_STATE",
+    val name: String,
+    val state: String,
+    val usingMenuCount: Int
+) : BaseRecyclerViewItem()
