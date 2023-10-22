@@ -1,6 +1,6 @@
 package org.swm.att.domain.entity.response
 
-data class StockVO(
+data class StockWithMixedVO(
     val id: Int,
     var name: String,
     val isMixed: Boolean,

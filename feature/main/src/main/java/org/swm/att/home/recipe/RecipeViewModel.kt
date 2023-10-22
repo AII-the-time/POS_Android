@@ -19,7 +19,7 @@ import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.entity.response.StockIdVO
-import org.swm.att.domain.entity.response.StockVO
+import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.domain.entity.response.StocksVO
 import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttPosUserRepository
@@ -260,7 +260,7 @@ class RecipeViewModel @Inject constructor(
 
     fun postNewStock(newItemName: String) {
         viewModelScope.launch(attExceptionHandler) {
-            val newStock = StockVO(newItemName)
+            val newStock = StockWithMixedVO(newItemName)
             attMenuRepository.postNewStock(getStoreId(), newStock).collect { result ->
                 result.onSuccess {
                     _postNewStockState.value = UiState.Success(it)
@@ -290,9 +290,9 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
-    fun addNewRecipe(stockVO: StockVO) {
+    fun addNewRecipe(stockWithMixedVO: StockWithMixedVO) {
         val currentRecipeMap = recipeMapForNewMenu.value ?: mutableMapOf()
-        currentRecipeMap[stockVO.id] = RecipeVO(stockVO)
+        currentRecipeMap[stockWithMixedVO.id] = RecipeVO(stockWithMixedVO)
         _recipeMapForNewMenu.postValue(currentRecipeMap)
     }
 

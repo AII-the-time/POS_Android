@@ -7,7 +7,7 @@ import org.swm.att.domain.entity.response.StocksVO
 @JsonClass(generateAdapter = true)
 data class StocksDTO(
     @field:Json(name = "stocks")
-    val stocks: List<StockDTO>?
+    val stocks: List<StockWithMixtedDTO>?
 ) {
     fun toVO() = StocksVO(
         stocks = stocks?.map { it.toVO() } ?: listOf()
