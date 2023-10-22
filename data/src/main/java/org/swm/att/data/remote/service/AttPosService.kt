@@ -126,4 +126,10 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Path("stockId") stockId: Int
     ): Response<StockDTO>
+
+    @POST("stock")
+    suspend fun postNewStock(
+        @Header("storeId") storeId: Int,
+        @Body newStock: StockDTO
+    ): Response<StockIdDTO>
 }

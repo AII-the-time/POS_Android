@@ -6,6 +6,7 @@ import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.data.remote.request.CategoryPostDTO
 import org.swm.att.data.remote.request.NewMenuDTO
 import org.swm.att.data.remote.response.RecipeDTO
+import org.swm.att.data.remote.response.StockDTO
 import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.domain.entity.request.NewMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
@@ -109,6 +110,26 @@ class AttMenuRepositoryImpl @Inject constructor(
                 isMixed = newStock.isMixed
             )
             menuDataSource.postNewStock(storeId, stockWithMixedDTO).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun postNewStock(storeId: Int, newStock: StockVO): Flow<Result<StockIdVO>> = flow {
+        try {
+            val stockDTO = StockDTO(
+                name = newStock.name,
+                amount = newStock.amount,
+                unit = newStock.unit,
+                price = newStock.price,
+                currentAmount = newStock.currentAmount,
+                noticeThreshold = newStock.noticeThreshold,
+                updatedAt = newStock.updatedAt,
+                menus = arrayListOf()
+            )
+            menuDataSource.postNewStock(storeId, stockDTO).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {
