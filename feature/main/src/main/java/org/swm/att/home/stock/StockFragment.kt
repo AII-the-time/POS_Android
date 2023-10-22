@@ -109,6 +109,7 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
 
     private fun setAddStockBtnClickListener() {
         binding.btnAddStock.setOnClickListener {
+            binding.stockDetail = null
             stockViewModel.changeCreateState(true)
         }
     }

@@ -215,7 +215,7 @@
                 android:textColor="@color/main_trans"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:visibility="@{stockDetail == null ? View.VISIBLE : View.GONE}"
+                android:visibility="@{stockDetail == null &amp;&amp; !stockViewModel.isCreate ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -224,7 +224,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{stockDetail == null ? View.GONE : View.VISIBLE}">
+                android:visibility="@{stockDetail == null &amp;&amp; !stockViewModel.isCreate ? View.GONE : View.VISIBLE}">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_stock_name_and_unit"
