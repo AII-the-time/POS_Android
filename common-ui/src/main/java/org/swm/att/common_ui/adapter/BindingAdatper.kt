@@ -7,10 +7,12 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import org.swm.att.common_ui.R
+import org.swm.att.common_ui.constant.StockState
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter.getDataTimeBaseFormattingResult
 import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
@@ -22,6 +24,7 @@ import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OptionTypeVO
+import org.swm.att.domain.entity.response.StockWithStateVO
 import java.util.Date
 import java.util.Stack
 
@@ -237,4 +240,18 @@ fun setVisibilityByUiState(view: TextView, uiState: UiState<CategoriesVO>) {
             view.visibility = View.VISIBLE
         }
     }
+}
+
+@BindingAdapter("backgroundByStockState")
+fun setBackgroundByStockState(view: AppCompatImageView, stockWithStateVO: StockWithStateVO) {
+    val stockState = StockState.toStockState(stockWithStateVO.state)
+    stockState.icon?.let {
+        view.background = view.context.getDrawable(it)
+    }
+}
+
+@BindingAdapter("textByStockState")
+fun setTextByStockState(view: TextView, stockWithStateVO: StockWithStateVO) {
+    val stockState = StockState.toStockState(stockWithStateVO.state)
+    view.text = stockState.state
 }
