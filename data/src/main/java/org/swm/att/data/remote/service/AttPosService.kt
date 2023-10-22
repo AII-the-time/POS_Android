@@ -16,9 +16,11 @@ import org.swm.att.data.remote.response.OrderReceiptDTO
 import org.swm.att.data.remote.response.PreOrderBillDTO
 import org.swm.att.data.remote.response.PreOrdersDTO
 import org.swm.att.data.remote.response.PreorderIdDTO
+import org.swm.att.data.remote.response.StockDTO
 import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.data.remote.response.StockIdDTO
 import org.swm.att.data.remote.response.StockWithMixedListDTO
+import org.swm.att.data.remote.response.StockWithStateListDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -113,4 +115,15 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Body newStock: StockWithMixedDTO
     ): Response<StockIdDTO>
+
+    @GET("stock")
+    suspend fun getStockWithStateList(
+        @Header("storeId") storeId: Int
+    ): Response<StockWithStateListDTO>
+
+    @GET("stock")
+    suspend fun getStockById(
+        @Header("storeId") storeId: Int,
+        @Path("stockId") stockId: Int
+    ): Response<StockDTO>
 }
