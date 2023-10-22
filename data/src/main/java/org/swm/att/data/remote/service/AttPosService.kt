@@ -121,7 +121,7 @@ interface AttPosService {
         @Header("storeId") storeId: Int
     ): Response<StockWithStateListDTO>
 
-    @GET("stock")
+    @GET("stock/{stockId}")
     suspend fun getStockById(
         @Header("storeId") storeId: Int,
         @Path("stockId") stockId: Int
