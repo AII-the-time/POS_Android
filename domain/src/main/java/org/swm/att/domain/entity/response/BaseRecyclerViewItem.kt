@@ -93,5 +93,6 @@ data class StockWithStateVO(
     override val viewType: String = "STOCK_WITH_STATE",
     val name: String,
     val state: String,
-    val usingMenuCount: Int
+    val usingMenuCount: Int,
+    var isFocused: Boolean = false
 ) : BaseRecyclerViewItem()
