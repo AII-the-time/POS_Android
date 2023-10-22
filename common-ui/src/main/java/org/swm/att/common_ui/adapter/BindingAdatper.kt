@@ -219,6 +219,14 @@ fun setLocalTimeText(view: TextView, date: String?) {
     }
 }
 
+@BindingAdapter("localDateText")
+fun setLocalDateText(view: TextView, date: String?) {
+    date?.let {
+        val localTime = getDateFromString(it).getRTCDateTime()
+        view.text = getDateBaseFormattingResult(localTime)
+    }
+}
+
 @SuppressLint("UseCompatLoadingForDrawables")
 @BindingAdapter("setSelectableItemBackground")
 fun setSelectableItemBackground(view: ConstraintLayout, isFocused: Boolean) {

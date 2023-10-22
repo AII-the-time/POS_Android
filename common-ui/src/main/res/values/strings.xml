@@ -165,6 +165,7 @@
     <string name="tv_no_menu_option_des">옵션을 추가해주세요!</string>
     <string name="tv_no_menu_des">메뉴를 등록해주세요!</string>
     <string name="tv_no_stock_des">재고를 등록해주세요!</string>
+    <string name="tv_no_using_menu_des">해당 재고를 사용하는 메뉴가 없습니다!</string>
     <string name="tv_price_unit">원</string>
     <string name="tv_register_recipe_des">레시피 설정</string>
     <string name="tv_stock_setting_des">재고 설정</string>
@@ -180,7 +181,7 @@
     <string name="tv_ready_for_service">서비스 준비 중 입니다!</string>
     <string name="tv_item_add_new">+ 재고 추가</string>
     <string name="chip_stock_all">재고 전체</string>
-    <string name="chip_stock_caution">주의/부족</string>
+    <string name="chip_stock_lack_or_empty">부족/없음</string>
     <string name="chip_stock_unknown">재고 조사 X</string>
     <string name="tv_current_stock_amount">현재 수량</string>
     <string name="tv_stock_notification_reference_amount">알림 기준량</string>
