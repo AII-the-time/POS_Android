@@ -7,5 +7,6 @@ data class StockVO(
     val price: String,
     val currentAmount: Int,
     val noticeThreshold: Int,
-    val updatedAt: String
+    val updatedAt: String,
+    val menus: List<String>
 )
