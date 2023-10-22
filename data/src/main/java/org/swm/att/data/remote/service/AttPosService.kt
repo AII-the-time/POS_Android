@@ -16,9 +16,9 @@ import org.swm.att.data.remote.response.OrderReceiptDTO
 import org.swm.att.data.remote.response.PreOrderBillDTO
 import org.swm.att.data.remote.response.PreOrdersDTO
 import org.swm.att.data.remote.response.PreorderIdDTO
-import org.swm.att.data.remote.response.StockWithMixtedDTO
+import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.data.remote.response.StockIdDTO
-import org.swm.att.data.remote.response.StocksDTO
+import org.swm.att.data.remote.response.StockWithMixedListDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -106,11 +106,11 @@ interface AttPosService {
     suspend fun getAllOfStocks(
         @Header("storeId") storeId: Int,
         @Query("name") name: String
-    ): Response<StocksDTO>
+    ): Response<StockWithMixedListDTO>
 
     @POST("stock")
     suspend fun postNewStock(
         @Header("storeId") storeId: Int,
-        @Body newStock: StockWithMixtedDTO
+        @Body newStock: StockWithMixedDTO
     ): Response<StockIdDTO>
 }

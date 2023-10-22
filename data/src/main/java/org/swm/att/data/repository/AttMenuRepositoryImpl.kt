@@ -6,7 +6,7 @@ import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.data.remote.request.CategoryPostDTO
 import org.swm.att.data.remote.request.NewMenuDTO
 import org.swm.att.data.remote.response.RecipeDTO
-import org.swm.att.data.remote.response.StockWithMixtedDTO
+import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.domain.entity.request.NewMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.CategoryIdVO
@@ -15,7 +15,7 @@ import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.StockIdVO
 import org.swm.att.domain.entity.response.StockWithMixedVO
-import org.swm.att.domain.entity.response.StocksVO
+import org.swm.att.domain.entity.response.StockWithMixedListVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
 
@@ -89,7 +89,7 @@ class AttMenuRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllOfStock(storeId: Int, name: String): Flow<Result<StocksVO>> = flow {
+    override suspend fun getAllOfStock(storeId: Int, name: String): Flow<Result<StockWithMixedListVO>> = flow {
         try {
             menuDataSource.getAllOfStocks(storeId, name).collect {
                 emit(Result.success(it.toVO()))
@@ -101,12 +101,12 @@ class AttMenuRepositoryImpl @Inject constructor(
 
     override suspend fun postNewStock(storeId: Int, newStock: StockWithMixedVO): Flow<Result<StockIdVO>> = flow {
         try {
-            val stockWithMixtedDTO = StockWithMixtedDTO(
+            val stockWithMixedDTO = StockWithMixedDTO(
                 id = newStock.id,
                 name = newStock.name,
                 isMixed = newStock.isMixed
             )
-            menuDataSource.postNewStock(storeId, stockWithMixtedDTO).collect {
+            menuDataSource.postNewStock(storeId, stockWithMixedDTO).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {

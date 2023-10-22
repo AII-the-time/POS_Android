@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 import org.swm.att.domain.entity.response.StockWithMixedVO
 
 @JsonClass(generateAdapter = true)
-data class StockWithMixtedDTO(
+data class StockWithMixedDTO(
     @field:Json(name = "id")
     val id: Int?,
     @field:Json(name = "name")
