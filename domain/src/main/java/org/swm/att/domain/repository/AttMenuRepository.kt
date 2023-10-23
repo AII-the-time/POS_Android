@@ -9,7 +9,9 @@ import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.StockIdVO
 import org.swm.att.domain.entity.response.StockVO
-import org.swm.att.domain.entity.response.StocksVO
+import org.swm.att.domain.entity.response.StockWithMixedVO
+import org.swm.att.domain.entity.response.StockWithMixedListVO
+import org.swm.att.domain.entity.response.StockWithStateListVO
 
 interface AttMenuRepository {
     suspend fun getMenu(storeId: Int): Flow<Result<CategoriesVO>>
@@ -17,6 +19,10 @@ interface AttMenuRepository {
     suspend fun postCategory(storeId: Int, categoryName: String): Flow<Result<CategoryIdVO>>
     suspend fun postNewMenu(storeId: Int, newMenu: NewMenuVO): Flow<Result<MenuIdVO>>
     suspend fun getAllOfOption(storeId: Int): Flow<Result<OptionListVO>>
-    suspend fun getAllOfStock(storeId: Int, name: String): Flow<Result<StocksVO>>
+    suspend fun getAllOfStock(storeId: Int, name: String): Flow<Result<StockWithMixedListVO>>
+    suspend fun postNewStock(storeId: Int, newStock: StockWithMixedVO): Flow<Result<StockIdVO>>
+    suspend fun getStockWithStateList(storeId: Int): Flow<Result<StockWithStateListVO>>
+    suspend fun getStockById(storeId: Int, stockId: Int): Flow<Result<StockVO>>
     suspend fun postNewStock(storeId: Int, newStock: StockVO): Flow<Result<StockIdVO>>
+    suspend fun updateStock(storeId: Int, stock: StockVO): Flow<Result<StockIdVO>>
 }

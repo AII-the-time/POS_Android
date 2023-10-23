@@ -19,8 +19,8 @@ import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.entity.response.StockIdVO
-import org.swm.att.domain.entity.response.StockVO
-import org.swm.att.domain.entity.response.StocksVO
+import org.swm.att.domain.entity.response.StockWithMixedVO
+import org.swm.att.domain.entity.response.StockWithMixedListVO
 import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttPosUserRepository
 import javax.inject.Inject
@@ -54,8 +54,8 @@ class RecipeViewModel @Inject constructor(
     private var selectedOptionList = mutableListOf<Int>()
 
     //stock
-    private val _getAllOfStockState = MutableStateFlow<UiState<StocksVO>>(UiState.Loading)
-    val getAllOfStockState: StateFlow<UiState<StocksVO>> = _getAllOfStockState
+    private val _getAllOfStockState = MutableStateFlow<UiState<StockWithMixedListVO>>(UiState.Loading)
+    val getAllOfStockState: StateFlow<UiState<StockWithMixedListVO>> = _getAllOfStockState
     private val _postNewStockState = MutableStateFlow<UiState<StockIdVO>>(UiState.Loading)
     val postNewStockState: StateFlow<UiState<StockIdVO>> = _postNewStockState
 
@@ -260,7 +260,7 @@ class RecipeViewModel @Inject constructor(
 
     fun postNewStock(newItemName: String) {
         viewModelScope.launch(attExceptionHandler) {
-            val newStock = StockVO(newItemName)
+            val newStock = StockWithMixedVO(newItemName)
             attMenuRepository.postNewStock(getStoreId(), newStock).collect { result ->
                 result.onSuccess {
                     _postNewStockState.value = UiState.Success(it)
@@ -290,9 +290,9 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
-    fun addNewRecipe(stockVO: StockVO) {
+    fun addNewRecipe(stockWithMixedVO: StockWithMixedVO) {
         val currentRecipeMap = recipeMapForNewMenu.value ?: mutableMapOf()
-        currentRecipeMap[stockVO.id] = RecipeVO(stockVO)
+        currentRecipeMap[stockWithMixedVO.id] = RecipeVO(stockWithMixedVO)
         _recipeMapForNewMenu.postValue(currentRecipeMap)
     }
 

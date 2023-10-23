@@ -10,12 +10,30 @@ data class StockDTO(
     val id: Int?,
     @field:Json(name = "name")
     val name: String?,
-    @field:Json(name = "isMixed")
-    val isMixed: Boolean?
+    @field:Json(name = "amount")
+    val amount: Int?,
+    @field:Json(name = "unit")
+    val unit: String?,
+    @field:Json(name = "price")
+    val price: String?,
+    @field:Json(name = "currentAmount")
+    val currentAmount: Int?,
+    @field:Json(name = "noticeThreshold")
+    val noticeThreshold: Int?,
+    @field:Json(name = "updatedAt")
+    val updatedAt: String?,
+    @field:Json(name = "menus")
+    val menus: List<String>?
 ) {
     fun toVO() = StockVO(
-        id = id ?: -1,
+        id = id,
         name = name ?: "Unknown",
-        isMixed = isMixed ?: false
+        amount = amount ?: 0,
+        unit = unit ?: "g",
+        price = price ?: "Unknown",
+        currentAmount = currentAmount ?: 0,
+        noticeThreshold = noticeThreshold ?: -1,
+        updatedAt = updatedAt ?: "Unknown",
+        menus = menus ?: listOf()
     )
 }

@@ -5,7 +5,6 @@ import org.swm.att.domain.constant.PayMethod
 import org.swm.att.domain.constant.PayState
 import org.swm.att.domain.util.BigDecimalSerializer
 import java.math.BigDecimal
-import java.util.UUID
 
 abstract class BaseRecyclerViewItem {
     abstract val id: Int
@@ -74,7 +73,7 @@ data class RecipeVO(
     var coldRegularAmount: String?,
     var unit: String
 ) : java.io.Serializable, BaseRecyclerViewItem() {
-    constructor(stock: StockVO): this(stock.id, "RECIPE", stock.name, stock.isMixed, null, "g")
+    constructor(stock: StockWithMixedVO): this(stock.id, "RECIPE", stock.name, stock.isMixed, null, "g")
 }
 
 data class PreorderVO(
@@ -86,5 +85,14 @@ data class PreorderVO(
     val totalCount: Int,
     val phone: String,
     val memo: String? = null,
+    var isFocused: Boolean = false
+) : BaseRecyclerViewItem()
+
+data class StockWithStateVO(
+    override val id: Int,
+    override val viewType: String = "STOCK_WITH_STATE",
+    val name: String,
+    val state: String,
+    val usingMenuCount: Int,
     var isFocused: Boolean = false
 ) : BaseRecyclerViewItem()

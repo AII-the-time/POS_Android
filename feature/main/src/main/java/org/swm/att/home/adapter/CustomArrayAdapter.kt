@@ -6,23 +6,23 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.AppCompatTextView
-import org.swm.att.domain.entity.response.StockVO
+import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.home.R
 import java.util.UUID
 
 class CustomArrayAdapter(
     private val context: Context,
     @LayoutRes private val resourceId: Int,
-    private val stockList: List<StockVO>,
-    private val onExistedItemClickListener: (StockVO) -> Unit,
+    private val stockList: List<StockWithMixedVO>,
+    private val onExistedItemClickListener: (StockWithMixedVO) -> Unit,
     private val onAddNewItemClickListener: () -> Unit
-): ArrayAdapter<StockVO>(context, resourceId, stockList) {
+): ArrayAdapter<StockWithMixedVO>(context, resourceId, stockList) {
     private val stocks = ArrayList(stockList)
     override fun getCount(): Int {
         return stocks.size
     }
 
-    override fun getItem(position: Int): StockVO? {
+    override fun getItem(position: Int): StockWithMixedVO? {
         return stocks[position]
     }
 
@@ -30,7 +30,7 @@ class CustomArrayAdapter(
         return stocks[position].id.toLong()
     }
 
-    fun addAll(stocks: List<StockVO>) {
+    fun addAll(stocks: List<StockWithMixedVO>) {
         this.stocks.addAll(stocks)
     }
     override fun clear() {
@@ -58,6 +58,6 @@ class CustomArrayAdapter(
     }
 
     fun addCreateNewItem() {
-        stocks.add(StockVO(UUID.randomUUID().hashCode(), context.getString(org.swm.att.common_ui.R.string.tv_item_add_new), isMixed = false, isNew = true))
+        stocks.add(StockWithMixedVO(UUID.randomUUID().hashCode(), context.getString(org.swm.att.common_ui.R.string.tv_item_add_new), isMixed = false, isNew = true))
     }
 }
