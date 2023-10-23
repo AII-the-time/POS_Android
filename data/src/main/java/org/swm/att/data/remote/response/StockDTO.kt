@@ -6,6 +6,8 @@ import org.swm.att.domain.entity.response.StockVO
 
 @JsonClass(generateAdapter = true)
 data class StockDTO(
+    @field:Json(name = "id")
+    val id: Int?,
     @field:Json(name = "name")
     val name: String?,
     @field:Json(name = "amount")
@@ -24,6 +26,7 @@ data class StockDTO(
     val menus: List<String>?
 ) {
     fun toVO() = StockVO(
+        id = id,
         name = name ?: "Unknown",
         amount = amount ?: 0,
         unit = unit ?: "g",

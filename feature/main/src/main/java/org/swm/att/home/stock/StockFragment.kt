@@ -125,8 +125,16 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
 
     private fun setStockBtnsClickListener() {
         binding.btnCancelRegisterStock.setOnClickListener {
-            stockViewModel.changeCreateState(false)
-            stockViewModel.getLastSelectedStock()
+            when(stockViewModel.getEditState()) {
+                CREATE -> {
+                    stockViewModel.changeCreateState(false)
+                    stockViewModel.getLastSelectedStock()
+                }
+                MODIFY -> {
+                    stockViewModel.changeModifyState(false)
+                    stockViewModel.getLastSelectedStock()
+                }
+            }
         }
         binding.btnRegisterNewStock.setOnClickListener {
             val name = binding.edtStockName.text.toString()
@@ -135,7 +143,17 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
             val perAmount = binding.edtStockPerAmount.text.toString()
             val perPrice = binding.edtStockPerPrice.text.toString()
             val unit = binding.actStockUnit.text.toString()
-            stockViewModel.postNewStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+            when(stockViewModel.getEditState()) {
+                CREATE -> {
+                    stockViewModel.postNewStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+                }
+                MODIFY -> {
+                    stockViewModel.updateStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+                }
+            }
+        }
+        binding.btnModifyStock.setOnClickListener {
+            stockViewModel.changeModifyState(true)
         }
     }
 
@@ -167,7 +185,8 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
                             uiState.data?.let {
                                 binding.stockDetail = it
                                 binding.actStockUnit.setText(it.unit, false)
-                                stockViewModel.changeCreateState(false)
+                                changeEditState()
+                                stockViewModel.resetGetSelectedStockByIdState()
                             }
                         }
                         is UiState.Loading -> {/* nothing */}
@@ -196,9 +215,30 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
                 stockViewModel.postNewStockState.collect { uiState ->
                     when(uiState) {
                         is UiState.Success -> {
-                            Toast.makeText(requireContext(), "재고 등록 완료", Toast.LENGTH_SHORT).show()
-                            stockViewModel.changeCreateState(false)
-                            initStockData()
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "재고 등록 완료", Toast.LENGTH_SHORT).show()
+                                stockViewModel.changeCreateState(false)
+                                initStockData(it.stockId)
+                            }
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                stockViewModel.updateStockState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "재고 수정 완료", Toast.LENGTH_SHORT).show()
+                                stockViewModel.changeModifyState(false)
+                                initStockData(it.stockId)
+                                stockViewModel.resetUpdateStockState()
+                            }
                         }
                         is UiState.Loading -> {/* nothing */}
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
@@ -208,8 +248,15 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
         }
     }
 
-    private fun initStockData() {
-        stockViewModel.getStockWithStateList()
+    private fun changeEditState() {
+        when(stockViewModel.getEditState()) {
+            CREATE -> stockViewModel.changeCreateState(false)
+            MODIFY -> stockViewModel.changeModifyState(false)
+        }
+    }
+
+    private fun initStockData(selectedId: Int? = null) {
+        stockViewModel.getStockWithStateList(selectedId)
     }
 
     private fun setDataBinding() {
@@ -217,9 +264,13 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
     }
 
     companion object {
+        //stock
         const val ALL = "all"
         const val LACK = "lack"
         const val UNKNOWN = "unknown"
+        //state
+        const val CREATE = "create"
+        const val MODIFY = "modify"
     }
 
 }

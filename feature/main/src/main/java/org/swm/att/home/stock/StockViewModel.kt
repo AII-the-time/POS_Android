@@ -19,7 +19,9 @@ import org.swm.att.domain.entity.response.StockWithStateVO
 import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttPosUserRepository
 import org.swm.att.home.stock.StockFragment.Companion.ALL
+import org.swm.att.home.stock.StockFragment.Companion.CREATE
 import org.swm.att.home.stock.StockFragment.Companion.LACK
+import org.swm.att.home.stock.StockFragment.Companion.MODIFY
 import org.swm.att.home.stock.StockFragment.Companion.UNKNOWN
 import java.util.Date
 import javax.inject.Inject
@@ -34,6 +36,8 @@ class StockViewModel @Inject constructor(
     val getStockWithStateListState: StateFlow<UiState<StockWithStateListVO>> = _getStockWithStateListState
     private val _postNewStockState = MutableStateFlow<UiState<StockIdVO>>(UiState.Loading)
     val postNewStockState: StateFlow<UiState<StockIdVO>> = _postNewStockState
+    private val _updateStockState = MutableStateFlow<UiState<StockIdVO>>(UiState.Loading)
+    val updateStockState: StateFlow<UiState<StockIdVO>> = _updateStockState
 
     //stock list
     private var allStocks: List<StockWithStateVO> = arrayListOf()
@@ -59,6 +63,8 @@ class StockViewModel @Inject constructor(
     private var storeId: Int? = null
     private val _isCreate = MutableLiveData<Boolean>(null)
     val isCreate: LiveData<Boolean?> = _isCreate
+    private val _isModify = MutableLiveData<Boolean>(null)
+    val isModify: LiveData<Boolean?> = _isModify
     private var lastSelectedStockId: Int? = null
 
     //selectable override
@@ -88,7 +94,7 @@ class StockViewModel @Inject constructor(
     fun postNewStock(name: String?, currentAmount: String?, noticeThreshold: String?, perAmount: String?, perPrice: String?, unit: String?) {
         viewModelScope.launch(attExceptionHandler) {
             try {
-                val newStock = checkCreateNewStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+                val newStock = checkCreateNewStock(null, name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
                 attMenuRepository.postNewStock(getStoreId(), newStock).collect { result ->
                     result.onSuccess {
                         _postNewStockState.value = UiState.Success(it)
@@ -103,10 +109,29 @@ class StockViewModel @Inject constructor(
         }
     }
 
-    private fun checkCreateNewStock(name: String?, currentAmount: String?, noticeThreshold: String?, perAmount: String?, perPrice: String?, unit: String?): StockVO {
+    fun updateStock(name: String?, currentAmount: String?, noticeThreshold: String?, perAmount: String?, perPrice: String?, unit: String?) {
+        viewModelScope.launch(attExceptionHandler) {
+            try {
+                val stock = checkCreateNewStock(lastSelectedStockId, name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+                attMenuRepository.updateStock(getStoreId(), stock).collect { result ->
+                    result.onSuccess {
+                        _updateStockState.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "재고 수정 실패"
+                        _updateStockState.value = UiState.Error(errorMsg)
+                    }
+                }
+            } catch (e: Exception) {
+                _updateStockState.value = UiState.Error(e.message ?: "재고 수정 실패")
+            }
+        }
+    }
+
+    private fun checkCreateNewStock(id: Int?, name: String?, currentAmount: String?, noticeThreshold: String?, perAmount: String?, perPrice: String?, unit: String?): StockVO {
         try {
             val inventoryDate = getStringByDateTimeBaseFormatter(lastInventoryDate.value?.getUTCDateTime() ?: Date().getUTCDateTime())
             return StockVO(
+                id = id,
                 name = requireNotNull(name),
                 amount = requireNotNull(perAmount).toInt(),
                 unit = requireNotNull(unit),
@@ -122,14 +147,18 @@ class StockViewModel @Inject constructor(
         }
     }
 
-    fun getStockWithStateList() {
+    fun getStockWithStateList(selectedId: Int? = null) {
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getStockWithStateList(getStoreId()).collect { result ->
                 result.onSuccess {
                     _getStockWithStateListState.value = UiState.Success(it)
                     setBaseStockList(it.stocks)
                     _currentResultStockList.postValue(it.stocks)
-                    getSelectedItem(it.stocks.first().id)
+                    if (selectedId == null) {
+                        getSelectedItem(it.stocks.first().id)
+                    } else {
+                        getSelectedItem(selectedId)
+                    }
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "재고 가져오기 실패"
                     _getStockWithStateListState.value = UiState.Error(errorMsg)
@@ -178,6 +207,10 @@ class StockViewModel @Inject constructor(
         _isCreate.postValue(state)
     }
 
+    fun changeModifyState(state: Boolean) {
+        _isModify.postValue(state)
+    }
+
     fun setDefaultStockList(type: String) {
         when(type) {
             ALL -> {
@@ -201,5 +234,21 @@ class StockViewModel @Inject constructor(
 
     fun setUnitString(unit: String) {
         _unitString.postValue(unit)
+    }
+
+    fun getEditState(): String {
+        return if (isCreate.value == true) {
+            CREATE
+        } else {
+            MODIFY
+        }
+    }
+
+    fun resetGetSelectedStockByIdState() {
+        _getStockByIdState.value = UiState.Loading
+    }
+
+    fun resetUpdateStockState() {
+        _updateStockState.value = UiState.Loading
     }
 }

@@ -120,6 +120,7 @@ class AttMenuRepositoryImpl @Inject constructor(
     override suspend fun postNewStock(storeId: Int, newStock: StockVO): Flow<Result<StockIdVO>> = flow {
         try {
             val stockDTO = StockDTO(
+                id = null,
                 name = newStock.name,
                 amount = newStock.amount,
                 unit = newStock.unit,
@@ -160,6 +161,7 @@ class AttMenuRepositoryImpl @Inject constructor(
     override suspend fun updateStock(storeId: Int, stock: StockVO): Flow<Result<StockIdVO>> = flow {
         try {
             val stockDTO = StockDTO(
+                id = stock.id,
                 name = stock.name,
                 amount = stock.amount,
                 unit = stock.unit,
