@@ -20,4 +20,5 @@ interface AttPosUserRepository {
     suspend fun patchMileage(storeId: Int, mileage: MileageVO): Flow<Result<MileageVO>>
     suspend fun registerCustomer(storeId: Int, phone: PhoneNumVO): Flow<Result<MileageIdVO>>
     suspend fun registerStore(store: StoreVO): Flow<Result<StoreIdVO>>
+    suspend fun registerStoreForTest(store: StoreVO): Flow<Result<StoreIdVO>>
 }

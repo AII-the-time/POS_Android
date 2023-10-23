@@ -122,4 +122,24 @@ class AttPosUserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun registerStoreForTest(store: StoreVO): Flow<Result<StoreIdVO>> = flow {
+        try {
+            userDataSource.registerStoreForTest(
+                StoreDTO(
+                    store.name,
+                    store.address,
+                    store.openingHours?.map {
+                        OpeningHourDTO(
+                            it.day,
+                            it.open,
+                            it.close
+                        )
+                    }
+                )
+            ).collect { emit(Result.success(it.toVO())) }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
 }

@@ -44,4 +44,9 @@ interface AttPosUserService {
         @Body store: StoreDTO
     ): Response<StoreIdDTO>
 
+    @POST("store/test")
+    suspend fun registerStoreForTest(
+        @Body store: StoreDTO
+    ): Response<StoreIdDTO>
+
 }
