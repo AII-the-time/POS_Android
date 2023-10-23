@@ -117,9 +117,12 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
         binding.btnAddStock.setOnClickListener {
             binding.stockDetail = null
             binding.actStockUnit.setText("g", false)
-            stockViewModel.setLastInventoryDate(Date())
             binding.tvInventoryDate.setText(getDateBaseFormattingResult(Date()))
-            stockViewModel.changeCreateState(true)
+            stockViewModel.apply {
+                setLastInventoryDate(Date())
+                changeCreateState(true)
+                setUnitString("g")
+            }
         }
     }
 
