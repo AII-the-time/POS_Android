@@ -118,6 +118,7 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
             binding.stockDetail = null
             binding.actStockUnit.setText("g", false)
             binding.tvInventoryDate.setText(getDateBaseFormattingResult(Date()))
+            binding.ivStockStateIcon.visibility = View.GONE
             stockViewModel.apply {
                 setLastInventoryDate(Date())
                 changeCreateState(true)
