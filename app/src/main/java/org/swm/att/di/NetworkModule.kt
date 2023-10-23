@@ -28,7 +28,7 @@ object NetworkModule {
 //            PreferenceKey.ACCESS_TOKEN
 //        )
 //      로그인 프로세스 생길 떄까지 임시 access token 사용
-        val accessToken = BuildConfig.TMP_ACCESS_TOKEN
+        val accessToken = BuildConfig.ACCESS_TOKEN
         val request = chain.request().newBuilder()
             .addHeader(AUTHORIZATION, accessToken)
             .build()

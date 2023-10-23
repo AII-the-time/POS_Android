@@ -26,6 +26,7 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "ATT_BASE_URL", "\"${gradleLocalProperties(rootDir).getProperty("ATT_DEBUG_BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${gradleLocalProperties(rootDir).getProperty("TMP_DEBUG_ACCESS_TOKEN")}\"")
             manifestPlaceholders["SENTRY_DSN"] = gradleLocalProperties(rootDir).getProperty("SENTRY_DSN_DEBUG")
         }
         release {
@@ -34,6 +35,7 @@ android {
                     getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
             buildConfigField("String", "ATT_BASE_URL", "\"${gradleLocalProperties(rootDir).getProperty("ATT_RELEASE_BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${gradleLocalProperties(rootDir).getProperty("TMP_RELEASE_ACCESS_TOKEN")}\"")
             manifestPlaceholders["SENTRY_DSN"] = gradleLocalProperties(rootDir).getProperty("SENTRY_DSN_RELEASE")
         }
     }
