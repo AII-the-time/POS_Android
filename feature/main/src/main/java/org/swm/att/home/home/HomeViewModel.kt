@@ -139,6 +139,9 @@ class HomeViewModel @Inject constructor(
     fun registerStore() {
         viewModelScope.launch(attExceptionHandler) {
             // 임시 token을 활용해 가게 바로 등록
+            // for test with base data
+            //attPosUserRepository.registerStoreForTest(
+            // real
             attPosUserRepository.registerStore(
                 StoreVO(
                     name = "temp",
