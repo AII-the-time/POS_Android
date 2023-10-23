@@ -156,4 +156,24 @@ class AttMenuRepositoryImpl @Inject constructor(
             emit(Result.failure(e))
         }
     }
+
+    override suspend fun updateStock(storeId: Int, stock: StockVO): Flow<Result<StockIdVO>> = flow {
+        try {
+            val stockDTO = StockDTO(
+                name = stock.name,
+                amount = stock.amount,
+                unit = stock.unit,
+                price = stock.price,
+                currentAmount = stock.currentAmount,
+                noticeThreshold = stock.noticeThreshold,
+                updatedAt = stock.updatedAt,
+                menus = arrayListOf()
+            )
+            menuDataSource.updateStock(storeId, stockDTO).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
 }

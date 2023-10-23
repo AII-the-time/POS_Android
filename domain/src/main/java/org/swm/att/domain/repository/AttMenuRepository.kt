@@ -24,4 +24,5 @@ interface AttMenuRepository {
     suspend fun getStockWithStateList(storeId: Int): Flow<Result<StockWithStateListVO>>
     suspend fun getStockById(storeId: Int, stockId: Int): Flow<Result<StockVO>>
     suspend fun postNewStock(storeId: Int, newStock: StockVO): Flow<Result<StockIdVO>>
+    suspend fun updateStock(storeId: Int, stock: StockVO): Flow<Result<StockIdVO>>
 }

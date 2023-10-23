@@ -26,6 +26,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -131,5 +132,11 @@ interface AttPosService {
     suspend fun postNewStock(
         @Header("storeId") storeId: Int,
         @Body newStock: StockDTO
+    ): Response<StockIdDTO>
+
+    @PUT("stock")
+    suspend fun updateStock(
+        @Header("storeId") storeId: Int,
+        @Body stock: StockDTO
     ): Response<StockIdDTO>
 }
