@@ -45,12 +45,13 @@
                 android:id="@+id/iv_stock_state_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:backgroundByStockState="@{stockWithState}"
                 android:background="@drawable/ic_stock_none_mdpi"
-                app:layout_constraintTop_toTopOf="parent"
+                app:backgroundByStockState="@{stockWithState}"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_stock_state"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tv_stock_state"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_stock_state"

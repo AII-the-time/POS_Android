@@ -253,8 +253,11 @@ fun setVisibilityByUiState(view: TextView, uiState: UiState<CategoriesVO>) {
 @BindingAdapter("backgroundByStockState")
 fun setBackgroundByStockState(view: AppCompatImageView, stockWithStateVO: StockWithStateVO) {
     val stockState = StockState.toStockState(stockWithStateVO.state)
-    stockState.icon?.let {
-        view.background = view.context.getDrawable(it)
+    if (stockState.icon == null) {
+        view.visibility = View.GONE
+    } else {
+        view.background = view.context.getDrawable(stockState.icon)
+        view.visibility = View.VISIBLE
     }
 }
 

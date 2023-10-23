@@ -11,6 +11,9 @@
         <variable
             name="stockDetail"
             type="org.swm.att.domain.entity.response.StockVO" />
+        <variable
+            name="unitString"
+            type="String" />
         <import type="android.view.View" />
         <import type="org.swm.att.common_ui.util.Formatter" />
     </data>
@@ -276,8 +279,6 @@
                         <AutoCompleteTextView
                             android:id="@+id/act_stock_unit"
                             android:padding="0dp"
-                            android:focusable="false"
-                            android:cursorVisible="false"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
@@ -389,12 +390,12 @@
                                         android:id="@+id/tv_stock_unit_for_current_amount"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="g"
                                         android:textColor="@color/black"
                                         android:textSize="14sp"
-                                        app:layout_constraintTop_toTopOf="parent"
                                         app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintStart_toEndOf="@id/edt_stock_amount" />
+                                        app:layout_constraintStart_toEndOf="@id/edt_stock_amount"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        android:text="개" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -460,7 +461,8 @@
                                         android:id="@+id/tv_stock_unit_for_notification_reference_amount"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="g"
+                                        tools:text="g"
+                                        android:text="@{unitString}"
                                         android:textColor="@color/black"
                                         android:textSize="14sp"
                                         app:layout_constraintTop_toTopOf="parent"
@@ -619,7 +621,8 @@
                                         android:id="@+id/tv_stock_unit_for_per_amount"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="g"
+                                        tools:text="g"
+                                        android:text="@{unitString}"
                                         android:textColor="@color/black"
                                         android:textSize="14sp"
                                         app:layout_constraintTop_toTopOf="parent"
@@ -643,7 +646,7 @@
                                     android:id="@+id/tv_stock_per_price_des"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/tv_stock_amount_per_des"
+                                    android:text="@string/tv_stock_price_per_des"
                                     android:textColor="@color/black"
                                     android:textSize="16sp"
                                     android:textStyle="bold"

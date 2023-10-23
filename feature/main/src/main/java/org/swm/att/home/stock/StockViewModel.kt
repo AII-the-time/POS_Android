@@ -9,7 +9,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.state.UiState
+import org.swm.att.common_ui.util.Formatter.getStringByDateTimeBaseFormatter
+import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
+import org.swm.att.domain.entity.response.StockIdVO
 import org.swm.att.domain.entity.response.StockVO
 import org.swm.att.domain.entity.response.StockWithStateListVO
 import org.swm.att.domain.entity.response.StockWithStateVO
@@ -18,6 +21,7 @@ import org.swm.att.domain.repository.AttPosUserRepository
 import org.swm.att.home.stock.StockFragment.Companion.ALL
 import org.swm.att.home.stock.StockFragment.Companion.LACK
 import org.swm.att.home.stock.StockFragment.Companion.UNKNOWN
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,9 +29,11 @@ class StockViewModel @Inject constructor(
     private val attMenuRepository: AttMenuRepository,
     private val attPosUserRepository: AttPosUserRepository
 ): BaseSelectableViewViewModel() {
-    //stock
+    //uiState
     private val _getStockWithStateListState = MutableStateFlow<UiState<StockWithStateListVO>>(UiState.Loading)
     val getStockWithStateListState: StateFlow<UiState<StockWithStateListVO>> = _getStockWithStateListState
+    private val _postNewStockState = MutableStateFlow<UiState<StockIdVO>>(UiState.Loading)
+    val postNewStockState: StateFlow<UiState<StockIdVO>> = _postNewStockState
 
     //stock list
     private var allStocks: List<StockWithStateVO> = arrayListOf()
@@ -40,6 +46,14 @@ class StockViewModel @Inject constructor(
     // selected stock
     private val _getStockByIdState = MutableStateFlow<UiState<StockVO>>(UiState.Loading)
     val getStockByIdState: StateFlow<UiState<StockVO>> = _getStockByIdState
+
+    //date picker
+    private val _lastInventoryDate = MutableLiveData<Date>()
+    val lastInventoryDate: LiveData<Date> = _lastInventoryDate
+
+    //unit
+    private val _unitString = MutableLiveData<String>()
+    val unitString: LiveData<String> = _unitString
 
     //local value
     private var storeId: Int? = null
@@ -71,6 +85,43 @@ class StockViewModel @Inject constructor(
     }
 
     //stock
+    fun postNewStock(name: String?, currentAmount: String?, noticeThreshold: String?, perAmount: String?, perPrice: String?, unit: String?) {
+        viewModelScope.launch(attExceptionHandler) {
+            try {
+                val newStock = checkCreateNewStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+                attMenuRepository.postNewStock(getStoreId(), newStock).collect { result ->
+                    result.onSuccess {
+                        _postNewStockState.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "재고 등록 실패"
+                        _postNewStockState.value = UiState.Error(errorMsg)
+                    }
+                }
+            } catch (e: Exception) {
+                _postNewStockState.value = UiState.Error(e.message ?: "재고 등록 실패")
+            }
+        }
+    }
+
+    private fun checkCreateNewStock(name: String?, currentAmount: String?, noticeThreshold: String?, perAmount: String?, perPrice: String?, unit: String?): StockVO {
+        try {
+            val inventoryDate = getStringByDateTimeBaseFormatter(lastInventoryDate.value?.getUTCDateTime() ?: Date().getUTCDateTime())
+            return StockVO(
+                name = requireNotNull(name),
+                amount = requireNotNull(perAmount).toInt(),
+                unit = requireNotNull(unit),
+                price = requireNotNull(perPrice),
+                currentAmount = requireNotNull(currentAmount).toInt(),
+                noticeThreshold = requireNotNull(noticeThreshold).toInt(),
+                updatedAt = inventoryDate
+            )
+        } catch (e: NumberFormatException) {
+            throw Exception("수량은 숫자만 입력해주세요!")
+        } catch (e: IllegalArgumentException) {
+            throw Exception("빈칸을 모두 채워주세요!")
+        }
+    }
+
     fun getStockWithStateList() {
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getStockWithStateList(getStoreId()).collect { result ->
@@ -142,5 +193,13 @@ class StockViewModel @Inject constructor(
                 _currentResultStockList.postValue(unknownStocks)
             }
         }
+    }
+
+    fun setLastInventoryDate(date: Date) {
+        _lastInventoryDate.postValue(date)
+    }
+
+    fun setUnitString(unit: String) {
+        _unitString.postValue(unit)
     }
 }

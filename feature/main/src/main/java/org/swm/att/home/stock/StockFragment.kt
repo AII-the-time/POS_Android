@@ -16,10 +16,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
+import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseRecyclerViewAdapter
 import org.swm.att.home.adapter.SelectableItemAdapter
 import org.swm.att.home.databinding.FragmentStockBinding
+import java.util.Date
 
 @AndroidEntryPoint
 class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock) {
@@ -35,6 +37,7 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
         initUnitMenu()
         setAddStockBtnClickListener()
         setStockBtnsClickListener()
+        setInventoryTextClickListener()
         setObserver()
         initStockData()
         setDataBinding()
@@ -104,12 +107,18 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
         val arrayAdapter = ArrayAdapter(binding.root.context, R.layout.item_simple_text, unitArray)
         binding.actStockUnit.apply {
             setAdapter(arrayAdapter)
+            setOnItemClickListener { _, _, i, _ ->
+                stockViewModel.setUnitString(unitArray[i])
+            }
         }
     }
 
     private fun setAddStockBtnClickListener() {
         binding.btnAddStock.setOnClickListener {
             binding.stockDetail = null
+            binding.actStockUnit.setText("g", false)
+            stockViewModel.setLastInventoryDate(Date())
+            binding.tvInventoryDate.setText(getDateBaseFormattingResult(Date()))
             stockViewModel.changeCreateState(true)
         }
     }
@@ -118,6 +127,22 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
         binding.btnCancelRegisterStock.setOnClickListener {
             stockViewModel.changeCreateState(false)
             stockViewModel.getLastSelectedStock()
+        }
+        binding.btnRegisterNewStock.setOnClickListener {
+            val name = binding.edtStockName.text.toString()
+            val currentAmount = binding.edtStockAmount.text.toString()
+            val noticeThreshold = binding.edtStockNotificationReferenceAmount.text.toString()
+            val perAmount = binding.edtStockPerAmount.text.toString()
+            val perPrice = binding.edtStockPerPrice.text.toString()
+            val unit = binding.actStockUnit.text.toString()
+            stockViewModel.postNewStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+        }
+    }
+
+    private fun setInventoryTextClickListener() {
+        binding.tvInventoryDate.setOnClickListener {
+            val datePickerDialog = DialogInventoryDatePicker(stockViewModel)
+            datePickerDialog.show(childFragmentManager, "DialogInventoryDatePicker")
         }
     }
 
@@ -142,6 +167,7 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
                             uiState.data?.let {
                                 binding.stockDetail = it
                                 binding.actStockUnit.setText(it.unit, false)
+                                stockViewModel.changeCreateState(false)
                             }
                         }
                         is UiState.Loading -> {/* nothing */}
@@ -150,8 +176,35 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
                 }
             }
         }
+
         stockViewModel.currentResultStockList.observe(viewLifecycleOwner) {
             stockWithStateAdapter.submitList(it)
+            stockWithStateAdapter.notifyDataSetChanged()
+        }
+
+        stockViewModel.lastInventoryDate.observe(viewLifecycleOwner) {
+            binding.tvInventoryDate.setText(getDateBaseFormattingResult(it))
+        }
+
+        stockViewModel.unitString.observe(viewLifecycleOwner) {
+            binding.actStockUnit.setText(it, false)
+            binding.unitString = it
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                stockViewModel.postNewStockState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            Toast.makeText(requireContext(), "재고 등록 완료", Toast.LENGTH_SHORT).show()
+                            stockViewModel.changeCreateState(false)
+                            initStockData()
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
