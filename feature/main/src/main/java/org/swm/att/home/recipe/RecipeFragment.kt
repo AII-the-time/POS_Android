@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.domain.entity.response.CategoriesVO
-import org.swm.att.domain.entity.response.StockVO
+import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseInteractiveItemAdapter
 import org.swm.att.home.adapter.CustomArrayAdapter
@@ -316,7 +316,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         is UiState.Success -> {
                             uiState.data?.let {
                                 Toast.makeText(requireContext(), "재고가 추가되었습니다.", Toast.LENGTH_SHORT).show()
-                                val newStock = StockVO(
+                                val newStock = StockWithMixedVO(
                                     id = it.stockId,
                                     name = binding.actSearchStock.text.toString(),
                                     isMixed = false

@@ -18,7 +18,8 @@ enum class StockState(
                 "EMPTY" -> EMPTY
                 "OUT_OF_STOCK" -> OUT_OF_STOCK
                 "CAUTION" -> CAUTION
-                else -> ENOUGH
+                "ENOUGH" -> ENOUGH
+                else -> UNKNOWN
             }
         }
     }

@@ -17,13 +17,16 @@ import org.swm.att.data.remote.response.PreOrderBillDTO
 import org.swm.att.data.remote.response.PreOrdersDTO
 import org.swm.att.data.remote.response.PreorderIdDTO
 import org.swm.att.data.remote.response.StockDTO
+import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.data.remote.response.StockIdDTO
-import org.swm.att.data.remote.response.StocksDTO
+import org.swm.att.data.remote.response.StockWithMixedListDTO
+import org.swm.att.data.remote.response.StockWithStateListDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -106,11 +109,34 @@ interface AttPosService {
     suspend fun getAllOfStocks(
         @Header("storeId") storeId: Int,
         @Query("name") name: String
-    ): Response<StocksDTO>
+    ): Response<StockWithMixedListDTO>
+
+    @POST("stock")
+    suspend fun postNewStock(
+        @Header("storeId") storeId: Int,
+        @Body newStock: StockWithMixedDTO
+    ): Response<StockIdDTO>
+
+    @GET("stock")
+    suspend fun getStockWithStateList(
+        @Header("storeId") storeId: Int
+    ): Response<StockWithStateListDTO>
+
+    @GET("stock/{stockId}")
+    suspend fun getStockById(
+        @Header("storeId") storeId: Int,
+        @Path("stockId") stockId: Int
+    ): Response<StockDTO>
 
     @POST("stock")
     suspend fun postNewStock(
         @Header("storeId") storeId: Int,
         @Body newStock: StockDTO
+    ): Response<StockIdDTO>
+
+    @PUT("stock")
+    suspend fun updateStock(
+        @Header("storeId") storeId: Int,
+        @Body stock: StockDTO
     ): Response<StockIdDTO>
 }
