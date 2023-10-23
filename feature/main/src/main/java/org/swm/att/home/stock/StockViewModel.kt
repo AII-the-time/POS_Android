@@ -66,6 +66,8 @@ class StockViewModel @Inject constructor(
     private val _isModify = MutableLiveData<Boolean>(null)
     val isModify: LiveData<Boolean?> = _isModify
     private var lastSelectedStockId: Int? = null
+    private val _lastSelectedStockState = MutableLiveData<String>()
+    val lastSelectedStockState: LiveData<String> = _lastSelectedStockState
 
     //selectable override
     override fun getSelectedItem(selectedItemId: Int) {
@@ -250,5 +252,9 @@ class StockViewModel @Inject constructor(
 
     fun resetUpdateStockState() {
         _updateStockState.value = UiState.Loading
+    }
+
+    fun setLastSelectedState(state: String) {
+        _lastSelectedStockState.postValue(state)
     }
 }

@@ -237,28 +237,52 @@
                     app:layout_constraintBottom_toTopOf="@id/nst_register_stock_section"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/edt_stock_name"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_stock_name_with_state"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:hint="@string/edt_register_stock_name"
-                        android:maxLength="6"
-                        android:maxLines="1"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:text="@{stockDetail.name}"
-                        android:textCursorDrawable="@null"
-                        app:setEditTextStyleByIsModify="@{stockViewModel.isCreate || stockViewModel.isModify}"
-                        android:backgroundTint="@{stockViewModel.isCreate || stockViewModel.isModify ? @color/main_trans : @color/white}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/til_stock_unit"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="@string/edt_register_stock_name" />
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/iv_stock_state_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_stock_none_mdpi"
+                            app:backgroundByStockState="@{stockViewModel.lastSelectedStockState}"
+                            android:visibility="gone"
+                            android:layout_marginEnd="5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/edt_stock_name"/>
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/edt_stock_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/edt_register_stock_name"
+                            android:maxLength="6"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:text="@{stockDetail.name}"
+                            android:textCursorDrawable="@null"
+                            app:setEditTextStyleByIsModify="@{stockViewModel.isCreate || stockViewModel.isModify}"
+                            android:backgroundTint="@{stockViewModel.isCreate || stockViewModel.isModify ? @color/main_trans : @color/white}"
+                            tools:text="@string/edt_register_stock_name"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/iv_stock_state_icon"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_stock_unit"
@@ -273,7 +297,7 @@
                         app:layout_constraintHorizontal_weight="2"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/edt_stock_name"
+                        app:layout_constraintStart_toEndOf="@id/cl_stock_name_with_state"
                         app:layout_constraintEnd_toEndOf="parent">
 
                         <AutoCompleteTextView

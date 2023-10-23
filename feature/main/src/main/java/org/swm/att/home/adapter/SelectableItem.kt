@@ -19,6 +19,7 @@ import org.swm.att.home.databinding.ItemBillBinding
 import org.swm.att.home.databinding.ItemPreorderBinding
 import org.swm.att.home.databinding.ItemRegisteredMenuBinding
 import org.swm.att.home.databinding.ItemStockBinding
+import org.swm.att.home.stock.StockViewModel
 
 class SelectableItemAdapter(
     private val viewModel: BaseSelectableViewViewModel
@@ -38,6 +39,9 @@ class SelectableItemAdapter(
         holder.itemView.setOnClickListener {
             viewModel.setCurrentSelectedItemId(position)
             viewModel.getSelectedItem(item.id)
+            if (viewModel is StockViewModel) {
+                viewModel.setLastSelectedState((item as StockWithStateVO).state)
+            }
         }
     }
 
