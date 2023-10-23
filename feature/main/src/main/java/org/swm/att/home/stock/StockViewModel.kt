@@ -1,5 +1,6 @@
 package org.swm.att.home.stock
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -135,11 +136,11 @@ class StockViewModel @Inject constructor(
             return StockVO(
                 id = id,
                 name = requireNotNull(name),
-                amount = requireNotNull(perAmount).toInt(),
-                unit = requireNotNull(unit),
-                price = requireNotNull(perPrice),
-                currentAmount = requireNotNull(currentAmount).toInt(),
-                noticeThreshold = requireNotNull(noticeThreshold).toInt(),
+                amount = (perAmount ?: "0").toInt() * (currentAmount ?: "0").toInt(),
+                unit = unit,
+                price = perPrice,
+                currentAmount = (currentAmount ?: "0").toInt(),
+                noticeThreshold = (noticeThreshold ?: "0").toInt(),
                 updatedAt = inventoryDate
             )
         } catch (e: NumberFormatException) {

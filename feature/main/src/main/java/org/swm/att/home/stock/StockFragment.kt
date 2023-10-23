@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
+import org.swm.att.common_ui.util.getValueOrNull
 import org.swm.att.home.R
 import org.swm.att.home.adapter.BaseRecyclerViewAdapter
 import org.swm.att.home.adapter.SelectableItemAdapter
@@ -141,18 +142,29 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
             }
         }
         binding.btnRegisterNewStock.setOnClickListener {
-            val name = binding.edtStockName.text.toString()
-            val currentAmount = binding.edtStockAmount.text.toString()
-            val noticeThreshold = binding.edtStockNotificationReferenceAmount.text.toString()
-            val perAmount = binding.edtStockPerAmount.text.toString()
-            val perPrice = binding.edtStockPerPrice.text.toString()
-            val unit = binding.actStockUnit.text.toString()
-            when(stockViewModel.getEditState()) {
-                CREATE -> {
-                    stockViewModel.postNewStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
-                }
-                MODIFY -> {
-                    stockViewModel.updateStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+            val name = binding.edtStockName.text.toString().getValueOrNull()
+            val currentAmount = binding.edtStockAmount.text.toString().getValueOrNull()
+            val noticeThreshold = binding.edtStockNotificationReferenceAmount.text.toString().getValueOrNull()
+            val perAmount = binding.edtStockPerAmount.text.toString().getValueOrNull()
+            val perPrice = binding.edtStockPerPrice.text.toString().getValueOrNull()
+            val unit = binding.actStockUnit.text.toString().getValueOrNull()
+            // TODO: 리팩토링 방법 생각하기
+            if (name == null) {
+                Toast.makeText(requireContext(), "재고 이름을 입력해주세요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }else{
+                if ((currentAmount == null && noticeThreshold == null && perAmount == null && perPrice.isNullOrEmpty())
+                        || (currentAmount != null && noticeThreshold != null && perAmount != null && perPrice != null)) {
+                    when(stockViewModel.getEditState()) {
+                        CREATE -> {
+                            stockViewModel.postNewStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+                        }
+                        MODIFY -> {
+                            stockViewModel.updateStock(name, currentAmount, noticeThreshold, perAmount, perPrice, unit)
+                        }
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "필요한 값들을 모두 입력해주세요.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
