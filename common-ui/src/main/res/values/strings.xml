@@ -184,7 +184,7 @@
     <string name="chip_stock_all">재고 전체</string>
     <string name="chip_stock_lack_or_empty">부족/없음</string>
     <string name="chip_stock_unknown">재고 조사 X</string>
-    <string name="tv_current_stock_amount">현재 수량</string>
+    <string name="tv_current_stock_amount">현재 재고량</string>
     <string name="tv_stock_amount_per_des">개당 재고량</string>
     <string name="tv_stock_notification_reference_amount">알림 기준량</string>
     <string name="tv_weekly_usage">최근 1주 사용량</string>
