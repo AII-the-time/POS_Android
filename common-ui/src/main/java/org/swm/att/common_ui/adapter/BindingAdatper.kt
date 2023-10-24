@@ -264,6 +264,22 @@ fun setBackgroundByStockState(view: AppCompatImageView, stockWithState: String?)
 }
 
 @BindingAdapter("textByStockState")
+fun setTextByStockState(view: TextView, stockWithState: String?) {
+    stockWithState?.let {
+        val stockState = StockState.toStockState(it)
+        view.text = stockState.state
+    }
+}
+
+@BindingAdapter("menuBackgroundByStockState")
+fun setMenuStateBackgroundByStockState(view: ConstraintLayout, stockWithState: String?) {
+    stockWithState?.let {
+        val stockState = StockState.toStockState(it)
+        view.setBackgroundResource(stockState.drawable)
+    }
+}
+
+@BindingAdapter("textByStockState")
 fun setTextByStockState(view: TextView, stockWithStateVO: StockWithStateVO) {
     val stockState = StockState.toStockState(stockWithStateVO.state)
     view.text = stockState.state
