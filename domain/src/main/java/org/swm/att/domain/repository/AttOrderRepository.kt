@@ -20,4 +20,5 @@ interface AttOrderRepository {
     suspend fun getPreOrders(storeId: Int, page: Int, date: String?): Flow<Result<PreOrdersVO>>
     suspend fun getPreOrderBill(storeId: Int, preOrderId: Int): Flow<Result<PreOrderBillVO>>
     suspend fun deletePreorder(storeId: Int, preorderId: Int): Flow<Result<PreorderIdVO>>
+    suspend fun updatePreorder(storeId: Int, preOrderedMenus: PreOrderedMenusVO): Flow<Result<PreorderIdVO>>
 }

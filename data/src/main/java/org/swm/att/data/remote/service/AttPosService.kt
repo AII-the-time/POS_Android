@@ -157,4 +157,10 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Path("menuId") menuId: Int
     ): Response<MenuIdDTO>
+
+    @PUT("preorder")
+    suspend fun updatePreorder(
+        @Header("storeId") storeId: Int,
+        @Body preOrderedMenus: PreOrderedMenusDTO
+    ): Response<PreorderIdDTO>
 }

@@ -160,4 +160,31 @@ class AttOrderRepositoryImpl @Inject constructor(
             emit(Result.failure(e))
         }
     }
+
+    override suspend fun updatePreorder(
+        storeId: Int,
+        preOrderedMenus: PreOrderedMenusVO
+    ): Flow<Result<PreorderIdVO>> = flow {
+        try {
+            val preOrderedMenusDTO = PreOrderedMenusDTO(
+                totalPrice = preOrderedMenus.totalPrice,
+                menus = preOrderedMenus.menus?.map {
+                    OrderedMenuDTO(
+                        id = it.id,
+                        count = it.count ?: 1,
+                        options = it.options.map { option -> option.id },
+                        detail = it.detail
+                    )
+                } ?: listOf(),
+                phone = preOrderedMenus.phone,
+                memo = preOrderedMenus.memo,
+                orderedFor = preOrderedMenus.orderedFor
+            )
+            orderDataSource.updatePreorder(storeId, preOrderedMenusDTO).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
 }

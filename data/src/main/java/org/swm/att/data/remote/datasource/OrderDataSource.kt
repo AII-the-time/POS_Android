@@ -52,4 +52,8 @@ class OrderDataSource @Inject constructor(
     suspend fun deletePreorder(storeId: Int, preorderId: Int): Flow<PreorderIdDTO> {
         return checkResponse(attPosService.deletePreorder(storeId, preorderId))
     }
+
+    suspend fun updatePreorder(storeId: Int, preOrderedMenus: PreOrderedMenusDTO): Flow<PreorderIdDTO> {
+        return checkResponse(attPosService.updatePreorder(storeId, preOrderedMenus))
+    }
 }
