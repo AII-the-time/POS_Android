@@ -48,6 +48,10 @@ class PreorderRegisterFragment : BaseFragment<FragmentPreorderRegisterBinding>(R
 
     private fun setDataBinding() {
         binding.preorderRegisterViewModel = preorderRegisterViewModel
+        if (navArgs.preorderId != -1) {
+            binding.isModify = true
+        }
+        binding.tvPreorderClientPhoneNum.setText(navArgs.customerPhoneNumber)
     }
 
     private fun setOrderedMenus() {
@@ -58,10 +62,24 @@ class PreorderRegisterFragment : BaseFragment<FragmentPreorderRegisterBinding>(R
     }
 
     private fun setModifyPreorderBtnClickListener() {
+        val preorderId = navArgs.preorderId
+        val customerPhoneNumber = navArgs.customerPhoneNumber
         binding.btnModifyPreorderList.setOnClickListener {
-            preorderRegisterViewModel.orderedMenus.value?.let {
-                val action = PreorderRegisterFragmentDirections.actionFragmentPreorderRegisterToFragmentHome(it)
-                findNavController().navigate(action)
+            if (preorderId != -1) {
+                preorderRegisterViewModel.orderedMenus.value?.let {
+                    val action = PreorderRegisterFragmentDirections.actionFragmentPreorderRegisterToFragmentHome(
+                        selectedMenus = it,
+                        isModify = true,
+                        preOrderId = preorderId,
+                        customerPhoneNumber = customerPhoneNumber
+                    )
+                    findNavController().navigate(action)
+                }
+            } else {
+                preorderRegisterViewModel.orderedMenus.value?.let {
+                    val action = PreorderRegisterFragmentDirections.actionFragmentPreorderRegisterToFragmentHome(it)
+                    findNavController().navigate(action)
+                }
             }
         }
     }
@@ -75,7 +93,7 @@ class PreorderRegisterFragment : BaseFragment<FragmentPreorderRegisterBinding>(R
 
     private fun setClPhoneNumClickListener() {
         binding.tvPreorderClientPhoneNum.setOnClickListener {
-            val inputUserPhoneNumDialog = PreorderInputUserPhoneNumDialog(preorderRegisterViewModel)
+            val inputUserPhoneNumDialog = PreorderInputUserPhoneNumDialog(preorderRegisterViewModel, navArgs.customerPhoneNumber)
             inputUserPhoneNumDialog.show(parentFragmentManager, "inputUserPhoneNumDialog")
         }
     }

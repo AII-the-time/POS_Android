@@ -135,6 +135,7 @@
     <string name="tv_customer_request_not_exist">요청사항 없음</string>
     <string name="tv_save_modification">주문 저장</string>
     <string name="tv_preorder_register_des">예약 주문 등록</string>
+    <string name="tv_preorder_modify_des">예약 주문 수정</string>
     <string name="tv_preorder_info_des">수령 정보</string>
     <string name="tv_preorder_date_des">예약 날짜</string>
     <string name="tv_preorder_time_des">수령 시간</string>
