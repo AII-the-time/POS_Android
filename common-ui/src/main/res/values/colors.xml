@@ -11,4 +11,8 @@
     <color name="key_pad_gray">#F3F3F3</color>
     <color name="key_pad_dark_gray">#333333</color>
     <color name="chip_background_gray">#DDDDDD</color>
+    <color name="stock_caution">#FFF736</color>
+    <color name="out_of_stock">#FF9C9C</color>
+    <color name="stock_enough">#447F64</color>
+    <color name="stock_none">#808080</color>
 </resources>
