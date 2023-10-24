@@ -56,4 +56,15 @@ object AlarmManager {
             alarmManager.cancel(it)
         }
     }
+
+    fun updateAlarm(
+        context: Context,
+        preorderDate: String,
+        phoneNumber: String,
+        totalOrderCount: Int,
+        preorderId: Int
+    ) {
+        cancelAlarm(context, preorderId)
+        setPreorderAlarm(context, preorderDate, phoneNumber, totalOrderCount, preorderId)
+    }
 }
