@@ -172,7 +172,8 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
             stockViewModel.changeModifyState(true)
         }
         binding.btnDeleteStock.setOnClickListener {
-            stockViewModel.deleteStock()
+            val dialog = DialogStockDeleteConfirm(stockViewModel)
+            dialog.show(childFragmentManager, "DialogStockDeleteConfirm")
         }
     }
 
@@ -273,6 +274,7 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
                         is UiState.Success -> {
                             Toast.makeText(requireContext(), "재고 삭제 완료", Toast.LENGTH_SHORT).show()
                             initStockData()
+                            binding.stockDetail = null
                         }
                         is UiState.Loading -> {/* nothing */}
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
