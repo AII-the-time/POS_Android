@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter.getStringByDateTimeBaseFormatter
+import org.swm.att.common_ui.util.getIntOrNull
 import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.StockIdVO
@@ -136,11 +137,11 @@ class StockViewModel @Inject constructor(
             return StockVO(
                 id = id,
                 name = requireNotNull(name),
-                amount = (perAmount ?: "0").toInt() * (currentAmount ?: "0").toInt(),
+                amount = if (perAmount != null && currentAmount != null ) {perAmount.toInt() * currentAmount.toInt()} else null,
                 unit = unit,
                 price = perPrice,
-                currentAmount = (currentAmount ?: "0").toInt(),
-                noticeThreshold = (noticeThreshold ?: "0").toInt(),
+                currentAmount = currentAmount.getIntOrNull(),
+                noticeThreshold = noticeThreshold.getIntOrNull(),
                 updatedAt = inventoryDate
             )
         } catch (e: NumberFormatException) {
