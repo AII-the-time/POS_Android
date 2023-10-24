@@ -50,11 +50,11 @@ class PreorderRegisterViewModel @Inject constructor(
     fun postPreOrder(phoneNumber: String, memo: String?) {
         viewModelScope.launch(attExceptionHandler) {
             val preOrderedMenus = PreOrderedMenusVO(
-                totalPrice.value ?: "0",
-                orderedMenus.value?.menus ?: listOf(),
-                phoneNumber,
-                memo,
-                getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime())
+                totalPrice = totalPrice.value ?: "0",
+                menus = orderedMenus.value?.menus ?: listOf(),
+                phone = phoneNumber,
+                memo = memo,
+                orderedFor = getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime())
             )
             val storeId = attPosUserRepository.getStoreId()
             attOrderRepository.postPreOrder(storeId, preOrderedMenus).collect { result ->
@@ -75,19 +75,20 @@ class PreorderRegisterViewModel @Inject constructor(
         }
     }
 
-    fun updatePreorder(phoneNumber: String, memo: String?) {
+    fun updatePreorder(phoneNumber: String, memo: String?, preorderId: Int) {
         viewModelScope.launch(attExceptionHandler) {
             val preOrderedMenus = PreOrderedMenusVO(
-                totalPrice.value ?: "0",
-                orderedMenus.value?.menus ?: listOf(),
-                phoneNumber,
-                memo,
-                getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime())
+                id = preorderId,
+                totalPrice = totalPrice.value ?: "0",
+                menus = orderedMenus.value?.menus ?: listOf(),
+                phone = phoneNumber,
+                memo = memo,
+                orderedFor = getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime())
             )
             val storeId = attPosUserRepository.getStoreId()
             attOrderRepository.updatePreorder(storeId, preOrderedMenus).collect { result ->
                 result.onSuccess {
-                    _postPreOrderState.value = UiState.Success()
+                    _updatePreorderState.value = UiState.Success()
                     resetPreorderToAlarmManager(
                         getStringByDateTimeBaseFormatter(preorderDate.value.getUTCDateTime()),
                         phoneNumber,
@@ -96,7 +97,7 @@ class PreorderRegisterViewModel @Inject constructor(
                     )
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "예약 주문 수정 실패"
-                    _postPreOrderState.value = UiState.Error(errorMsg)
+                    _updatePreorderState.value = UiState.Error(errorMsg)
                 }
             }
         }

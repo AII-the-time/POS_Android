@@ -30,10 +30,12 @@ class PreorderRegisterFragment : BaseFragment<FragmentPreorderRegisterBinding>(R
         initPreorderRecyclerView()
         setDataBinding()
         setOrderedMenus()
+        setCustomerPhoneNumberForPreorder()
         setModifyPreorderBtnClickListener()
         setClDateClickListener()
         setClPhoneNumClickListener()
         setBtnPreOrderRegisterClickListener()
+        setPreorderUpdateBtnClickListener()
         setObserver()
     }
 
@@ -51,13 +53,18 @@ class PreorderRegisterFragment : BaseFragment<FragmentPreorderRegisterBinding>(R
         if (navArgs.preorderId != -1) {
             binding.isModify = true
         }
-        binding.tvPreorderClientPhoneNum.setText(navArgs.customerPhoneNumber)
     }
 
     private fun setOrderedMenus() {
         navArgs.orderedMenus?.let {
             orderedMenuAdapter.submitList(it.menus)
             preorderRegisterViewModel.setOrderedMenus(it)
+        }
+    }
+
+    private fun setCustomerPhoneNumberForPreorder() {
+        navArgs.customerPhoneNumber?.let {
+            preorderRegisterViewModel.setPhoneNumber(it)
         }
     }
 
@@ -110,6 +117,18 @@ class PreorderRegisterFragment : BaseFragment<FragmentPreorderRegisterBinding>(R
         }
     }
 
+    private fun setPreorderUpdateBtnClickListener() {
+        binding.btnPreorderUpdate.setOnClickListener {
+            val phoneNumber = binding.tvPreorderClientPhoneNum.text.toString()
+            val memo = binding.edtPreorderDetail.text.toString()
+            if (phoneNumber.isNotEmpty()) {
+                preorderRegisterViewModel.updatePreorder(phoneNumber, memo, navArgs.preorderId)
+            } else {
+                Toast.makeText(requireContext(), "휴대폰 번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun setObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -133,6 +152,22 @@ class PreorderRegisterFragment : BaseFragment<FragmentPreorderRegisterBinding>(R
                         ).show()
                     }
 
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preorderRegisterViewModel.updatePreorderState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            Toast.makeText(requireContext(), "예약 주문 수정 완료", Toast.LENGTH_SHORT).show()
+                            val action = PreorderRegisterFragmentDirections.actionFragmentPreorderRegisterToFragmentPreorder(navArgs.preorderId)
+                            findNavController().navigate(action)
+                        }
+                        is UiState.Loading -> { /* nothing */ }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

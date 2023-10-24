@@ -94,15 +94,17 @@ class HomeViewModel @Inject constructor(
 
     fun minusSelectedMenuItem(menu: OrderedMenuVO) {
         val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
-        val count = selectedMenuMap[menu]!!
+        selectedMenuMap[menu]?.let {
+            val count = selectedMenuMap[menu]!!
 
-        if (count == 1) {
-            selectedMenuMap.remove(menu)
-        } else {
-            selectedMenuMap[menu] = count - 1
+            if (count == 1) {
+                selectedMenuMap.remove(menu)
+            } else {
+                selectedMenuMap[menu] = count - 1
+            }
+
+            _selectedMenuMap.postValue(selectedMenuMap)
         }
-
-        _selectedMenuMap.postValue(selectedMenuMap)
     }
 
     fun plusSelectedMenuItem(menu: OrderedMenuVO) {
