@@ -188,4 +188,14 @@ class AttMenuRepositoryImpl @Inject constructor(
             emit(Result.failure(e))
         }
     }
+
+    override suspend fun deleteMenu(storeId: Int, menuId: Int): Flow<Result<MenuIdVO>> = flow {
+        try {
+            menuDataSource.deleteMenu(storeId, menuId).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
 }
