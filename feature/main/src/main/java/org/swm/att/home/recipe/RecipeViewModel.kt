@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.state.UiState
@@ -47,6 +48,8 @@ class RecipeViewModel @Inject constructor(
     val currentSelectedMenuId: LiveData<Int> = _currentSelectedMenuId
     private val _postMenuState = MutableStateFlow<UiState<MenuIdVO>>(UiState.Loading)
     val postMenuState: StateFlow<UiState<MenuIdVO>> = _postMenuState
+    private val _deleteMenuState = MutableStateFlow<UiState<MenuIdVO>>(UiState.Loading)
+    val deleteMenuState: StateFlow<UiState<MenuIdVO>> = _deleteMenuState
 
     //option
     private val _getAllOfOptionState = MutableStateFlow<UiState<OptionListVO>>(UiState.Loading)
@@ -67,6 +70,7 @@ class RecipeViewModel @Inject constructor(
     private val _recipeMapForNewMenu = MutableLiveData<MutableMap<Int, RecipeVO>>()
     val recipeMapForNewMenu: LiveData<MutableMap<Int, RecipeVO>> = _recipeMapForNewMenu
     private var storeId: Int? = null
+    private var lastSelectedMenuId: Int? = null
 
     //category
     fun postCategory(name: String) {
@@ -106,6 +110,7 @@ class RecipeViewModel @Inject constructor(
 
     //menu
     override fun getSelectedItem(selectedItemId: Int) {
+        lastSelectedMenuId = selectedItemId
         _selectedMenuInfo.value = UiState.Loading
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getMenuInfo(getStoreId(), selectedItemId).collect() { result ->
@@ -115,6 +120,21 @@ class RecipeViewModel @Inject constructor(
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "메뉴 상세 불러오기 실패"
                     _selectedMenuInfo.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
+
+    fun deleteMenu() {
+        viewModelScope.launch(attExceptionHandler) {
+            lastSelectedMenuId?.let { id ->
+                attMenuRepository.deleteMenu(getStoreId(), id).collect { result ->
+                    result.onSuccess {
+                        _deleteMenuState.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "메뉴 삭제 실패"
+                        _deleteMenuState.value = UiState.Error(errorMsg)
+                    }
                 }
             }
         }

@@ -117,15 +117,9 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
         }
 
-        binding.btnRegisterRecipe.setOnClickListener {
-//            recipeViewModel.changeModifyState()
-            /* todo */
-            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
-        }
-
         binding.btnDeleteRecipe.setOnClickListener {
-            /* todo */
-            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
+            val dialog = MenuDeleteConfirmDialog(recipeViewModel)
+            dialog.show(childFragmentManager, "MenuDeleteConfirmDialog")
         }
     }
 
@@ -327,6 +321,21 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                                 }
                                 recipeViewModel.addNewRecipe(newStock)
                             }
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.deleteMenuState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            Toast.makeText(requireContext(), "메뉴 삭제 완료", Toast.LENGTH_SHORT).show()
+                            initData()
                         }
                         is UiState.Loading -> {/* nothing */}
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
