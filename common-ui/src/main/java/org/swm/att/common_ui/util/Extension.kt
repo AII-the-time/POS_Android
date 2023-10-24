@@ -31,3 +31,11 @@ fun String?.getValueOrNull(): String? {
         this
     }
 }
+
+fun String?.getIntOrNull(): Int? {
+    return if (this.isNullOrEmpty()) {
+        null
+    } else {
+        this.toInt()
+    }
+}
