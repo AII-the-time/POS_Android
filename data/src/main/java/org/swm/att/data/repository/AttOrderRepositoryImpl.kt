@@ -103,6 +103,7 @@ class AttOrderRepositoryImpl @Inject constructor(
     ): Flow<Result<PreorderIdVO>> = flow {
         try {
             val preOrderedMenusDTO = PreOrderedMenusDTO(
+                id = null,
                 totalPrice = preOrderedMenus.totalPrice,
                 menus = preOrderedMenus.menus?.map {
                     OrderedMenuDTO(
@@ -167,6 +168,7 @@ class AttOrderRepositoryImpl @Inject constructor(
     ): Flow<Result<PreorderIdVO>> = flow {
         try {
             val preOrderedMenusDTO = PreOrderedMenusDTO(
+                id = preOrderedMenus.id,
                 totalPrice = preOrderedMenus.totalPrice,
                 menus = preOrderedMenus.menus?.map {
                     OrderedMenuDTO(
