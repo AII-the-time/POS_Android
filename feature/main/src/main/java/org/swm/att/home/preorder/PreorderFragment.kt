@@ -164,7 +164,7 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
 
     private fun setCancelPreorderBtnClickListener() {
         binding.btnCancelPreorder.setOnClickListener {
-            val dialog = PreorderDeleteConfirmDialog(preorderViewModel)
+            val dialog = DialogPreorderDeleteConfirm(preorderViewModel)
             dialog.show(childFragmentManager, "PreorderDeleteConfirmDialog")
         }
     }
