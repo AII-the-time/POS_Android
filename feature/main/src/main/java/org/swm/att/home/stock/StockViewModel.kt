@@ -40,6 +40,8 @@ class StockViewModel @Inject constructor(
     val postNewStockState: StateFlow<UiState<StockIdVO>> = _postNewStockState
     private val _updateStockState = MutableStateFlow<UiState<StockIdVO>>(UiState.Loading)
     val updateStockState: StateFlow<UiState<StockIdVO>> = _updateStockState
+    private val _deleteStockState = MutableStateFlow<UiState<StockIdVO>>(UiState.Loading)
+    val deleteStockState: StateFlow<UiState<StockIdVO>> = _deleteStockState
 
     //stock list
     private var allStocks: List<StockWithStateVO> = arrayListOf()
@@ -166,6 +168,22 @@ class StockViewModel @Inject constructor(
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "재고 가져오기 실패"
                     _getStockWithStateListState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
+
+    fun deleteStock() {
+        lastSelectedStockId?.let { id ->
+            viewModelScope.launch(attExceptionHandler) {
+                attMenuRepository.deleteStock(getStoreId(), id).collect { result ->
+                    result.onSuccess {
+                        _deleteStockState.value = UiState.Success(it)
+                    }.onFailure {
+                        Log.d("deleteStock", "deleteStock: ${it}")
+                        val errorMsg = if (it is HttpResponseException) it.message else "재고 삭제 실패"
+                        _deleteStockState.value = UiState.Error(errorMsg)
+                    }
                 }
             }
         }
