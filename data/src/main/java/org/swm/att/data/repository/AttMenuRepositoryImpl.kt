@@ -16,8 +16,8 @@ import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.StockIdVO
 import org.swm.att.domain.entity.response.StockVO
-import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.domain.entity.response.StockWithMixedListVO
+import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.domain.entity.response.StockWithStateListVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
@@ -172,6 +172,16 @@ class AttMenuRepositoryImpl @Inject constructor(
                 menus = arrayListOf()
             )
             menuDataSource.updateStock(storeId, stockDTO).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun deleteStock(storeId: Int, stockId: Int): Flow<Result<StockIdVO>> = flow {
+        try {
+            menuDataSource.deleteStock(storeId, stockId).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {

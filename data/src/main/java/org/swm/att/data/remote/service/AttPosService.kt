@@ -21,8 +21,10 @@ import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.data.remote.response.StockIdDTO
 import org.swm.att.data.remote.response.StockWithMixedListDTO
 import org.swm.att.data.remote.response.StockWithStateListDTO
+import org.swm.att.data.remote.response.StoreIdDTO
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -138,5 +140,11 @@ interface AttPosService {
     suspend fun updateStock(
         @Header("storeId") storeId: Int,
         @Body stock: StockDTO
+    ): Response<StockIdDTO>
+
+    @PUT("stock/{stockId}")
+    suspend fun deleteStock(
+        @Header("storeId") storeId: Int,
+        @Path("stockId") stockId: Int
     ): Response<StockIdDTO>
 }

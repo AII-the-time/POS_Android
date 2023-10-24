@@ -60,7 +60,11 @@ class MenuDataSource @Inject constructor(
         return checkResponse(attPosService.postNewStock(storeId, newStock))
     }
 
-    suspend fun updateStock(storeId: Int, stock:StockDTO): Flow<StockIdDTO> {
+    suspend fun updateStock(storeId: Int, stock: StockDTO): Flow<StockIdDTO> {
         return checkResponse(attPosService.updateStock(storeId, stock))
+    }
+
+    suspend fun deleteStock(storeId: Int, stockId: Int): Flow<StockIdDTO> {
+        return checkResponse(attPosService.deleteStock(storeId, stockId))
     }
 }
