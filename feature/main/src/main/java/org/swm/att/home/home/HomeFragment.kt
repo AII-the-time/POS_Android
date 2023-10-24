@@ -173,8 +173,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setModifyPreorderBtnClickListener() {
         binding.btnModificationComplete.setOnClickListener {
-            //주문 내역 업데이트 api 연결 필요
-            homeViewModel.clearSelectedMenuList()
+            val action = HomeFragmentDirections.actionFragmentHomeToFragmentPreorderRegister(
+                homeViewModel.getOrderedMenusVO(),
+                args.preOrderId,
+                args.customerPhoneNumber
+            )
+            findNavController().navigate(action)
         }
     }
 

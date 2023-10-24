@@ -196,6 +196,8 @@ class PreorderViewModel @Inject constructor(
         _selectedPreorderInfoData.postValue(null)
     }
 
+    fun getLastSelectedPreorderId() = lastSelectedPreorderId
+
     private suspend fun getStoreId(): Int {
         if (storeId == null) {
             storeId = attPosUserRepository.getStoreId()

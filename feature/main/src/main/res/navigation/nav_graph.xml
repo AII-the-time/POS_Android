@@ -204,6 +204,15 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/fragment_home"/>
+        <argument
+            android:name="preorderId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="customerPhoneNumber"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
 </navigation>
