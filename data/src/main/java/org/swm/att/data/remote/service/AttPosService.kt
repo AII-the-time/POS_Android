@@ -17,14 +17,12 @@ import org.swm.att.data.remote.response.PreOrderBillDTO
 import org.swm.att.data.remote.response.PreOrdersDTO
 import org.swm.att.data.remote.response.PreorderIdDTO
 import org.swm.att.data.remote.response.StockDTO
-import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.data.remote.response.StockIdDTO
+import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.data.remote.response.StockWithMixedListDTO
 import org.swm.att.data.remote.response.StockWithStateListDTO
-import org.swm.att.data.remote.response.StoreIdDTO
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -147,4 +145,10 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Path("stockId") stockId: Int
     ): Response<StockIdDTO>
+
+    @PUT("preorder/{preOrderId}")
+    suspend fun deletePreorder(
+        @Header("storeId") storeId: Int,
+        @Path("preOrderId") preorderId: Int
+    ): Response<PreorderIdDTO>
 }
