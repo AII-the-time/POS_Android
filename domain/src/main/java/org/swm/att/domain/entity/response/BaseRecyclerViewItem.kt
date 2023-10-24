@@ -39,6 +39,7 @@ data class MenuVO(
     override val viewType: String = "MENU",
     val name: String,
     val price: Int,
+    val stockState: String,
     val option: List<OptionVO>,
     val detail: String? = null,
     var isFocused: Boolean = false
