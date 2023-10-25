@@ -191,9 +191,9 @@ class AttOrderRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteOrder(storeId: Int, orderId: Int): Flow<Result<OrderIdVO>> = flow {
+    override suspend fun cancelOrder(storeId: Int, orderId: Int): Flow<Result<OrderIdVO>> = flow {
         try {
-            orderDataSource.deleteOrder(storeId, orderId).collect {
+            orderDataSource.cancelOrder(storeId, orderId).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {

@@ -166,7 +166,7 @@ interface AttPosService {
     ): Response<PreorderIdDTO>
 
     @PUT("order/{orderId}")
-    suspend fun deleteOrder(
+    suspend fun cancelOrder(
         @Header("storeId") storeId: Int,
         @Path("orderId") orderId: Int
     ): Response<OrderIdDTO>

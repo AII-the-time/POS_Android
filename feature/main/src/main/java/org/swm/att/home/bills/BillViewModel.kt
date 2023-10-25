@@ -102,10 +102,10 @@ class BillViewModel @Inject constructor(
         }
     }
 
-    fun deleteOrder() {
+    fun cancelOrder() {
         lastSelectedOrderId?.let {  id ->
             viewModelScope.launch(attExceptionHandler) {
-                attOrderRepository.deleteOrder(getStoreId(), id).collect { result ->
+                attOrderRepository.cancelOrder(getStoreId(), id).collect { result ->
                     result.onSuccess {
                         _deleteBillState.value = UiState.Success(it)
                     }.onFailure {

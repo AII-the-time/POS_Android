@@ -7,6 +7,6 @@ class BillCancelConfirmDialog(
     private val billViewModel: BillViewModel
 ): BaseConfirmDialog(R.string.tv_confirm_bill_cancel_text) {
     override fun deleteItem() {
-        billViewModel.deleteOrder()
+        billViewModel.cancelOrder()
     }
 }
