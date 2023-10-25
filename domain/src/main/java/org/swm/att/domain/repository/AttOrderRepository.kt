@@ -5,6 +5,7 @@ import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PaymentVO
 import org.swm.att.domain.entity.request.PreOrderedMenusVO
 import org.swm.att.domain.entity.response.OrderBillsVO
+import org.swm.att.domain.entity.response.OrderIdVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.entity.response.OrderVO
 import org.swm.att.domain.entity.response.PreOrderBillVO
@@ -21,4 +22,5 @@ interface AttOrderRepository {
     suspend fun getPreOrderBill(storeId: Int, preOrderId: Int): Flow<Result<PreOrderBillVO>>
     suspend fun deletePreorder(storeId: Int, preorderId: Int): Flow<Result<PreorderIdVO>>
     suspend fun updatePreorder(storeId: Int, preOrderedMenus: PreOrderedMenusVO): Flow<Result<PreorderIdVO>>
+    suspend fun deleteOrder(storeId: Int, orderId: Int): Flow<Result<OrderIdVO>>
 }

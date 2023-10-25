@@ -12,6 +12,7 @@ import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PaymentVO
 import org.swm.att.domain.entity.request.PreOrderedMenusVO
 import org.swm.att.domain.entity.response.OrderBillsVO
+import org.swm.att.domain.entity.response.OrderIdVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.entity.response.OrderVO
 import org.swm.att.domain.entity.response.PreOrderBillVO
@@ -183,6 +184,16 @@ class AttOrderRepositoryImpl @Inject constructor(
                 orderedFor = preOrderedMenus.orderedFor
             )
             orderDataSource.updatePreorder(storeId, preOrderedMenusDTO).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun deleteOrder(storeId: Int, orderId: Int): Flow<Result<OrderIdVO>> = flow {
+        try {
+            orderDataSource.deleteOrder(storeId, orderId).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {

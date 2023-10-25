@@ -6,11 +6,13 @@ import org.swm.att.data.remote.request.PaymentDTO
 import org.swm.att.data.remote.request.PreOrderedMenusDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
 import org.swm.att.data.remote.response.OrderDTO
+import org.swm.att.data.remote.response.OrderIdDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
 import org.swm.att.data.remote.response.PreOrderBillDTO
 import org.swm.att.data.remote.response.PreOrdersDTO
 import org.swm.att.data.remote.response.PreorderIdDTO
 import org.swm.att.data.remote.service.AttPosService
+import org.swm.att.domain.entity.response.OrderIdVO
 import javax.inject.Inject
 
 class OrderDataSource @Inject constructor(
@@ -55,5 +57,9 @@ class OrderDataSource @Inject constructor(
 
     suspend fun updatePreorder(storeId: Int, preOrderedMenus: PreOrderedMenusDTO): Flow<PreorderIdDTO> {
         return checkResponse(attPosService.updatePreorder(storeId, preOrderedMenus))
+    }
+
+    suspend fun deleteOrder(store:Int, orderId: Int): Flow<OrderIdDTO> {
+        return checkResponse(attPosService.deleteOrder(store, orderId))
     }
 }
