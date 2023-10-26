@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseSelectableViewViewModel
 import org.swm.att.common_ui.state.UiState
@@ -18,12 +17,14 @@ import org.swm.att.domain.entity.response.CategoryVO
 import org.swm.att.domain.entity.response.MenuIdVO
 import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
+import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.entity.response.StockIdVO
 import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.domain.entity.response.StockWithMixedListVO
 import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttPosUserRepository
+import org.swm.att.home.stock.StockFragment
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,6 +51,8 @@ class RecipeViewModel @Inject constructor(
     val postMenuState: StateFlow<UiState<MenuIdVO>> = _postMenuState
     private val _deleteMenuState = MutableStateFlow<UiState<MenuIdVO>>(UiState.Loading)
     val deleteMenuState: StateFlow<UiState<MenuIdVO>> = _deleteMenuState
+    private val _updateMenuState = MutableStateFlow<UiState<MenuIdVO>>(UiState.Loading)
+    val updateMenuState: StateFlow<UiState<MenuIdVO>> = _updateMenuState
 
     //option
     private val _getAllOfOptionState = MutableStateFlow<UiState<OptionListVO>>(UiState.Loading)
@@ -116,6 +119,7 @@ class RecipeViewModel @Inject constructor(
             attMenuRepository.getMenuInfo(getStoreId(), selectedItemId).collect() { result ->
                 result.onSuccess {
                     initRecipeMap(it.recipe)
+                    initOptionList(it.option)
                     _selectedMenuInfo.value = UiState.Success(it)
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "메뉴 상세 불러오기 실패"
@@ -156,7 +160,7 @@ class RecipeViewModel @Inject constructor(
     fun postNewMenu(name: String?, price: String?) {
         viewModelScope.launch(attExceptionHandler) {
             try {
-                val newMenuItem = checkCreateNewMenu(name, price)
+                val newMenuItem = checkCreateNewMenu(null, name, price)
                 attMenuRepository.postNewMenu(getStoreId(), newMenuItem).collect { result ->
                     result.onSuccess {
                         _postMenuState.value = UiState.Success(it)
@@ -167,6 +171,24 @@ class RecipeViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _postMenuState.value = UiState.Error(e.message ?: "메뉴 추가 실패")
+            }
+        }
+    }
+
+    fun updateMenu(name: String?, price: String?) {
+        viewModelScope.launch(attExceptionHandler) {
+            try {
+                val updateMenuItem = checkCreateNewMenu(lastSelectedMenuId, name, price)
+                attMenuRepository.updateMenu(getStoreId(), updateMenuItem).collect { result ->
+                    result.onSuccess {
+                        _updateMenuState.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "메뉴 수정 실패"
+                        _updateMenuState.value = UiState.Error(errorMsg)
+                    }
+                }
+            } catch (e: Exception) {
+                _updateMenuState.value = UiState.Error(e.message ?: "메뉴 수정 실패")
             }
         }
     }
@@ -212,9 +234,10 @@ class RecipeViewModel @Inject constructor(
         _selectedMenuId.postValue(currentSelectedMenuId.value)
     }
 
-    private fun checkCreateNewMenu(name: String?, price: String?): NewMenuVO {
+    private fun checkCreateNewMenu(id: Int?, name: String?, price: String?): NewMenuVO {
         try {
             return NewMenuVO(
+                id = id,
                 name = requireNotNull(name),
                 price = requireNotNull(price).toInt(),
                 categoryId = requireNotNull(_selectedCategory.value?.categoryId),
@@ -235,6 +258,12 @@ class RecipeViewModel @Inject constructor(
             }
         }
         return _recipeMapForNewMenu.value?.values?.toList()
+    }
+
+    fun getLastSelectedMenu() {
+        lastSelectedMenuId?.let {
+            getSelectedItem(it)
+        }
     }
 
     //option
@@ -292,15 +321,27 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
-    // recipe
+    //recipe
     private fun initRecipeMap(recipes: List<RecipeVO>?) {
         val recipeMap = recipes?.map { it.id to it }?.toMap() ?: emptyMap()
         _recipeMapForNewMenu.postValue(recipeMap.toMutableMap())
     }
 
+    //option
+    private fun initOptionList(option: List<OptionVO>) {
+        selectedOptionList = mutableListOf()
+        option.forEach { optionVO ->
+            optionVO.options.forEach { optionType ->
+                if (optionType.isSelectable) {
+                    addSelectedOption(optionType.id)
+                }
+            }
+        }
+    }
+
     //local value
-    fun changeModifyState() {
-        _isModify.postValue(isModify.value?.not() ?: false)
+    fun changeModifyState(state: Boolean) {
+        _isModify.postValue(state)
     }
 
     fun changeCreateState(state: Boolean) {
@@ -337,5 +378,17 @@ class RecipeViewModel @Inject constructor(
 
     fun setGetAllOfStockStateDefault() {
         _getAllOfStockState.value = UiState.Loading
+    }
+
+    fun getEditState(): String {
+        return if (isCreate.value == true) {
+            StockFragment.CREATE
+        } else {
+            StockFragment.MODIFY
+        }
+    }
+
+    fun resetUpdateStockState() {
+        _updateMenuState.value = UiState.Loading
     }
 }

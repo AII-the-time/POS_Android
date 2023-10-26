@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
+import org.swm.att.common_ui.util.Formatter
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.home.R
@@ -112,14 +113,24 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
 
     private fun setRecipeBtnsClickListener() {
         binding.btnModifyRecipe.setOnClickListener {
-//            recipeViewModel.changeModifyState()
-            /* todo */
-            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
+            recipeViewModel.changeModifyState(true)
         }
 
         binding.btnDeleteRecipe.setOnClickListener {
             val dialog = MenuDeleteConfirmDialog(recipeViewModel)
             dialog.show(childFragmentManager, "MenuDeleteConfirmDialog")
+        }
+        binding.btnCancel.setOnClickListener {
+            when(recipeViewModel.getEditState()) {
+                CREATE -> {
+                    recipeViewModel.changeCreateState(false)
+                    recipeViewModel.getLastSelectedMenu()
+                }
+                MODIFY -> {
+                    recipeViewModel.changeModifyState(false)
+                    recipeViewModel.getLastSelectedMenu()
+                }
+            }
         }
     }
 
@@ -156,15 +167,19 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     private fun setBtnRegisterRecipeClickListener() {
         binding.btnRegisterRecipe.setOnClickListener {
             val name = binding.edtMenuName.text.toString()
-            val price = binding.edtMenuPrice.text.toString()
+            val price = Formatter.getBaseStringFromCurrencyUnit(binding.edtMenuPrice.text.toString())
             if (name.isNullOrEmpty() || price.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "메뉴 이름과 가격을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else {
-                recipeViewModel.postNewMenu(
-                    binding.edtMenuName.text.toString(),
-                    binding.edtMenuPrice.text.toString()
-                )
+                when(recipeViewModel.getEditState()) {
+                    CREATE -> {
+                        recipeViewModel.postNewMenu(name, price)
+                    }
+                    MODIFY -> {
+                        recipeViewModel.updateMenu(name, price)
+                    }
+                }
             }
         }
     }
@@ -343,6 +358,25 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.updateMenuState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "메뉴 수정 완료", Toast.LENGTH_SHORT).show()
+                                recipeViewModel.changeModifyState(false)
+                                recipeViewModel.resetUpdateStockState()
+                                initData()
+                            }
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun setCategoryChips(categoriesVO: CategoriesVO) {
@@ -399,5 +433,11 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
 
     private fun initData() {
         recipeViewModel.getRegisteredMenus()
+    }
+
+    companion object {
+        //state
+        const val CREATE = "create"
+        const val MODIFY = "modify"
     }
 }

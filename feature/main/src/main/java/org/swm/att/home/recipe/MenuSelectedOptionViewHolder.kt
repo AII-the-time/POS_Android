@@ -61,12 +61,11 @@ class MenuSelectedOptionViewHolder(
     }
 
     private fun setObserver() {
-//        menuRecipeViewModel.isModify.observe(lifecycleOwner) {
-//            binding.cgMenuOptionType.children.iterator().forEach { chip ->
-//                chip.isEnabled = it ?: false
-//                Log.d("MenuSelectedOptionViewHolder", "isModify: ${chip.isEnabled}")
-//            }
-//        }
+        menuRecipeViewModel.isModify.observe(lifecycleOwner) {
+            binding.cgMenuOptionType.children.iterator().forEach { chip ->
+                chip.isEnabled = it ?: false
+            }
+        }
         menuRecipeViewModel.isCreate.observe(lifecycleOwner) {
             binding.cgMenuOptionType.children.iterator().forEach { chip ->
                 chip.isEnabled = it ?: false
