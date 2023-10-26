@@ -47,6 +47,7 @@ class MenuSelectedOptionViewHolder(
                         context.getString(R.string.tv_menu_option_type_with_no_price, type.name)
                     }
                     isChecked = type.isSelectable
+                    isEnabled = false
                     setOnCheckedChangeListener { _, b ->
                         if (b) {
                             menuRecipeViewModel.addSelectedOption(type.id)

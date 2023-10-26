@@ -23,7 +23,7 @@ data class OrderBillVO(
 ) : BaseRecyclerViewItem()
 
 data class MenuWithRecipeVO(
-    override val id: Int,
+    override var id: Int,
     override val viewType: String = "MENU",
     val category: String,
     var menuId: Int? = null,

@@ -25,6 +25,7 @@ import org.swm.att.home.adapter.BaseInteractiveItemAdapter
 import org.swm.att.home.adapter.CustomArrayAdapter
 import org.swm.att.home.adapter.SelectableItemAdapter
 import org.swm.att.home.databinding.FragmentRecipeBinding
+import org.swm.att.home.stock.StockFragment
 
 @AndroidEntryPoint
 class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_recipe) {
@@ -227,9 +228,15 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 recipeViewModel.selectedMenuInfo.collect { uiState ->
                     when (uiState) {
                         is UiState.Success -> {
-                            uiState.data?.let { binding.menuWithRecipe = it
+                            uiState.data?.let {
+                                binding.menuWithRecipe = it
                                 recipesAdapter.submitList(it.recipe)
                                 optionsAdapter.submitList(it.option)
+                                if (recipeViewModel.checkLastSelectedMenu(it.id)) {
+                                    recipesAdapter.notifyDataSetChanged()
+                                    optionsAdapter.notifyDataSetChanged()
+                                }
+                                changeEditState()
                             }
                         }
                         is UiState.Loading -> {/* nothing */ }
@@ -435,9 +442,17 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         recipeViewModel.getRegisteredMenus()
     }
 
+    private fun changeEditState() {
+        when(recipeViewModel.getEditState()) {
+            StockFragment.CREATE -> recipeViewModel.changeCreateState(false)
+            StockFragment.MODIFY -> recipeViewModel.changeModifyState(false)
+        }
+    }
+
     companion object {
         //state
         const val CREATE = "create"
         const val MODIFY = "modify"
+        const val NONE = "none"
     }
 }

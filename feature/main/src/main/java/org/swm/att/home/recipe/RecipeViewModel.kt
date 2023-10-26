@@ -20,11 +20,10 @@ import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.OptionVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.entity.response.StockIdVO
-import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.domain.entity.response.StockWithMixedListVO
+import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttPosUserRepository
-import org.swm.att.home.stock.StockFragment
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,12 +113,12 @@ class RecipeViewModel @Inject constructor(
     //menu
     override fun getSelectedItem(selectedItemId: Int) {
         lastSelectedMenuId = selectedItemId
-        _selectedMenuInfo.value = UiState.Loading
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getMenuInfo(getStoreId(), selectedItemId).collect() { result ->
                 result.onSuccess {
                     initRecipeMap(it.recipe)
                     initOptionList(it.option)
+                    it.id = selectedItemId
                     _selectedMenuInfo.value = UiState.Success(it)
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "메뉴 상세 불러오기 실패"
@@ -262,8 +261,16 @@ class RecipeViewModel @Inject constructor(
 
     fun getLastSelectedMenu() {
         lastSelectedMenuId?.let {
+            _selectedMenuInfo.value = UiState.Loading
             getSelectedItem(it)
         }
+    }
+
+    fun checkLastSelectedMenu(id: Int): Boolean {
+        lastSelectedMenuId?.let { lastSelectedId ->
+            return id == lastSelectedId
+        }
+        return false
     }
 
     //option
@@ -382,9 +389,11 @@ class RecipeViewModel @Inject constructor(
 
     fun getEditState(): String {
         return if (isCreate.value == true) {
-            StockFragment.CREATE
+            RecipeFragment.CREATE
+        } else if (isModify.value == true) {
+            RecipeFragment.MODIFY
         } else {
-            StockFragment.MODIFY
+            RecipeFragment.NONE
         }
     }
 
