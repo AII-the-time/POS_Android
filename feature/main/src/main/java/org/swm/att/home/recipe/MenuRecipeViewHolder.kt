@@ -39,6 +39,7 @@ class MenuRecipeViewHolder(
         val unitArray = binding.root.context.resources.getStringArray(R.array.recipe_unit)
         val arrayAdapter =
             ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_simple_text, unitArray)
+        val unit = if (unit == "Unknown") "-" else unit
         binding.actMenuUnit.apply {
             setAdapter(arrayAdapter)
             setText(unit, false)
