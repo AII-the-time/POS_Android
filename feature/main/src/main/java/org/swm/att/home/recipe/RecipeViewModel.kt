@@ -112,6 +112,9 @@ class RecipeViewModel @Inject constructor(
 
     //menu
     override fun getSelectedItem(selectedItemId: Int) {
+        if (lastSelectedMenuId == selectedItemId) {
+            return
+        }
         lastSelectedMenuId = selectedItemId
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getMenuInfo(getStoreId(), selectedItemId).collect() { result ->
