@@ -61,6 +61,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             setHasFixedSize(false)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recipesAdapter
+            itemAnimator = null
         }
 
         optionsAdapter = BaseInteractiveItemAdapter(recipeViewModel)
@@ -68,6 +69,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             setHasFixedSize(false)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = optionsAdapter
+            itemAnimator = null
         }
     }
 
