@@ -1,6 +1,7 @@
 package org.swm.att.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.data.remote.request.CategoryPostDTO
@@ -60,6 +61,7 @@ class AttMenuRepositoryImpl @Inject constructor(
     override suspend fun postNewMenu(storeId: Int, newMenu: NewMenuVO): Flow<Result<MenuIdVO>> = flow {
         try {
             val menuDTO = NewMenuDTO(
+                id = newMenu.id,
                 name = newMenu.name,
                 price = newMenu.price,
                 categoryId = newMenu.categoryId,
@@ -192,6 +194,32 @@ class AttMenuRepositoryImpl @Inject constructor(
     override suspend fun deleteMenu(storeId: Int, menuId: Int): Flow<Result<MenuIdVO>> = flow {
         try {
             menuDataSource.deleteMenu(storeId, menuId).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun updateMenu(storeId: Int, menu: NewMenuVO): Flow<Result<MenuIdVO>> = flow {
+        try {
+            val menuVO = NewMenuDTO(
+                id = menu.id,
+                name = menu.name,
+                price = menu.price,
+                categoryId = menu.categoryId,
+                option = menu.option,
+                recipe = menu.recipe?.map {
+                    RecipeDTO(
+                        id = it.id,
+                        name = it.name,
+                        isMixed = it.isMixed,
+                        coldRegularAmount = it.coldRegularAmount?.toInt() ?: 0,
+                        unit = it.unit
+                    )
+                }
+            )
+            menuDataSource.updateMenu(storeId, menuVO).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {
