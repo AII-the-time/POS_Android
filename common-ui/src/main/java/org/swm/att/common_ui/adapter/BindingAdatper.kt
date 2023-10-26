@@ -1,10 +1,8 @@
 package org.swm.att.common_ui.adapter
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
@@ -195,7 +193,6 @@ fun setEndDateText(view: TextView, endDateText: Date?) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @BindingAdapter("setEditTextStyleByIsModify")
 fun setEditTextStyleByIsModify(view: AppCompatEditText, isModify: Boolean) {
     view.isEnabled = isModify
