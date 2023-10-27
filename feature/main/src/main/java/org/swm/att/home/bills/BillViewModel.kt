@@ -29,8 +29,8 @@ class BillViewModel @Inject constructor(
     //selected bill info
     private val _selectedBillInfo = MutableStateFlow<UiState<OrderReceiptVO>>(UiState.Loading)
     val selectedBillInfo: StateFlow<UiState<OrderReceiptVO>> = _selectedBillInfo
-    private val _selectedBillInfoData = MutableLiveData<OrderReceiptVO>()
-    val selectedBillInfoData: LiveData<OrderReceiptVO> = _selectedBillInfoData
+    private val _selectedBillInfoData = MutableLiveData<OrderReceiptVO?>()
+    val selectedBillInfoData: LiveData<OrderReceiptVO?> = _selectedBillInfoData
 
     //bill list info
     private val _orderBills = MutableStateFlow<UiState<OrderBillsVO>>(UiState.Loading)
