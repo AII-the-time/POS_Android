@@ -155,7 +155,8 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         true
                     }
                     R.id.item_category_delete -> {
-                        /*todo*/
+                        val dialog = CategoryDeleteConfirmDialog(recipeViewModel)
+                        dialog.show(childFragmentManager, "CategoryDeleteConfirmDialog")
                         true
                     }
                     else -> false
@@ -375,6 +376,23 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                                 Toast.makeText(requireContext(), "메뉴 수정 완료", Toast.LENGTH_SHORT).show()
                                 recipeViewModel.changeModifyState(false)
                                 recipeViewModel.resetUpdateStockState()
+                                initData()
+                            }
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.deleteCategoryState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "카테고리 삭제 완료", Toast.LENGTH_SHORT).show()
                                 initData()
                             }
                         }

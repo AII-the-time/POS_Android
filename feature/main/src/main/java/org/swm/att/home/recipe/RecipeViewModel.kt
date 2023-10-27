@@ -38,6 +38,8 @@ class RecipeViewModel @Inject constructor(
     val postCategoryState: StateFlow<UiState<CategoryIdVO>> = _postCategoryState
     private val _selectedCategory = MutableLiveData<CategoryVO?>()
     val selectedCategory: LiveData<CategoryVO?> = _selectedCategory
+    private val _deleteCategoryState = MutableStateFlow<UiState<CategoryIdVO>>(UiState.Loading)
+    val deleteCategoryState: StateFlow<UiState<CategoryIdVO>> = _deleteCategoryState
 
     //menu
     private val _selectedMenuInfo = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
@@ -83,6 +85,20 @@ class RecipeViewModel @Inject constructor(
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "카테고리 추가 실패"
                     _postCategoryState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
+
+    fun deleteCategory() {
+        viewModelScope.launch(attExceptionHandler) {
+            val categoryId = requireNotNull(_selectedCategory.value?.categoryId)
+            attMenuRepository.deleteCategory(getStoreId(), categoryId).collect { result ->
+                result.onSuccess {
+                    _deleteCategoryState.value = UiState.Success(it)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "카테고리 삭제 실패"
+                    _deleteCategoryState.value = UiState.Error(errorMsg)
                 }
             }
         }
