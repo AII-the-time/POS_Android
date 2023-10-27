@@ -22,6 +22,6 @@ data class RecipeDTO(
         name = name ?: "Unknown",
         isMixed = isMixed ?: false,
         coldRegularAmount = coldRegularAmount.toString() ?: "-1",
-        unit = unit ?: "Unknown"
+        unit = if (unit == "Unknown") "-" else unit ?: "-"
     )
 }

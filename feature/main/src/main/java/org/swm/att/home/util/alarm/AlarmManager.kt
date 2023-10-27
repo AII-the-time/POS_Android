@@ -7,11 +7,10 @@ import android.content.Intent
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.common_ui.util.getUTCDateTime
 import java.util.Calendar
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 object AlarmManager {
-    private val pendingIntentList = mutableListOf<PendingIntent>()
+    private val pendingIntentList = mutableMapOf<Int, PendingIntent>()
 
     fun setPreorderAlarm(
         context: Context,
@@ -31,11 +30,11 @@ object AlarmManager {
             alarmIntent.putExtra("preorderId", preorderId)
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
-                UUID.randomUUID().hashCode(),
+                preorderId,
                 alarmIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
-            pendingIntentList.add(pendingIntent)
+            pendingIntentList[preorderId] = pendingIntent
             alarmManager.setExact(
                 AlarmManager.RTC,
                 alarmTime.time - TimeUnit.MINUTES.toMillis(10),
@@ -46,8 +45,26 @@ object AlarmManager {
 
     fun cancelAllAlarm(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        pendingIntentList.forEach {
+        pendingIntentList.values.forEach {
             alarmManager.cancel(it)
         }
+    }
+
+    fun cancelAlarm(context: Context, preorderId: Int) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        pendingIntentList[preorderId]?.let {
+            alarmManager.cancel(it)
+        }
+    }
+
+    fun updateAlarm(
+        context: Context,
+        preorderDate: String,
+        phoneNumber: String,
+        totalOrderCount: Int,
+        preorderId: Int
+    ) {
+        cancelAlarm(context, preorderId)
+        setPreorderAlarm(context, preorderDate, phoneNumber, totalOrderCount, preorderId)
     }
 }

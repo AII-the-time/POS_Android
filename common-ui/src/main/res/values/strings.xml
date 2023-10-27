@@ -113,7 +113,9 @@
     <string name="tv_week_sat">토</string>
     <string name="tv_week_sun">일</string>
     <string name="tv_bill_filtering_des">기간별 검색</string>
-    <string name="btn_bill_filtering_search">검색</string>
+    <string name="btn_bill_filtering_search">적용</string>
+    <string name="btn_confirm">예</string>
+    <string name="btn_cancel_delete">아니오</string>
     <string name="tv_no_filtering">전체</string>
     <string name="tv_preorder_input_user_info">고객 정보</string>
     <string name="tv_preorder_request_des">요청사항</string>
@@ -133,6 +135,7 @@
     <string name="tv_customer_request_not_exist">요청사항 없음</string>
     <string name="tv_save_modification">주문 저장</string>
     <string name="tv_preorder_register_des">예약 주문 등록</string>
+    <string name="tv_preorder_modify_des">예약 주문 수정</string>
     <string name="tv_preorder_info_des">수령 정보</string>
     <string name="tv_preorder_date_des">예약 날짜</string>
     <string name="tv_preorder_time_des">수령 시간</string>
@@ -192,6 +195,12 @@
     <string name="tv_inventory_date_des">최근 재고\n조사일</string>
     <string name="tv_menu_related_stock_des">관련 메뉴</string>
     <string name="tv_stock_cost_setting_des">원가 설정</string>
+    <string name="tv_confirm_preorder_delete_text">해당 <b>예약 주문</b>을 삭제하시겠습니까?</string>
+    <string name="tv_confirm_stock_delete_text">해당 <b>재고</b>를 삭제하시겠습니까?</string>
+    <string name="tv_confirm_menu_delete_text">해당 <b>메뉴</b>를 삭제하시겠습니까?</string>
+    <string name="tv_confirm_bill_cancel_text">해당 <b>결제 내역</b>을 취소하시겠습니까?</string>
+    <string name="tv_confirm_category_delete_text">카테고리 삭제 시, 포함된 메뉴들도 함께 삭제됩니다!\n해당 <b>카테고리</b>를 삭제하시겠습니까?</string>
+    <string name="btn_category_modify_des">수정 완료</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>

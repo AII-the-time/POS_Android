@@ -8,7 +8,12 @@
         <variable
             name="preorderRegisterViewModel"
             type="org.swm.att.home.home.preorder.PreorderRegisterViewModel" />
+        <variable
+            name="isModify"
+            type="Boolean"
+            android:value="false" />
         <import type="org.swm.att.common_ui.util.Formatter" />
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -510,10 +515,28 @@
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:visibility="@{isModify ? View.INVISIBLE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_preorder_pay_detail_info" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_preorder_update"
+                android:layout_width="280dp"
+                android:layout_height="44dp"
+                android:background="@drawable/shape_round_8"
+                android:backgroundTint="@color/main_color"
+                android:gravity="center"
+                android:text="@string/tv_preorder_modify_des"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:visibility="@{isModify ? View.VISIBLE : View.INVISIBLE}"
+                app:layout_constraintTop_toTopOf="@id/btn_preorder_register"
+                app:layout_constraintBottom_toBottomOf="@id/btn_preorder_register"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
