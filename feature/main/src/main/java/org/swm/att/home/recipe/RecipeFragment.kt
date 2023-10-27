@@ -43,6 +43,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         setRecipeBtnsClickListener()
         setBtnRegisterMenuClickListener()
         setBtnRegisterRecipeClickListener()
+        setBtnUpdateCategoryClickListener()
         setObserver()
         setDataBinding()
         initData()
@@ -151,7 +152,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.item_category_modify -> {
-                        /*todo*/
+                        recipeViewModel.changeCategoryModifyState(true)
                         true
                     }
                     R.id.item_category_delete -> {
@@ -186,6 +187,17 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         }
     }
 
+    private fun setBtnUpdateCategoryClickListener() {
+        binding.btnCategoryUpdate.setOnClickListener {
+            val categoryName = binding.edtCategoryName.text.toString()
+            if (categoryName.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "카테고리 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                recipeViewModel.updateCategory(categoryName)
+            }
+        }
+    }
+
     private fun setObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -202,16 +214,19 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 }
             }
         }
+
         recipeViewModel.currentSelectedMenuId.observe(viewLifecycleOwner) {
             if (it != -1) {
                 registeredMenusAdapter.notifyItemChanged(it)
             }
         }
+
         recipeViewModel.selectedMenuId.observe(viewLifecycleOwner) {
             if (it != -1) {
                 registeredMenusAdapter.notifyItemChanged(it)
             }
         }
+
         recipeViewModel.selectedCategory.observe(viewLifecycleOwner) {
             it?.let {
                 if (it.menus.isEmpty()) {
@@ -219,11 +234,11 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 }
                 registeredMenusAdapter.submitList(it.menus)
                 recipeViewModel.setDefaultSelectedItem()
-                binding.edtCategoryName.setText(
-                    String.format("%s(%d건)", it.category, it.menus.size)
-                )
+                binding.edtCategoryName.setText(String.format("%s", it.category))
+                binding.tvMenuSize.text = String.format("(%s건)", it.menus.size)
             }
         }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 recipeViewModel.selectedMenuInfo.collect { uiState ->
@@ -247,6 +262,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 }
             }
         }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 recipeViewModel.postMenuState.collect { uiState ->
@@ -265,6 +281,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 }
             }
         }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 recipeViewModel.postCategoryState.collect { uiState ->
@@ -281,9 +298,11 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 }
             }
         }
+
         recipeViewModel.recipeMapForNewMenu.observe(viewLifecycleOwner) {
             recipesAdapter.submitList(it.values.toList())
         }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 recipeViewModel.getAllOfOptionState.collect { uiState ->
@@ -302,6 +321,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 }
             }
         }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 recipeViewModel.getAllOfStockState.collect { uiState ->
@@ -399,6 +419,25 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         is UiState.Loading -> {/* nothing */}
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recipeViewModel.updateCategoryState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let {
+                                recipeViewModel.changeCategoryModifyState(false)
+                                Toast.makeText(requireContext(), "카테고리 수정 완료", Toast.LENGTH_SHORT).show()
+                                initData()
+                            }
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             }
         }

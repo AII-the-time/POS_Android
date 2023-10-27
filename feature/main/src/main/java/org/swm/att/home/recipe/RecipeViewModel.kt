@@ -40,6 +40,8 @@ class RecipeViewModel @Inject constructor(
     val selectedCategory: LiveData<CategoryVO?> = _selectedCategory
     private val _deleteCategoryState = MutableStateFlow<UiState<CategoryIdVO>>(UiState.Loading)
     val deleteCategoryState: StateFlow<UiState<CategoryIdVO>> = _deleteCategoryState
+    private val _updateCategoryState = MutableStateFlow<UiState<CategoryIdVO>>(UiState.Loading)
+    val updateCategoryState: StateFlow<UiState<CategoryIdVO>> = _updateCategoryState
 
     //menu
     private val _selectedMenuInfo = MutableStateFlow<UiState<MenuWithRecipeVO>>(UiState.Loading)
@@ -75,6 +77,8 @@ class RecipeViewModel @Inject constructor(
     val recipeMapForNewMenu: LiveData<MutableMap<Int, RecipeVO>> = _recipeMapForNewMenu
     private var storeId: Int? = null
     private var lastSelectedMenuId: Int? = null
+    private val _isCategoryModify = MutableLiveData(false)
+    val isCategoryModify: LiveData<Boolean> = _isCategoryModify
 
     //category
     fun postCategory(name: String) {
@@ -99,6 +103,20 @@ class RecipeViewModel @Inject constructor(
                 }.onFailure {
                     val errorMsg = if (it is HttpResponseException) it.message else "카테고리 삭제 실패"
                     _deleteCategoryState.value = UiState.Error(errorMsg)
+                }
+            }
+        }
+    }
+
+    fun updateCategory(categoryName: String) {
+        viewModelScope.launch(attExceptionHandler) {
+            val categoryId = requireNotNull(_selectedCategory.value?.categoryId)
+            attMenuRepository.updateCategory(getStoreId(), categoryId, categoryName).collect { result ->
+                result.onSuccess {
+                    _updateCategoryState.value = UiState.Success(it)
+                }.onFailure {
+                    val errorMsg = if (it is HttpResponseException) it.message else "카테고리 수정 실패"
+                    _updateCategoryState.value = UiState.Error(errorMsg)
                 }
             }
         }
@@ -375,6 +393,10 @@ class RecipeViewModel @Inject constructor(
         if (state) {
             _recipeMapForNewMenu.postValue(mutableMapOf())
         }
+    }
+
+    fun changeCategoryModifyState(state: Boolean) {
+        _isCategoryModify.postValue(state)
     }
 
     fun addNewRecipe(stockWithMixedVO: StockWithMixedVO) {
