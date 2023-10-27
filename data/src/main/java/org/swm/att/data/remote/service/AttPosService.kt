@@ -12,13 +12,14 @@ import org.swm.att.data.remote.response.MenuWithRecipeDTO
 import org.swm.att.data.remote.response.OptionListDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
 import org.swm.att.data.remote.response.OrderDTO
+import org.swm.att.data.remote.response.OrderIdDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
 import org.swm.att.data.remote.response.PreOrderBillDTO
 import org.swm.att.data.remote.response.PreOrdersDTO
 import org.swm.att.data.remote.response.PreorderIdDTO
 import org.swm.att.data.remote.response.StockDTO
-import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.data.remote.response.StockIdDTO
+import org.swm.att.data.remote.response.StockWithMixedDTO
 import org.swm.att.data.remote.response.StockWithMixedListDTO
 import org.swm.att.data.remote.response.StockWithStateListDTO
 import retrofit2.Response
@@ -139,4 +140,52 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Body stock: StockDTO
     ): Response<StockIdDTO>
+
+    @PUT("stock/{stockId}")
+    suspend fun deleteStock(
+        @Header("storeId") storeId: Int,
+        @Path("stockId") stockId: Int
+    ): Response<StockIdDTO>
+
+    @PUT("preorder/{preOrderId}")
+    suspend fun deletePreorder(
+        @Header("storeId") storeId: Int,
+        @Path("preOrderId") preorderId: Int
+    ): Response<PreorderIdDTO>
+
+    @PUT("menu/{menuId}")
+    suspend fun deleteMenu(
+        @Header("storeId") storeId: Int,
+        @Path("menuId") menuId: Int
+    ): Response<MenuIdDTO>
+
+    @PUT("preorder")
+    suspend fun updatePreorder(
+        @Header("storeId") storeId: Int,
+        @Body preOrderedMenus: PreOrderedMenusDTO
+    ): Response<PreorderIdDTO>
+
+    @PUT("order/{orderId}")
+    suspend fun cancelOrder(
+        @Header("storeId") storeId: Int,
+        @Path("orderId") orderId: Int
+    ): Response<OrderIdDTO>
+
+    @PUT("menu")
+    suspend fun updateMenu(
+        @Header("storeId") storeId: Int,
+        @Body menu: NewMenuDTO
+    ): Response<MenuIdDTO>
+
+    @PUT("menu/category/{categoryId}")
+    suspend fun deleteCategory(
+        @Header("storeId") storeId: Int,
+        @Path("categoryId") categoryId: Int
+    ): Response<CategoryIdDTO>
+
+    @PUT("menu/category")
+    suspend fun updateCategory(
+        @Header("storeId") storeId: Int,
+        @Body category: CategoryPostDTO
+    ): Response<CategoryIdDTO>
 }

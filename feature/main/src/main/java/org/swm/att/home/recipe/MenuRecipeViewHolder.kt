@@ -13,14 +13,14 @@ import org.swm.att.home.databinding.ItemMenuRecipeBinding
 
 class MenuRecipeViewHolder(
     private val binding: ItemMenuRecipeBinding,
-    private val menuRecipeViewModel: RecipeViewModel
+    private val menuRecipeViewModel: RecipeViewModel,
 ) : BaseInteractiveViewHolder(binding, menuRecipeViewModel) {
-    private lateinit var lifecycleOwner: LifecycleOwner
+    private var owner: LifecycleOwner? = null
 
     init {
         itemView.doOnAttach {
-            binding.recipeViewModel = menuRecipeViewModel
-            lifecycleOwner = it.findViewTreeLifecycleOwner()!!
+            owner = it.findViewTreeLifecycleOwner()
+            binding.lifecycleOwner = owner
         }
     }
 
@@ -41,7 +41,7 @@ class MenuRecipeViewHolder(
             ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_simple_text, unitArray)
         binding.actMenuUnit.apply {
             setAdapter(arrayAdapter)
-            setText(unit, false)
+//            setText(unit, false)
         }
     }
 

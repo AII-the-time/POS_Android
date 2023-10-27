@@ -10,7 +10,8 @@ import org.swm.att.home.databinding.DialogUserPhoneNumInputBinding
 import org.swm.att.home.home.preorder.PreorderRegisterViewModel
 
 class PreorderInputUserPhoneNumDialog(
-    private val preorderRegisterViewModel: PreorderRegisterViewModel
+    private val preorderRegisterViewModel: PreorderRegisterViewModel,
+    private val customerPhoneNumber: String?
 ): BaseDialog<DialogUserPhoneNumInputBinding>(R.layout.dialog_user_phone_num_input) {
     private val phoneNumberViewModel: PhoneNumberViewModel by activityViewModels()
 
@@ -18,6 +19,7 @@ class PreorderInputUserPhoneNumDialog(
         super.onViewCreated(view, savedInstanceState)
         phoneNumberViewModel.clearPhoneNumber()
         initView()
+        setCustomerPhoneNumber()
         setBtnClickListener()
         setUpCustomKeypad()
         setPhoneNumberObserver()
@@ -26,6 +28,12 @@ class PreorderInputUserPhoneNumDialog(
     private fun initView() {
         binding.clEarnMileageBtns.visibility = View.GONE
         binding.tvEarnMileageDes.visibility = View.INVISIBLE
+    }
+
+    private fun setCustomerPhoneNumber() {
+        customerPhoneNumber?.let {
+            phoneNumberViewModel.setPhoneNumber(it)
+        }
     }
 
     private fun setBtnClickListener() {

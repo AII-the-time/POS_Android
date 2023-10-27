@@ -85,48 +85,51 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
                                 preorderMenuOfBillAdapter.submitList(it.orderitems)
                             }
                         }
-
-                        is UiState.Loading -> {/* do nothing */
-                        }
-
-                        is UiState.Error -> Toast.makeText(
-                            requireContext(),
-                            uiState.errorMsg,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        is UiState.Loading -> {/* do nothing */ }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     }
-
                 }
             }
         }
+
         preorderViewModel.currentSelectedPreorderId.observe(viewLifecycleOwner) {
             validPreorderListAdapter.notifyItemChanged(it)
         }
+
         preorderViewModel.selectedPreorderId.observe(viewLifecycleOwner) {
             validPreorderListAdapter.notifyItemChanged(it)
         }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 preorderViewModel.getPreOrdersState.collect { uiState ->
                     when (uiState) {
-                        is UiState.Success -> {/* do nothing */
-                        }
-
-                        is UiState.Loading -> {/* do nothing */
-                        }
-
-                        is UiState.Error -> Toast.makeText(
-                            requireContext(),
-                            uiState.errorMsg,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        is UiState.Success -> {/* do nothing */ }
+                        is UiState.Loading -> {/* do nothing */ }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     }
-
                 }
             }
         }
+
         preorderViewModel.preOrdersData.observe(viewLifecycleOwner) {
             validPreorderListAdapter.submitList(it)
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preorderViewModel.deletePreorderState.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> {
+                            Toast.makeText(requireContext(), "예약 내역 취소 완료", Toast.LENGTH_SHORT).show()
+                            preorderViewModel.resetPagingValue()
+                            preorderViewModel.getNextValidPreOrders()
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
@@ -136,22 +139,20 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
 
     private fun setPreorderBtnClickListener() {
         binding.btnModifyPreorderList.setOnClickListener {
-//            val action = PreorderFragmentDirections.actionGlobalFragmentHome(
-//                selectedMenus = preorderViewModel.getSelectedMenus(),
-//                isModify = true
-//            )
-//            findNavController().navigate(action)
-//            mainViewModel.directWithGlobalAction(NavDestinationType.Home)
-            /* todo */
-            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
+            val action = PreorderFragmentDirections.actionGlobalFragmentHome(
+                selectedMenus = preorderViewModel.getSelectedMenus(),
+                isModify = true,
+                preOrderId = preorderViewModel.getLastSelectedPreorderId() ?: -1,
+                customerPhoneNumber = preorderViewModel.selectedPreorderInfoData.value?.phone
+            )
+            findNavController().navigate(action)
+            mainViewModel.directWithGlobalAction(NavDestinationType.Home)
         }
         binding.btnPayBill.setOnClickListener {
             val action =
                 PreorderFragmentDirections.actionGlobalFragmentHome(
                     selectedMenus = preorderViewModel.getSelectedMenus(),
-                    preOrderId = preorderViewModel.preOrdersData.value?.get(
-                        preorderViewModel.selectedPreorderId.value ?: 0
-                    )?.id ?: -1,
+                    preOrderId = preorderViewModel.getLastSelectedPreorderId() ?: -1,
                     customerPhoneNumber = preorderViewModel.selectedPreorderInfoData.value?.phone
                 )
             findNavController().navigate(action)
@@ -161,8 +162,8 @@ class PreorderFragment : BaseFragment<FragmentPreorderBinding>(R.layout.fragment
 
     private fun setCancelPreorderBtnClickListener() {
         binding.btnCancelPreorder.setOnClickListener {
-            /* todo */
-            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
+            val dialog = DialogPreorderDeleteConfirm(preorderViewModel)
+            dialog.show(childFragmentManager, "PreorderDeleteConfirmDialog")
         }
     }
 

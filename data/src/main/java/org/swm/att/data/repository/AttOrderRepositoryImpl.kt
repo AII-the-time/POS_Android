@@ -12,6 +12,7 @@ import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.entity.request.PaymentVO
 import org.swm.att.domain.entity.request.PreOrderedMenusVO
 import org.swm.att.domain.entity.response.OrderBillsVO
+import org.swm.att.domain.entity.response.OrderIdVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.entity.response.OrderVO
 import org.swm.att.domain.entity.response.PreOrderBillVO
@@ -103,6 +104,7 @@ class AttOrderRepositoryImpl @Inject constructor(
     ): Flow<Result<PreorderIdVO>> = flow {
         try {
             val preOrderedMenusDTO = PreOrderedMenusDTO(
+                id = null,
                 totalPrice = preOrderedMenus.totalPrice,
                 menus = preOrderedMenus.menus?.map {
                     OrderedMenuDTO(
@@ -144,6 +146,54 @@ class AttOrderRepositoryImpl @Inject constructor(
     ): Flow<Result<PreOrderBillVO>> = flow {
         try {
             orderDataSource.getPreOrderBill(storeId, preOrderId).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun deletePreorder(storeId: Int, preorderId: Int): Flow<Result<PreorderIdVO>> = flow {
+        try {
+            orderDataSource.deletePreorder(storeId, preorderId).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun updatePreorder(
+        storeId: Int,
+        preOrderedMenus: PreOrderedMenusVO
+    ): Flow<Result<PreorderIdVO>> = flow {
+        try {
+            val preOrderedMenusDTO = PreOrderedMenusDTO(
+                id = preOrderedMenus.id,
+                totalPrice = preOrderedMenus.totalPrice,
+                menus = preOrderedMenus.menus?.map {
+                    OrderedMenuDTO(
+                        id = it.id,
+                        count = it.count ?: 1,
+                        options = it.options.map { option -> option.id },
+                        detail = it.detail
+                    )
+                } ?: listOf(),
+                phone = preOrderedMenus.phone,
+                memo = preOrderedMenus.memo,
+                orderedFor = preOrderedMenus.orderedFor
+            )
+            orderDataSource.updatePreorder(storeId, preOrderedMenusDTO).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun cancelOrder(storeId: Int, orderId: Int): Flow<Result<OrderIdVO>> = flow {
+        try {
+            orderDataSource.cancelOrder(storeId, orderId).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {

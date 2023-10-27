@@ -334,8 +334,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="20dp"
-                    android:visibility="@{billViewModel.selectedBillInfoData == null ? View.GONE : View.VISIBLE}"
-                    android:enabled="@{billViewModel.selectedBillInfoData.paymentState != PayState.CANCELED ? false: true}"
+                    android:visibility="@{billViewModel.selectedBillInfoData == null || billViewModel.selectedBillInfoData.paymentState == PayState.CANCELED ? View.GONE : View.VISIBLE}"
                     android:background="@drawable/selector_enabled_round_stroke"
                     app:layout_constraintTop_toBottomOf="@id/cl_receipt_payment_info"
                     app:layout_constraintBottom_toBottomOf="parent"/>

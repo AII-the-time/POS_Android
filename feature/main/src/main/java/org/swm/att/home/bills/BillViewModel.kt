@@ -14,6 +14,7 @@ import org.swm.att.common_ui.util.getUTCDateTime
 import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.response.OrderBillVO
 import org.swm.att.domain.entity.response.OrderBillsVO
+import org.swm.att.domain.entity.response.OrderIdVO
 import org.swm.att.domain.entity.response.OrderReceiptVO
 import org.swm.att.domain.repository.AttOrderRepository
 import org.swm.att.domain.repository.AttPosUserRepository
@@ -25,29 +26,42 @@ class BillViewModel @Inject constructor(
     private val attOrderRepository: AttOrderRepository,
     private val attPosUserRepository: AttPosUserRepository
 ): BaseSelectableViewViewModel() {
+    //selected bill info
     private val _selectedBillInfo = MutableStateFlow<UiState<OrderReceiptVO>>(UiState.Loading)
     val selectedBillInfo: StateFlow<UiState<OrderReceiptVO>> = _selectedBillInfo
-    private val _selectedBillInfoData = MutableLiveData<OrderReceiptVO>()
-    val selectedBillInfoData: LiveData<OrderReceiptVO> = _selectedBillInfoData
+    private val _selectedBillInfoData = MutableLiveData<OrderReceiptVO?>()
+    val selectedBillInfoData: LiveData<OrderReceiptVO?> = _selectedBillInfoData
 
+    //bill list info
     private val _orderBills = MutableStateFlow<UiState<OrderBillsVO>>(UiState.Loading)
     val orderBills: StateFlow<UiState<OrderBillsVO>> = _orderBills
     private val _orderBillsData = MutableLiveData<List<OrderBillVO>>()
     val orderBillsData: LiveData<List<OrderBillVO>> = _orderBillsData
 
+    //delete bill
+    private val _deleteBillState = MutableStateFlow<UiState<OrderIdVO>>(UiState.Loading)
+    val deleteBillState: StateFlow<UiState<OrderIdVO>> = _deleteBillState
+
+    //value for selecting
     private val _selectedBillId = MutableLiveData<Int>()
     val selectedBillId: LiveData<Int> = _selectedBillId
     private val _currentSelectedBillId = MutableLiveData<Int>()
     val currentSelectedBillId: LiveData<Int> = _currentSelectedBillId
+
+    //filtering
     private val _filteringStartDate = MutableLiveData<Date>()
     val filteringStartDate: LiveData<Date> = _filteringStartDate
     private val _filteringEndDate = MutableLiveData<Date?>()
     val filteringEndDate: LiveData<Date?> = _filteringEndDate
 
+    //local value
     private var page: Int = 1
     private var storeId: Int? = null
+    private var lastSelectedOrderId: Int? = null
 
+    //api
     override fun getSelectedItem(selectedItemId: Int) {
+        lastSelectedOrderId = selectedItemId
         viewModelScope.launch(attExceptionHandler) {
             attOrderRepository.getOrderBill(getStoreId(), selectedItemId)
                 .collect { result ->
@@ -88,6 +102,22 @@ class BillViewModel @Inject constructor(
         }
     }
 
+    fun cancelOrder() {
+        lastSelectedOrderId?.let {  id ->
+            viewModelScope.launch(attExceptionHandler) {
+                attOrderRepository.cancelOrder(getStoreId(), id).collect { result ->
+                    result.onSuccess {
+                        _deleteBillState.value = UiState.Success(it)
+                    }.onFailure {
+                        val errorMsg = if (it is HttpResponseException) it.message else "결제 취소 실패"
+                        _deleteBillState.value = UiState.Error(errorMsg)
+                    }
+                }
+            }
+        }
+    }
+
+    //override
     override fun setCurrentSelectedItemId(position: Int) {
         val currentOrderBills = _orderBillsData.value
         val pastSelectedId = currentSelectedBillId.value
@@ -111,6 +141,7 @@ class BillViewModel @Inject constructor(
         _selectedBillId.postValue(currentSelectedBillId.value)
     }
 
+    //filtering
     fun getBillsForFilteringDates(startDate: Date) {
         if (startDate == filteringStartDate.value) return
         _filteringStartDate.value = startDate
@@ -119,6 +150,7 @@ class BillViewModel @Inject constructor(
         getNextOrderBills()
     }
 
+    //etc
     fun getSizeOfOrderBills(): Int {
         return orderBillsData.value?.size ?: 0
     }
@@ -128,5 +160,11 @@ class BillViewModel @Inject constructor(
             storeId = attPosUserRepository.getStoreId()
         }
         return storeId as Int
+    }
+
+    fun resetPagingValue() {
+        page = 1
+        _orderBillsData.postValue(listOf())
+        _selectedBillInfoData.postValue(null)
     }
 }

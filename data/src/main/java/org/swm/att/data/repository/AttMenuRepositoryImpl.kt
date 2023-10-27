@@ -1,6 +1,7 @@
 package org.swm.att.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.MenuDataSource
 import org.swm.att.data.remote.request.CategoryPostDTO
@@ -16,8 +17,8 @@ import org.swm.att.domain.entity.response.MenuWithRecipeVO
 import org.swm.att.domain.entity.response.OptionListVO
 import org.swm.att.domain.entity.response.StockIdVO
 import org.swm.att.domain.entity.response.StockVO
-import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.domain.entity.response.StockWithMixedListVO
+import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.domain.entity.response.StockWithStateListVO
 import org.swm.att.domain.repository.AttMenuRepository
 import javax.inject.Inject
@@ -48,7 +49,7 @@ class AttMenuRepositoryImpl @Inject constructor(
 
     override suspend fun postCategory(storeId: Int, categoryName: String): Flow<Result<CategoryIdVO>> = flow {
         try {
-            val categoryPostInfo = CategoryPostDTO(categoryName)
+            val categoryPostInfo = CategoryPostDTO(null, categoryName)
             menuDataSource.postCategory(storeId, categoryPostInfo).collect {
                 emit(Result.success(it.toVO()))
             }
@@ -60,6 +61,7 @@ class AttMenuRepositoryImpl @Inject constructor(
     override suspend fun postNewMenu(storeId: Int, newMenu: NewMenuVO): Flow<Result<MenuIdVO>> = flow {
         try {
             val menuDTO = NewMenuDTO(
+                id = newMenu.id,
                 name = newMenu.name,
                 price = newMenu.price,
                 categoryId = newMenu.categoryId,
@@ -172,6 +174,77 @@ class AttMenuRepositoryImpl @Inject constructor(
                 menus = arrayListOf()
             )
             menuDataSource.updateStock(storeId, stockDTO).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun deleteStock(storeId: Int, stockId: Int): Flow<Result<StockIdVO>> = flow {
+        try {
+            menuDataSource.deleteStock(storeId, stockId).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun deleteMenu(storeId: Int, menuId: Int): Flow<Result<MenuIdVO>> = flow {
+        try {
+            menuDataSource.deleteMenu(storeId, menuId).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun updateMenu(storeId: Int, menu: NewMenuVO): Flow<Result<MenuIdVO>> = flow {
+        try {
+            val menuVO = NewMenuDTO(
+                id = menu.id,
+                name = menu.name,
+                price = menu.price,
+                categoryId = menu.categoryId,
+                option = menu.option,
+                recipe = menu.recipe?.map {
+                    RecipeDTO(
+                        id = it.id,
+                        name = it.name,
+                        isMixed = it.isMixed,
+                        coldRegularAmount = it.coldRegularAmount?.toInt() ?: 0,
+                        unit = it.unit
+                    )
+                }
+            )
+            menuDataSource.updateMenu(storeId, menuVO).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun deleteCategory(storeId: Int, categoryId: Int): Flow<Result<CategoryIdVO>> = flow {
+        try {
+            menuDataSource.deleteCategory(storeId, categoryId).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun updateCategory(
+        storeId: Int,
+        categoryId: Int,
+        categoryName: String
+    ): Flow<Result<CategoryIdVO>> = flow {
+        try {
+            val categoryInfo = CategoryPostDTO(categoryId, categoryName)
+            menuDataSource.updateCategory(storeId, categoryInfo).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {
