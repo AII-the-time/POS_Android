@@ -49,7 +49,7 @@ class AttMenuRepositoryImpl @Inject constructor(
 
     override suspend fun postCategory(storeId: Int, categoryName: String): Flow<Result<CategoryIdVO>> = flow {
         try {
-            val categoryPostInfo = CategoryPostDTO(categoryName)
+            val categoryPostInfo = CategoryPostDTO(null, categoryName)
             menuDataSource.postCategory(storeId, categoryPostInfo).collect {
                 emit(Result.success(it.toVO()))
             }
