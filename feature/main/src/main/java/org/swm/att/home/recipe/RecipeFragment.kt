@@ -108,9 +108,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
 
     private fun setCategoryDetailBtnClickListener() {
         binding.tvCategoryModify.setOnClickListener { view ->
-//            showMenu(view, R.menu.item_category_detail)
-            /* todo */
-            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
+            showMenu(view, R.menu.item_category_detail)
         }
     }
 
