@@ -176,4 +176,16 @@ interface AttPosService {
         @Header("storeId") storeId: Int,
         @Body menu: NewMenuDTO
     ): Response<MenuIdDTO>
+
+    @PUT("menu/category/{categoryId}")
+    suspend fun deleteCategory(
+        @Header("storeId") storeId: Int,
+        @Path("categoryId") categoryId: Int
+    ): Response<CategoryIdDTO>
+
+    @PUT("menu/category")
+    suspend fun updateCategory(
+        @Header("storeId") storeId: Int,
+        @Body category: CategoryPostDTO
+    ): Response<CategoryIdDTO>
 }

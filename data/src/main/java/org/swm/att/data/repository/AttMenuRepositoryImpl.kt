@@ -226,4 +226,29 @@ class AttMenuRepositoryImpl @Inject constructor(
             emit(Result.failure(e))
         }
     }
+
+    override suspend fun deleteCategory(storeId: Int, categoryId: Int): Flow<Result<CategoryIdVO>> = flow {
+        try {
+            menuDataSource.deleteCategory(storeId, categoryId).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun updateCategory(
+        storeId: Int,
+        categoryId: Int,
+        categoryName: String
+    ): Flow<Result<CategoryIdVO>> = flow {
+        try {
+            val categoryInfo = CategoryPostDTO(categoryId, categoryName)
+            menuDataSource.updateCategory(storeId, categoryInfo).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
 }

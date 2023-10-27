@@ -75,4 +75,12 @@ class MenuDataSource @Inject constructor(
     suspend fun updateMenu(storeId: Int, menu: NewMenuDTO): Flow<MenuIdDTO> {
         return checkResponse(attPosService.updateMenu(storeId, menu))
     }
+
+    suspend fun deleteCategory(storeId: Int, categoryId: Int): Flow<CategoryIdDTO> {
+        return checkResponse(attPosService.deleteCategory(storeId, categoryId))
+    }
+
+    suspend fun updateCategory(storeId: Int, categoryInfo: CategoryPostDTO): Flow<CategoryIdDTO> {
+        return checkResponse(attPosService.updateCategory(storeId, categoryInfo))
+    }
 }
