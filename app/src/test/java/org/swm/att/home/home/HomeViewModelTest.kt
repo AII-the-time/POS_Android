@@ -2,7 +2,6 @@ package org.swm.att.home.home
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -13,6 +12,7 @@ import org.swm.att.domain.entity.request.OrderedMenusVO
 import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttOrderRepository
 import org.swm.att.domain.repository.AttPosUserRepository
+import org.swm.att.home.main.home.HomeViewModel
 
 class HomeViewModelTest {
     private lateinit var homeViewModel: HomeViewModel

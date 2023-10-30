@@ -6,7 +6,7 @@
     <data>
         <variable
             name="payViewModel"
-            type="org.swm.att.home.home.pay.PayViewModel" />
+            type="org.swm.att.home.main.home.pay.PayViewModel" />
         <variable
             name="customerId"
             type="String" />
@@ -20,7 +20,7 @@
         android:paddingEnd="20dp"
         android:paddingBottom="40dp"
         android:background="@color/back_color"
-        tools:context=".home.pay.PayFragment">
+        tools:context=".main.home.pay.PayFragment">
         
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_order_info"
