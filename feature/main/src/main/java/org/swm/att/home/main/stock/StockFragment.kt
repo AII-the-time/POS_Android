@@ -3,7 +3,6 @@ package org.swm.att.home.main.stock
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -205,7 +204,7 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
                         is UiState.Success -> {
                             uiState.data?.let {
                                 binding.stockDetail = it
-                                Log.d("StockFragment", "stockDetail: ${binding.stockDetail}")
+                                binding.unitString = it.unit
                                 binding.actStockUnit.setText(it.unit, false)
                                 changeEditState()
                                 stockViewModel.resetGetSelectedStockByIdState()
