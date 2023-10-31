@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".stock.StockFragment">
+    tools:context=".main.stock.StockFragment">
 
     <data>
         <variable
             name="stockViewModel"
-            type="org.swm.att.home.stock.StockViewModel" />
+            type="org.swm.att.home.main.stock.StockViewModel" />
         <variable
             name="stockDetail"
             type="org.swm.att.domain.entity.response.StockVO" />

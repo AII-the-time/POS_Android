@@ -201,6 +201,13 @@
     <string name="tv_confirm_bill_cancel_text">해당 <b>결제 내역</b>을 취소하시겠습니까?</string>
     <string name="tv_confirm_category_delete_text">카테고리 삭제 시, 포함된 메뉴들도 함께 삭제됩니다!\n해당 <b>카테고리</b>를 삭제하시겠습니까?</string>
     <string name="btn_category_modify_des">수정 완료</string>
+    <string name="btn_submit_phone_number">전송</string>
+    <string name="btn_submit_authentication_code">확인</string>
+    <string name="tv_phone_number_des1">전화번호 입력</string>
+    <string name="tv_phone_number_des2">서비스 이용을 위해 전화번호를 입력해주세요!</string>
+    <string name="tv_authentication_code_des1">인증번호 입력</string>
+    <string name="tv_authentication_code_des2">전송된 인증번호를 입력해주세요!</string>
+    <string name="tv_phone_number_helper_txt">ex) 01012341234</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>

@@ -13,7 +13,7 @@
 
         <variable
             name="homeViewModel"
-            type="org.swm.att.home.home.HomeViewModel"/>
+            type="org.swm.att.home.main.home.HomeViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

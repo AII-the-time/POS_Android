@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".bills.BillFragment">
+    tools:context=".main.bills.BillFragment">
 
     <data>
         <variable
@@ -10,7 +10,7 @@
             type="Integer" />
         <variable
             name="billViewModel"
-            type="org.swm.att.home.bills.BillViewModel"/>
+            type="org.swm.att.home.main.bills.BillViewModel"/>
         <import type="android.view.View" />
         <import type="org.swm.att.domain.constant.PayState" />
         <import type="org.swm.att.common_ui.util.Formatter" />
