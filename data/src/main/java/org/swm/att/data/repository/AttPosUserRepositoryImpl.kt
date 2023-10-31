@@ -14,6 +14,7 @@ import org.swm.att.domain.entity.request.StoreVO
 import org.swm.att.domain.entity.response.MileageIdVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.StoreIdVO
+import org.swm.att.domain.entity.response.TokenForCertificationPhoneVO
 import org.swm.att.domain.entity.response.TokenVO
 import org.swm.att.domain.repository.AttPosUserRepository
 import javax.inject.Inject
@@ -135,6 +136,18 @@ class AttPosUserRepositoryImpl @Inject constructor(
                             it.close
                         )
                     }
+                )
+            ).collect { emit(Result.success(it.toVO())) }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun postPhoneNumberForAuthentication(phone: String): Flow<Result<TokenForCertificationPhoneVO>> = flow {
+        try {
+            userDataSource.postPhoneNumberForAuthentication(
+                PhoneNumDTO(
+                    phone = phone
                 )
             ).collect { emit(Result.success(it.toVO())) }
         } catch (e: Exception) {

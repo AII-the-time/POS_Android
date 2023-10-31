@@ -6,6 +6,7 @@ import org.swm.att.domain.entity.request.StoreVO
 import org.swm.att.domain.entity.response.MileageIdVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.StoreIdVO
+import org.swm.att.domain.entity.response.TokenForCertificationPhoneVO
 import org.swm.att.domain.entity.response.TokenVO
 
 interface AttPosUserRepository {
@@ -21,4 +22,5 @@ interface AttPosUserRepository {
     suspend fun registerCustomer(storeId: Int, phone: PhoneNumVO): Flow<Result<MileageIdVO>>
     suspend fun registerStore(store: StoreVO): Flow<Result<StoreIdVO>>
     suspend fun registerStoreForTest(store: StoreVO): Flow<Result<StoreIdVO>>
+    suspend fun postPhoneNumberForAuthentication(phone: String): Flow<Result<TokenForCertificationPhoneVO>>
 }

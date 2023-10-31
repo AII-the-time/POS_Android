@@ -26,4 +26,7 @@ class UserDataSource @Inject constructor(
 
     suspend fun registerStoreForTest(store: StoreDTO) =
         checkResponse(attPosUserService.registerStoreForTest(store))
+
+    suspend fun postPhoneNumberForAuthentication(phone: PhoneNumDTO) =
+        checkResponse(attPosUserService.postPhoneNumberForAuthentication(phone))
 }

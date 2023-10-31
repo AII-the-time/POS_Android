@@ -6,6 +6,7 @@ import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.data.remote.response.MileageIdDTO
 import org.swm.att.data.remote.response.StoreIdDTO
 import org.swm.att.data.remote.response.TokenDTO
+import org.swm.att.data.remote.response.TokenForCertificationPhoneDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -48,5 +49,10 @@ interface AttPosUserService {
     suspend fun registerStoreForTest(
         @Body store: StoreDTO
     ): Response<StoreIdDTO>
+
+    @POST("user/phone")
+    suspend fun postPhoneNumberForAuthentication(
+        @Body phone: PhoneNumDTO
+    ): Response<TokenForCertificationPhoneDTO>
 
 }
