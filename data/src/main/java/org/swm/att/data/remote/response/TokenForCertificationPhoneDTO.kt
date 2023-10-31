@@ -6,10 +6,10 @@ import org.swm.att.domain.entity.response.TokenForCertificationPhoneVO
 
 @JsonClass(generateAdapter = true)
 data class TokenForCertificationPhoneDTO(
-    @field:Json(name = "tokenForCertificationPhone")
-    val tokenForCertificationPhone: String?
+    @field:Json(name = "tokenForCertificatePhone")
+    val tokenForCertificatePhone: String?
 ) {
     fun toVO() = TokenForCertificationPhoneVO(
-        tokenForCertificationPhone = tokenForCertificationPhone ?: "Unknown"
+        tokenForCertificatePhone = tokenForCertificatePhone ?: "Unknown"
     )
 }
