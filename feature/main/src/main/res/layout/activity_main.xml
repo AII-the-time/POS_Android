@@ -2,19 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".main.MainActivity">
+    tools:context=".MainActivity">
 
     <data>
         <variable
             name="mainViewModel"
-            type="org.swm.att.home.main.MainViewModel" />
+            type="org.swm.att.home.MainViewModel" />
         <variable
             name="barDate"
             type="String" />
         <variable
             name="salesPercent"
             type="Integer" />
-        <import type="org.swm.att.home.main.constant.NavDestinationType" />
+        <import type="org.swm.att.home.constant.NavDestinationType" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

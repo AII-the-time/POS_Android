@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".main.recipe.RecipeFragment">
+    tools:context=".recipe.RecipeFragment">
 
     <data>
 
         <variable
             name="recipeViewModel"
-            type="org.swm.att.home.main.recipe.RecipeViewModel" />
+            type="org.swm.att.home.recipe.RecipeViewModel" />
 
         <variable
             name="menuWithRecipe"
