@@ -29,7 +29,7 @@ data class StockDTO(
         id = id,
         name = name ?: "Unknown",
         amount = amount ?: 0,
-        unit = unit ?: "g",
+        unit = unit ?: "-",
         price = price ?: "Unknown",
         currentAmount = currentAmount ?: 0,
         noticeThreshold = noticeThreshold ?: -1,
