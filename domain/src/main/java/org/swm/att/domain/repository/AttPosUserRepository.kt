@@ -1,8 +1,10 @@
 package org.swm.att.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import org.swm.att.domain.entity.request.CertificationVO
 import org.swm.att.domain.entity.request.PhoneNumVO
 import org.swm.att.domain.entity.request.StoreVO
+import org.swm.att.domain.entity.response.CertificatedPhoneTokenVO
 import org.swm.att.domain.entity.response.MileageIdVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.StoreIdVO
@@ -23,4 +25,5 @@ interface AttPosUserRepository {
     suspend fun registerStore(store: StoreVO): Flow<Result<StoreIdVO>>
     suspend fun registerStoreForTest(store: StoreVO): Flow<Result<StoreIdVO>>
     suspend fun postPhoneNumberForAuthentication(phone: String): Flow<Result<TokenForCertificationPhoneVO>>
+    suspend fun checkCertificationCode(certificationInfo: CertificationVO): Flow<Result<CertificatedPhoneTokenVO>>
 }

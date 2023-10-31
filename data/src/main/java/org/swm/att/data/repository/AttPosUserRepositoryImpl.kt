@@ -5,12 +5,15 @@ import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey
 import org.swm.att.data.remote.datasource.UserDataSource
+import org.swm.att.data.remote.request.CertificationDTO
 import org.swm.att.data.remote.request.OpeningHourDTO
 import org.swm.att.data.remote.request.PhoneNumDTO
 import org.swm.att.data.remote.request.StoreDTO
 import org.swm.att.data.remote.response.MileageDTO
+import org.swm.att.domain.entity.request.CertificationVO
 import org.swm.att.domain.entity.request.PhoneNumVO
 import org.swm.att.domain.entity.request.StoreVO
+import org.swm.att.domain.entity.response.CertificatedPhoneTokenVO
 import org.swm.att.domain.entity.response.MileageIdVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.StoreIdVO
@@ -155,4 +158,18 @@ class AttPosUserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun checkCertificationCode(certificationInfo: CertificationVO): Flow<Result<CertificatedPhoneTokenVO>> = flow {
+        try {
+            val certificationInfo = CertificationDTO(
+                certificationInfo.phone,
+                certificationInfo.certificationCode,
+                certificationInfo.phoneCertificationToken
+            )
+            userDataSource.checkCertificationCode(certificationInfo).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
 }
