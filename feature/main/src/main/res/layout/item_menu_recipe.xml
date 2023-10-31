@@ -5,7 +5,7 @@
     <data>
         <variable
             name="recipeViewModel"
-            type="org.swm.att.home.recipe.RecipeViewModel" />
+            type="org.swm.att.home.main.recipe.RecipeViewModel" />
         <variable
             name="recipeVO"
             type="org.swm.att.domain.entity.response.RecipeVO" />

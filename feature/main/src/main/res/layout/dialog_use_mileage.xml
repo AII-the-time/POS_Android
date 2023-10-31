@@ -5,7 +5,7 @@
     <data>
         <variable
             name="payViewModel"
-            type="org.swm.att.home.home.pay.PayViewModel"/>
+            type="org.swm.att.home.main.home.pay.PayViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
