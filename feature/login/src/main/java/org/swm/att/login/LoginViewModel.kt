@@ -1,4 +1,4 @@
-package org.swm.att.home.login
+package org.swm.att.login
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel

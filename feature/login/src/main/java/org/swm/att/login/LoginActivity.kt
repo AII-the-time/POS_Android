@@ -1,4 +1,4 @@
-package org.swm.att.home.login
+package org.swm.att.login
 
 import android.os.Bundle
 import android.widget.Toast
@@ -10,8 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseActivity
 import org.swm.att.common_ui.state.UiState
-import org.swm.att.home.R
-import org.swm.att.home.databinding.ActivityLoginBinding
+import org.swm.att.login.databinding.ActivityLoginBinding
 
 @AndroidEntryPoint
 class LoginActivity: BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {

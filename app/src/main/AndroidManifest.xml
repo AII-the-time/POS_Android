@@ -31,7 +31,7 @@
             android:launchMode="singleInstance"
             android:exported="true" />
         <activity
-            android:name=".home.login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
