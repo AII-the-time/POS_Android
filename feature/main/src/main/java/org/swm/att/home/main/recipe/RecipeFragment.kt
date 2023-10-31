@@ -19,12 +19,13 @@ import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter
 import org.swm.att.domain.entity.response.CategoriesVO
+import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.home.R
+import org.swm.att.home.databinding.FragmentRecipeBinding
 import org.swm.att.home.main.adapter.BaseInteractiveItemAdapter
 import org.swm.att.home.main.adapter.CustomArrayAdapter
 import org.swm.att.home.main.adapter.SelectableItemAdapter
-import org.swm.att.home.databinding.FragmentRecipeBinding
 import org.swm.att.home.main.stock.StockFragment
 
 @AndroidEntryPoint
@@ -175,16 +176,27 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                 Toast.makeText(requireContext(), "메뉴 이름과 가격을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else {
+                val recipeList = getRecipeValues()
                 when(recipeViewModel.getEditState()) {
                     CREATE -> {
-                        recipeViewModel.postNewMenu(name, price)
+                        recipeViewModel.postNewMenu(name, price, recipeList)
                     }
                     MODIFY -> {
-                        recipeViewModel.updateMenu(name, price)
+                        recipeViewModel.updateMenu(name, price, recipeList)
                     }
                 }
             }
         }
+    }
+
+    private fun getRecipeValues(): MutableList<RecipeVO> {
+        val recipeList = mutableListOf<RecipeVO>()
+        for (index in 0 until recipesAdapter.itemCount) {
+            val holder = binding.rvMenuRecipe.findViewHolderForAdapterPosition(index) as MenuRecipeViewHolder
+            val recipe = holder.getRecipe()
+            recipeList.add(recipe)
+        }
+        return recipeList
     }
 
     private fun setBtnUpdateCategoryClickListener() {
@@ -246,8 +258,6 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                         is UiState.Success -> {
                             uiState.data?.let {
                                 binding.menuWithRecipe = it
-                                recipesAdapter.submitList(it.recipe)
-                                optionsAdapter.submitList(it.option)
                                 if (recipeViewModel.checkLastSelectedMenu(it.id)) {
                                     recipesAdapter.notifyDataSetChanged()
                                     optionsAdapter.notifyDataSetChanged()
@@ -301,6 +311,10 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
 
         recipeViewModel.recipeMapForNewMenu.observe(viewLifecycleOwner) {
             recipesAdapter.submitList(it.values.toList())
+        }
+
+        recipeViewModel.optionList.observe(viewLifecycleOwner) {
+            optionsAdapter.submitList(it)
         }
 
         lifecycleScope.launch {

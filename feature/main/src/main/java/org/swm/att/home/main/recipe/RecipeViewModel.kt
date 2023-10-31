@@ -75,6 +75,8 @@ class RecipeViewModel @Inject constructor(
     val isCreate: LiveData<Boolean?> = _isCreate
     private val _recipeMapForNewMenu = MutableLiveData<MutableMap<Int, RecipeVO>>()
     val recipeMapForNewMenu: LiveData<MutableMap<Int, RecipeVO>> = _recipeMapForNewMenu
+    private val _optionList = MutableLiveData<List<OptionVO>>()
+    val optionList: LiveData<List<OptionVO>> = _optionList
     private var storeId: Int? = null
     private var lastSelectedMenuId: Int? = null
     private val _isCategoryModify = MutableLiveData(false)
@@ -146,9 +148,6 @@ class RecipeViewModel @Inject constructor(
 
     //menu
     override fun getSelectedItem(selectedItemId: Int) {
-        if (lastSelectedMenuId == selectedItemId) {
-            return
-        }
         lastSelectedMenuId = selectedItemId
         viewModelScope.launch(attExceptionHandler) {
             attMenuRepository.getMenuInfo(getStoreId(), selectedItemId).collect() { result ->
@@ -193,10 +192,10 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
-    fun postNewMenu(name: String?, price: String?) {
+    fun postNewMenu(name: String?, price: String?, recipes: List<RecipeVO>?) {
         viewModelScope.launch(attExceptionHandler) {
             try {
-                val newMenuItem = checkCreateNewMenu(null, name, price)
+                val newMenuItem = checkCreateNewMenu(null, name, price, recipes)
                 attMenuRepository.postNewMenu(getStoreId(), newMenuItem).collect { result ->
                     result.onSuccess {
                         _postMenuState.value = UiState.Success(it)
@@ -211,10 +210,10 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
-    fun updateMenu(name: String?, price: String?) {
+    fun updateMenu(name: String?, price: String?, recipes: List<RecipeVO>?) {
         viewModelScope.launch(attExceptionHandler) {
             try {
-                val updateMenuItem = checkCreateNewMenu(lastSelectedMenuId, name, price)
+                val updateMenuItem = checkCreateNewMenu(lastSelectedMenuId, name, price, recipes)
                 attMenuRepository.updateMenu(getStoreId(), updateMenuItem).collect { result ->
                     result.onSuccess {
                         _updateMenuState.value = UiState.Success(it)
@@ -248,7 +247,6 @@ class RecipeViewModel @Inject constructor(
             // 현재 선택된 item의 focused 값을 true로 변경
             if (position != -1) {
                 currentSelectedCategory!!.menus[position].isFocused = true
-                getSelectedItem(currentSelectedCategory.menus[position].id)
             }
             // 이전에 선택된 item의 focused 값을 false로 변경
             pastSelectedId?.let { pastId ->
@@ -270,7 +268,7 @@ class RecipeViewModel @Inject constructor(
         _selectedMenuId.postValue(currentSelectedMenuId.value)
     }
 
-    private fun checkCreateNewMenu(id: Int?, name: String?, price: String?): NewMenuVO {
+    private fun checkCreateNewMenu(id: Int?, name: String?, price: String?, recipes: List<RecipeVO>?): NewMenuVO {
         try {
             return NewMenuVO(
                 id = id,
@@ -278,7 +276,7 @@ class RecipeViewModel @Inject constructor(
                 price = requireNotNull(price).toInt(),
                 categoryId = requireNotNull(_selectedCategory.value?.categoryId),
                 option = selectedOptionList,
-                recipe = checkContentInRecipeListEmpty()
+                recipe = checkContentInRecipeListEmpty(recipes)
             )
         } catch (e: NumberFormatException) {
             throw Exception("가격은 숫자만 입력해주세요!")
@@ -287,13 +285,13 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
-    private fun checkContentInRecipeListEmpty(): List<RecipeVO>? {
-        for (recipe in _recipeMapForNewMenu.value?.values ?: emptyList()) {
+    private fun checkContentInRecipeListEmpty(recipes: List<RecipeVO>?): List<RecipeVO>? {
+        for (recipe in recipes ?: emptyList()) {
             if (recipe.coldRegularAmount?.isNullOrEmpty() == true) {
                 throw Exception("레시피 내용을 모두 입력해주세요!")
             }
         }
-        return _recipeMapForNewMenu.value?.values?.toList()
+        return recipes
     }
 
     fun getLastSelectedMenu() {
@@ -373,6 +371,7 @@ class RecipeViewModel @Inject constructor(
 
     //option
     private fun initOptionList(option: List<OptionVO>) {
+        _optionList.postValue(option)
         selectedOptionList = mutableListOf()
         option.forEach { optionVO ->
             optionVO.options.forEach { optionType ->

@@ -2,7 +2,6 @@ package org.swm.att.home.main.recipe
 
 import android.widget.ArrayAdapter
 import androidx.core.view.doOnAttach
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import org.swm.att.common_ui.R
@@ -16,6 +15,7 @@ class MenuRecipeViewHolder(
     private val menuRecipeViewModel: RecipeViewModel,
 ) : BaseInteractiveViewHolder(binding, menuRecipeViewModel) {
     private var owner: LifecycleOwner? = null
+    private var recipeId: Int? = null
 
     init {
         itemView.doOnAttach {
@@ -26,13 +26,13 @@ class MenuRecipeViewHolder(
 
     override fun bind(item: BaseRecyclerViewItem, position: Int?) {
         val recipe = item as RecipeVO
+        recipeId = recipe.id
         binding.apply {
             recipeVO = recipe
             recipeViewModel = menuRecipeViewModel
         }
         initUnitMenu(recipe.unit)
         setBtnDeleteRecipeClickListener(recipe.id)
-        setEdtTextChangeListener(recipe.id)
     }
 
     private fun initUnitMenu(unit: String) {
@@ -51,12 +51,13 @@ class MenuRecipeViewHolder(
         }
     }
 
-    private fun setEdtTextChangeListener(storeId: Int) {
-        binding.etRecipeAmount.addTextChangedListener {
-            menuRecipeViewModel.recipeMapForNewMenu.value?.get(storeId)?.coldRegularAmount = it.toString()
-        }
-        binding.actMenuUnit.addTextChangedListener {
-            menuRecipeViewModel.recipeMapForNewMenu.value?.get(storeId)?.unit = it.toString()
-        }
+    fun getRecipe(): RecipeVO {
+        return RecipeVO(
+            id = recipeId ?: -1,
+            name = binding.etRecipeName.text.toString(),
+            isMixed = false,
+            coldRegularAmount = binding.etRecipeAmount.text.toString(),
+            unit = binding.actMenuUnit.text.toString(),
+        )
     }
 }
