@@ -29,10 +29,14 @@
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleInstance"
+            android:exported="true" />
+        <activity
+            android:name=".home.login.LoginActivity"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,7 +44,6 @@
             android:name=".home.main.alarm.PreorderAlarmDialog"
             android:exported="false"
             android:theme="@style/Theme.DialogTheme" />
-
         <receiver
             android:name=".home.main.alarm.AlarmReceiver"
             android:enabled="true" />
