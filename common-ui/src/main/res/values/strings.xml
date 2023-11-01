@@ -211,6 +211,7 @@
     <string name="tv_authentication_code_des1">인증번호 입력</string>
     <string name="tv_authentication_code_des2">전송된 인증번호를 입력해주세요!</string>
     <string name="tv_phone_number_helper_txt">ex) 01012341234</string>
+    <string name="tv_business_registration_num_hint">ex) 0101234123</string>
     <string name="tv_register_store_des">인증에 성공하셨습니다!</string>
     <string name="tv_business_registration_num_des1">사업자 등록 번호 입력</string>
     <string name="tv_business_registration_num_des2">가게 등록을 위해 사업자등록번호를 입력해주세요!</string>
