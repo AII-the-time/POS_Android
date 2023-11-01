@@ -1,16 +1,19 @@
 package org.swm.att.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey
 import org.swm.att.data.remote.datasource.UserDataSource
 import org.swm.att.data.remote.request.CertificationDTO
+import org.swm.att.data.remote.request.LoginDTO
 import org.swm.att.data.remote.request.OpeningHourDTO
 import org.swm.att.data.remote.request.PhoneNumDTO
 import org.swm.att.data.remote.request.StoreDTO
 import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.domain.entity.request.CertificationVO
+import org.swm.att.domain.entity.request.LoginVO
 import org.swm.att.domain.entity.request.PhoneNumVO
 import org.swm.att.domain.entity.request.StoreVO
 import org.swm.att.domain.entity.response.CertificatedPhoneTokenVO
@@ -166,6 +169,20 @@ class AttPosUserRepositoryImpl @Inject constructor(
                 certificationInfo.phoneCertificationToken
             )
             userDataSource.checkCertificationCode(certificationInfo).collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override suspend fun login(userInfo: LoginVO): Flow<Result<TokenVO>> = flow {
+        try {
+            val user = LoginDTO(
+                userInfo.businessRegistrationNumber,
+                userInfo.certificatedPhoneToken
+            )
+            userDataSource.login(user).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {

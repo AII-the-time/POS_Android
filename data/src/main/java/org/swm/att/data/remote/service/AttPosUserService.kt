@@ -1,6 +1,7 @@
 package org.swm.att.data.remote.service
 
 import org.swm.att.data.remote.request.CertificationDTO
+import org.swm.att.data.remote.request.LoginDTO
 import org.swm.att.data.remote.request.PhoneNumDTO
 import org.swm.att.data.remote.request.StoreDTO
 import org.swm.att.data.remote.response.CertificatedPhoneTokenDTO
@@ -61,5 +62,10 @@ interface AttPosUserService {
     suspend fun checkCertificationCode(
        @Body certificationBody: CertificationDTO
     ): Response<CertificatedPhoneTokenDTO>
+
+    @POST("user/login")
+    suspend fun login(
+        @Body userInfo: LoginDTO
+    ): Response<TokenDTO>
 
 }
