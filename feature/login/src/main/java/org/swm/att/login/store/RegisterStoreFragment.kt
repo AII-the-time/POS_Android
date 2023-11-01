@@ -24,6 +24,7 @@ class RegisterStoreFragment : BaseFragment<FragmentRegisterStoreBinding>(R.layou
         super.onViewCreated(view, savedInstanceState)
         setOnBtnBackClickListener()
         setBusinessRegistrationNumBtnCLickListener()
+        setRegisterStoreBtnClickListener()
         setObserver()
     }
 
@@ -44,6 +45,13 @@ class RegisterStoreFragment : BaseFragment<FragmentRegisterStoreBinding>(R.layou
         }
     }
 
+    private fun setRegisterStoreBtnClickListener() {
+        binding.btnRegisterStore.setOnClickListener {
+            val storeName = binding.tieStoreName.text.toString()
+            registerStoreViewModel.registerStore(storeName)
+        }
+    }
+
     private fun setObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -59,6 +67,21 @@ class RegisterStoreFragment : BaseFragment<FragmentRegisterStoreBinding>(R.layou
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
                     }
 
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                registerStoreViewModel.registerStoreState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            //main으로 전환
+                            Toast.makeText(requireContext(), "가게 등록이 완료되었습니다!\n환영합니다!", Toast.LENGTH_SHORT).show()
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
