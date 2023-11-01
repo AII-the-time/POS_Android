@@ -29,42 +29,42 @@ class AttPosUserRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
     private val attEncryptedPrefDataSource: AttEncryptedPrefDataSource
 ): AttPosUserRepository {
-    override suspend fun refreshToken(refreshToken: String): Flow<Result<TokenVO>> = flow {
+    override fun refreshToken(refreshToken: String): Flow<Result<TokenVO>> = flow {
         userDataSource.refreshToken(refreshToken).collect {
             emit(Result.success(it.toVO()))
         }
     }
 
-    override suspend fun saveAccessToken(accessToken: String) {
+    override fun saveAccessToken(accessToken: String) {
         attEncryptedPrefDataSource.setAccessToken(
             preferenceKey = PreferenceKey.ACCESS_TOKEN,
             value = accessToken
         )
     }
 
-    override suspend fun saveRefreshToken(refreshToken: String) {
+    override fun saveRefreshToken(refreshToken: String) {
         attEncryptedPrefDataSource.setAccessToken(
             preferenceKey = PreferenceKey.REFRESH_TOKEN,
             value = refreshToken
         )
     }
 
-    override suspend fun getAccessToken(): String {
+    override fun getAccessToken(): String {
         return attEncryptedPrefDataSource.getAccessToken(PreferenceKey.ACCESS_TOKEN)
     }
 
-    override suspend fun getRefreshToken(): String {
+    override fun getRefreshToken(): String {
         return attEncryptedPrefDataSource.getAccessToken(PreferenceKey.REFRESH_TOKEN)
     }
 
-    override suspend fun saveStoreId(storeId: Int) {
+    override fun saveStoreId(storeId: Int) {
         attEncryptedPrefDataSource.setStoreId(
             preferenceKey = PreferenceKey.STORE_ID,
             value = storeId
         )
     }
 
-    override suspend fun getStoreId(): Int {
+    override fun getStoreId(): Int {
         return attEncryptedPrefDataSource.getStoreId(PreferenceKey.STORE_ID)
     }
 

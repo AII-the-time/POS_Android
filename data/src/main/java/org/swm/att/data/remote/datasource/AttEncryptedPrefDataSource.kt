@@ -19,7 +19,7 @@ class AttEncryptedPrefDataSource @Inject constructor(
         value: String
     ) {
         val key = preferenceKey.name
-        attEncryptedPref.edit().putString(key, value).apply()
+        attEncryptedPref.edit().putString(key, value).commit()
     }
 
     fun getStoreId(
@@ -34,7 +34,7 @@ class AttEncryptedPrefDataSource @Inject constructor(
         value: Int
     ) {
         val key = preferenceKey.name
-        attEncryptedPref.edit().putInt(key, value).apply()
+        attEncryptedPref.edit().putInt(key, value).commit()
     }
 
     companion object {
