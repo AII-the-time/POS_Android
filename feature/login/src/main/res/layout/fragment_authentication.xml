@@ -183,7 +183,7 @@
                 android:id="@+id/btn_submit_authentication_code"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:text="@string/btn_submit_authentication_code"
+                android:text="@string/btn_check_des"
                 android:textSize="16sp"
                 android:background="@drawable/shape_round_8"
                 android:backgroundTint="@color/white"

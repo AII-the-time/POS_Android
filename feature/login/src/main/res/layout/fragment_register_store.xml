@@ -10,16 +10,6 @@
         android:background="@drawable/ic_icon_background">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_back_w_mdpi"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_cafepos_logo"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
@@ -88,12 +78,13 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_submit_phone_number">
+                app:layout_constraintEnd_toStartOf="@id/btn_submit_business_registration_num">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tie_business_registration_num"
                     android:layout_width="300dp"
                     android:layout_height="60dp"
+                    android:maxLength="10"
                     android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -102,7 +93,7 @@
                 android:id="@+id/btn_submit_business_registration_num"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:text="@string/btn_submit"
+                android:text="@string/btn_check_des"
                 android:textSize="16sp"
                 android:background="@drawable/shape_round_8"
                 android:backgroundTint="@color/white"
@@ -191,7 +182,7 @@
                 android:id="@+id/btn_register_store"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:text="@string/btn_submit_authentication_code"
+                android:text="@string/btn_check_des"
                 android:textSize="16sp"
                 android:background="@drawable/shape_round_8"
                 android:backgroundTint="@color/white"
@@ -208,6 +199,17 @@
                 app:layout_constraintStart_toEndOf="@id/til_store_name"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_re_authentication"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:text="@string/tv_re_authentication_des"
+            app:layout_constraintTop_toBottomOf="@id/cl_store_name"
+            app:layout_constraintStart_toStartOf="@id/cl_store_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

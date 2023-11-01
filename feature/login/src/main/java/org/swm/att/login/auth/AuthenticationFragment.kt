@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
@@ -49,7 +50,11 @@ class AuthenticationFragment : BaseFragment<FragmentAuthenticationBinding>(R.lay
                 loginViewModel.checkCertificationCodeState.collect { uiState ->
                     when(uiState) {
                         is UiState.Success -> {
-                            Toast.makeText(requireContext(), "인증되었습니다!", Toast.LENGTH_SHORT).show()
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "인증되었습니다!", Toast.LENGTH_SHORT).show()
+                                val action = AuthenticationFragmentDirections.actionFragmentAuthenticationToFragmentRegisterStore(it.certificatedPhoneToken)
+                                findNavController().navigate(action)
+                            }
                         }
                         is UiState.Loading -> {/* nothing */}
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()

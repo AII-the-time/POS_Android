@@ -205,7 +205,7 @@
     <string name="btn_category_modify_des">수정 완료</string>
     <string name="btn_submit_phone_number">전송</string>
     <string name="btn_submit">제출</string>
-    <string name="btn_submit_authentication_code">확인</string>
+    <string name="btn_check_des">확인</string>
     <string name="tv_phone_number_des1">전화번호 입력</string>
     <string name="tv_phone_number_des2">서비스 이용을 위해 전화번호를 입력해주세요!</string>
     <string name="tv_authentication_code_des1">인증번호 입력</string>
@@ -216,6 +216,7 @@
     <string name="tv_business_registration_num_des2">가게 등록을 위해 사업자등록번호를 입력해주세요!</string>
     <string name="tv_store_name_des1">가게 이름 입력</string>
     <string name="tv_store_name_des2">추가적인 가게 정보를 알려주세요!</string>
+    <string name="tv_re_authentication_des">← 전화번호를 재인증 하시겠습니까?</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>

@@ -22,5 +22,19 @@
         android:id="@+id/fragment_register_store"
         android:name="org.swm.att.login.store.RegisterStoreFragment"
         android:label="@string/fragment_register_store"
-        tools:layout="@layout/fragment_register_store" />
+        tools:layout="@layout/fragment_register_store" >
+        <action
+            android:id="@+id/action_fragment_register_store_to_fragment_authentication"
+            app:destination="@id/fragment_authentication"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/login_nav_graph" />
+        <argument
+            android:name="certificatedPhoneToken"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>
