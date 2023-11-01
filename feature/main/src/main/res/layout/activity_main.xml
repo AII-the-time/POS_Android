@@ -523,7 +523,7 @@
             app:layout_constraintStart_toEndOf="@id/custom_nav_rail"
             app:layout_constraintEnd_toEndOf="parent"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            app:navGraph="@navigation/nav_graph"
+            app:navGraph="@navigation/main_nav_graph"
             app:defaultNavHost="true"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
