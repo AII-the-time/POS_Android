@@ -1,4 +1,4 @@
-package org.swm.att.login
+package org.swm.att.login.auth
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,15 +16,17 @@ import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class AuthenticationViewModel @Inject constructor(
     private val attPosUserRepository: AttPosUserRepository
 ): BaseViewModel() {
     //phoneNumber
-    private val _postPhoneNumberState = MutableStateFlow<UiState<TokenForCertificationPhoneVO>>(UiState.Loading)
+    private val _postPhoneNumberState = MutableStateFlow<UiState<TokenForCertificationPhoneVO>>(
+        UiState.Loading)
     val postPhoneNumberState: StateFlow<UiState<TokenForCertificationPhoneVO>> = _postPhoneNumberState
 
     //certificationCode
-    private val _checkCertificationCodeState = MutableStateFlow<UiState<CertificatedPhoneTokenVO>>(UiState.Loading)
+    private val _checkCertificationCodeState = MutableStateFlow<UiState<CertificatedPhoneTokenVO>>(
+        UiState.Loading)
     val checkCertificationCodeState: StateFlow<UiState<CertificatedPhoneTokenVO>> = _checkCertificationCodeState
 
     //local
