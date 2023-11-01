@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterStoreViewModel @Inject constructor(
-    private val attPosUserRepository: AttPosUserRepository
+    private val attPosUserRepository: AttPosUserRepository,
 ): BaseViewModel() {
     //uiState
     private val _loginState = MutableStateFlow<UiState<TokenVO>>(UiState.Loading)
@@ -50,5 +50,11 @@ class RegisterStoreViewModel @Inject constructor(
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("전화번호 인증을 다시 해 주세요!")
         }
+    }
+
+    //token
+    fun saveTokens(accessToken: String, refreshToken: String) {
+        attPosUserRepository.saveAccessToken(accessToken)
+        attPosUserRepository.saveRefreshToken(refreshToken)
     }
 }

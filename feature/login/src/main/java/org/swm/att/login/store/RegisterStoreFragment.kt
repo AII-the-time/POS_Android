@@ -50,7 +50,10 @@ class RegisterStoreFragment : BaseFragment<FragmentRegisterStoreBinding>(R.layou
                 registerStoreViewModel.loginState.collect { uiState ->
                     when(uiState) {
                         is UiState.Success -> {
-                            Toast.makeText(requireContext(), "사업자 등록 번호 제출이 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                            uiState.data?.let {
+                                Toast.makeText(requireContext(), "사업자 등록 번호 제출이 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                                registerStoreViewModel.saveTokens(it.accessToken, it.refreshToken)
+                            }
                         }
                         is UiState.Loading -> {/* nothing */}
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
