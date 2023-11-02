@@ -41,4 +41,6 @@ dependencies {
     implementation(libs.bundles.androidx.ui.foundation)
     implementation(libs.material)
     testImplementation(libs.bundles.basic.test)
+    implementation(libs.hilt)
+    kapt(libs.hilt.kapt)
 }

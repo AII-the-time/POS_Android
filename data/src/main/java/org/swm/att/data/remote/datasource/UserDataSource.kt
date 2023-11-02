@@ -1,5 +1,7 @@
 package org.swm.att.data.remote.datasource
 
+import org.swm.att.data.remote.request.CertificationDTO
+import org.swm.att.data.remote.request.LoginDTO
 import org.swm.att.data.remote.request.PhoneNumDTO
 import org.swm.att.data.remote.request.StoreDTO
 import org.swm.att.data.remote.response.MileageDTO
@@ -26,4 +28,13 @@ class UserDataSource @Inject constructor(
 
     suspend fun registerStoreForTest(store: StoreDTO) =
         checkResponse(attPosUserService.registerStoreForTest(store))
+
+    suspend fun postPhoneNumberForAuthentication(phone: PhoneNumDTO) =
+        checkResponse(attPosUserService.postPhoneNumberForAuthentication(phone))
+
+    suspend fun checkCertificationCode(certificationInfo: CertificationDTO) =
+        checkResponse(attPosUserService.checkCertificationCode(certificationInfo))
+
+    suspend fun login(userInfo: LoginDTO) =
+        checkResponse(attPosUserService.login(userInfo))
 }

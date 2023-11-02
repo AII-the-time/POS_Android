@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_nav_graph"
+    app:startDestination="@id/fragment_authentication">
+
+    <fragment
+        android:id="@+id/fragment_authentication"
+        android:name="org.swm.att.login.auth.AuthenticationFragment"
+        android:label="@string/fragment_authentication"
+        tools:layout="@layout/fragment_authentication" >
+        <action
+            android:id="@+id/action_fragment_authentication_to_fragment_register_store"
+            app:destination="@id/fragment_register_store"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_register_store"
+        android:name="org.swm.att.login.store.RegisterStoreFragment"
+        android:label="@string/fragment_register_store"
+        tools:layout="@layout/fragment_register_store" >
+        <action
+            android:id="@+id/action_fragment_register_store_to_fragment_authentication"
+            app:destination="@id/fragment_authentication"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/login_nav_graph" />
+        <argument
+            android:name="certificatedPhoneToken"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+</navigation>
