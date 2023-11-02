@@ -23,15 +23,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //TODO: 로그인 과정 추가되면 수정
-        //checkRefreshToken()
         setNavController()
         setBindingData()
         setObserver()
     }
-//    private fun checkRefreshToken() {
-//        mainViewModel.checkRefreshToken()
-//    }
 
     private fun setNavController() {
         val navHost =
@@ -47,15 +42,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun setObserver() {
-//        mainViewModel.refreshExist.observe(this) { exist ->
-//            if (exist == false) {
-//                // 로그인 및 회원가입으로 화면 전환
-//            } else {
-//                // storeId 확인
-//                mainViewModel.checkStoreId()
-//            }
-//        }
-
         mainViewModel.selectedScreen.observe(this) { destination ->
             mainViewModel.isGlobalAction.value?.let {
                 findViewById<CheckBox>(destination.viewId).isChecked = true
