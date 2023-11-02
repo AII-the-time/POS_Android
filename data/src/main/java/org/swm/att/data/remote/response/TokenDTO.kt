@@ -8,9 +8,9 @@ import org.swm.att.domain.entity.response.TokenVO
 @Serializable
 @JsonClass(generateAdapter = true)
 data class TokenDTO(
-    @field:Json(name = "access_token")
+    @field:Json(name = "accessToken")
     val accessToken: String? = "",
-    @field:Json(name = "refresh_token")
+    @field:Json(name = "refreshToken")
     val refreshToken: String? = ""
 ) {
     fun toVO() = TokenVO(
