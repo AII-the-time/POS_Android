@@ -60,6 +60,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":common-ui"))
     implementation(project(":feature:main"))
+    implementation(project(":feature:login"))
 
     implementation(libs.material)
     implementation(libs.bundles.androidx.ui.foundation)

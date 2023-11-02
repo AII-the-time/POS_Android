@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".main.preorder.PreorderFragment">
+    tools:context=".preorder.PreorderFragment">
 
     <data>
         <variable
             name = "preorderViewModel"
-            type = "org.swm.att.home.main.preorder.PreorderViewModel" />
+            type = "org.swm.att.home.preorder.PreorderViewModel" />
         <import type="android.view.View" />
         <import type="org.swm.att.common_ui.util.Formatter" />
     </data>

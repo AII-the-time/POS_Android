@@ -7,19 +7,19 @@ class AttEncryptedPrefDataSource @Inject constructor(
     private val attEncryptedPref: SharedPreferences
 ) {
 
-    fun getAccessToken(
+    fun getToken(
         preferenceKey: PreferenceKey
-    ): String {
+    ): String? {
         val key = preferenceKey.name
-        return attEncryptedPref.getString(key, "") as String
+        return attEncryptedPref.getString(key, null)
     }
 
-    fun setAccessToken(
+    fun setToken(
         preferenceKey: PreferenceKey,
         value: String
     ) {
         val key = preferenceKey.name
-        attEncryptedPref.edit().putString(key, value).apply()
+        attEncryptedPref.edit().putString(key, value).commit()
     }
 
     fun getStoreId(
@@ -34,7 +34,7 @@ class AttEncryptedPrefDataSource @Inject constructor(
         value: Int
     ) {
         val key = preferenceKey.name
-        attEncryptedPref.edit().putInt(key, value).apply()
+        attEncryptedPref.edit().putInt(key, value).commit()
     }
 
     companion object {
