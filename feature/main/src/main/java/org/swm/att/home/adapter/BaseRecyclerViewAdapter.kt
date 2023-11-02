@@ -12,9 +12,7 @@ import org.swm.att.domain.constant.BaseItemViewType
 import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.BaseRecyclerViewItem
 import org.swm.att.domain.entity.response.OrderedMenuOfBillVO
-import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.home.R
-import org.swm.att.home.databinding.ItemMenuRecipeBinding
 import org.swm.att.home.databinding.ItemOrderedMenuBinding
 
 class BaseRecyclerViewAdapter: ListAdapter<BaseRecyclerViewItem, BaseRecyclerViewViewHolder>(

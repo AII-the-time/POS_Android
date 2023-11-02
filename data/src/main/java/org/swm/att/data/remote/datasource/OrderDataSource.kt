@@ -6,11 +6,13 @@ import org.swm.att.data.remote.request.PaymentDTO
 import org.swm.att.data.remote.request.PreOrderedMenusDTO
 import org.swm.att.data.remote.response.OrderBillsDTO
 import org.swm.att.data.remote.response.OrderDTO
+import org.swm.att.data.remote.response.OrderIdDTO
 import org.swm.att.data.remote.response.OrderReceiptDTO
 import org.swm.att.data.remote.response.PreOrderBillDTO
 import org.swm.att.data.remote.response.PreOrdersDTO
 import org.swm.att.data.remote.response.PreorderIdDTO
 import org.swm.att.data.remote.service.AttPosService
+import org.swm.att.domain.entity.response.OrderIdVO
 import javax.inject.Inject
 
 class OrderDataSource @Inject constructor(
@@ -47,5 +49,17 @@ class OrderDataSource @Inject constructor(
 
     suspend fun getPreOrderBill(storeId: Int, preOrderId: Int): Flow<PreOrderBillDTO> {
         return checkResponse(attPosService.getPreOrderBill(storeId, preOrderId))
+    }
+
+    suspend fun deletePreorder(storeId: Int, preorderId: Int): Flow<PreorderIdDTO> {
+        return checkResponse(attPosService.deletePreorder(storeId, preorderId))
+    }
+
+    suspend fun updatePreorder(storeId: Int, preOrderedMenus: PreOrderedMenusDTO): Flow<PreorderIdDTO> {
+        return checkResponse(attPosService.updatePreorder(storeId, preOrderedMenus))
+    }
+
+    suspend fun cancelOrder(store:Int, orderId: Int): Flow<OrderIdDTO> {
+        return checkResponse(attPosService.cancelOrder(store, orderId))
     }
 }

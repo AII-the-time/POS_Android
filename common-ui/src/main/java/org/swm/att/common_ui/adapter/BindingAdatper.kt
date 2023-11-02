@@ -1,16 +1,16 @@
 package org.swm.att.common_ui.adapter
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import org.swm.att.common_ui.R
+import org.swm.att.common_ui.constant.StockState
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter.getDataTimeBaseFormattingResult
 import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
@@ -22,6 +22,7 @@ import org.swm.att.domain.entity.request.OrderedMenuVO
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.OptionTypeVO
+import org.swm.att.domain.entity.response.StockWithStateVO
 import java.util.Date
 import java.util.Stack
 
@@ -192,7 +193,6 @@ fun setEndDateText(view: TextView, endDateText: Date?) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @BindingAdapter("setEditTextStyleByIsModify")
 fun setEditTextStyleByIsModify(view: AppCompatEditText, isModify: Boolean) {
     view.isEnabled = isModify
@@ -213,6 +213,14 @@ fun setLocalTimeText(view: TextView, date: String?) {
     date?.let {
         val localTime = getDateFromString(it).getRTCDateTime()
         view.text = getTimeFromString(localTime)
+    }
+}
+
+@BindingAdapter("localDateText")
+fun setLocalDateText(view: TextView, date: String?) {
+    date?.let {
+        val localTime = getDateFromString(it).getRTCDateTime()
+        view.text = getDateBaseFormattingResult(localTime)
     }
 }
 
@@ -237,4 +245,39 @@ fun setVisibilityByUiState(view: TextView, uiState: UiState<CategoriesVO>) {
             view.visibility = View.VISIBLE
         }
     }
+}
+
+@BindingAdapter("backgroundByStockState")
+fun setBackgroundByStockState(view: AppCompatImageView, stockWithState: String?) {
+    stockWithState?.let {
+        val stockState = StockState.toStockState(it)
+        if (stockState.icon == null) {
+            view.visibility = View.GONE
+        } else {
+            view.background = view.context.getDrawable(stockState.icon)
+            view.visibility = View.VISIBLE
+        }
+    }
+}
+
+@BindingAdapter("textByStockState")
+fun setTextByStockState(view: TextView, stockWithState: String?) {
+    stockWithState?.let {
+        val stockState = StockState.toStockState(it)
+        view.text = stockState.state
+    }
+}
+
+@BindingAdapter("menuBackgroundByStockState")
+fun setMenuStateBackgroundByStockState(view: ConstraintLayout, stockWithState: String?) {
+    stockWithState?.let {
+        val stockState = StockState.toStockState(it)
+        view.setBackgroundResource(stockState.drawable)
+    }
+}
+
+@BindingAdapter("textByStockState")
+fun setTextByStockState(view: TextView, stockWithStateVO: StockWithStateVO) {
+    val stockState = StockState.toStockState(stockWithStateVO.state)
+    view.text = stockState.state
 }

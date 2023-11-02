@@ -24,7 +24,7 @@ import org.swm.att.domain.entity.response.StoreIdVO
 import org.swm.att.domain.repository.AttMenuRepository
 import org.swm.att.domain.repository.AttOrderRepository
 import org.swm.att.domain.repository.AttPosUserRepository
-import org.swm.att.home.util.alarm.AlarmManager
+import org.swm.att.home.alarm.AlarmManager
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -67,9 +67,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getCategories() {
+    fun getCategories(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
-            val storeId = attPosUserRepository.getStoreId()
             attMenuRepository.getMenu(storeId)
                 .collect { result ->
                     result.onSuccess { category ->
@@ -95,15 +94,17 @@ class HomeViewModel @Inject constructor(
 
     fun minusSelectedMenuItem(menu: OrderedMenuVO) {
         val selectedMenuMap = (_selectedMenuMap.value ?: mapOf()).toMutableMap()
-        val count = selectedMenuMap[menu]!!
+        selectedMenuMap[menu]?.let {
+            val count = selectedMenuMap[menu]!!
 
-        if (count == 1) {
-            selectedMenuMap.remove(menu)
-        } else {
-            selectedMenuMap[menu] = count - 1
+            if (count == 1) {
+                selectedMenuMap.remove(menu)
+            } else {
+                selectedMenuMap[menu] = count - 1
+            }
+
+            _selectedMenuMap.postValue(selectedMenuMap)
         }
-
-        _selectedMenuMap.postValue(selectedMenuMap)
     }
 
     fun plusSelectedMenuItem(menu: OrderedMenuVO) {
@@ -140,6 +141,9 @@ class HomeViewModel @Inject constructor(
     fun registerStore() {
         viewModelScope.launch(attExceptionHandler) {
             // 임시 token을 활용해 가게 바로 등록
+            // for test with base data
+            //attPosUserRepository.registerStoreForTest(
+            // real
             attPosUserRepository.registerStore(
                 StoreVO(
                     name = "temp",
@@ -159,17 +163,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getTodayPreorder() {
+    fun getTodayPreorder(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
             val date =
                 Formatter.getStringByDateTimeBaseFormatter(Calendar.getInstance().time.getUTCDateTime())
-            val storeId = attPosUserRepository.getStoreId()
             attOrderRepository.getPreOrders(storeId, page, date).collect { result ->
                 result.onSuccess {
                     todayPreorderList.addAll(it.preOrders)
                     page += 1
                     if (page < it.lastPage) {
-                        getTodayPreorder()
+                        getTodayPreorder(storeId)
                     } else {
                         setPreorderAlarm()
                     }

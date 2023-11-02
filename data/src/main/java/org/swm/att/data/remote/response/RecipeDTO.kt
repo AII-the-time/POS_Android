@@ -10,15 +10,18 @@ data class RecipeDTO(
     val id: Int?,
     @field:Json(name = "name")
     val name: String?,
-    @field:Json(name = "amount")
-    val amount: Int?,
+    @field:Json(name = "isMixed")
+    val isMixed: Boolean?,
+    @field:Json(name = "coldRegularAmount")
+    val coldRegularAmount: Int?,
     @field:Json(name = "unit")
     val unit: String?
 ) {
     fun toVO() = RecipeVO(
         id = id ?: -1,
         name = name ?: "Unknown",
-        amount = amount?.toString() ?: "-1",
-        unit = unit ?: "Unknown"
+        isMixed = isMixed ?: false,
+        coldRegularAmount = coldRegularAmount.toString() ?: "-1",
+        unit = if (unit == "Unknown") "-" else unit ?: "-"
     )
 }

@@ -1,7 +1,6 @@
 package org.swm.att.home.bills
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -70,8 +69,8 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
 
     private fun setBillCancelBtnClickListener() {
         binding.btnPayCancel.setOnClickListener {
-            /* todo */
-            Toast.makeText(requireContext(), "서비스 준비 중입니다!", Toast.LENGTH_SHORT).show()
+            val dialog = BillCancelConfirmDialog(billViewModel)
+            dialog.show(childFragmentManager, "billCancel")
         }
     }
 
@@ -111,6 +110,24 @@ class BillFragment : BaseFragment<FragmentBillBinding>(R.layout.fragment_bill) {
 
                         is UiState.Loading -> { /* nothing */
                         }
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                billViewModel.deleteBillState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            Toast.makeText(requireContext(), "결제 취소 완료", Toast.LENGTH_SHORT).show()
+                            billViewModel.apply {
+                                resetPagingValue()
+                                getNextOrderBills()
+                            }
+                        }
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        is UiState.Loading -> { /* nothing */ }
                     }
                 }
             }

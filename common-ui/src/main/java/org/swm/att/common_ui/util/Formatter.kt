@@ -36,6 +36,14 @@ object Formatter {
         }
     }
 
+    fun getBaseStringFromCurrencyUnit(currency: String?): String {
+        return if (currency.isNullOrEmpty()) {
+            ""
+        } else {
+            decimalFormat.parse(currency).toString()
+        }
+    }
+
     fun getDateBaseFormattingResult(date: Date): String {
         return baseDateFormatter.format(date)
     }

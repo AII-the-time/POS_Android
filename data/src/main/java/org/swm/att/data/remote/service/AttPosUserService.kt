@@ -1,11 +1,15 @@
 package org.swm.att.data.remote.service
 
+import org.swm.att.data.remote.request.CertificationDTO
+import org.swm.att.data.remote.request.LoginDTO
 import org.swm.att.data.remote.request.PhoneNumDTO
 import org.swm.att.data.remote.request.StoreDTO
+import org.swm.att.data.remote.response.CertificatedPhoneTokenDTO
 import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.data.remote.response.MileageIdDTO
 import org.swm.att.data.remote.response.StoreIdDTO
 import org.swm.att.data.remote.response.TokenDTO
+import org.swm.att.data.remote.response.TokenForCertificationPhoneDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -43,5 +47,25 @@ interface AttPosUserService {
     suspend fun registerStore(
         @Body store: StoreDTO
     ): Response<StoreIdDTO>
+
+    @POST("store/test")
+    suspend fun registerStoreForTest(
+        @Body store: StoreDTO
+    ): Response<StoreIdDTO>
+
+    @POST("user/phone")
+    suspend fun postPhoneNumberForAuthentication(
+        @Body phone: PhoneNumDTO
+    ): Response<TokenForCertificationPhoneDTO>
+
+    @POST("user/phone/certificationCode")
+    suspend fun checkCertificationCode(
+       @Body certificationBody: CertificationDTO
+    ): Response<CertificatedPhoneTokenDTO>
+
+    @POST("user/login")
+    suspend fun login(
+        @Body userInfo: LoginDTO
+    ): Response<TokenDTO>
 
 }

@@ -12,6 +12,8 @@ data class MenuDTO(
     val name: String?,
     @field:Json(name = "price")
     val price: Int?,
+    @field:Json(name = "stockStatus")
+    val stockState: String?,
     @field:Json(name = "option")
     val option: List<OptionDTO>?
 ) {
@@ -20,6 +22,7 @@ data class MenuDTO(
             id = id ?: -1,
             name = name ?: "",
             price = price ?: -1,
+            stockState = stockState ?: "UNKNOWN",
             option = option?.map { it.toVO() } ?: listOf()
         )
     }

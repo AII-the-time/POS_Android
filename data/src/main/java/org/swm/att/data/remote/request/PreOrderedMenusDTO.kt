@@ -5,6 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PreOrderedMenusDTO(
+    @field:Json(name = "id")
+    val id: Int?,
     @field:Json(name = "totalPrice")
     val totalPrice: String,
     @field:Json(name = "menus")

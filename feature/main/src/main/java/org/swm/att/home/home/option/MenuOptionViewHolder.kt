@@ -39,6 +39,7 @@ class MenuOptionViewHolder(
                     } else {
                         context.getString(R.string.tv_menu_option_type_with_no_price, type.name)
                     }
+                    isEnabled = type.isSelectable
                 }
                 binding.cgMenuOptionType.addView(chip)
             }

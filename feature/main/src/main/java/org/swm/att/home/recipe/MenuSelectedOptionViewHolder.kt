@@ -48,6 +48,13 @@ class MenuSelectedOptionViewHolder(
                     }
                     isChecked = type.isSelectable
                     isEnabled = false
+                    setOnCheckedChangeListener { _, b ->
+                        if (b) {
+                            menuRecipeViewModel.addSelectedOption(type.id)
+                        } else {
+                            menuRecipeViewModel.removeSelectedOption(type.id)
+                        }
+                    }
                 }
                 binding.cgMenuOptionType.addView(chip)
             }
@@ -57,7 +64,12 @@ class MenuSelectedOptionViewHolder(
     private fun setObserver() {
         menuRecipeViewModel.isModify.observe(lifecycleOwner) {
             binding.cgMenuOptionType.children.iterator().forEach { chip ->
-                chip.isEnabled = it
+                chip.isEnabled = it ?: false
+            }
+        }
+        menuRecipeViewModel.isCreate.observe(lifecycleOwner) {
+            binding.cgMenuOptionType.children.iterator().forEach { chip ->
+                chip.isEnabled = it ?: false
             }
         }
     }

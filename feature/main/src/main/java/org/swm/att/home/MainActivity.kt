@@ -8,9 +8,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.swm.att.common_ui.presenter.base.BaseActivity
+import org.swm.att.home.constant.NavDestinationType
 import org.swm.att.home.databinding.ActivityMainBinding
+import org.swm.att.home.alarm.AlarmManager
 import org.swm.att.home.home.HomeFragmentDirections
-import org.swm.att.home.util.alarm.AlarmManager
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -22,15 +23,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //TODO: 로그인 과정 추가되면 수정
-        //checkRefreshToken()
         setNavController()
         setBindingData()
         setObserver()
     }
-//    private fun checkRefreshToken() {
-//        mainViewModel.checkRefreshToken()
-//    }
 
     private fun setNavController() {
         val navHost =
@@ -46,15 +42,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun setObserver() {
-//        mainViewModel.refreshExist.observe(this) { exist ->
-//            if (exist == false) {
-//                // 로그인 및 회원가입으로 화면 전환
-//            } else {
-//                // storeId 확인
-//                mainViewModel.checkStoreId()
-//            }
-//        }
-
         mainViewModel.selectedScreen.observe(this) { destination ->
             mainViewModel.isGlobalAction.value?.let {
                 findViewById<CheckBox>(destination.viewId).isChecked = true
@@ -91,6 +78,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
                 val action = HomeFragmentDirections.actionGlobalFragmentPreorder(it)
                 navHost.navController.navigate(action)
+                mainViewModel.directWithGlobalAction(NavDestinationType.Preorder)
             }
         }
     }

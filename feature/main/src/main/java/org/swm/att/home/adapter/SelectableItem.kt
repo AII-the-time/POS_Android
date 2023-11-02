@@ -13,10 +13,13 @@ import org.swm.att.domain.entity.response.BaseRecyclerViewItem
 import org.swm.att.domain.entity.response.MenuVO
 import org.swm.att.domain.entity.response.OrderBillVO
 import org.swm.att.domain.entity.response.PreorderVO
+import org.swm.att.domain.entity.response.StockWithStateVO
 import org.swm.att.home.R
 import org.swm.att.home.databinding.ItemBillBinding
 import org.swm.att.home.databinding.ItemPreorderBinding
 import org.swm.att.home.databinding.ItemRegisteredMenuBinding
+import org.swm.att.home.databinding.ItemStockBinding
+import org.swm.att.home.stock.StockViewModel
 
 class SelectableItemAdapter(
     private val viewModel: BaseSelectableViewViewModel
@@ -36,6 +39,9 @@ class SelectableItemAdapter(
         holder.itemView.setOnClickListener {
             viewModel.setCurrentSelectedItemId(position)
             viewModel.getSelectedItem(item.id)
+            if (viewModel is StockViewModel) {
+                viewModel.setLastSelectedState((item as StockWithStateVO).state)
+            }
         }
     }
 
@@ -49,6 +55,7 @@ class SelectableItemAdapter(
                 SelectedItemViewType.BILL -> R.layout.item_bill
                 SelectedItemViewType.MENU -> R.layout.item_registered_menu
                 SelectedItemViewType.PREORDER -> R.layout.item_preorder
+                SelectedItemViewType.STOCK_WITH_STATE -> R.layout.item_stock
             }
         }
 
@@ -58,6 +65,7 @@ class SelectableItemAdapter(
                 SelectedItemViewType.BILL -> BillViewHolder(binding as ItemBillBinding)
                 SelectedItemViewType.MENU -> RegisteredMenuVIewHolder(binding as ItemRegisteredMenuBinding)
                 SelectedItemViewType.PREORDER -> PreorderItemViewHolder(binding as ItemPreorderBinding)
+                SelectedItemViewType.STOCK_WITH_STATE -> StockWithStateViewHolder(binding as ItemStockBinding)
             }
         }
     }
@@ -84,5 +92,13 @@ class PreorderItemViewHolder(
 ) : BaseRecyclerViewViewHolder(binding) {
     override fun bind(item: BaseRecyclerViewItem) {
         binding.preorder = item as PreorderVO
+    }
+}
+
+class StockWithStateViewHolder(
+    private val binding: ItemStockBinding
+) : BaseRecyclerViewViewHolder(binding) {
+    override fun bind(item: BaseRecyclerViewItem) {
+        binding.stockWithState = item as StockWithStateVO
     }
 }

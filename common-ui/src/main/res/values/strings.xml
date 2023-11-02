@@ -11,6 +11,8 @@
     <string name="fragment_setting">SettingFragment</string>
     <string name="fragment_worker">WorkerFragment</string>
     <string name="dialog_earn_mileage">EarnMileageDialog</string>
+    <string name="fragment_authentication">AuthenticationFragment</string>
+    <string name="fragment_register_store">RegisterStoreFragment</string>
     <!--  menu  -->
     <string name="menu_home">홈</string>
     <string name="menu_order">전체 주문</string>
@@ -47,8 +49,10 @@
     <!--  hint  -->
     <string name="edt_menu_custom_option">상세옵션 입력 시 작성</string>
     <string name="edt_register_menu_name">메뉴 이름을 입력해주세요.</string>
+    <string name="edt_register_stock_name">ex) 원두</string>
     <string name="edt_register_menu_price">ex) 6,000</string>
     <string name="edt_category_name">카테고리 이름을 입력해주세요.</string>
+    <string name="sv_search_stock">재료 검색</string>
     <!--  format  -->
     <string name="tv_filtering_start">%s</string>
     <string name="tv_filtering_end">- %s</string>
@@ -111,9 +115,10 @@
     <string name="tv_week_sat">토</string>
     <string name="tv_week_sun">일</string>
     <string name="tv_bill_filtering_des">기간별 검색</string>
-    <string name="btn_bill_filtering_search">검색</string>
+    <string name="btn_bill_filtering_search">적용</string>
+    <string name="btn_confirm">예</string>
+    <string name="btn_cancel_delete">아니오</string>
     <string name="tv_no_filtering">전체</string>
-
     <string name="tv_preorder_input_user_info">고객 정보</string>
     <string name="tv_preorder_request_des">요청사항</string>
     <string name="tv_preorder_request_hint">ex) 얼음 많이 주세요.</string>
@@ -132,6 +137,7 @@
     <string name="tv_customer_request_not_exist">요청사항 없음</string>
     <string name="tv_save_modification">주문 저장</string>
     <string name="tv_preorder_register_des">예약 주문 등록</string>
+    <string name="tv_preorder_modify_des">예약 주문 수정</string>
     <string name="tv_preorder_info_des">수령 정보</string>
     <string name="tv_preorder_date_des">예약 날짜</string>
     <string name="tv_preorder_time_des">수령 시간</string>
@@ -147,20 +153,28 @@
     <string name="tv_minute_for_picker">분</string>
     <string name="tv_modify_category_name"><u>카테고리 수정</u></string>
     <string name="tv_register_menu">메뉴 추가</string>
+    <string name="tv_register_stock">재고 추가</string>
     <string name="chip_manufactured_menu">제조 메뉴</string>
     <string name="chip_none_manufactured_menu">비제조 메뉴</string>
     <string name="tv_recipe_name_des">품목</string>
     <string name="tv_recipe_amount_des">수량</string>
     <string name="tv_recipe_unit_des">단위</string>
     <string name="btn_modify_menu">레시피 수정</string>
+    <string name="btn_modify_stock">재고 수정</string>
+    <string name="btn_cancel">취소</string>
     <string name="btn_delete_menu">메뉴 삭제</string>
+    <string name="btn_delete_stock">재고 삭제</string>
     <string name="btn_modify_options">옵션 설정</string>
     <string name="btn_register_menu">메뉴 등록</string>
+    <string name="btn_register_stock">재고 등록</string>
     <string name="tv_no_menu_recipe_des">레시피를 추가해주세요!</string>
     <string name="tv_no_menu_option_des">옵션을 추가해주세요!</string>
     <string name="tv_no_menu_des">메뉴를 등록해주세요!</string>
+    <string name="tv_no_stock_des">재고를 등록해주세요!</string>
+    <string name="tv_no_using_menu_des">해당 재고를 사용하는 메뉴가 없습니다!</string>
     <string name="tv_price_unit">원</string>
     <string name="tv_register_recipe_des">레시피 설정</string>
+    <string name="tv_stock_setting_des">재고 설정</string>
     <string name="tv_register_option_des">옵션 설정</string>
     <string name="tv_category_no_item">메뉴를 등록해주세요!</string>
     <string name="tv_category_modify">수정</string>
@@ -171,6 +185,39 @@
     <string name="tv_new_menu_item">새로운 메뉴</string>
     <string name="tv_no_category_des">\'레시피 관리\'에서 새로운 카테고리와 메뉴를 추가해보세요!</string>
     <string name="tv_ready_for_service">서비스 준비 중 입니다!</string>
+    <string name="tv_item_add_new">+ 재고 추가</string>
+    <string name="chip_stock_all">재고 전체</string>
+    <string name="chip_stock_lack_or_empty">부족/없음</string>
+    <string name="chip_stock_unknown">재고 조사 X</string>
+    <string name="tv_current_stock_amount">현재 재고수</string>
+    <string name="tv_stock_amount_per_des">한 개당 재고량</string>
+    <string name="tv_stock_price_per_des">한 개당 가격</string>
+    <string name="tv_stock_notification_reference_amount">알림 기준량</string>
+    <string name="tv_weekly_usage">최근 1주 사용량</string>
+    <string name="tv_inventory_date_des">최근 재고\n조사일</string>
+    <string name="tv_menu_related_stock_des">관련 메뉴</string>
+    <string name="tv_stock_cost_setting_des">원가 설정</string>
+    <string name="tv_confirm_preorder_delete_text">해당 <b>예약 주문</b>을 삭제하시겠습니까?</string>
+    <string name="tv_confirm_stock_delete_text">해당 <b>재고</b>를 삭제하시겠습니까?</string>
+    <string name="tv_confirm_menu_delete_text">해당 <b>메뉴</b>를 삭제하시겠습니까?</string>
+    <string name="tv_confirm_bill_cancel_text">해당 <b>결제 내역</b>을 취소하시겠습니까?</string>
+    <string name="tv_confirm_category_delete_text">카테고리 삭제 시, 포함된 메뉴들도 함께 삭제됩니다!\n해당 <b>카테고리</b>를 삭제하시겠습니까?</string>
+    <string name="btn_category_modify_des">수정 완료</string>
+    <string name="btn_submit_phone_number">전송</string>
+    <string name="btn_submit">제출</string>
+    <string name="btn_check_des">확인</string>
+    <string name="tv_phone_number_des1">전화번호 입력</string>
+    <string name="tv_phone_number_des2">서비스 이용을 위해 전화번호를 입력해주세요!</string>
+    <string name="tv_authentication_code_des1">인증번호 입력</string>
+    <string name="tv_authentication_code_des2">전송된 인증번호를 입력해주세요!</string>
+    <string name="tv_phone_number_helper_txt">ex) 01012341234</string>
+    <string name="tv_business_registration_num_hint">ex) 0101234123</string>
+    <string name="tv_register_store_des">인증에 성공하셨습니다!</string>
+    <string name="tv_business_registration_num_des1">사업자 등록 번호 입력</string>
+    <string name="tv_business_registration_num_des2">가게 등록을 위해 사업자등록번호를 입력해주세요!</string>
+    <string name="tv_store_name_des1">가게 이름 입력</string>
+    <string name="tv_store_name_des2">추가적인 가게 정보를 알려주세요!</string>
+    <string name="tv_re_authentication_des">← 전화번호를 재인증 하시겠습니까?</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>

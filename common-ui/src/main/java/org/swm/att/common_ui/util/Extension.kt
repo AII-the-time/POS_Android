@@ -23,3 +23,19 @@ fun Date.getRTCDateTimeFromData(data: Date): Date {
     localTime.add(Calendar.HOUR, 9)
     return localTime.time
 }
+
+fun String?.getValueOrNull(): String? {
+    return if (this.isNullOrEmpty()) {
+        null
+    } else {
+        this
+    }
+}
+
+fun String?.getIntOrNull(): Int? {
+    return if (this.isNullOrEmpty()) {
+        null
+    } else {
+        this.toInt()
+    }
+}

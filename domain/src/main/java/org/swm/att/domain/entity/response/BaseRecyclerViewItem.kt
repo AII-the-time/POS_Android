@@ -23,7 +23,7 @@ data class OrderBillVO(
 ) : BaseRecyclerViewItem()
 
 data class MenuWithRecipeVO(
-    override val id: Int,
+    override var id: Int,
     override val viewType: String = "MENU",
     val category: String,
     var menuId: Int? = null,
@@ -39,6 +39,7 @@ data class MenuVO(
     override val viewType: String = "MENU",
     val name: String,
     val price: Int,
+    val stockState: String,
     val option: List<OptionVO>,
     val detail: String? = null,
     var isFocused: Boolean = false
@@ -69,9 +70,12 @@ data class RecipeVO(
     override val id: Int,
     override val viewType: String = "RECIPE",
     var name: String,
-    var amount: String,
+    val isMixed: Boolean,
+    var coldRegularAmount: String?,
     var unit: String
-) : java.io.Serializable, BaseRecyclerViewItem()
+) : java.io.Serializable, BaseRecyclerViewItem() {
+    constructor(stock: StockWithMixedVO): this(stock.id, "RECIPE", stock.name, stock.isMixed, null, "g")
+}
 
 data class PreorderVO(
     override val id: Int,
@@ -82,5 +86,14 @@ data class PreorderVO(
     val totalCount: Int,
     val phone: String,
     val memo: String? = null,
+    var isFocused: Boolean = false
+) : BaseRecyclerViewItem()
+
+data class StockWithStateVO(
+    override val id: Int,
+    override val viewType: String = "STOCK_WITH_STATE",
+    val name: String,
+    val state: String,
+    val usingMenuCount: Int,
     var isFocused: Boolean = false
 ) : BaseRecyclerViewItem()

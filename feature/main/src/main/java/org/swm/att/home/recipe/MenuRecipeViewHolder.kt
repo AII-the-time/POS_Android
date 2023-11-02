@@ -2,7 +2,6 @@ package org.swm.att.home.recipe
 
 import android.widget.ArrayAdapter
 import androidx.core.view.doOnAttach
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import org.swm.att.common_ui.R
@@ -13,56 +12,52 @@ import org.swm.att.home.databinding.ItemMenuRecipeBinding
 
 class MenuRecipeViewHolder(
     private val binding: ItemMenuRecipeBinding,
-    private val menuRecipeViewModel: RecipeViewModel
+    private val menuRecipeViewModel: RecipeViewModel,
 ) : BaseInteractiveViewHolder(binding, menuRecipeViewModel) {
-    private lateinit var lifecycleOwner: LifecycleOwner
+    private var owner: LifecycleOwner? = null
+    private var recipeId: Int? = null
 
     init {
         itemView.doOnAttach {
-            binding.recipeViewModel = menuRecipeViewModel
-            lifecycleOwner = it.findViewTreeLifecycleOwner()!!
+            owner = it.findViewTreeLifecycleOwner()
+            binding.lifecycleOwner = owner
         }
     }
 
     override fun bind(item: BaseRecyclerViewItem, position: Int?) {
+        val recipe = item as RecipeVO
+        recipeId = recipe.id
         binding.apply {
-            recipeVO = item as RecipeVO
+            recipeVO = recipe
             recipeViewModel = menuRecipeViewModel
         }
-        initUnitMenu()
-        setBtnDeleteRecipeClickListener(position)
-        setEdtTextChangeListener(position)
+        initUnitMenu(recipe.unit)
+        setBtnDeleteRecipeClickListener(recipe.id)
     }
 
-    private fun initUnitMenu() {
+    private fun initUnitMenu(unit: String) {
         val unitArray = binding.root.context.resources.getStringArray(R.array.recipe_unit)
         val arrayAdapter =
-            ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_menu_unit, unitArray)
+            ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_simple_text, unitArray)
         binding.actMenuUnit.apply {
             setAdapter(arrayAdapter)
-            // 단위 'g'을 default로 설정
-            setText(unitArray[0], false)
+//            setText(unit, false)
         }
     }
 
-    private fun setBtnDeleteRecipeClickListener(position: Int?) {
+    private fun setBtnDeleteRecipeClickListener(stockId: Int) {
         binding.btnDeleteRecipe.setOnClickListener {
-            menuRecipeViewModel.deleteRecipeByPosition(position)
+            menuRecipeViewModel.deleteRecipeByPosition(stockId)
         }
     }
 
-    private fun setEdtTextChangeListener(position: Int?) {
-        position?.let {
-            binding.etRecipeAmount.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.amount =
-                    it.toString()
-            }
-            binding.etRecipeName.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.name = it.toString()
-            }
-            binding.actMenuUnit.addTextChangedListener {
-                menuRecipeViewModel.recipeListForNewMenu.value?.get(position)?.unit = it.toString()
-            }
-        }
+    fun getRecipe(): RecipeVO {
+        return RecipeVO(
+            id = recipeId ?: -1,
+            name = binding.etRecipeName.text.toString(),
+            isMixed = false,
+            coldRegularAmount = binding.etRecipeAmount.text.toString(),
+            unit = binding.actMenuUnit.text.toString(),
+        )
     }
 }

@@ -17,8 +17,8 @@ android {
         applicationId = "org.swm.att"
         minSdk = ProjectConfig.minSdk
         targetSdk = ProjectConfig.targetSdk
-        versionCode = 10
-        versionName = "1.0.0"
+        versionCode = 13
+        versionName = "3.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,6 +26,7 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "ATT_BASE_URL", "\"${gradleLocalProperties(rootDir).getProperty("ATT_DEBUG_BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${gradleLocalProperties(rootDir).getProperty("TMP_DEBUG_ACCESS_TOKEN")}\"")
             manifestPlaceholders["SENTRY_DSN"] = gradleLocalProperties(rootDir).getProperty("SENTRY_DSN_DEBUG")
         }
         release {
@@ -34,6 +35,7 @@ android {
                     getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
             buildConfigField("String", "ATT_BASE_URL", "\"${gradleLocalProperties(rootDir).getProperty("ATT_RELEASE_BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${gradleLocalProperties(rootDir).getProperty("TMP_RELEASE_ACCESS_TOKEN")}\"")
             manifestPlaceholders["SENTRY_DSN"] = gradleLocalProperties(rootDir).getProperty("SENTRY_DSN_RELEASE")
         }
     }
@@ -58,6 +60,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":common-ui"))
     implementation(project(":feature:main"))
+    implementation(project(":feature:login"))
 
     implementation(libs.material)
     implementation(libs.bundles.androidx.ui.foundation)

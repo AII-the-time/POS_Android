@@ -69,18 +69,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    private fun setCategories() {
+    private fun setCategories(storeId: Int) {
         categoryViewPagerAdapter = CategoryViewPagerAdapter(this)
         binding.vpCategory.adapter = categoryViewPagerAdapter
-        homeViewModel.getCategories()
+        homeViewModel.getCategories(storeId)
     }
 
     private fun setCategoriesObserver() {
         homeViewModel.storeIdExist.observe(viewLifecycleOwner) {
             if (it != -1) { // storeId가 있는 경우
-                setPreorderAlarm()
+                setPreorderAlarm(it)
                 setSelectedMenuList()
-                setCategories()
+                setCategories(it)
             } else { // storeId가 없는 경우
                 // TODO 새로운 가게 등록 화면으로 전환
                 homeViewModel.registerStore()
@@ -94,9 +94,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                         is UiState.Success -> {
                             Toast.makeText(requireContext(), "가게 등록이 완료되었습니다!", Toast.LENGTH_SHORT).show()
                             uiState.data?.let {
-                                setPreorderAlarm()
+                                setPreorderAlarm(it.storeId)
                                 setSelectedMenuList()
-                                setCategories()
+                                setCategories(it.storeId)
                             }
                         }
                         is UiState.Loading -> {/* nothing */}
@@ -166,24 +166,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setPreorderBtnClickListener() {
         binding.btnPreorder.setOnClickListener {
             val orderedMenus = homeViewModel.getOrderedMenusVO()
-            val action = HomeFragmentDirections.actionFragmentHomeToFragmentPreorderRegister(orderedMenus)
+            val action =
+                HomeFragmentDirections.actionFragmentHomeToFragmentPreorderRegister(orderedMenus)
             findNavController().navigate(action)
         }
     }
 
     private fun setModifyPreorderBtnClickListener() {
         binding.btnModificationComplete.setOnClickListener {
-            //주문 내역 업데이트 api 연결 필요
-            homeViewModel.clearSelectedMenuList()
+            val action = HomeFragmentDirections.actionFragmentHomeToFragmentPreorderRegister(
+                homeViewModel.getOrderedMenusVO(),
+                args.preOrderId,
+                args.customerPhoneNumber
+            )
+            findNavController().navigate(action)
         }
     }
 
     private fun checkStoreId() {
-        if (homeViewModel.storeIdExist.value == null) {
+        val storeId = homeViewModel.storeIdExist.value
+        if (storeId == null) {
             homeViewModel.checkStoreId()
         } else {
             setSelectedMenuList()
-            setCategories()
+            setCategories(storeId)
         }
     }
 
@@ -193,9 +199,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         super.onDestroy()
     }
 
-    private fun setPreorderAlarm() {
+    private fun setPreorderAlarm(storeId: Int) {
         if (!homeViewModel.isRegisteredPreorderAlarm()) {
-            homeViewModel.getTodayPreorder()
+            homeViewModel.getTodayPreorder(storeId)
         }
     }
 }
