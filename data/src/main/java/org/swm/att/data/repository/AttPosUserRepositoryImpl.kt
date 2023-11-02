@@ -1,7 +1,6 @@
 package org.swm.att.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey
@@ -36,25 +35,25 @@ class AttPosUserRepositoryImpl @Inject constructor(
     }
 
     override fun saveAccessToken(accessToken: String) {
-        attEncryptedPrefDataSource.setAccessToken(
+        attEncryptedPrefDataSource.setToken(
             preferenceKey = PreferenceKey.ACCESS_TOKEN,
             value = accessToken
         )
     }
 
     override fun saveRefreshToken(refreshToken: String) {
-        attEncryptedPrefDataSource.setAccessToken(
+        attEncryptedPrefDataSource.setToken(
             preferenceKey = PreferenceKey.REFRESH_TOKEN,
             value = refreshToken
         )
     }
 
-    override fun getAccessToken(): String {
-        return attEncryptedPrefDataSource.getAccessToken(PreferenceKey.ACCESS_TOKEN)
+    override fun getAccessToken(): String? {
+        return attEncryptedPrefDataSource.getToken(PreferenceKey.ACCESS_TOKEN)
     }
 
-    override fun getRefreshToken(): String {
-        return attEncryptedPrefDataSource.getAccessToken(PreferenceKey.REFRESH_TOKEN)
+    override fun getRefreshToken(): String? {
+        return attEncryptedPrefDataSource.getToken(PreferenceKey.REFRESH_TOKEN)
     }
 
     override fun saveStoreId(storeId: Int) {

@@ -30,7 +30,7 @@ class MainViewModel @Inject constructor(
     fun checkRefreshToken() {
         viewModelScope.launch {
             val curRefreshToken = attPosUserRepository.getRefreshToken()
-            if (curRefreshToken == "") {
+            if (curRefreshToken == null) {
                 _refreshExist.postValue(false)
             } else {
                 //refresh token 만료 확인
