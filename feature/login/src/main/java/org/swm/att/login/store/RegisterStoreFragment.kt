@@ -10,7 +10,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
+import org.swm.att.common_ui.navigator.AttNavigatorInjector
+import org.swm.att.common_ui.navigator.FakeAttNavigator
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.login.R
@@ -20,6 +23,13 @@ import org.swm.att.login.databinding.FragmentRegisterStoreBinding
 class RegisterStoreFragment : BaseFragment<FragmentRegisterStoreBinding>(R.layout.fragment_register_store) {
     private val registerStoreViewModel by viewModels<RegisterStoreViewModel>()
     private val args by navArgs<RegisterStoreFragmentArgs>()
+    private val attNavigator: FakeAttNavigator by lazy {
+        EntryPointAccessors.fromActivity(
+            requireActivity(),
+            AttNavigatorInjector::class.java
+        ).attNavigator()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnBtnBackClickListener()
@@ -76,7 +86,7 @@ class RegisterStoreFragment : BaseFragment<FragmentRegisterStoreBinding>(R.layou
                 registerStoreViewModel.registerStoreState.collect { uiState ->
                     when(uiState) {
                         is UiState.Success -> {
-                            //main으로 전환
+                            attNavigator.navigateToMain(requireContext())
                             Toast.makeText(requireContext(), "가게 등록이 완료되었습니다!\n환영합니다!", Toast.LENGTH_SHORT).show()
                         }
                         is UiState.Loading -> {/* nothing */}
