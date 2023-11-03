@@ -9,6 +9,7 @@ import javax.inject.Inject
 class AttNavigator @Inject constructor(): FakeAttNavigator {
     override fun navigateToMain(context: Context) {
         val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
         context.startActivity(intent)
     }
 }
