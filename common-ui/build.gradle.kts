@@ -38,6 +38,7 @@ android {
 
 dependencies {
     api(project(":domain"))
+    implementation(libs.splashscreen)
     implementation(libs.bundles.androidx.ui.foundation)
     implementation(libs.material)
     testImplementation(libs.bundles.basic.test)
