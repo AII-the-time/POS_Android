@@ -6,6 +6,7 @@
         <item name="colorPrimaryVariant">@color/divider_gray</item>
         <item name="colorOnPrimary">@color/divider_gray</item>
         <item name="chipStyle">@style/Widget.App.SelectedChip</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="Theme.POSAndroid" parent="Base.Theme.POSAndroid" />
