@@ -20,6 +20,7 @@ interface AttPosUserRepository {
     fun getRefreshToken(): String?
     fun saveStoreId(storeId: Int)
     fun getStoreId(): Int
+    fun logout()
     suspend fun getMileage(storeId: Int, phoneNumber: String): Flow<Result<MileageVO>>
     suspend fun patchMileage(storeId: Int, mileage: MileageVO): Flow<Result<MileageVO>>
     suspend fun registerCustomer(storeId: Int, phone: PhoneNumVO): Flow<Result<MileageIdVO>>

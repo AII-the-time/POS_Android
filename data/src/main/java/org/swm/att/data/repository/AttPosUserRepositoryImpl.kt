@@ -67,6 +67,10 @@ class AttPosUserRepositoryImpl @Inject constructor(
         return attEncryptedPrefDataSource.getStoreId(PreferenceKey.STORE_ID)
     }
 
+    override fun logout() {
+        attEncryptedPrefDataSource.logout()
+    }
+
     override suspend fun getMileage(storeId: Int, phoneNumber: String): Flow<Result<MileageVO>> = flow {
         try {
             userDataSource.getMileage(storeId, phoneNumber).collect {
