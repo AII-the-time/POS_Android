@@ -4,4 +4,5 @@ import android.content.Context
 
 interface FakeAttNavigator {
     fun navigateToMain(context: Context)
+    fun navigateToLogin(context: Context)
 }
