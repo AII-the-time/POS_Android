@@ -86,7 +86,7 @@ class RegisterStoreFragment : BaseFragment<FragmentRegisterStoreBinding>(R.layou
                 registerStoreViewModel.registerStoreState.collect { uiState ->
                     when(uiState) {
                         is UiState.Success -> {
-                            attNavigator.navigateToMain(requireContext())
+                            attNavigator.navigateToMain(requireActivity())
                             Toast.makeText(requireContext(), "가게 등록이 완료되었습니다!\n환영합니다!", Toast.LENGTH_SHORT).show()
                         }
                         is UiState.Loading -> {/* nothing */}
