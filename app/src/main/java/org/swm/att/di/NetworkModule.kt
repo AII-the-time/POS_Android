@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.swm.att.BuildConfig
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource
+import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey.ACCESS_TOKEN
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
@@ -24,15 +25,15 @@ object NetworkModule {
     fun provideAttInterceptor(
         attEncryptedPrefDataSource: AttEncryptedPrefDataSource
     ): Interceptor = Interceptor { chain ->
-//        val accessToken = attEncryptedPrefDataSource.getStrValue(
-//            PreferenceKey.ACCESS_TOKEN
-//        )
-//      로그인 프로세스 생길 떄까지 임시 access token 사용
-        val accessToken = BuildConfig.ACCESS_TOKEN
-        val request = chain.request().newBuilder()
-            .addHeader(AUTHORIZATION, accessToken)
-            .build()
-        chain.proceed(request)
+        val accessToken = attEncryptedPrefDataSource.getToken(
+            ACCESS_TOKEN
+        )
+        accessToken?.let {
+            val request = chain.request().newBuilder()
+                .addHeader(AUTHORIZATION, accessToken)
+                .build()
+            chain.proceed(request)
+        } ?: chain.proceed(chain.request())
     }
 
     @Provides
