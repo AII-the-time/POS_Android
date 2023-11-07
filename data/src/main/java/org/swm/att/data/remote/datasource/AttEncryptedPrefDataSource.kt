@@ -37,6 +37,14 @@ class AttEncryptedPrefDataSource @Inject constructor(
         attEncryptedPref.edit().putInt(key, value).commit()
     }
 
+    fun logout() {
+        attEncryptedPref.edit().apply {
+            remove(PreferenceKey.ACCESS_TOKEN.name).apply()
+            remove(PreferenceKey.REFRESH_TOKEN.name).apply()
+            remove(PreferenceKey.STORE_ID.name).apply()
+        }.apply()
+    }
+
     companion object {
         enum class PreferenceKey {
             ACCESS_TOKEN,

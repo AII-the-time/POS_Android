@@ -69,8 +69,8 @@ class RegisterStoreFragment : BaseFragment<FragmentRegisterStoreBinding>(R.layou
                     when(uiState) {
                         is UiState.Success -> {
                             uiState.data?.let {
-                                Toast.makeText(requireContext(), "사업자 등록 번호 제출이 완료되었습니다!", Toast.LENGTH_SHORT).show()
                                 registerStoreViewModel.saveTokens(it.accessToken, it.refreshToken)
+                                registerStoreViewModel.getStore()
                             }
                         }
                         is UiState.Loading -> {/* nothing */}
@@ -86,8 +86,30 @@ class RegisterStoreFragment : BaseFragment<FragmentRegisterStoreBinding>(R.layou
                 registerStoreViewModel.registerStoreState.collect { uiState ->
                     when(uiState) {
                         is UiState.Success -> {
-                            attNavigator.navigateToMain(requireContext())
+                            attNavigator.navigateToMain(requireActivity())
                             Toast.makeText(requireContext(), "가게 등록이 완료되었습니다!\n환영합니다!", Toast.LENGTH_SHORT).show()
+                        }
+                        is UiState.Loading -> {/* nothing */}
+                        is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                registerStoreViewModel.getStoreState.collect { uiState ->
+                    when(uiState) {
+                        is UiState.Success -> {
+                            uiState.data?.let { storeList ->
+                                if (storeList.stores.isEmpty()) {
+                                    Toast.makeText(requireContext(), "환영합니다! 가게를 등록해주세요!", Toast.LENGTH_SHORT).show()
+                                    binding.isNew = true
+                                } else {
+                                    registerStoreViewModel.saveStoreId(storeList.stores[0].storeId)
+                                    attNavigator.navigateToMain(requireActivity())
+                                }
+                            }
                         }
                         is UiState.Loading -> {/* nothing */}
                         is UiState.Error -> Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show()

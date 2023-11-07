@@ -4,6 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".store.RegisterStoreFragment">
 
+    <data>
+        <variable
+            name="isNew"
+            type="Boolean"
+            android:value="False" />
+        <import type="android.view.View" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -116,6 +124,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
+            android:visibility="@{isNew ? View.VISIBLE : View.GONE}"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintTop_toBottomOf="@id/cl_business_registration_num"
             app:layout_constraintBottom_toTopOf="@id/cl_store_name"
@@ -152,6 +161,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:visibility="@{isNew ? View.VISIBLE : View.GONE}"
             app:layout_constraintTop_toBottomOf="@id/cl_store_name_des"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/cl_business_registration_num"
@@ -209,7 +219,7 @@
             android:textSize="14sp"
             android:text="@string/tv_re_authentication_des"
             app:layout_constraintTop_toBottomOf="@id/cl_store_name"
-            app:layout_constraintStart_toStartOf="@id/cl_store_name" />
+            app:layout_constraintStart_toStartOf="@id/cl_business_registration_num_des" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
