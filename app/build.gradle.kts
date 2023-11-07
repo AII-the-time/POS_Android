@@ -17,8 +17,8 @@ android {
         applicationId = "org.swm.att"
         minSdk = ProjectConfig.minSdk
         targetSdk = ProjectConfig.targetSdk
-        versionCode = 13
-        versionName = "3.0.0"
+        versionCode = 14
+        versionName = "3.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
