@@ -19,6 +19,7 @@ import org.swm.att.domain.entity.response.CertificatedPhoneTokenVO
 import org.swm.att.domain.entity.response.MileageIdVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.StoreIdVO
+import org.swm.att.domain.entity.response.StoreListVO
 import org.swm.att.domain.entity.response.TokenForCertificationPhoneVO
 import org.swm.att.domain.entity.response.TokenVO
 import org.swm.att.domain.repository.AttPosUserRepository
@@ -65,6 +66,10 @@ class AttPosUserRepositoryImpl @Inject constructor(
 
     override fun getStoreId(): Int {
         return attEncryptedPrefDataSource.getStoreId(PreferenceKey.STORE_ID)
+    }
+
+    override fun logout() {
+        attEncryptedPrefDataSource.logout()
     }
 
     override suspend fun getMileage(storeId: Int, phoneNumber: String): Flow<Result<MileageVO>> = flow {
@@ -187,5 +192,16 @@ class AttPosUserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             emit(Result.failure(e))
         }
+    }
+
+    override suspend fun getStore(): Flow<Result<StoreListVO>> = flow {
+        try {
+            userDataSource.getStore().collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+
     }
 }

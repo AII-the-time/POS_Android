@@ -9,6 +9,7 @@ import org.swm.att.domain.entity.response.CertificatedPhoneTokenVO
 import org.swm.att.domain.entity.response.MileageIdVO
 import org.swm.att.domain.entity.response.MileageVO
 import org.swm.att.domain.entity.response.StoreIdVO
+import org.swm.att.domain.entity.response.StoreListVO
 import org.swm.att.domain.entity.response.TokenForCertificationPhoneVO
 import org.swm.att.domain.entity.response.TokenVO
 
@@ -20,6 +21,7 @@ interface AttPosUserRepository {
     fun getRefreshToken(): String?
     fun saveStoreId(storeId: Int)
     fun getStoreId(): Int
+    fun logout()
     suspend fun getMileage(storeId: Int, phoneNumber: String): Flow<Result<MileageVO>>
     suspend fun patchMileage(storeId: Int, mileage: MileageVO): Flow<Result<MileageVO>>
     suspend fun registerCustomer(storeId: Int, phone: PhoneNumVO): Flow<Result<MileageIdVO>>
@@ -28,4 +30,5 @@ interface AttPosUserRepository {
     suspend fun postPhoneNumberForAuthentication(phone: String): Flow<Result<TokenForCertificationPhoneVO>>
     suspend fun checkCertificationCode(certificationInfo: CertificationVO): Flow<Result<CertificatedPhoneTokenVO>>
     suspend fun login(userInfo: LoginVO): Flow<Result<TokenVO>>
+    suspend fun getStore(): Flow<Result<StoreListVO>>
 }
