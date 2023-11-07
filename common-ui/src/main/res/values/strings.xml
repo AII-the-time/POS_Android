@@ -218,6 +218,7 @@
     <string name="tv_store_name_des1">가게 이름 입력</string>
     <string name="tv_store_name_des2">추가적인 가게 정보를 알려주세요!</string>
     <string name="tv_re_authentication_des">← 전화번호를 재인증 하시겠습니까?</string>
+    <string name="btn_logout">로그아웃</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>

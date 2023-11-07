@@ -8,6 +8,7 @@ import org.swm.att.data.remote.response.CertificatedPhoneTokenDTO
 import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.data.remote.response.MileageIdDTO
 import org.swm.att.data.remote.response.StoreIdDTO
+import org.swm.att.data.remote.response.StoreListDTO
 import org.swm.att.data.remote.response.TokenDTO
 import org.swm.att.data.remote.response.TokenForCertificationPhoneDTO
 import retrofit2.Response
@@ -67,5 +68,8 @@ interface AttPosUserService {
     suspend fun login(
         @Body userInfo: LoginDTO
     ): Response<TokenDTO>
+
+    @GET("store")
+    suspend fun getStore(): Response<StoreListDTO>
 
 }

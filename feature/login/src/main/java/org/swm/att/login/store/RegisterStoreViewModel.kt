@@ -12,6 +12,7 @@ import org.swm.att.domain.entity.HttpResponseException
 import org.swm.att.domain.entity.request.LoginVO
 import org.swm.att.domain.entity.request.StoreVO
 import org.swm.att.domain.entity.response.StoreIdVO
+import org.swm.att.domain.entity.response.StoreListVO
 import org.swm.att.domain.entity.response.TokenVO
 import org.swm.att.domain.repository.AttPosUserRepository
 import java.lang.IllegalArgumentException
@@ -26,6 +27,8 @@ class RegisterStoreViewModel @Inject constructor(
     val loginState: StateFlow<UiState<TokenVO>> = _loginState
     private val _registerStoreState = MutableStateFlow<UiState<StoreIdVO>>(UiState.Loading)
     val registerStoreState: StateFlow<UiState<StoreIdVO>> = _registerStoreState
+    private val _getStoreState = MutableStateFlow<UiState<StoreListVO>>(UiState.Loading)
+    val getStoreState: StateFlow<UiState<StoreListVO>> = _getStoreState
 
     //login
     fun login(businessRegistrationNumber: String, certificatedPhoneToken: String?) {
@@ -42,6 +45,18 @@ class RegisterStoreViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _loginState.value = UiState.Error(e.message)
+            }
+        }
+    }
+
+    fun getStore() {
+        viewModelScope.launch(attExceptionHandler) {
+            attPosUserRepository.getStore().collect { result ->
+                result.onSuccess {
+                    _getStoreState.value = UiState.Success(it)
+                }.onFailure {
+                    _getStoreState.value = UiState.Error(it.message)
+                }
             }
         }
     }
@@ -65,7 +80,7 @@ class RegisterStoreViewModel @Inject constructor(
                 attPosUserRepository.registerStore(storeInfo).collect { result ->
                     result.onSuccess {
                         _registerStoreState.value = UiState.Success(it)
-                        attPosUserRepository.saveStoreId(it.storeId)
+                        saveStoreId(it.storeId)
                     }.onFailure {
                         val errorMsg = if (it is HttpResponseException) it.message else "가게 등록에 실패했습니다."
                         _registerStoreState.value = UiState.Error(errorMsg)
@@ -75,6 +90,10 @@ class RegisterStoreViewModel @Inject constructor(
                 _registerStoreState.value = UiState.Error(e.message)
             }
         }
+    }
+
+    fun saveStoreId(storeId: Int) {
+        attPosUserRepository.saveStoreId(storeId)
     }
 
     private fun checkCreateStoreInfo(storeName: String?): StoreVO {
