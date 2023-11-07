@@ -37,4 +37,6 @@ class UserDataSource @Inject constructor(
 
     suspend fun login(userInfo: LoginDTO) =
         checkResponse(attPosUserService.login(userInfo))
+
+    suspend fun getStore() = checkResponse(attPosUserService.getStore())
 }
