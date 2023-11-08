@@ -32,8 +32,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private fun handleIntent(intent: Intent) {
         val deepLinkData: Uri? = intent.data
         deepLinkData?.let {
-            val preorderId = it.getQueryParameter("preorderId")?.toInt()
-            checkPreorderAlarm(preorderId)
+            when(it.lastPathSegment) {
+                PREORDER -> {
+                    val preorderId = it.getQueryParameter("preorderId")?.toInt()
+                    checkPreorderAlarm(preorderId)
+                }
+            }
         }
     }
 
@@ -95,5 +99,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         handleIntent(intent ?: return)
+    }
+
+    companion object {
+        const val PREORDER = "preorder"
     }
 }
