@@ -10,8 +10,8 @@
         android:smallScreens="false"
         android:normalScreens="false"
         android:largeScreens="true"
-        android:xlargeScreens="true"/>
-    
+        android:xlargeScreens="true" />
+
     <application
         android:name=".AttPosApplication"
         android:allowBackup="true"
@@ -28,17 +28,28 @@
             android:name=".login.splash.SplashActivity"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/Theme.POSAndroid"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".home.MainActivity"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:host="www.cafepos.com" />
+                <data android:pathPattern="/preorder" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".login.LoginActivity"
             android:screenOrientation="sensorLandscape"
@@ -47,6 +58,7 @@
             android:name=".home.alarm.PreorderAlarmDialog"
             android:exported="false"
             android:theme="@style/Theme.DialogTheme" />
+
         <receiver
             android:name=".home.alarm.AlarmReceiver"
             android:enabled="true" />
@@ -71,7 +83,9 @@
             android:name="io.sentry.traces.sample-rate"
             android:value="1.0" />
         <!-- enable profiling when starting transactions, adjust in production env -->
-        <meta-data android:name="io.sentry.traces.profiling.sample-rate" android:value="1.0" />
+        <meta-data
+            android:name="io.sentry.traces.profiling.sample-rate"
+            android:value="1.0" />
     </application>
 
 </manifest>
