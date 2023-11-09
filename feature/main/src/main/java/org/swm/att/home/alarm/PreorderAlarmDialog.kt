@@ -33,7 +33,7 @@ class PreorderAlarmDialog :
     private fun setAlarmDialogClickListener() {
         binding.clDialogPreorderAlarm.setOnClickListener {
             val preorderId = intent.getIntExtra("preorderId", -1)
-            val uri = Uri.parse("http://www.cafepos.com/preorder?preorderId=$preorderId")
+            val uri = Uri.parse("app://www.cafepos.com/preorder?preorderId=$preorderId")
             val intent = Intent().also {
                 it.data = uri
             }
