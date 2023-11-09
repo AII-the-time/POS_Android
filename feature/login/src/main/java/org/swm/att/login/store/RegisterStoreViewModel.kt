@@ -1,5 +1,7 @@
 package org.swm.att.login.store
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,6 +79,7 @@ class RegisterStoreViewModel @Inject constructor(
         viewModelScope.launch(attExceptionHandler) {
             try {
                 val storeInfo = checkCreateStoreInfo(storeName)
+                //attPosUserRepository.registerStoreForTest(storeInfo).collect { result ->
                 attPosUserRepository.registerStore(storeInfo).collect { result ->
                     result.onSuccess {
                         _registerStoreState.value = UiState.Success(it)
