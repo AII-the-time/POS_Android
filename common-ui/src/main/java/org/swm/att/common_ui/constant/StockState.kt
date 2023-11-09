@@ -7,7 +7,7 @@ enum class StockState(
     val icon: Int?,
     val drawable: Int
 ) {
-    EMPTY("없음", R.drawable.ic_stock_none_mdpi, R.drawable.shape_round_stock_none),
+    EMPTY("없음", R.drawable.ic_out_of_stock_mdpi, R.drawable.shape_round_out_of_stock),
     OUT_OF_STOCK("부족", R.drawable.ic_out_of_stock_mdpi, R.drawable.shape_round_out_of_stock),
     CAUTION("주의", R.drawable.ic_stock_caution_mdpi, R.drawable.shape_round_stock_caution),
     ENOUGH("충분", R.drawable.ic_stock_enough_mdpi, R.drawable.shape_round_stock_enough),

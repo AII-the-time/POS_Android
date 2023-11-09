@@ -77,32 +77,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setCategoriesObserver() {
         homeViewModel.storeIdExist.observe(viewLifecycleOwner) {
-            if (it != -1) { // storeId가 있는 경우
+            if (it != -1) {
                 setPreorderAlarm(it)
                 setSelectedMenuList()
                 setCategories(it)
-            } else { // storeId가 없는 경우
-                // TODO 새로운 가게 등록 화면으로 전환
-                homeViewModel.registerStore()
-            }
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                homeViewModel.registerStoreState.collect { uiState ->
-                    when(uiState) {
-                        is UiState.Success -> {
-                            Toast.makeText(requireContext(), "가게 등록이 완료되었습니다!", Toast.LENGTH_SHORT).show()
-                            uiState.data?.let {
-                                setPreorderAlarm(it.storeId)
-                                setSelectedMenuList()
-                                setCategories(it.storeId)
-                            }
-                        }
-                        is UiState.Loading -> {/* nothing */}
-                        is UiState.Error -> { Toast.makeText(requireContext(), uiState.errorMsg, Toast.LENGTH_SHORT).show() }
-                    }
-                }
             }
         }
 
