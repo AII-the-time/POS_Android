@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/tv_stock_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             tools:text="길라델리 파우더"
             android:textColor="@color/black"
@@ -25,6 +25,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginBottom="18dp"
             android:paddingStart="20dp"
+            app:layout_constraintHorizontal_weight="3"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/divider_registered_menu"
@@ -33,9 +34,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_stock_state_section"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingEnd="20dp"
+            app:layout_constraintHorizontal_weight="4"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_stock_name"
