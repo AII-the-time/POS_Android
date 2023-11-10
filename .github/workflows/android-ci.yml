@@ -1,0 +1,65 @@
+name: Android CI
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+      - name: Generate Local Property
+        run: |
+          echo ATT_BASE_URL=\"$ATT_BASE_URL\" >> local.properties
+          echo SENTRY_DSN_DEBUG=\"SENTRY_DSN_DEBUG\" >> local.properties
+          echo SENTRY_DSN_RELEASE=\"SENTRY_DSN_RELEASE\" >> local.properties
+        env:
+          ATT_BASE_URL: ${{ secrets.ATT_BASE_URL }}
+          SENTRY_DSN_DEBUG: ${{ secrets.SENTRY_DSN_DEBUG }}
+          SENTRY_DSN_RELEASE: ${{ secrets.SENTRY_DSN_RELEASE }}
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Unit Test
+        run: ./gradlew test
+
+      - name: Android Test Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }}
+
+      - name: Build assemble release apk
+        run: ./gradlew assembleRelease
+
+  merge-branch:
+    permissions:
+      checks: write
+      contents: write
+      pull-requests: write
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Merge staging -> develop
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: 'develop'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
