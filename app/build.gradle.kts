@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.Packaging
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
@@ -70,9 +71,9 @@ dependencies {
     implementation(libs.bundles.navigation)
 
     //Test
-    testImplementation(libs.bundles.basic.test)
-    testImplementation(libs.arch.core.testing)
-    testImplementation(libs.mockk)
+    implementation(libs.bundles.basic.test)
+    implementation(libs.arch.core.testing)
+    implementation(libs.mockk)
 
     //hilt
     implementation(libs.hilt)

@@ -52,5 +52,5 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.sentry)
     implementation(libs.kotlin.coroutines)
-    testImplementation(libs.bundles.basic.test)
+    implementation(libs.bundles.basic.test)
 }
