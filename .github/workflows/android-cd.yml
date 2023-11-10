@@ -16,7 +16,7 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: all-the-time
-          file: app/release/app-release.aab
+          file: app/build/outputs/apk/release/app-release.apk
           releaseNotes: |
             ${{ github.event.pull_request.title }}
             ${{ github.event.pull_request.html_url }}
