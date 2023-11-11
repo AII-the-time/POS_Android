@@ -1,7 +1,7 @@
 name: Android CD
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -17,6 +17,7 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: all-the-time
           file: app/build/outputs/apk/debug/app-debug.apk
+          releaseNotes: |
             ${{ github.event.pull_request.title }}
             ${{ github.event.pull_request.html_url }}
             ${{ github.event.pull_request.body }}
