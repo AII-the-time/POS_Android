@@ -3,6 +3,11 @@ name: Android CI/CD
 on:
   pull_request:
 
+defaults:
+  run:
+    shell: bash
+    working-directory: .
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -58,7 +63,7 @@ jobs:
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: all-the-time
           file: app/build/outputs/apk/debug/app-debug.apk
           releaseNotes: |
