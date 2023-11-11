@@ -41,6 +41,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Build debug apk
+        run: ./gradlew assembleDebug --stacktrace
+
       - name: Upload apk to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
