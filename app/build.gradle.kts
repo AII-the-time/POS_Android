@@ -86,4 +86,7 @@ dependencies {
     //hilt
     implementation(libs.hilt)
     kapt(libs.hilt.kapt)
+
+    //firebase
+    implementation(libs.firebase.app.distribution)
 }
