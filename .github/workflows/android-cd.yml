@@ -1,0 +1,27 @@
+name: Android CD
+
+on:
+  workflow_run:
+    workflows: [Android CI]
+    types: [completed]
+    branches: [develop]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Build debug apk
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload apk to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: all-the-time
+          file: app/build/outputs/apk/debug/app-debug.apk
+          releaseNotes: |
+            ${{ github.event.pull_request.title }}
+            ${{ github.event.pull_request.html_url }}
+            ${{ github.event.pull_request.body }}
