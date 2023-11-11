@@ -43,7 +43,6 @@ glide = "4.15.1"
 # Firebase
 google-services = "4.3.15"
 firebase = "32.1.0"
-firebase-app-distribution = "4.0.0"
 
 #plugin
 android_plugin = "8.0.2"
@@ -98,8 +97,6 @@ navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref 
 
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 
-firebase-app-distribution = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebase-app-distribution" }
-
 sentry = { module = "io.sentry:sentry-android", version.ref = "setnry" }
 
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
@@ -122,4 +119,3 @@ dagger_hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hil
 secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secret" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebase-app-distribution" }

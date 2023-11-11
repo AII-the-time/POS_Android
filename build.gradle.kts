@@ -8,5 +8,4 @@ plugins {
     alias(libs.plugins.secret) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.google.services) apply false
-    alias(libs.plugins.appdistribution) apply false
 }
