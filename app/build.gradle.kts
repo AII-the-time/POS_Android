@@ -17,8 +17,8 @@ android {
         applicationId = "org.swm.att"
         minSdk = ProjectConfig.minSdk
         targetSdk = ProjectConfig.targetSdk
-        versionCode = 14
-        versionName = "3.1.0"
+        versionCode = 15
+        versionName = "3.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,6 +50,14 @@ android {
         dataBinding = true
         buildConfig = true
     }
+    packaging {
+        resources.excludes.addAll(
+            listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md"
+            )
+        )
+    }
 }
 kapt {
     correctErrorTypes = true
@@ -70,9 +78,9 @@ dependencies {
     implementation(libs.bundles.navigation)
 
     //Test
-    testImplementation(libs.bundles.basic.test)
-    testImplementation(libs.arch.core.testing)
-    testImplementation(libs.mockk)
+    implementation(libs.bundles.basic.test)
+    implementation(libs.arch.core.testing)
+    implementation(libs.mockk)
 
     //hilt
     implementation(libs.hilt)

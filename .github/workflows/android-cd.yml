@@ -1,0 +1,22 @@
+name: Android CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Upload apk to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: all-the-time
+          file: app/build/outputs/apk/debug/app-debug.apk
+            ${{ github.event.pull_request.title }}
+            ${{ github.event.pull_request.html_url }}
+            ${{ github.event.pull_request.body }}

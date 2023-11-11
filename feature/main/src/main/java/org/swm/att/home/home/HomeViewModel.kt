@@ -46,16 +46,12 @@ class HomeViewModel @Inject constructor(
     private val todayPreorderList = arrayListOf<PreorderVO>()
     private var page = 1
 
-    private val _registerStoreState = MutableStateFlow<UiState<StoreIdVO>>(UiState.Loading)
-    val registerStoreState: StateFlow<UiState<StoreIdVO>> = _registerStoreState
-
     fun checkStoreId() {
         viewModelScope.launch(attExceptionHandler) {
             val storeId = attPosUserRepository.getStoreId()
             _storeIdExist.postValue(storeId)
         }
     }
-
 
     fun setSelectedMenusVO(selectedMenusVO: OrderedMenusVO) {
         selectedMenusVO.menus?.let {
@@ -138,31 +134,6 @@ class HomeViewModel @Inject constructor(
         _getMenuState.value = UiState.Loading
     }
 
-    fun registerStore() {
-        viewModelScope.launch(attExceptionHandler) {
-            // 임시 token을 활용해 가게 바로 등록
-            // for test with base data
-            //attPosUserRepository.registerStoreForTest(
-            // real
-            attPosUserRepository.registerStore(
-                StoreVO(
-                    name = "temp",
-                    address = "temp",
-                    openingHours = emptyList()
-                )
-            ).collect { result ->
-                result.onSuccess {
-                    _registerStoreState.value = UiState.Success(it)
-                    setStoreId(it.storeId)
-                    _storeIdExist.postValue(it.storeId)
-                }.onFailure {
-                    val errorMsg = if (it is HttpResponseException) it.message else "가게 등록 실패"
-                    _registerStoreState.value = UiState.Error(errorMsg)
-                }
-            }
-        }
-    }
-
     fun getTodayPreorder(storeId: Int) {
         viewModelScope.launch(attExceptionHandler) {
             val date =
@@ -197,14 +168,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setStoreId(storeId: Int) {
-        viewModelScope.launch(attExceptionHandler)  {
-            attPosUserRepository.saveStoreId(storeId)
-        }
-    }
-
     fun clearUiValues() {
-        _registerStoreState.value = UiState.Loading
         _getMenuState.value = UiState.Loading
         clearSelectedMenuList()
     }

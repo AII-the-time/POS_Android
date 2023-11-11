@@ -52,5 +52,5 @@ dependencies {
     implementation(libs.bundles.navigation)
     implementation(libs.sentry)
     implementation(libs.kotlin.coroutines)
-    testImplementation(libs.bundles.basic.test)
+    implementation(libs.bundles.basic.test)
 }
