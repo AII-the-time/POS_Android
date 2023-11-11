@@ -1,7 +1,7 @@
 name: Android CI
 
 on:
-  pull_request:
+  push:
     branches: [ develop ]
 
 jobs:
@@ -45,22 +45,5 @@ jobs:
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }}
 
-      - name: Build assemble release apk
-        run: ./gradlew assembleRelease
-
-  merge-branch:
-    permissions:
-      checks: write
-      contents: write
-      pull-requests: write
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Merge staging -> develop
-        uses: devmasx/merge-branch@master
-        with:
-          type: now
-          message: Merge staging -> develop
-          target_branch: 'develop'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build debug apk
+        run: ./gradlew assembleDebug --stacktrace

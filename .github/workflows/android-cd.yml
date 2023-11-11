@@ -1,7 +1,7 @@
 name: Android CD
 
 on:
-  pull_request:
+  push:
     branches: [ main ]
 
 jobs:
@@ -16,25 +16,7 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: all-the-time
-          file: app/build/outputs/apk/release/app-release-unsigned.apk
-          releaseNotes: |
+          file: app/build/outputs/apk/debug/app-debug.apk
             ${{ github.event.pull_request.title }}
             ${{ github.event.pull_request.html_url }}
             ${{ github.event.pull_request.body }}
-
-  merge-branch:
-    permissions:
-      checks: write
-      contents: write
-      pull-requests: write
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Merge develop -> main
-        uses: devmasx/merge-branch@master
-        with:
-          type: now
-          message: Merge develop -> main
-          target_branch: 'main'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
