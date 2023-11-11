@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "92675282109",
+    "project_id": "att-cafe-pos",
+    "storage_bucket": "att-cafe-pos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92675282109:android:149bc9908ab09490c653d4",
+        "android_client_info": {
+          "package_name": "org.swm.att"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu1PwxGiRoPpaBt77NjfrVG2MQJgAOO6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
