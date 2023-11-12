@@ -118,3 +118,4 @@ navigation_safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref 
 dagger_hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secret" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
