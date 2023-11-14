@@ -5,15 +5,15 @@
 - SW마에스트로 14기 프로젝트
 - <b>시중 포스의 불편한 점과 재고 관리 문제점을 개선</b>한 카페만을 위한 태블릿 포스 서비스입니다.
 
-## Multi Module Architecutre
+## 🔗 Multi Module
 
 ![multi module](https://github.com/AII-the-time/POS_Android/assets/64644738/dd8fa08e-0d0c-4b1d-be7e-6a106a232df7)
 
-## Clean Architecutre
+## 🔗 Clean Architecutre
 
 ![clean architecture](https://github.com/AII-the-time/POS_Android/assets/64644738/1d0dfbfd-6bf7-424a-aa5d-5aeb6d05b62d)
 
-## 구현 화면
+## 🔗 구현 화면
 
 | 화면 분류          | 이미지                                                       |
 | ----------------- | ------------------------------------------------------------ |
@@ -23,8 +23,7 @@
 | 메뉴 & 레시피 등록   | <img src="https://github.com/AII-the-time/POS_Android/assets/64644738/4f9f19e5-6a8b-4051-a0d7-9bbf56122092" width="600" height="400"/> |
 | 재고 등록 & 재고 관리 | <img src="https://github.com/AII-the-time/POS_Android/assets/64644738/c1f20f44-83aa-4fa1-a034-5d8d033d6558" width="600" height="400"/> |
 
-
- ## ⚒️ Tech Stack
+ ## 🔗 Tech Stack
 
 | Category            | Details                                      |
 | ------------------- | -------------------------------------------- |
