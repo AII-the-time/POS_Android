@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import org.swm.att.common_ui.util.Formatter
+import org.swm.att.common_ui.util.getRTCDateTime
 import org.swm.att.common_ui.util.getUTCDateTime
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -37,7 +38,7 @@ object AlarmManager {
             pendingIntentList[preorderId] = pendingIntent
             alarmManager.setExact(
                 AlarmManager.RTC,
-                alarmTime.time - TimeUnit.MINUTES.toMillis(10),
+                alarmTime.getRTCDateTime().time - TimeUnit.MINUTES.toMillis(10),
                 pendingIntent
             )
         }
