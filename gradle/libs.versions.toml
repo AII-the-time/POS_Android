@@ -93,6 +93,7 @@ retrofit-moshi-converter = { module = "com.squareup.retrofit2:converter-moshi", 
 
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+moshi-adapter = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
 moshi-kapt = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
@@ -112,6 +113,7 @@ mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "
 androidx-ui-foundation = ["core-ktx", "appcompat", "constraintlayout", "lifecycle-viewmodel", "fragment"]
 okhttp = ["okhttp", "okhttp-bom", "okhttp-logging-interceptor"]
 retrofit = ["retrofit", "retrofit-moshi-converter"]
+moshi = ["moshi", "moshi-kotlin", "moshi-adapter"]
 navigation = ["navigation-fragment", "navigation-ui"]
 basic-test = ["junit", "androidx-test-junit", "androidx-test-espresso"]
 
