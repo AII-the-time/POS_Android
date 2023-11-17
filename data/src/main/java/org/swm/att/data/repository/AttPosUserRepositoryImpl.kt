@@ -18,6 +18,7 @@ import org.swm.att.domain.entity.request.StoreVO
 import org.swm.att.domain.entity.response.CertificatedPhoneTokenVO
 import org.swm.att.domain.entity.response.MileageIdVO
 import org.swm.att.domain.entity.response.MileageVO
+import org.swm.att.domain.entity.response.SduiReportVO
 import org.swm.att.domain.entity.response.StoreIdVO
 import org.swm.att.domain.entity.response.StoreListVO
 import org.swm.att.domain.entity.response.TokenForCertificationPhoneVO
@@ -29,6 +30,16 @@ class AttPosUserRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
     private val attEncryptedPrefDataSource: AttEncryptedPrefDataSource
 ): AttPosUserRepository {
+    override fun getUserReport(): Flow<Result<SduiReportVO>> = flow {
+        try {
+            userDataSource.getUserReport().collect {
+                emit(Result.success(it.toVO()))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
     override fun refreshToken(refreshToken: String): Flow<Result<TokenVO>> = flow {
         userDataSource.refreshToken(refreshToken).collect {
             emit(Result.success(it.toVO()))
@@ -202,6 +213,5 @@ class AttPosUserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             emit(Result.failure(e))
         }
-
     }
 }
