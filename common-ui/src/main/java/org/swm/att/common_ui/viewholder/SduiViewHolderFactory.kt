@@ -16,7 +16,7 @@ fun getSduiViewHolder(parent: ViewGroup, viewType: SduiViewType): BaseSduiViewHo
 
     //수정해야 함.
     return when(viewType) {
-        SduiViewType.PIECHART -> SduiPeiChartViewHolder(binding as ItemSduiPiechartBinding)
+        SduiViewType.PIECHART -> SduiPieChartViewHolder(binding as ItemSduiPiechartBinding)
         SduiViewType.GRAPH -> SduiGraphViewHolder(binding as ItemSduiGraphBinding)
         SduiViewType.UNKNOWN -> SduiUnknownViewHolder(binding as ItemSduiUnknownBinding)
     }
