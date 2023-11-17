@@ -43,5 +43,6 @@ dependencies {
     implementation(libs.material)
     testImplementation(libs.bundles.basic.test)
     implementation(libs.hilt)
+    implementation(libs.mpandroidchart)
     kapt(libs.hilt.kapt)
 }
