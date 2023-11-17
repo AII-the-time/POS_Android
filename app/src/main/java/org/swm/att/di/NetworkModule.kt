@@ -8,6 +8,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.swm.att.BuildConfig
+import org.swm.att.data.json_adapter.JsonAdapter
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource
 import org.swm.att.data.remote.datasource.AttEncryptedPrefDataSource.Companion.PreferenceKey.ACCESS_TOKEN
 import retrofit2.Retrofit
@@ -55,10 +56,10 @@ object NetworkModule {
     @Singleton
     fun providePingRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(JsonAdapter.moshi))
             .client(okHttpClient)
             .baseUrl(BuildConfig.ATT_BASE_URL)
             .build()
     }
-
 }
+
