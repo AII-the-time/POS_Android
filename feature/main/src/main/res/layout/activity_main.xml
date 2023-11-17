@@ -390,46 +390,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/menu_worker"/>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/menu_worker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Worker)}"
-                    app:layout_constraintTop_toBottomOf="@id/divider_nav_rail"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/menu_sales">
-
-                    <CheckBox
-                        android:id="@+id/btn_worker"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:button="@null"
-                        android:focusable="false"
-                        android:clickable="false"
-                        android:background="@drawable/ic_menu_auth_w_mdpi"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/tv_icon_worker_des"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:importantForAccessibility="no"/>
-
-                    <TextView
-                        android:id="@+id/tv_icon_worker_des"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="10sp"
-                        android:textColor="@color/white"
-                        android:text="@string/menu_worker"
-                        app:layout_constraintTop_toBottomOf="@id/btn_worker"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintBottom_toTopOf="@id/menu_sales"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/menu_sales"
@@ -437,7 +398,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:onClickListener="@{() -> mainViewModel.customNavRailIconClickListener(NavDestinationType.Sales)}"
-                    app:layout_constraintTop_toBottomOf="@id/menu_worker"
+                    app:layout_constraintTop_toBottomOf="@id/divider_nav_rail"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/menu_setting">
