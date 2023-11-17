@@ -55,6 +55,9 @@ setnry = "6.29.0"
 #mock for test
 mockk = "1.13.7"
 
+#chart
+mpandroidchart = "v3.1.0"
+
 [libraries]
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
@@ -102,6 +105,8 @@ sentry = { module = "io.sentry:sentry-android", version.ref = "setnry" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 androidx-monitor = { group = "androidx.test", name = "monitor", version = "1.6.1" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version = "1.1.5" }
+
+mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
 
 [bundles]
 androidx-ui-foundation = ["core-ktx", "appcompat", "constraintlayout", "lifecycle-viewmodel", "fragment"]
