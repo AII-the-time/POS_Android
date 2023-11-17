@@ -9,9 +9,8 @@ import java.lang.reflect.Type
 enum class SduiViewType(
     val viewType: String, private val viewTypeClass: Type
 ) {
-    Calendar("calendar", ReportCalendarVO::class.java),
-    PieChart("peiChart", ReportPieChartVO::class.java),
-    Graph("graph", ReportGraphVO::class.java),
+    PIECHART("piechart", ReportPieChartVO::class.java),
+    GRAPH("graph", ReportGraphVO::class.java),
     UNKNOWN("unknown", ReportUnknownVO::class.java);
 
     companion object {
