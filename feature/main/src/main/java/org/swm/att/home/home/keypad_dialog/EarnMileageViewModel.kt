@@ -1,6 +1,5 @@
 package org.swm.att.home.home.keypad_dialog
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -27,17 +26,16 @@ class EarnMileageViewModel @Inject constructor(
     val getMileageState: StateFlow<UiState<MileageVO>> = _getMileageState
     private val _registerCustomerState = MutableStateFlow<UiState<MileageVO>>(UiState.Loading)
     val registerCustomerState: StateFlow<UiState<MileageVO>> = _registerCustomerState
+    private var storeId: Int? = null
 
     fun getMileage(phone: String) {
         viewModelScope.launch(attExceptionHandler) {
-            attPosUserRepository.getMileage(1, phone).collect { result ->
+            attPosUserRepository.getMileage(getStoreId(), phone).collect { result ->
                 result.onSuccess {
                     _getMileageState.value = UiState.Success(it)
                     _mileage.postValue(it)
                 }.onFailure {
-                    //추후 에러처리 필요
                     val errorMsg = if (it is HttpResponseException) it.message else "없는 회원입니다."
-                    Log.d("setRegisterBtnVisibility", "getMileage: $errorMsg")
                     _getMileageState.value = UiState.Error(errorMsg)
                 }
             }
@@ -47,7 +45,7 @@ class EarnMileageViewModel @Inject constructor(
     fun registerCustomer(phone: String) {
         viewModelScope.launch(attExceptionHandler) {
             attPosUserRepository.registerCustomer(
-                1,
+                getStoreId(),
                 PhoneNumVO(
                     phone = phone
                 )
@@ -71,4 +69,12 @@ class EarnMileageViewModel @Inject constructor(
         _getMileageState.value = UiState.Loading
         _mileage.postValue(null)
     }
+
+    private fun getStoreId(): Int {
+        if (storeId == null) {
+            storeId = attPosUserRepository.getStoreId()
+        }
+        return storeId as Int
+    }
+
 }
