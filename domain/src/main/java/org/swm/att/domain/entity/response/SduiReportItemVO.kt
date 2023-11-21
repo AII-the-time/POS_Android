@@ -4,6 +4,7 @@ import org.swm.att.domain.sever_driven_ui.SduiViewType
 import org.swm.att.domain.sever_driven_ui.response.SduiReportContent
 import org.swm.att.domain.sever_driven_ui.response.graph.ReportGraphVO
 import org.swm.att.domain.sever_driven_ui.response.piechart.ReportPieChartVO
+import org.swm.att.domain.sever_driven_ui.response.text.ReportTextVO
 
 interface SduiReportItemVO {
     val viewType: SduiViewType
@@ -18,4 +19,9 @@ data class SduiReportGraphItemVO(
 data class SduiReportPieChartItemVO(
     override val viewType: SduiViewType,
     override val content: ReportPieChartVO
+): SduiReportItemVO
+
+data class SduiReportTextItemVO(
+    override val viewType: SduiViewType,
+    override val content: ReportTextVO
 ): SduiReportItemVO

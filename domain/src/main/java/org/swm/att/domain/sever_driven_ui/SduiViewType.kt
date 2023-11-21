@@ -1,9 +1,9 @@
 package org.swm.att.domain.sever_driven_ui
 
 import org.swm.att.domain.sever_driven_ui.response.ReportUnknownVO
-import org.swm.att.domain.sever_driven_ui.response.calendar.ReportCalendarVO
 import org.swm.att.domain.sever_driven_ui.response.graph.ReportGraphVO
 import org.swm.att.domain.sever_driven_ui.response.piechart.ReportPieChartVO
+import org.swm.att.domain.sever_driven_ui.response.text.ReportTextVO
 import java.lang.reflect.Type
 
 enum class SduiViewType(
@@ -11,6 +11,7 @@ enum class SduiViewType(
 ) {
     PIECHART("piechart", ReportPieChartVO::class.java),
     GRAPH("graph", ReportGraphVO::class.java),
+    TEXT("text", ReportTextVO::class.java),
     UNKNOWN("unknown", ReportUnknownVO::class.java);
 
     companion object {
