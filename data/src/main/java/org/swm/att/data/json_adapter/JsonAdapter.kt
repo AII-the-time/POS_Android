@@ -3,16 +3,14 @@ package org.swm.att.data.json_adapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import org.swm.att.domain.sever_driven_ui.response.SduiReportContent
-import org.swm.att.domain.sever_driven_ui.response.calendar.ReportCalendarVO
-import org.swm.att.domain.sever_driven_ui.response.graph.ReportGraphVO
-import org.swm.att.domain.sever_driven_ui.response.piechart.ReportPieChartVO
+import org.swm.att.domain.entity.response.SduiReportGraphItemVO
+import org.swm.att.domain.entity.response.SduiReportItemVO
+import org.swm.att.domain.entity.response.SduiReportPieChartItemVO
 
 object JsonAdapter {
-    private val sduiJsonAdapter: PolymorphicJsonAdapterFactory<SduiReportContent> = PolymorphicJsonAdapterFactory.of(SduiReportContent::class.java, "viewType")
-        .withSubtype(ReportCalendarVO::class.java, "calendar")
-        .withSubtype(ReportPieChartVO::class.java, "pieChart")
-        .withSubtype(ReportGraphVO::class.java, "graph")
+    private val sduiJsonAdapter: PolymorphicJsonAdapterFactory<SduiReportItemVO> = PolymorphicJsonAdapterFactory.of(SduiReportItemVO::class.java, "viewType")
+        .withSubtype(SduiReportPieChartItemVO::class.java, "PIECHART")
+        .withSubtype(SduiReportGraphItemVO::class.java, "GRAPH")
 
     val moshi: Moshi = Moshi.Builder()
         .add(sduiJsonAdapter)
