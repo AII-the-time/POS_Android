@@ -7,6 +7,7 @@ import org.swm.att.data.remote.request.StoreDTO
 import org.swm.att.data.remote.response.CertificatedPhoneTokenDTO
 import org.swm.att.data.remote.response.MileageDTO
 import org.swm.att.data.remote.response.MileageIdDTO
+import org.swm.att.data.remote.response.SduiBaseResponseDTO
 import org.swm.att.data.remote.response.StoreIdDTO
 import org.swm.att.data.remote.response.StoreListDTO
 import org.swm.att.data.remote.response.TokenDTO
@@ -20,6 +21,9 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface AttPosUserService {
+
+    @GET("report")
+    suspend fun getUserReport(): Response<SduiBaseResponseDTO>
 
     @POST("user/refresh")
     suspend fun refreshToken(

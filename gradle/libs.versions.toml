@@ -55,6 +55,9 @@ setnry = "6.29.0"
 #mock for test
 mockk = "1.13.7"
 
+#chart
+mpandroidchart = "v3.1.0"
+
 [libraries]
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
@@ -90,6 +93,7 @@ retrofit-moshi-converter = { module = "com.squareup.retrofit2:converter-moshi", 
 
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+moshi-adapter = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
 moshi-kapt = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
@@ -103,10 +107,13 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 androidx-monitor = { group = "androidx.test", name = "monitor", version = "1.6.1" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version = "1.1.5" }
 
+mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
+
 [bundles]
 androidx-ui-foundation = ["core-ktx", "appcompat", "constraintlayout", "lifecycle-viewmodel", "fragment"]
 okhttp = ["okhttp", "okhttp-bom", "okhttp-logging-interceptor"]
 retrofit = ["retrofit", "retrofit-moshi-converter"]
+moshi = ["moshi", "moshi-kotlin", "moshi-adapter"]
 navigation = ["navigation-fragment", "navigation-ui"]
 basic-test = ["junit", "androidx-test-junit", "androidx-test-espresso"]
 
