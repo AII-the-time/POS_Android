@@ -93,11 +93,12 @@ class SduiGraphViewHolder(
         val xAxis = binding.reportLineChart.xAxis
         xAxis.apply {
             valueFormatter = IndexAxisValueFormatter(labels)
-            labelCount = 10
+            labelCount = 5
         }
         binding.reportLineChart.apply {
             setDrawGridBackground(true)
             data = lineData
+            setVisibleXRangeMaximum(5f)
         }
 
         binding.reportLineChart.invalidate()
