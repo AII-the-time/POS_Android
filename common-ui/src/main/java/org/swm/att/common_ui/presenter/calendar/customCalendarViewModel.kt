@@ -13,15 +13,8 @@ class CustomCalendarViewModel: BaseViewModel() {
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0) }.time)
     val startDate: LiveData<Date?> = _startDate
-    private val _endDate = MutableLiveData<Date?>(null)
-    val endDate: LiveData<Date?> = _endDate
 
     fun setStartDate(date: Date) {
         _startDate.postValue(date)
-        _endDate.postValue(null)
-    }
-
-    fun setEndDate(date: Date) {
-        _endDate.postValue(date)
     }
 }

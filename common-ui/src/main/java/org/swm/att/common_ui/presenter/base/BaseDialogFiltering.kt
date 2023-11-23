@@ -28,16 +28,15 @@ abstract class BaseDialogFiltering : BaseDialog<BaseDialogFilteringBinding>(R.la
         binding.customCalendar.initCustomCalendarViewModel(customCalendarViewModel)
     }
 
-    abstract fun onFilteringBtnClick(startDate: Date, endDate: Date?)
+    abstract fun onFilteringBtnClick(startDate: Date)
 
 
     private fun setBtnFilteringSearchClickListener() {
         binding.btnFilteringSearch.setOnClickListener {
             dismiss()
             val startDate = customCalendarViewModel.startDate.value
-            val endDate = customCalendarViewModel.endDate.value
             if (startDate != null) {
-                onFilteringBtnClick(startDate, endDate)
+                onFilteringBtnClick(startDate)
             }
         }
     }
