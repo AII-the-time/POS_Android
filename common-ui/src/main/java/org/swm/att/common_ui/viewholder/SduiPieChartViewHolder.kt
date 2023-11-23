@@ -24,7 +24,7 @@ class SduiPieChartViewHolder(
         val colorList = mutableListOf<Int>()
         for (item in (reportPieChartData).pieChartItems) {
             dataList.add(PieEntry(item.categoryCount.toFloat(), item.categoryName))
-            colorList.add(Color.parseColor(item.chartColor))
+            colorList.add(Color.parseColor(item.charColor))
         }
         val dataSet = PieDataSet(dataList, null)
         dataSet.colors = colorList

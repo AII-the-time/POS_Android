@@ -16,7 +16,7 @@ import org.swm.att.domain.entity.response.TokenForCertificationPhoneVO
 import org.swm.att.domain.entity.response.TokenVO
 
 interface AttPosUserRepository {
-    fun getUserReport(): Flow<Result<SduiBaseResponseVO>>
+    fun getUserReport(storeId: Int): Flow<Result<SduiBaseResponseVO>>
     fun refreshToken(refreshToken: String): Flow<Result<TokenVO>>
     fun saveAccessToken(accessToken: String)
     fun saveRefreshToken(refreshToken: String)

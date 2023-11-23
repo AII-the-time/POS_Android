@@ -79,8 +79,8 @@ class RegisterStoreViewModel @Inject constructor(
         viewModelScope.launch(attExceptionHandler) {
             try {
                 val storeInfo = checkCreateStoreInfo(storeName)
-                //attPosUserRepository.registerStoreForTest(storeInfo).collect { result ->
-                attPosUserRepository.registerStore(storeInfo).collect { result ->
+                attPosUserRepository.registerStoreForTest(storeInfo).collect { result ->
+                //attPosUserRepository.registerStore(storeInfo).collect { result ->
                     result.onSuccess {
                         _registerStoreState.value = UiState.Success(it)
                         saveStoreId(it.storeId)

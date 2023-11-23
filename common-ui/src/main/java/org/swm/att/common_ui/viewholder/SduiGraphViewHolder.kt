@@ -10,6 +10,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import org.swm.att.common_ui.databinding.ItemSduiGraphBinding
 import org.swm.att.domain.sever_driven_ui.response.SduiReportContent
 import org.swm.att.domain.sever_driven_ui.response.graph.ReportGraphVO
@@ -39,6 +40,7 @@ class SduiGraphViewHolder(
             xAxis.textColor = Color.rgb(118, 118, 118)
             xAxis.spaceMin = 0.1f
             xAxis.spaceMax = 0.1f
+            xAxis.axisMinimum = 0f
 
             val yAxisLeft: YAxis = binding.reportLineChart.getAxisLeft()
             yAxisLeft.textSize = 14f
@@ -49,7 +51,6 @@ class SduiGraphViewHolder(
 
             val yAxis: YAxis = binding.reportLineChart.getAxisRight()
             yAxis.setDrawLabels(false)
-            yAxis.textColor = Color.rgb(163, 163, 163)
             yAxis.setDrawAxisLine(false)
             yAxis.axisLineWidth = 2f
             yAxis.axisMinimum = 0f
@@ -67,8 +68,10 @@ class SduiGraphViewHolder(
 
         // entries 구하기
         val entries = ArrayList<Entry>()
-        reportGraphData.graphItems.map { reportGraphItemVO ->
-            entries.add(Entry(reportGraphItemVO.graphKey.toFloat(), reportGraphItemVO.graphValue.toFloat()))
+        val labels = ArrayList<String>()
+        reportGraphData.graphItems.withIndex().map { (index, reportGraphItemVO) ->
+            entries.add(Entry(index.toFloat(), reportGraphItemVO.graphValue.toFloat()))
+            labels.add(reportGraphItemVO.graphKey)
         }
 
         // lineDataSet 설정
@@ -87,9 +90,15 @@ class SduiGraphViewHolder(
         // lineData 설정
         val dataSet: List<LineDataSet> = arrayListOf(lineDataSet, lineDataSet)
         val lineData = LineData(dataSet)
+        val xAxis = binding.reportLineChart.xAxis
+        xAxis.apply {
+            valueFormatter = IndexAxisValueFormatter(labels)
+            labelCount = 5
+        }
         binding.reportLineChart.apply {
             setDrawGridBackground(true)
             data = lineData
+            setVisibleXRangeMaximum(5f)
         }
 
         binding.reportLineChart.invalidate()
