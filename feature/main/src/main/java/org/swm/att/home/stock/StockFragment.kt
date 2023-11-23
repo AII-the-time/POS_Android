@@ -113,11 +113,9 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
             yAxisLeft.textColor = Color.rgb(163, 163, 163)
             yAxisLeft.setDrawAxisLine(false)
             yAxisLeft.axisLineWidth = 2f
-            yAxisLeft.axisMinimum = 0f
 
             val yAxis: YAxis = this.getAxisRight()
             yAxis.axisLineWidth = 2f
-            yAxis.axisMinimum = 0f
             yAxis.setDrawLabels(false)
             yAxis.setDrawAxisLine(false)
 
