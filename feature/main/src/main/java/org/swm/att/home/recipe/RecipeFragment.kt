@@ -22,12 +22,14 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter
+import org.swm.att.common_ui.util.Formatter.getSimpleStringFromDate
 import org.swm.att.domain.entity.response.CategoriesVO
 import org.swm.att.domain.entity.response.HistoryVO
 import org.swm.att.domain.entity.response.RecipeVO
@@ -90,7 +92,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     @SuppressLint("ResourceAsColor")
     private fun initMenuCostLineChart() {
         with(binding.menuCostLineChart) {
-            setGridBackgroundColor(Color.parseColor("#F5F5F5"))
+            setGridBackgroundColor(Color.parseColor("#FFFFFF"))
             animateX(1200, Easing.EaseInSine)
             description.isEnabled = false
 
@@ -103,20 +105,18 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             xAxis.textColor = Color.rgb(118, 118, 118)
             xAxis.spaceMin = 0.1f
             xAxis.spaceMax = 0.1f
+            xAxis.axisMinimum = 0f
 
             val yAxisLeft: YAxis = this.getAxisLeft()
             yAxisLeft.textSize = 14f
             yAxisLeft.textColor = Color.rgb(163, 163, 163)
             yAxisLeft.setDrawAxisLine(false)
             yAxisLeft.axisLineWidth = 2f
-            yAxisLeft.axisMinimum = 0f
 
             val yAxis: YAxis = this.getAxisRight()
             yAxis.setDrawLabels(false)
-            yAxis.textColor = Color.rgb(163, 163, 163)
             yAxis.setDrawAxisLine(false)
             yAxis.axisLineWidth = 2f
-            yAxis.axisMinimum = 0f
 
             legend.orientation = Legend.LegendOrientation.VERTICAL
             legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
@@ -542,8 +542,10 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     private fun initMenuCostGraph(history: List<HistoryVO>) {
         // entries 구하기
         val entries = ArrayList<Entry>()
-        history.map { reportGraphItemVO ->
-            entries.add(Entry(reportGraphItemVO.date.toFloat(), reportGraphItemVO.price.toFloat()))
+        val labels = ArrayList<String>()
+        history.withIndex().map { (index, history) ->
+            entries.add(Entry(index.toFloat(), history.price.toFloat()))
+            labels.add(getSimpleStringFromDate(Formatter.getDateFromString(history.date)))
         }
 
         // lineDataSet 설정
@@ -551,8 +553,8 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         lineDataSet.apply {
             valueTextSize = 15f
             mode = LineDataSet.Mode.CUBIC_BEZIER
-//            color = Color.parseColor(reportGraphData.graphColor)
-//            setCircleColor(Color.parseColor(reportGraphData.graphColor))
+            color = Color.parseColor("#2B1E12")
+            setCircleColor(Color.parseColor("#2B1E12"))
             setDrawCircleHole(true)
             circleRadius = 5f
             setFormLineDashEffect(DashPathEffect(floatArrayOf(10f, 5f), 0f))
@@ -562,6 +564,11 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
         // lineData 설정
         val dataSet: List<LineDataSet> = arrayListOf(lineDataSet, lineDataSet)
         val lineData = LineData(dataSet)
+        val xAxis: XAxis = binding.menuCostLineChart.getXAxis()
+        xAxis.apply {
+            valueFormatter = IndexAxisValueFormatter(labels)
+            labelCount = 5
+        }
         binding.menuCostLineChart.apply {
             setDrawGridBackground(true)
             data = lineData
