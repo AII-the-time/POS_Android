@@ -50,4 +50,5 @@ dependencies {
     implementation(libs.sentry)
     implementation(libs.kotlin.coroutines)
     implementation(libs.bundles.basic.test)
+    implementation(libs.mpandroidchart)
 }

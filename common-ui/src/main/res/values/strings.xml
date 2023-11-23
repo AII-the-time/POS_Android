@@ -176,6 +176,7 @@
     <string name="tv_register_recipe_des">레시피 설정</string>
     <string name="tv_stock_setting_des">재고 설정</string>
     <string name="tv_register_option_des">옵션 설정</string>
+    <string name="tv_menu_cost_des">메뉴 원가 추이</string>
     <string name="tv_category_no_item">메뉴를 등록해주세요!</string>
     <string name="tv_category_modify">수정</string>
     <string name="tv_category_delete">삭제</string>

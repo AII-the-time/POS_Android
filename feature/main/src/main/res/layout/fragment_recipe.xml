@@ -537,7 +537,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:layout_marginEnd="30dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/divider_menu_cost"
                             app:layout_constraintTop_toBottomOf="@id/tv_register_menu_option_des">
 
                             <TextView
@@ -565,6 +565,43 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <com.google.android.material.divider.MaterialDivider
+                            android:id="@+id/divider_menu_cost"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/main_trans"
+                            android:layout_marginTop="15dp"
+                            app:layout_constraintBottom_toTopOf="@id/tv_menu_cost_des"
+                            app:layout_constraintTop_toBottomOf="@id/cl_menu_option_section" />
+
+                        <TextView
+                            android:id="@+id/tv_menu_cost_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="15dp"
+                            android:text="@string/tv_menu_cost_des"
+                            android:textColor="@color/text_gray"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@id/menu_cost_line_chart"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/divider_menu_cost" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/menu_cost_line_chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="230dp"
+                            android:layout_marginStart="50dp"
+                            android:layout_marginEnd="50dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:background="@color/back_color"
+                            app:layout_constraintTop_toBottomOf="@id/tv_menu_cost_des"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
