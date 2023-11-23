@@ -168,6 +168,7 @@
     <string name="btn_register_menu">메뉴 등록</string>
     <string name="btn_register_stock">재고 등록</string>
     <string name="tv_no_menu_recipe_des">레시피를 추가해주세요!</string>
+    <string name="tv_no_menu_cost_history">메뉴 원가 변동이 없습니다!</string>
     <string name="tv_no_menu_option_des">옵션을 추가해주세요!</string>
     <string name="tv_no_menu_des">메뉴를 등록해주세요!</string>
     <string name="tv_no_stock_des">재고를 등록해주세요!</string>

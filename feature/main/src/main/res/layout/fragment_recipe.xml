@@ -563,7 +563,9 @@
                                 android:layout_marginTop="12dp"
                                 android:nestedScrollingEnabled="false"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="1.0"
+                                tools:layout_editor_absoluteX="0dp" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <com.google.android.material.divider.MaterialDivider
@@ -585,23 +587,51 @@
                             android:textColor="@color/text_gray"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@id/menu_cost_line_chart"
+                            app:layout_constraintBottom_toTopOf="@id/cl_menu_cost_chart_section"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/divider_menu_cost" />
 
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/menu_cost_line_chart"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_menu_cost_chart_section"
                             android:layout_width="match_parent"
-                            android:layout_height="230dp"
-                            android:layout_marginStart="50dp"
-                            android:layout_marginEnd="50dp"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:background="@color/back_color"
-                            app:layout_constraintTop_toBottomOf="@id/tv_menu_cost_des"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginEnd="30dp"
+                            app:layout_constraintBottom_toTopOf="@id/divider_menu_cost"
+                            app:layout_constraintTop_toBottomOf="@id/tv_menu_cost_des">
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/menu_cost_line_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="230dp"
+                                android:layout_marginStart="50dp"
+                                android:layout_marginEnd="50dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginBottom="20dp"
+                                android:background="@color/back_color"
+                                android:visibility="@{menuWithRecipe.history.size > 0 ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tv_no_menu_cost_history"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/tv_no_menu_cost_history"
+                                android:textColor="@color/main_trans"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="25dp"
+                                android:layout_marginBottom="10dp"
+                                android:visibility="@{menuWithRecipe.history.size > 0 ? View.GONE : View.VISIBLE}"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
