@@ -17,7 +17,9 @@ data class MenuWithRecipeDTO(
     @field:Json(name = "option")
     val option: List<OptionDTO>?,
     @field:Json(name = "recipe")
-    val recipe: List<RecipeDTO>?
+    val recipe: List<RecipeDTO>?,
+    @field:Json(name = "history")
+    val history: List<HistoryDTO>?
 ) {
     fun toVO() = MenuWithRecipeVO(
         id = categoryId ?: -1,
@@ -25,6 +27,7 @@ data class MenuWithRecipeDTO(
         menuName = name ?: "Unknown",
         price = price?.toBigDecimal() ?: "-1".toBigDecimal(),
         option = option?.map { it.toVO() } ?: emptyList(),
-        recipe = recipe?.map { it.toVO() } ?: emptyList()
+        recipe = recipe?.map { it.toVO() } ?: emptyList(),
+        history = history?.map { it.toVO() } ?: emptyList()
     )
 }

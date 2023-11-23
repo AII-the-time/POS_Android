@@ -30,7 +30,8 @@ data class MenuWithRecipeVO(
     val menuName: String,
     val price: BigDecimal,
     val option: List<OptionVO>,
-    val recipe: List<RecipeVO>
+    val recipe: List<RecipeVO>,
+    val history: List<HistoryVO>
 ) : BaseRecyclerViewItem()
 
 @Serializable

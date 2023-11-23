@@ -537,7 +537,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:layout_marginEnd="30dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/divider_menu_cost"
                             app:layout_constraintTop_toBottomOf="@id/tv_register_menu_option_des">
 
                             <TextView
@@ -563,7 +563,73 @@
                                 android:layout_marginTop="12dp"
                                 android:nestedScrollingEnabled="false"
                                 app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="1.0"
+                                tools:layout_editor_absoluteX="0dp" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <com.google.android.material.divider.MaterialDivider
+                            android:id="@+id/divider_menu_cost"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/main_trans"
+                            android:layout_marginTop="15dp"
+                            app:layout_constraintBottom_toTopOf="@id/tv_menu_cost_des"
+                            app:layout_constraintTop_toBottomOf="@id/cl_menu_option_section" />
+
+                        <TextView
+                            android:id="@+id/tv_menu_cost_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="15dp"
+                            android:text="@string/tv_menu_cost_des"
+                            android:textColor="@color/text_gray"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@id/cl_menu_cost_chart_section"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/divider_menu_cost" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_menu_cost_chart_section"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginEnd="30dp"
+                            app:layout_constraintBottom_toTopOf="@id/divider_menu_cost"
+                            app:layout_constraintTop_toBottomOf="@id/tv_menu_cost_des">
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/menu_cost_line_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="230dp"
+                                android:layout_marginBottom="20dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:background="@color/white"
+                                android:visibility="@{menuWithRecipe.history.size > 0 ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tv_no_menu_cost_history"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/tv_no_menu_cost_history"
+                                android:textColor="@color/main_trans"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="25dp"
+                                android:layout_marginBottom="10dp"
+                                android:visibility="@{menuWithRecipe.history.size > 0 ? View.GONE : View.VISIBLE}"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
