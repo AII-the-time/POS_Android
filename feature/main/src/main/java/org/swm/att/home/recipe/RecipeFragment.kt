@@ -1,5 +1,8 @@
 package org.swm.att.home.recipe
 
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,13 +15,23 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter
+import org.swm.att.common_ui.util.Formatter.getSimpleStringFromDate
 import org.swm.att.domain.entity.response.CategoriesVO
+import org.swm.att.domain.entity.response.HistoryVO
 import org.swm.att.domain.entity.response.RecipeVO
 import org.swm.att.domain.entity.response.StockWithMixedVO
 import org.swm.att.home.R
@@ -39,6 +52,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMenusRecyclerView()
+        initMenuCostLineChart()
         initSearchView()
         setCategoryDetailBtnClickListener()
         setRecipeBtnsClickListener()
@@ -72,6 +86,43 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             layoutManager = LinearLayoutManager(requireContext())
             adapter = optionsAdapter
             itemAnimator = null
+        }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun initMenuCostLineChart() {
+        with(binding.menuCostLineChart) {
+            setGridBackgroundColor(Color.parseColor("#FFFFFF"))
+            animateX(1200, Easing.EaseInSine)
+            description.isEnabled = false
+
+            val xAxis: XAxis = this.getXAxis()
+            xAxis.setDrawAxisLine(false)
+            xAxis.setDrawGridLines(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM // x축 데이터 표시 위치
+            xAxis.granularity = 1f
+            xAxis.textSize = 14f
+            xAxis.textColor = Color.rgb(118, 118, 118)
+            xAxis.spaceMin = 0.1f
+            xAxis.spaceMax = 0.1f
+            xAxis.axisMinimum = 0f
+
+            val yAxisLeft: YAxis = this.getAxisLeft()
+            yAxisLeft.textSize = 14f
+            yAxisLeft.textColor = Color.rgb(163, 163, 163)
+            yAxisLeft.setDrawAxisLine(false)
+            yAxisLeft.axisLineWidth = 2f
+
+            val yAxis: YAxis = this.getAxisRight()
+            yAxis.setDrawLabels(false)
+            yAxis.setDrawAxisLine(false)
+            yAxis.axisLineWidth = 2f
+
+            legend.orientation = Legend.LegendOrientation.VERTICAL
+            legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+            legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+            legend.textSize = 15F
+            legend.form = Legend.LegendForm.LINE
         }
     }
 
@@ -263,6 +314,7 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
                                     optionsAdapter.notifyDataSetChanged()
                                 }
                                 changeEditState()
+                                initMenuCostGraph(it.history)
                             }
                         }
                         is UiState.Loading -> {/* nothing */ }
@@ -485,6 +537,44 @@ class RecipeFragment : BaseFragment<FragmentRecipeBinding>(R.layout.fragment_rec
             }
             addAddItemChip(it.size)
         }
+    }
+
+    private fun initMenuCostGraph(history: List<HistoryVO>) {
+        // entries 구하기
+        val entries = ArrayList<Entry>()
+        val labels = ArrayList<String>()
+        history.withIndex().map { (index, history) ->
+            entries.add(Entry(index.toFloat(), history.price.toFloat()))
+            labels.add(getSimpleStringFromDate(Formatter.getDateFromString(history.date)))
+        }
+
+        // lineDataSet 설정
+        val lineDataSet = LineDataSet(entries, null)
+        lineDataSet.apply {
+            valueTextSize = 15f
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            color = Color.parseColor("#2B1E12")
+            setCircleColor(Color.parseColor("#2B1E12"))
+            setDrawCircleHole(true)
+            circleRadius = 5f
+            setFormLineDashEffect(DashPathEffect(floatArrayOf(10f, 5f), 0f))
+            valueTextColor = Color.BLACK
+        }
+
+        // lineData 설정
+        val dataSet: List<LineDataSet> = arrayListOf(lineDataSet, lineDataSet)
+        val lineData = LineData(dataSet)
+        val xAxis: XAxis = binding.menuCostLineChart.getXAxis()
+        xAxis.apply {
+            valueFormatter = IndexAxisValueFormatter(labels)
+            labelCount = 5
+        }
+        binding.menuCostLineChart.apply {
+            setDrawGridBackground(true)
+            data = lineData
+        }
+
+        binding.menuCostLineChart.invalidate()
     }
 
     private fun addAddItemChip(chipId: Int) {

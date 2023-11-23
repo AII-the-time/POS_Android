@@ -36,7 +36,6 @@
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/cl_business_registration_num"
-            app:layout_constraintEnd_toEndOf="@id/cl_business_registration_num"
             app:layout_constraintStart_toStartOf="@id/cl_business_registration_num">
 
             <TextView

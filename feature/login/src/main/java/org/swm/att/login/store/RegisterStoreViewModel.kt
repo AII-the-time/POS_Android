@@ -1,7 +1,5 @@
 package org.swm.att.login.store
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +15,6 @@ import org.swm.att.domain.entity.response.StoreIdVO
 import org.swm.att.domain.entity.response.StoreListVO
 import org.swm.att.domain.entity.response.TokenVO
 import org.swm.att.domain.repository.AttPosUserRepository
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,6 +28,7 @@ class RegisterStoreViewModel @Inject constructor(
     val registerStoreState: StateFlow<UiState<StoreIdVO>> = _registerStoreState
     private val _getStoreState = MutableStateFlow<UiState<StoreListVO>>(UiState.Loading)
     val getStoreState: StateFlow<UiState<StoreListVO>> = _getStoreState
+    private var businessNumber: String? = null
 
     //login
     fun login(businessRegistrationNumber: String, certificatedPhoneToken: String?) {
@@ -40,6 +38,7 @@ class RegisterStoreViewModel @Inject constructor(
                 attPosUserRepository.login(userInfo).collect { result ->
                     result.onSuccess {
                         _loginState.value = UiState.Success(it)
+                        businessNumber = businessRegistrationNumber
                     }.onFailure {
                         val errorMsg = if (it is HttpResponseException) it.message else "사업자 등록 번호 제출에 실패했습니다."
                         _loginState.value = UiState.Error(errorMsg)
@@ -79,14 +78,25 @@ class RegisterStoreViewModel @Inject constructor(
         viewModelScope.launch(attExceptionHandler) {
             try {
                 val storeInfo = checkCreateStoreInfo(storeName)
-                //attPosUserRepository.registerStoreForTest(storeInfo).collect { result ->
-                attPosUserRepository.registerStore(storeInfo).collect { result ->
-                    result.onSuccess {
-                        _registerStoreState.value = UiState.Success(it)
-                        saveStoreId(it.storeId)
-                    }.onFailure {
-                        val errorMsg = if (it is HttpResponseException) it.message else "가게 등록에 실패했습니다."
-                        _registerStoreState.value = UiState.Error(errorMsg)
+                if (businessNumber == "0000" && storeInfo.name == "소예다방") { // TODO: 테스트 계정 생성을 위한 코드, 추후 삭제 필요
+                    attPosUserRepository.registerStoreForTest(storeInfo).collect { result ->
+                        result.onSuccess {
+                            _registerStoreState.value = UiState.Success(it)
+                            saveStoreId(it.storeId)
+                        }.onFailure {
+                            val errorMsg = if (it is HttpResponseException) it.message else "가게 등록에 실패했습니다."
+                            _registerStoreState.value = UiState.Error(errorMsg)
+                        }
+                    }
+                } else {
+                    attPosUserRepository.registerStore(storeInfo).collect { result ->
+                        result.onSuccess {
+                            _registerStoreState.value = UiState.Success(it)
+                            saveStoreId(it.storeId)
+                        }.onFailure {
+                            val errorMsg = if (it is HttpResponseException) it.message else "가게 등록에 실패했습니다."
+                            _registerStoreState.value = UiState.Error(errorMsg)
+                        }
                     }
                 }
             } catch (e: Exception) {

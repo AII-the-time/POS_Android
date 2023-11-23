@@ -6,7 +6,7 @@ import java.util.Date
 class DialogBillFiltering(
     private val billViewModel: BillViewModel
 ): BaseDialogFiltering() {
-    override fun onFilteringBtnClick(startDate: Date, endDate: Date?) {
+    override fun onFilteringBtnClick(startDate: Date) {
         billViewModel.getBillsForFilteringDates(startDate)
     }
 }

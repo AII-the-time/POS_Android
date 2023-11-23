@@ -8,12 +8,15 @@ import org.swm.att.domain.entity.request.StoreVO
 import org.swm.att.domain.entity.response.CertificatedPhoneTokenVO
 import org.swm.att.domain.entity.response.MileageIdVO
 import org.swm.att.domain.entity.response.MileageVO
+import org.swm.att.domain.entity.response.SduiBaseResponseVO
+import org.swm.att.domain.entity.response.SduiReportVO
 import org.swm.att.domain.entity.response.StoreIdVO
 import org.swm.att.domain.entity.response.StoreListVO
 import org.swm.att.domain.entity.response.TokenForCertificationPhoneVO
 import org.swm.att.domain.entity.response.TokenVO
 
 interface AttPosUserRepository {
+    fun getUserReport(storeId: Int): Flow<Result<SduiBaseResponseVO>>
     fun refreshToken(refreshToken: String): Flow<Result<TokenVO>>
     fun saveAccessToken(accessToken: String)
     fun saveRefreshToken(refreshToken: String)

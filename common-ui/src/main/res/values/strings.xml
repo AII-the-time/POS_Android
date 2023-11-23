@@ -168,6 +168,8 @@
     <string name="btn_register_menu">메뉴 등록</string>
     <string name="btn_register_stock">재고 등록</string>
     <string name="tv_no_menu_recipe_des">레시피를 추가해주세요!</string>
+    <string name="tv_no_menu_cost_history">메뉴 원가 변동이 없습니다!</string>
+    <string name="tv_no_stock_cost_history">재고 원가 변동이 없습니다!</string>
     <string name="tv_no_menu_option_des">옵션을 추가해주세요!</string>
     <string name="tv_no_menu_des">메뉴를 등록해주세요!</string>
     <string name="tv_no_stock_des">재고를 등록해주세요!</string>
@@ -176,8 +178,10 @@
     <string name="tv_register_recipe_des">레시피 설정</string>
     <string name="tv_stock_setting_des">재고 설정</string>
     <string name="tv_register_option_des">옵션 설정</string>
+    <string name="tv_menu_cost_des">메뉴 원가 추이</string>
+    <string name="tv_stock_cost_des">재고 원가 추이</string>
     <string name="tv_category_no_item">메뉴를 등록해주세요!</string>
-    <string name="tv_category_modify">수정</string>
+    <string name="tv_category_modify">수정</string>이
     <string name="tv_category_delete">삭제</string>
     <string name="tv_add_category_des">카테고리 생성</string>
     <string name="tv_preorder_customer">%s님의 주문</string>
@@ -214,11 +218,12 @@
     <string name="tv_business_registration_num_hint">ex) 0101234123</string>
     <string name="tv_register_store_des">인증에 성공하셨습니다!</string>
     <string name="tv_business_registration_num_des1">사업자 등록 번호 입력</string>
-    <string name="tv_business_registration_num_des2">가게 등록을 위해 사업자등록번호를 입력해주세요!</string>
+    <string name="tv_business_registration_num_des2">가게 등록을 위해 사업자등록번호를 입력해주세요!\n사업자번호가 없으시다면 <b>0000</b>을 입력해 테스트해보실 수 있습니다!</string>
     <string name="tv_store_name_des1">가게 이름 입력</string>
     <string name="tv_store_name_des2">추가적인 가게 정보를 알려주세요!</string>
     <string name="tv_re_authentication_des">← 전화번호를 재인증 하시겠습니까?</string>
     <string name="btn_logout">로그아웃</string>
+    <string name="tv_report_des">매출 리포트</string>
     <!--  레시피 unit  -->
     <string-array name="recipe_unit">
         <item>g</item>

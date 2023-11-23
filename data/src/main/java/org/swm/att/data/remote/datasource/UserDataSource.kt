@@ -11,6 +11,8 @@ import javax.inject.Inject
 class UserDataSource @Inject constructor(
     private val attPosUserService: AttPosUserService
 ): BaseNetworkDataSource() {
+    suspend fun getUserReport(storeId: Int) = checkResponse(attPosUserService.getUserReport(storeId))
+
     suspend fun refreshToken(refreshToken: String) =
         checkResponse(attPosUserService.refreshToken(refreshToken))
 

@@ -1,5 +1,8 @@
 package org.swm.att.home.stock
 
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,15 +14,23 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.swm.att.common_ui.presenter.base.BaseFragment
 import org.swm.att.common_ui.state.UiState
 import org.swm.att.common_ui.util.Formatter.getDateBaseFormattingResult
+import org.swm.att.common_ui.util.Formatter.getDateFromString
+import org.swm.att.common_ui.util.Formatter.getSimpleStringFromDate
 import org.swm.att.common_ui.util.getValueOrNull
+import org.swm.att.domain.entity.response.HistoryVO
 import org.swm.att.home.R
-import org.swm.att.home.adapter.BaseRecyclerViewAdapter
 import org.swm.att.home.adapter.SelectableItemAdapter
 import org.swm.att.home.databinding.FragmentStockBinding
 import java.util.Date
@@ -28,12 +39,11 @@ import java.util.Date
 class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock) {
     private val stockViewModel by viewModels<StockViewModel>()
     private lateinit var stockWithStateAdapter: SelectableItemAdapter
-    private lateinit var usingMenuAdapter: BaseRecyclerViewAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initStockCategoryChipGroup()
         initStocksRecyclerView()
-        initUsingMenuRecyclerView()
+        initStockCostLineChart()
         initSearchView()
         initUnitMenu()
         setAddStockBtnClickListener()
@@ -80,14 +90,43 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
         }
     }
 
-    private fun initUsingMenuRecyclerView() {
-        usingMenuAdapter = BaseRecyclerViewAdapter()
-        binding.rvUsingMenuList.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = usingMenuAdapter
+    @SuppressLint("ResourceAsColor")
+    private fun initStockCostLineChart() {
+        with(binding.stockCostLineChart) {
+            setGridBackgroundColor(Color.parseColor("#FFFFFF"))
+            animateX(1200, com.github.mikephil.charting.animation.Easing.EaseInSine)
+            description.isEnabled = false
+
+            val xAxis: XAxis = this.getXAxis()
+            xAxis.setDrawAxisLine(false)
+            xAxis.setDrawGridLines(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM // x축 데이터 표시 위치
+            xAxis.granularity = 1f
+            xAxis.textSize = 14f
+            xAxis.textColor = Color.rgb(118, 118, 118)
+            xAxis.spaceMin = 0.1f
+            xAxis.spaceMax = 0.1f
+            xAxis.axisMinimum = 0f
+
+            val yAxisLeft: YAxis = this.getAxisLeft()
+            yAxisLeft.textSize = 14f
+            yAxisLeft.textColor = Color.rgb(163, 163, 163)
+            yAxisLeft.setDrawAxisLine(false)
+            yAxisLeft.axisLineWidth = 2f
+
+            val yAxis: YAxis = this.getAxisRight()
+            yAxis.axisLineWidth = 2f
+            yAxis.setDrawLabels(false)
+            yAxis.setDrawAxisLine(false)
+
+            legend.orientation = com.github.mikephil.charting.components.Legend.LegendOrientation.VERTICAL
+            legend.verticalAlignment = com.github.mikephil.charting.components.Legend.LegendVerticalAlignment.TOP
+            legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.CENTER
+            legend.textSize = 15F
+            legend.form = com.github.mikephil.charting.components.Legend.LegendForm.LINE
         }
     }
+
 
     private fun initSearchView() {
         binding.actSearchStock.addTextChangedListener(object: TextWatcher {
@@ -208,6 +247,7 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
                                 binding.actStockUnit.setText(it.unit, false)
                                 changeEditState()
                                 stockViewModel.resetGetSelectedStockByIdState()
+                                setStockCostLineChart(it.history)
                             }
                         }
                         is UiState.Loading -> {/* nothing */}
@@ -282,6 +322,46 @@ class StockFragment : BaseFragment<FragmentStockBinding>(R.layout.fragment_stock
                     }
                 }
             }
+        }
+    }
+
+    private fun setStockCostLineChart(history: List<HistoryVO>?) {
+        history?.let {
+            // entries 구하기
+            val entries = ArrayList<Entry>()
+            val labels = ArrayList<String>()
+            history.withIndex().map { (index, history) ->
+                entries.add(Entry(index.toFloat(), (history.price.toInt() / history.amount).toFloat()))
+                labels.add(getSimpleStringFromDate(getDateFromString(history.date)))
+            }
+
+            // lineDataSet 설정
+            val lineDataSet = LineDataSet(entries, null)
+            lineDataSet.apply {
+                valueTextSize = 15f
+                mode = LineDataSet.Mode.CUBIC_BEZIER
+                color = Color.parseColor("#2B1E12")
+                setCircleColor(Color.parseColor("#2B1E12"))
+                setDrawCircleHole(true)
+                circleRadius = 5f
+                setFormLineDashEffect(DashPathEffect(floatArrayOf(10f, 5f), 0f))
+                valueTextColor = Color.BLACK
+            }
+
+            // lineData 설정
+            val dataSet: List<LineDataSet> = arrayListOf(lineDataSet, lineDataSet)
+            val lineData = LineData(dataSet)
+            val xAxis = binding.stockCostLineChart.xAxis
+            xAxis.apply {
+                valueFormatter = IndexAxisValueFormatter(labels)
+                labelCount = 5
+            }
+            binding.stockCostLineChart.apply {
+                setDrawGridBackground(true)
+                data = lineData
+            }
+
+            binding.stockCostLineChart.invalidate()
         }
     }
 

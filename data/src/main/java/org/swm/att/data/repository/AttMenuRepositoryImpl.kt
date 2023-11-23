@@ -130,7 +130,7 @@ class AttMenuRepositoryImpl @Inject constructor(
                 currentAmount = newStock.currentAmount,
                 noticeThreshold = newStock.noticeThreshold,
                 updatedAt = newStock.updatedAt,
-                menus = arrayListOf()
+                history = null
             )
             menuDataSource.postNewStock(storeId, stockDTO).collect {
                 emit(Result.success(it.toVO()))
@@ -171,7 +171,7 @@ class AttMenuRepositoryImpl @Inject constructor(
                 currentAmount = stock.currentAmount,
                 noticeThreshold = stock.noticeThreshold,
                 updatedAt = stock.updatedAt,
-                menus = arrayListOf()
+                history = null
             )
             menuDataSource.updateStock(storeId, stockDTO).collect {
                 emit(Result.success(it.toVO()))

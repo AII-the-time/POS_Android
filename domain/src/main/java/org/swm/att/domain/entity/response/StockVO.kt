@@ -9,5 +9,5 @@ data class StockVO(
     val currentAmount: Int?,
     val noticeThreshold: Int?,
     val updatedAt: String?,
-    val menus: List<String>? = null
+    val history: List<HistoryVO>? = null
 )

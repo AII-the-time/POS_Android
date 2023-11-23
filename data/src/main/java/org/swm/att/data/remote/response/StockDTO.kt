@@ -22,8 +22,8 @@ data class StockDTO(
     val noticeThreshold: Int?,
     @field:Json(name = "updatedAt")
     val updatedAt: String?,
-    @field:Json(name = "menus")
-    val menus: List<String>?
+    @field:Json(name = "history")
+    val history: List<HistoryDTO>?
 ) {
     fun toVO() = StockVO(
         id = id,
@@ -34,6 +34,6 @@ data class StockDTO(
         currentAmount = currentAmount ?: 0,
         noticeThreshold = noticeThreshold ?: -1,
         updatedAt = updatedAt ?: "Unknown",
-        menus = menus ?: listOf()
+        history = history?.map { it.toVO() }
     )
 }

@@ -45,12 +45,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.hilt)
     kapt(libs.hilt.kapt)
-    implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
-    kapt(libs.moshi.kapt)
     implementation(libs.bundles.navigation)
     implementation(libs.flexbox)
     implementation(libs.sentry)
     implementation(libs.kotlin.coroutines)
     implementation(libs.bundles.basic.test)
+    implementation(libs.mpandroidchart)
 }
