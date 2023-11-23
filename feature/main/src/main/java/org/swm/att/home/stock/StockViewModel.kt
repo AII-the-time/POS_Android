@@ -139,10 +139,10 @@ class StockViewModel @Inject constructor(
             return StockVO(
                 id = id,
                 name = requireNotNull(name),
-                amount = if (perAmount != null && currentAmount != null ) {perAmount.toInt() * currentAmount.toInt()} else null,
+                amount = currentAmount?.toInt(),
                 unit = unit,
                 price = perPrice,
-                currentAmount = currentAmount.getIntOrNull(),
+                currentAmount = if (perAmount != null && currentAmount != null ) {perAmount.toInt() * currentAmount.toInt()} else null,
                 noticeThreshold = noticeThreshold.getIntOrNull(),
                 updatedAt = inventoryDate
             )
