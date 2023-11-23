@@ -41,7 +41,7 @@ class MenuRecipeViewHolder(
             ArrayAdapter(binding.root.context, org.swm.att.home.R.layout.item_simple_text, unitArray)
         binding.actMenuUnit.apply {
             setAdapter(arrayAdapter)
-//            setText(unit, false)
+            setText(unit, false)
         }
     }
 

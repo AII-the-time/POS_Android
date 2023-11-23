@@ -39,15 +39,7 @@ class CustomCalendarAdapter(
         holder.bind(item, baseDateFormat.format(item))
         holder.itemView.apply {
             setOnClickListener {
-                if (!isDatePicker && customCalendarViewModel.endDate.value == null) {
-                    if (customCalendarViewModel.startDate.value!! >= item) {
-                        customCalendarViewModel.setStartDate(item)
-                    } else {
-                        customCalendarViewModel.setEndDate(item)
-                    }
-                } else {
-                    customCalendarViewModel.setStartDate(item)
-                }
+                customCalendarViewModel.setStartDate(item)
             }
         }
     }
@@ -71,29 +63,14 @@ class CustomCalendarDateViewHolder(
         viewModel.startDate.observe(lifecycleOwner) {
             changeBackground(date)
         }
-        viewModel.endDate.observe(lifecycleOwner) {
-            changeBackground(date)
-        }
     }
 
     @SuppressLint("ResourceAsColor")
     private fun changeBackground(date: Date) {
-        val background = if(viewModel.endDate.value == null) {
-            if (viewModel.startDate.value == date) {
-                R.drawable.shape_oval_date
-            } else {
-                R.color.white
-            }
+        val background = if (viewModel.startDate.value == date) {
+            R.drawable.shape_oval_date
         } else {
-            if (viewModel.startDate.value == date) {
-                R.drawable.shape_round_start_date
-            } else if (viewModel.endDate.value == date) {
-                R.drawable.shape_round_end_date
-            } else if (date in viewModel.startDate.value!!..viewModel.endDate.value!!) {
-                R.color.main_trans
-            } else {
-                R.color.white
-            }
+            R.color.white
         }
         binding.tvCalendarDate.setBackgroundResource(background)
     }

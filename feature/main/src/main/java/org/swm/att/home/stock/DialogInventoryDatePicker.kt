@@ -6,7 +6,7 @@ import java.util.Date
 class DialogInventoryDatePicker(
     private val stockViewModel: StockViewModel
 ): BaseDialogFiltering() {
-    override fun onFilteringBtnClick(startDate: Date, endDate: Date?) {
+    override fun onFilteringBtnClick(startDate: Date) {
         stockViewModel.setLastInventoryDate(startDate)
     }
 }

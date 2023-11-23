@@ -24,6 +24,7 @@ import org.swm.att.data.remote.response.StockWithMixedListDTO
 import org.swm.att.data.remote.response.StockWithStateListDTO
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -141,19 +142,19 @@ interface AttPosService {
         @Body stock: StockDTO
     ): Response<StockIdDTO>
 
-    @PUT("stock/{stockId}")
+    @DELETE("stock/{stockId}")
     suspend fun deleteStock(
         @Header("storeId") storeId: Int,
         @Path("stockId") stockId: Int
     ): Response<StockIdDTO>
 
-    @PUT("preorder/{preOrderId}")
+    @DELETE("preorder/{preOrderId}")
     suspend fun deletePreorder(
         @Header("storeId") storeId: Int,
         @Path("preOrderId") preorderId: Int
     ): Response<PreorderIdDTO>
 
-    @PUT("menu/{menuId}")
+    @DELETE("menu/{menuId}")
     suspend fun deleteMenu(
         @Header("storeId") storeId: Int,
         @Path("menuId") menuId: Int
@@ -165,7 +166,7 @@ interface AttPosService {
         @Body preOrderedMenus: PreOrderedMenusDTO
     ): Response<PreorderIdDTO>
 
-    @PUT("order/{orderId}")
+    @DELETE("order/{orderId}")
     suspend fun cancelOrder(
         @Header("storeId") storeId: Int,
         @Path("orderId") orderId: Int
@@ -177,7 +178,7 @@ interface AttPosService {
         @Body menu: NewMenuDTO
     ): Response<MenuIdDTO>
 
-    @PUT("menu/category/{categoryId}")
+    @DELETE("menu/category/{categoryId}")
     suspend fun deleteCategory(
         @Header("storeId") storeId: Int,
         @Path("categoryId") categoryId: Int
