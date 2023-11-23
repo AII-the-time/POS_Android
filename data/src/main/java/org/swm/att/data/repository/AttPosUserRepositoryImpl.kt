@@ -30,9 +30,9 @@ class AttPosUserRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
     private val attEncryptedPrefDataSource: AttEncryptedPrefDataSource
 ): AttPosUserRepository {
-    override fun getUserReport(): Flow<Result<SduiBaseResponseVO>> = flow {
+    override fun getUserReport(storeId: Int): Flow<Result<SduiBaseResponseVO>> = flow {
         try {
-            userDataSource.getUserReport().collect {
+            userDataSource.getUserReport(storeId).collect {
                 emit(Result.success(it.toVO()))
             }
         } catch (e: Exception) {

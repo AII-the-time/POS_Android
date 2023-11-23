@@ -23,7 +23,9 @@ import retrofit2.http.Query
 interface AttPosUserService {
 
     @GET("report")
-    suspend fun getUserReport(): Response<SduiBaseResponseDTO>
+    suspend fun getUserReport(
+        @Header("StoreId") storeId: Int
+    ): Response<SduiBaseResponseDTO>
 
     @POST("user/refresh")
     suspend fun refreshToken(

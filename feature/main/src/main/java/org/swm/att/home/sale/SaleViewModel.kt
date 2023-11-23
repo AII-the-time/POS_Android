@@ -17,10 +17,11 @@ class SaleViewModel @Inject constructor(
 ): BaseViewModel() {
     private val _getSduiReportDataState: MutableStateFlow<UiState<SduiBaseResponseVO>> = MutableStateFlow(UiState.Loading)
     val getSduiReportDataState = _getSduiReportDataState
+    private var storeId: Int? = null
 
     fun getSduiReportData() {
         viewModelScope.launch(attExceptionHandler) {
-            attPosUserRepository.getUserReport().collect() { result ->
+            attPosUserRepository.getUserReport(getStoreId()).collect() { result ->
                 result.onSuccess {
                     _getSduiReportDataState.value = UiState.Success(it)
                 }.onFailure {
@@ -30,4 +31,12 @@ class SaleViewModel @Inject constructor(
             }
         }
     }
+
+    private fun getStoreId(): Int {
+        if (storeId == null) {
+            storeId = attPosUserRepository.getStoreId()
+        }
+        return storeId as Int
+    }
+
 }
